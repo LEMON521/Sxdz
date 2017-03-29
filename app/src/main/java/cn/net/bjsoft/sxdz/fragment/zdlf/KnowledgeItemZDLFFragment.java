@@ -28,7 +28,7 @@ import cn.net.bjsoft.sxdz.view.ShowHtmlView;
 /**
  * 中电联发的知识---条目界面
  * Created by Zrzc on 2017/3/20.
- *
+ * <p>
  * 添加注释,同步git
  */
 
@@ -67,7 +67,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
             knowledgeItemsItemAdapter = new KnowledgeItemsItemAdapter(mActivity, knowledgeItemList);
         }
 
-        headView = View.inflate(mActivity, R.layout.item_list_headview, null);
+        headView = View.inflate(mActivity, R.layout.item_list_knowledge_headview, null);
         headWebView = (ShowHtmlView) headView.findViewById(R.id.item_list_headview_knowledge);
 
         lv_items.addHeaderView(headView);

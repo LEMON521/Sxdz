@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/dm010">
+
+    <ImageView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dm020"
+        android:text="下载附件:"
+        android:textColor="#2D64B3"
+        android:textSize="@dimen/dm020" />
+
+    <TextView
+        android:id="@+id/item_list_headview_knowledge_item_filename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跑步路线"
+        android:textColor="#2D64B3"
+        android:textSize="@dimen/dm020" />
+
+
+</LinearLayout>
