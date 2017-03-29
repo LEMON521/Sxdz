@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:background="@color/background"
+    android:orientation="horizontal"
     android:padding="@dimen/dm005">
 
 
@@ -80,7 +80,6 @@
             android:layout_marginLeft="@dimen/dm010"
             android:layout_marginTop="@dimen/dm010">
 
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -103,7 +102,6 @@
                     android:text="回复"
                     android:textColor="@color/blue"
                     android:textSize="@dimen/dm020" />
-
 
             </LinearLayout>
         </RelativeLayout>

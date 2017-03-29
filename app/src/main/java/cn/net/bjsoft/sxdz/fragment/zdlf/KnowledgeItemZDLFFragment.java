@@ -28,6 +28,8 @@ import cn.net.bjsoft.sxdz.view.ShowHtmlView;
 /**
  * 中电联发的知识---条目界面
  * Created by Zrzc on 2017/3/20.
+ *
+ * 添加注释,同步git
  */
 
 @ContentView(R.layout.fragment_knowledge_item)
