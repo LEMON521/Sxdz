@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.home.bartop.MessageActivity">
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/message_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/dm030" />
+
+        <ImageView
+            android:id="@+id/message_back"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/common_back" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/login_line" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/message_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="21"></FrameLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e1edf9" />
+
+    <LinearLayout
+        android:id="@+id/message_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+        <!--消息-->
+        <RelativeLayout
+            android:id="@+id/message_message"
+            android:layout_width="0dp"
+            android:tag="message"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/message_message_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/xinxi_s" />
+
+            <TextView
+                android:id="@+id/message_message_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/message_message_icon"
+                android:gravity="center"
+                android:text="信息"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/dm022" />
+
+            <TextView
+                android:id="@+id/message_message_num"
+                android:layout_width="@dimen/dm024"
+                android:layout_height="@dimen/dm024"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/message_message_text"
+                android:background="@drawable/common_red"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm018" />
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/message_message_img"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="#e1edf9" />
+
+        <!--任务-->
+        <RelativeLayout
+            android:tag="task"
+            android:id="@+id/message_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/message_task_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/renwu_n" />
+            <TextView
+                android:id="@+id/message_task_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/message_task_icon"
+                android:gravity="center"
+                android:text="任务"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dm022" />
+            <TextView
+                android:id="@+id/message_task_num"
+                android:layout_width="@dimen/dm024"
+                android:layout_height="@dimen/dm024"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/message_task_text"
+                android:background="@drawable/common_red"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm018" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/message_task_img"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="#e1edf9" />
+        <!--客户-->
+        <RelativeLayout
+            android:tag="client"
+            android:id="@+id/message_client"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/message_client_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/clientele_n" />
+
+            <TextView
+                android:id="@+id/message_client_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/message_client_icon"
+                android:gravity="center"
+                android:text="客户"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dm022" />
+
+            <TextView
+                android:id="@+id/message_client_num"
+                android:layout_width="@dimen/dm024"
+                android:layout_height="@dimen/dm024"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/message_client_text"
+                android:background="@drawable/common_red"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm018" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/message_client_img"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="#e1edf9" />
+        <!--审批-->
+        <RelativeLayout
+            android:tag="approve"
+            android:id="@+id/message_approve"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/message_approve_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/shenpi_n" />
+            <TextView
+                android:id="@+id/message_approve_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/message_approve_icon"
+                android:gravity="center"
+                android:text="审批"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dm022" />
+            <TextView
+                android:id="@+id/message_approve_num"
+                android:layout_width="@dimen/dm024"
+                android:layout_height="@dimen/dm024"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/message_approve_text"
+                android:background="@drawable/common_red"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm018" />
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/message_approve_img"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="#e1edf9" />
+    </LinearLayout>
+</LinearLayout>

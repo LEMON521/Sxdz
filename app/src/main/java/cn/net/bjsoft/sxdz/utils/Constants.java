@@ -1,0 +1,72 @@
+package cn.net.bjsoft.sxdz.utils;
+
+/**
+ * 全局常量&变量
+ * Created by zkagang on 2016/9/12.
+ */
+public class Constants {
+
+    /**
+     * 判断app处于前台还是后台
+     */
+    public static boolean is_app=true;
+
+
+    public static String app_name="biip";
+
+    public static String app_id_sxdz="1";//舒心定制
+    public static String app_id_test="4634260932234193754";//测试
+    public static String app_id_rcjg="4878704752557545429";//热刺激光
+    public static String app_id_ylyd="5248838326746830499";//誉龙亚东
+    public static String app_id_zdlf="5647951308111750793";//誉龙亚东
+
+    public static boolean isfullscreen=false;
+    public static boolean isForeground = true;
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_EXTRAS = "extras";
+    public static final String MESSAGE_RECEIVED_ACTION = "com.shuxin.jpushdemo.MESSAGE_RECEIVED_ACTION";
+
+    /**用户名*/
+    public static final String USER_KEY_LOGIN_USERNAME_FLAG = "LoginUserNameFlag";
+    /**用户密码*/
+    public static final String USER_KEY_LOGIN_PASSWORD_FLAG = "LoginPasswordFlag";
+    /**登录状态*/
+    public static final String USER_KEY_LOGINSTATUS_FLAG = "LoginStatusFlag";
+
+    /**用户 id*/
+    public static final String USER_KEY_ID="id";
+
+    /**用户姓名*/
+    public static final String USER_KEY_NAME="name";
+
+    /**用户昵称*/
+    public static final String USER_KEY_NICK_NAME="nickname";
+
+    /**用户邮箱*/
+    public static final String USER_KEY_EMAIL="email";
+
+    /**验证码code*/
+    public static final String USER_KEY_CODE="code";
+
+    /**随机码*/
+    public static final String USER_KEY_RANDCODE="randcode";
+
+    /**uuid*/
+    public static final String UUID="uuid";
+
+    /**phone_uuid*/
+    public static final String PHONE_UUID="phoneuuid";
+
+    /**phone*/
+    public static final String PHONE_PHONE="phone";
+
+    /**经度*/
+    public static final String LONGITUDE="longitude";
+
+    /**纬度*/
+    public static final String LATITUDE="latitude";
+
+    /**详细地址*/
+    public static final String ADDRESS="address";
+}

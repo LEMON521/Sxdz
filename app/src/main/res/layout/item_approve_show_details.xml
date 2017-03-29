@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!--报销模块-->
+    <LinearLayout
+        android:id="@+id/approve_show_expences"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <!--报销类型-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_expences_type_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="报销类型："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_expences_type_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="报销类型"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--物品信息-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_expences_res_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="物品信息："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_expences_res_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="铅笔"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--物品单价-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_expences_unit_price_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="物品单价："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_expences_unit_price_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.4"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--物品数量-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_expences_quantity_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="物品数量："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_expences_quantity_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--金额-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_expences_money_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="金额："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_expences_money_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.2元"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--总金额-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_expences_money_totle_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="总金额："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_expences_money_totle_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.2元"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!--出差模块-->
+    <LinearLayout
+        android:id="@+id/approve_show_trip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <!--出差事由-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_trip_mater_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="出差事由："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_trip_mater_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="洽谈合同"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--出差地点-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_trip_situs_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="出差地点："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_trip_situs_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="天津"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+        <!--开始时间-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_trip_starttime_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开始时间："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_trip_starttime_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2017-02-04"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--结束时间-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_trip_endtime_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结束时间："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_trip_endtime_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2017-02-04"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--出差天数-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_trip_datetime_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="出差天数："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_trip_datetime_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3天"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--请假模块-->
+    <LinearLayout
+        android:id="@+id/approve_show_leave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <!--请假类型-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_leave_type_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请假类型："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_leave_type_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="病假"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+        <!--请假事由-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_leave_matter_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请假事由："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_leave_matter_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="肚子痛"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+        <!--开始时间-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_leave_starttime_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开始时间："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_leave_starttime_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2017-02-04"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--结束时间-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_leave_endtime_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结束时间："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_leave_endtime_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2017-02-04"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--请假天数-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_leave_datetime_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请假天数："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_leave_datetime_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3天"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!--外出模块-->
+    <LinearLayout
+        android:id="@+id/approve_show_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!--外出事由-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_out_matter_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="外出事由："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_out_matter_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="肚子痛"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+        <!--开始时间-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_out_starttime_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开始时间："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_out_starttime_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2017-02-04"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--结束时间-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_out_endtime_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结束时间："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_out_endtime_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2017-02-04"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--外出时长-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_out_datetime_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="外出时长："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_out_datetime_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5小时"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!--采购模块-->
+    <LinearLayout
+        android:id="@+id/approve_show_buy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <!--采购类型-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_buy_type_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="采购类型："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_buy_type_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="采购类型"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--采购事由-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_buy_mater_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="采购事由："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_buy_mater_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="更新设备"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--物品信息-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_buy_res_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="物品信息："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_buy_res_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="钢笔"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--物品单价-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_buy_unit_price_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="物品单价："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_buy_unit_price_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.4"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--物品数量-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_buy_quantity_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="物品数量："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_buy_quantity_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--金额-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_buy_money_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="金额："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_buy_money_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.2元"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--总金额-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_buy_money_totle_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="总金额："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_buy_money_totle_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.2元"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!--合同审批模块-->
+    <LinearLayout
+        android:id="@+id/approve_show_agreement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <!--合同编号-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_agreement_num_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合同编号："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_agreement_num_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20170203"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--签约日期-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_agreement_date_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="签约日期："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_agreement_date_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2017-03-05"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--甲方名称-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_agreement_first_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="甲方名称："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_agreement_first_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="韦恩国际"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--甲方负责人-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_agreement_first_leading_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="甲方负责人："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_agreement_first_leading_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="张经理"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--乙方名称-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_agreement_second_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="乙方名称："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_agreement_second_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="中软卓成"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--乙方负责人-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_agreement_second_leading_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="乙方负责人："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_agreement_second_leading_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="刘经理"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!--物品领用模块-->
+    <LinearLayout
+        android:id="@+id/approve_show_res"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <!--物品名称-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_res_res_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="物品名称："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_res_res_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="戴尔电脑"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--物品用途-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_res_use_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="物品用途："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_res_use_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="培训用"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--物品数量-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/approve_show_res_num_discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="物品数量："
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_show_res_num_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

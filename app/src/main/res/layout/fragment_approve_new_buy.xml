@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f4f5ee"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="采购总金额:"
+                android:textSize="@dimen/dm023" />
+
+            <!--总金额-->
+            <TextView
+                android:id="@+id/approve_new_buy_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="0.0"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:text="元"
+                android:textSize="@dimen/dm023" />
+
+        </LinearLayout>
+
+        <!--申请事由-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="申请事由："
+                android:textSize="@dimen/dm023" />
+
+            <EditText
+                android:textColorHint="@color/gray"
+                android:hint="请输入申请事由"
+                android:id="@+id/approve_new_buy_mater"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/biankuang_dark"
+                android:padding="3dp"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <!--采购类型-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="采购类型："
+                android:textSize="@dimen/dm023" />
+
+            <EditText
+                android:textColorHint="@color/gray"
+                android:hint="请输入采购类型"
+                android:id="@+id/approve_new_buy_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/biankuang_dark"
+                android:padding="3dp"
+                android:textSize="@dimen/dm023" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/login_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="3"
+                android:text="物品"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="2"
+                android:text="单价"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="2"
+                android:text="数量"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="2"
+                android:text="金额(元)"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_new_buy_edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/approve_shixin_blue"
+                android:gravity="center"
+                android:text="编辑"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm023"
+                android:visibility="invisible" />
+        </LinearLayout>
+        <!--报销物品的条目80dp-->
+        <ListView
+
+            android:id="@+id/approve_new_buy_entry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"></ListView>
+
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@drawable/login_line" />-->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/approve_new_buy_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/approve_shixin_blue"
+                android:padding="5dp"
+                android:text="+ 费用明细"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm023" />
+            <!--android:drawableLeft="@drawable/aid_nav_btn_close"-->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/login_line" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+

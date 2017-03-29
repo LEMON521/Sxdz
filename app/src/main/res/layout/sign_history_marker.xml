@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:padding="@dimen/dm005"
+    android:background="@color/aMap_caolv"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/marker_sign_iv"
+        android:layout_width="@dimen/dm060"
+        android:layout_height="@dimen/dm060"
+        android:src="@drawable/wlh" />
+
+    <LinearLayout
+        android:id="@+id/marker_sign_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm060"
+        android:orientation="vertical"
+        android:padding="@dimen/dm003">
+
+        <TextView
+            android:id="@+id/marker_sign_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dm025"
+            android:layout_gravity="center_vertical"
+            android:text="签到时间:2017.02.03"
+            android:textSize="@dimen/dm020" />
+
+        <TextView
+            android:id="@+id/marker_sign_tv_space"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dm025"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/dm004"
+            android:text="签到地点:北京市朝阳区朝阳路8号朗廷大厦"
+            android:textSize="@dimen/dm020" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="合同编号："
+                android:textSize="@dimen/dm023" />
+
+
+            <EditText
+                android:id="@+id/approve_new_agreement_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/biankuang_dark"
+                android:hint="请输入合同编号"
+                android:inputType="number"
+                android:padding="3dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm023" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="签约日期："
+                android:textSize="@dimen/dm023" />
+
+
+            <EditText
+                android:id="@+id/approve_new_agreement_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/biankuang_dark"
+                android:focusable="false"
+                android:hint="请选择日期"
+                android:padding="3dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm023" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="甲方名称："
+                android:textSize="@dimen/dm023" />
+
+
+            <EditText
+                android:id="@+id/approve_new_agreement_first"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/biankuang_dark"
+                android:hint="请输入甲方名称"
+                android:padding="3dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm023" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="甲方负责人："
+                android:textSize="@dimen/dm023" />
+
+
+            <EditText
+                android:id="@+id/approve_new_agreement_first_leading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/biankuang_dark"
+                android:hint="请输入甲方负责人"
+                android:padding="3dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm023" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="乙方名称："
+                android:textSize="@dimen/dm023" />
+
+
+            <EditText
+                android:id="@+id/approve_new_agreement_second"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/biankuang_dark"
+                android:hint="请输入乙方名称"
+                android:padding="3dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm023" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="乙方负责人："
+                android:textSize="@dimen/dm023" />
+
+
+            <EditText
+                android:id="@+id/approve_new_agreement_second_leading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/biankuang_dark"
+                android:hint="请输入乙方负责人"
+                android:padding="3dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm023" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
+

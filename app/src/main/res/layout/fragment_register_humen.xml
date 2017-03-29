@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/register"
+            android:textSize="@dimen/dm030" />
+
+        <ImageView
+            android:id="@+id/register_humen_back"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/common_back" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/login_line" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="21"
+        android:background="#F9FDFF"
+        android:orientation="vertical">
+        <!--身份证号-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:id="@+id/register_humen_text_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="身份证号"
+                android:textSize="@dimen/dm028" />
+
+            <ImageView
+                android:id="@+id/register_humen_iv_line"
+                android:layout_width="2dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/register_humen_text_code"
+                android:src="@drawable/login_vertival_line" />
+
+            <EditText
+                android:id="@+id/register_humen_editer_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/register_humen_iv_line"
+                android:background="@null"
+                android:hint="请输入身份证号"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm028" />
+        </RelativeLayout>
+
+
+        <!--照片-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="8dp"
+                android:text="请上传身份证图片" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/dm070"
+                android:paddingBottom="@dimen/dm050">
+                <!--正面-->
+                <LinearLayout
+                    android:id="@+id/regiest_humen_ll_front"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+
+                        android:layout_width="@dimen/dm200"
+                        android:layout_height="@dimen/dm150">
+
+                        <ImageView
+                            android:id="@+id/regiest_humen_iv_front"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:adjustViewBounds="true"
+                            android:background="#ffffff"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/common_photo" />
+
+                        <ImageView
+                            android:id="@+id/regiest_humen_iv_front_delete"
+                            android:layout_width="@dimen/dm030"
+                            android:layout_height="@dimen/dm030"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="3dp"
+                            android:layout_marginTop="2dp"
+                            android:src="@drawable/common_close" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/regiest_humen_tv_front"
+                        android:layout_width="@dimen/dm200"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:text="身份证正面" />
+                </LinearLayout>
+                <!--反面-->
+                <LinearLayout
+                    android:id="@+id/regiest_humen_ll_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+
+                        android:layout_width="@dimen/dm200"
+                        android:layout_height="@dimen/dm150">
+
+                        <ImageView
+                            android:id="@+id/regiest_humen_iv_back"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:adjustViewBounds="true"
+                            android:background="#ffffff"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/common_photo" />
+
+                        <ImageView
+                            android:id="@+id/regiest_humen_iv_back_delete"
+                            android:layout_width="@dimen/dm030"
+                            android:layout_height="@dimen/dm030"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="3dp"
+                            android:layout_marginTop="2dp"
+                            android:src="@drawable/common_close" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/regiest_humen_tv_back"
+                        android:layout_width="@dimen/dm200"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/regiest_humen_rl_back"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:text="身份证反面" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:id="@+id/register_humen_text_emile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_horizontal"
+                android:text="邮       箱"
+                android:textSize="@dimen/dm028" />
+
+            <ImageView
+                android:id="@+id/register_humen_iv_emile_line"
+                android:layout_width="2dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/register_humen_text_emile"
+                android:src="@drawable/login_vertival_line" />
+
+            <EditText
+                android:id="@+id/register_humen_editer_emile_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/register_humen_iv_emile_line"
+                android:background="@null"
+                android:hint="请输入电子邮箱"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm028" />
+        </RelativeLayout>
+
+        <!--所在机构-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:id="@+id/register_humen_text_organization_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="所在机构"
+                android:textSize="@dimen/dm028" />
+
+            <ImageView
+                android:id="@+id/register_humen_iv_organization_line"
+                android:layout_width="2dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/register_humen_text_organization_code"
+                android:src="@drawable/login_vertival_line" />
+
+            <EditText
+                android:id="@+id/register_humen_editer_organization_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/register_humen_iv_organization_line"
+                android:background="@null"
+                android:hint="请输入所在机构"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm028" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/register_humen_btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/login_btn_blue"
+            android:text="完成"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/dm032" />
+    </LinearLayout>
+    <!--邮箱-->
+
+</LinearLayout>
+
+
+

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <EditText
+        android:id="@+id/item_approve_leave_matter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="3"
+        android:background="@drawable/biankuang_dark"
+        android:hint="请假事由"
+        android:padding="3dp"
+        android:singleLine="true"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/dm023" />
+    <!--android:editable="false"-->
+    />
+
+    <EditText
+        android:id="@+id/item_approve_leave_start_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_weight="2"
+        android:background="@drawable/biankuang_dark"
+        android:editable="false"
+        android:focusable="false"
+        android:hint="开始时间"
+        android:inputType="number"
+        android:padding="3dp"
+        android:singleLine="true"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/dm023" />
+    />
+
+    <EditText
+        android:id="@+id/item_approve_leave_end_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_weight="2"
+        android:background="@drawable/biankuang_dark"
+        android:editable="false"
+        android:focusable="false"
+        android:hint="结束时间"
+        android:inputType="numberDecimal"
+        android:padding="3dp"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/dm023" />
+
+    <TextView
+        android:id="@+id/item_approve_leave_delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="2dp"
+        android:layout_weight="1"
+        android:background="@drawable/approve_shixin_red"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="删除"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dm020"/>
+</LinearLayout>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/fragmen_upload_tv_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="新闻详情"
+            android:textSize="@dimen/dm036" />
+
+        <ImageView
+            android:id="@+id/news_item_back"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/common_back" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/login_line" />
+    </RelativeLayout>
+    <!--<TextView-->
+    <!--android:gravity="center"-->
+    <!--android:text="没有详细信息"-->
+    <!--android:textSize="@dimen/dm020"-->
+    <!--android:id="@+id/news_item_tv_details"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="25"/>-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:padding="3dp"
+                android:id="@+id/news_item_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dm010"
+                android:layout_marginTop="@dimen/dm010"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#000000" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm036"
+                android:layout_marginLeft="@dimen/dm010"
+                android:layout_marginRight="@dimen/dm010"
+                android:layout_marginTop="@dimen/dm005">
+
+                <TextView
+                    android:id="@+id/news_item_author"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dm030"
+                    android:layout_weight="2"
+                    android:text=""
+                    android:textColor="#50000000" />
+
+                <TextView
+                    android:id="@+id/news_item_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dm030"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text=""
+                    android:textColor="#50000000" />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/dm020"
+                android:layout_marginRight="@dimen/dm020"
+                android:background="#30000000"></RelativeLayout>
+
+            <WebView
+                android:padding="3dp"
+                android:id="@+id/web"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></WebView>
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/news_item_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dm010"
+                android:layout_marginRight="@dimen/dm010"
+                android:layout_marginTop="@dimen/dm010"
+                android:text="" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

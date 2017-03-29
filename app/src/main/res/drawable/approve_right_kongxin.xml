@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><!--空心状态-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 边框 -->
+    <stroke
+        android:width="0.5dp"
+        android:color="#005DD1" />
+    <!-- 圆角 -->
+    <corners
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="3dp"
+        android:topLeftRadius="0dp"
+        android:topRightRadius="3dp" />
+    <!--<solid android:color="#FFFFFF" />-->
+</shape>

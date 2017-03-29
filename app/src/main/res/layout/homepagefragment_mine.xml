@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm080"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/main_botton_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/mine"
+            android:textSize="@dimen/dm036" />
+        <!--<ImageView-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:onClick="onback"-->
+        <!--android:src="@drawable/common_back"/>-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/login_line" />
+
+    </RelativeLayout>
+
+    <!--<WebView-->
+    <!--android:id="@+id/mine"-->
+    <!--android:scrollbars="none"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->
+    <LinearLayout
+        android:id="@+id/homepagefrag_mine_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:background="#f4f5ee"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dm160"
+            android:background="#005DD1"
+            android:gravity="center">
+
+            <!--<ImageView-->
+            <!--<cn.net.bjsoft.sxdz.view.RoundImageView-->
+            <cn.net.bjsoft.sxdz.view.CircleImageView
+
+
+                android:layout_centerInParent="true"
+                android:id="@+id/homepagefrag_mine_riv_avatar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/tab_me_n" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/homepagefrag_mine_tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="@dimen/dm020"
+                android:text="姓名"
+                android:textColor="#000000"
+                android:textSize="@dimen/dm024" />
+
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/dm020"
+                android:background="#30000000"></RelativeLayout>
+
+            <TextView
+                android:id="@+id/homepagefrag_mine_tv_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="@dimen/dm020"
+                android:text="邮箱"
+                android:textColor="#000000"
+                android:textSize="@dimen/dm024" />
+
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/dm020"
+                android:background="#30000000"></RelativeLayout>
+
+            <TextView
+                android:id="@+id/homepagefrag_mine_tv_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="@dimen/dm020"
+                android:text="生日"
+                android:textColor="#000000"
+                android:textSize="@dimen/dm024" />
+
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/dm020"
+                android:background="#30000000"></RelativeLayout>
+
+            <TextView
+                android:id="@+id/homepagefrag_mine_tv_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="@dimen/dm020"
+                android:layout_marginTop="@dimen/dm020"
+                android:text="账号"
+                android:textColor="#000000"
+                android:textSize="@dimen/dm024" />
+
+        </LinearLayout>
+        <Button
+            android:layout_marginTop="@dimen/dm200"
+            android:id="@+id/fragmen_mine_btn_exit"
+            android:textColor="#ffffff"
+            android:text="退出登录\nExit"
+            android:textSize="@dimen/dm020"
+            android:layout_marginLeft="@dimen/dm090"
+            android:layout_marginBottom="@dimen/dm100"
+            android:layout_marginRight="@dimen/dm090"
+            android:background="@drawable/yuanjiao_red"
+            android:layout_width="match_parent"
+            android:layout_height="37dp" />
+    </LinearLayout>
+
+</LinearLayout>
+

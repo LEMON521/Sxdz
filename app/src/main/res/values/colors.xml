@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="light_blue">#6593cb</color>
+    <!-- 签到人的线条颜色 -->
+    <color name="aMap_black">#000000</color>
+    <color name="aMap_wite">#FFFFFF</color>
+    <color name="aMap_chenghuang">#F29500</color>
+    <color name="aMap_chunhuang">#fff200</color>
+    <color name="aMap_huanglv">#8ec21f</color>
+    <color name="aMap_chunlv">#008f0a</color>
+    <color name="aMap_lanlv">#005a5c</color>
+    <color name="aMap_chunlan">#005bab</color>
+    <color name="aMap_zilan">#002770</color>
+    <color name="aMap_chunzi">#4d157d</color>
+    <color name="aMap_zihong">#7d0043</color>
+    <color name="aMap_fenhong">#edc2be</color>
+    <color name="aMap_chahong">#6e280e</color>
+    <color name="aMap_huanghe">#ab6900</color>
+    <color name="aMap_hongcheng">#db4e02</color>
+    <color name="aMap_hongzi">#c25988</color>
+    <color name="aMap_meihong">#c75872</color>
+    <color name="aMap_hailan">#00799e</color>
+    <color name="aMap_caolv">#86bd77</color>
+    <color name="aMap_shenfen">#ff1493</color>
+
+    <!--背景-->
+    <color name="background">#f4f5ee</color>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="gray">#565656</color>
+    <color name="blue">#018AEA</color>
+    <color name="white">#ffffff</color>
+    <color name="tran">#30000000</color>
+    <color name="trans">#00000000</color>
+    <color name="red"> #FF0000</color>
+    <color name="viewfinder_frame">#ff000000</color>
+    <color name="viewfinder_laser">#ffff0000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#b0000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+
+    <!-- 画面背景色 -->
+    <drawable name="layout_backgroud">#000000</drawable>
+
+    <!-- 分割线背景色 -->
+    <drawable name="line_background">#161823</drawable>
+
+
+    <!-- 控件按下时显示的颜色 -->
+    <color name="list_backgroud_color">#2fb3cb</color>
+    <color name="title_color">#0f8ec5</color>
+    <color name="content_color">#737373</color>
+</resources>

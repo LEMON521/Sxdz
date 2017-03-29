@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <include layout="@layout/top_title" />
+
+    <include layout="@layout/pop_knowledge_search" />
+
+    <LinearLayout
+
+        android:id="@+id/address_change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/dm010">
+
+        <TextView
+            android:id="@+id/address_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/approve_left_shixin"
+            android:paddingBottom="@dimen/dm005"
+            android:paddingLeft="@dimen/dm020"
+            android:paddingRight="@dimen/dm020"
+            android:paddingTop="@dimen/dm005"
+            android:text="总公司"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dm024" />
+
+        <TextView
+            android:id="@+id/address_filiale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/approve_right_kongxin"
+            android:paddingBottom="@dimen/dm005"
+            android:paddingLeft="@dimen/dm020"
+            android:paddingRight="@dimen/dm020"
+            android:paddingTop="@dimen/dm005"
+            android:text="分公司"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/dm024" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/address_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm015"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="@dimen/dm010">
+
+        <ListView
+            android:id="@+id/address_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

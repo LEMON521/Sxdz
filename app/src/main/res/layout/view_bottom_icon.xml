@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:gravity="center">
+
+
+    <!--竖直分布-->
+    <LinearLayout
+        android:id="@+id/view_bottom_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+
+            android:id="@+id/view_bottom_vertical_fram_top"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="0.5dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/view_bottom_vertical_text_top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="上部"
+                android:textColor="@color/gray"
+                android:textSize="10sp" />
+            <ImageView
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/view_bottom_vertical_iv_top"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/nav_sao"
+                />
+
+        </FrameLayout>
+
+
+
+        <FrameLayout
+            android:id="@+id/view_bottom_vertical_fram_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="0.5dp"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/view_bottom_vertical_text_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="下部"
+                android:textColor="@color/gray"
+                android:textSize="10sp" />
+            <ImageView
+
+                android:gravity="center"
+                android:id="@+id/view_bottom_vertical_iv_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:src="@drawable/nav_sao"
+                />
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <!--水平分布-->
+    <LinearLayout
+        android:id="@+id/view_bottom_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+
+
+        <FrameLayout
+            android:id="@+id/view_bottom_horizontal_fram_left"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="0.5dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/view_bottom_horizontal_text_left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/gray"
+                android:text="左部"
+                android:textSize="10sp" />
+            <ImageView
+                android:id="@+id/view_bottom_horizontal_iv_left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/nav_sao"
+                />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/view_bottom_horizontal_fram_right"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="2dip"
+            android:layout_marginLeft="0.5dip"
+            android:layout_marginRight="2dip"
+            android:layout_marginTop="2dip"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/view_bottom_horizontal_text_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="右部"
+                android:lines="1"
+                android:textColor="@color/gray"
+                android:textSize="10sp" />
+            <ImageView
+                android:id="@+id/view_bottom_horizontal_iv_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/nav_sao"
+                />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+</FrameLayout>

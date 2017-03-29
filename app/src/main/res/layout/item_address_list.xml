@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/item_address_list_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dm005">
+
+            <ImageView
+                android:id="@+id/item_address_list_parent_icon"
+                android:layout_width="@dimen/dm050"
+                android:layout_height="@dimen/dm050"
+                android:src="@drawable/wlh" />
+
+            <TextView
+                android:id="@+id/item_address_list_parent_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dm020"
+                android:padding="@dimen/dm005"
+                android:text="公司"
+                android:textColor="@color/aMap_black"
+                android:textSize="@dimen/dm030" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_address_list_child"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dm005">
+
+            <!--<ImageView-->
+            <cn.net.bjsoft.sxdz.view.CircleImageView
+                android:id="@+id/item_address_list_child_icon"
+                android:layout_width="@dimen/dm050"
+                android:layout_height="@dimen/dm050"
+                android:src="@drawable/wlh" />
+
+            <TextView
+                android:id="@+id/item_address_list_child_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dm020"
+                android:layout_toRightOf="@id/item_address_list_child_icon"
+                android:padding="@dimen/dm005"
+                android:text="张三丰"
+                android:textAllCaps="false"
+                android:textColor="@color/aMap_black"
+                android:textSize="@dimen/dm024" />
+
+            <TextView
+                android:id="@+id/item_address_list_child_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dm020"
+                android:layout_marginRight="@dimen/dm020"
+                android:padding="@dimen/dm005"
+                android:text="13900000000"
+                android:textColor="@color/aMap_black"
+                android:textSize="@dimen/dm022" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>

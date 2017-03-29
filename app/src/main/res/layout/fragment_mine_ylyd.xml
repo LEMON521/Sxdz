@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/top_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:background="#f4f5ee"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/fragment_mine_ylyd_tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dm020"
+                android:layout_marginRight="@dimen/dm020"
+                android:layout_marginTop="@dimen/dm020"
+                android:layout_marginBottom="@dimen/dm010"
+                android:text="员工姓名"
+                android:textColor="#000000"
+                android:textSize="@dimen/dm024" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/dm010"
+                android:layout_marginRight="@dimen/dm010"
+                android:layout_marginTop="@dimen/dm010"
+                android:layout_marginBottom="@dimen/dm010"
+                android:background="#30000000"></RelativeLayout>
+
+            <TextView
+                android:id="@+id/fragment_mine_ylyd_tv_company"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dm020"
+                android:layout_marginRight="@dimen/dm020"
+                android:layout_marginTop="@dimen/dm010"
+                android:layout_marginBottom="@dimen/dm010"
+                android:text="所属公司"
+                android:textColor="#000000"
+                android:textSize="@dimen/dm024" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/dm010"
+                android:layout_marginRight="@dimen/dm010"
+                android:layout_marginTop="@dimen/dm010"
+
+                android:background="#30000000"></RelativeLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/dm010"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_weight="7"
+                    android:id="@+id/fragment_mine_ylyd_tv_quarters"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_gravity="center_vertical"
+                    android:text="当前岗位"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/dm024" />
+
+                <Spinner
+                    style="null"
+                    android:layout_marginRight="@dimen/dm030"
+                    android:layout_weight="3"
+                    android:entries="@array/sping_sign_history"
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                </Spinner>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/dm010"
+                android:layout_marginRight="@dimen/dm010"
+                android:layout_marginTop="@dimen/dm010"
+                android:layout_marginBottom="@dimen/dm010"
+                android:background="#30000000"></RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_mine_ylyd_ll_resetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dm010"
+                android:layout_marginTop="@dimen/dm010">
+
+                <TextView
+                    android:id="@+id/fragment_mine_ylyd_tv_resetting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_weight="8"
+                    android:text="修改密码"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/dm024" />
+
+                <ImageView
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:src="@drawable/common_right" />
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/dm010"
+                android:layout_marginRight="@dimen/dm010"
+                android:layout_marginTop="@dimen/dm010"
+                android:background="#30000000"></RelativeLayout>
+            <LinearLayout
+                android:id="@+id/fragment_mine_ylyd_ll_exit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dm020"
+                android:layout_marginTop="@dimen/dm020">
+
+                <TextView
+                    android:id="@+id/fragment_mine_ylyd_tv_exit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_weight="8"
+                    android:text="注销"
+                    android:textColor="#FF0000"
+                    android:textSize="@dimen/dm024" />
+
+                <!--<ImageView-->
+                    <!--android:layout_marginRight="@dimen/dm020"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_weight="2"-->
+                    <!--android:src="@drawable/common_right" />-->
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <!--<Button-->
+            <!--android:id="@+id/fragment_mine_ylyd_exit"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="37dp"-->
+            <!--android:layout_marginBottom="@dimen/dm100"-->
+            <!--android:layout_marginLeft="@dimen/dm090"-->
+            <!--android:layout_marginRight="@dimen/dm090"-->
+            <!--android:layout_marginTop="@dimen/dm200"-->
+            <!--android:background="@drawable/yuanjiao_red"-->
+            <!--android:text="退出登录\nExit"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:textSize="@dimen/dm024" />-->
+    </LinearLayout>
+
+</LinearLayout>
+

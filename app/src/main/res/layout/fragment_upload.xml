@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/include_title_upload"
+        layout="@layout/top_title" />
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/dm080"-->
+    <!--android:gravity="center_vertical">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/fragmen_upload_tv_toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:text="@string/toobar_upload"-->
+    <!--android:textSize="@dimen/dm036" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/fragmen_upload_iv_back"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:src="@drawable/common_back" />-->
+
+    <!--<ImageView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:background="@drawable/login_line" />-->
+    <!--</RelativeLayout>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/china"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:text="请上传产品报废视频或图片"
+            android:textColor="#000000"
+            android:textSize="@dimen/dm025" />
+
+        <TextView
+            android:id="@+id/englsh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="0.14"
+            android:text="Please upload the product scrap video or pictures"
+            android:textColor="#000000"
+            android:textSize="@dimen/dm025" />
+
+        <FrameLayout
+            android:id="@+id/fragmen_upload_fl"
+            android:layout_width="@dimen/dm300"
+
+            android:layout_height="@dimen/dm300">
+
+            <ImageView
+                android:id="@+id/frgment_ouload_iv_upimg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/englsh"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:src="@drawable/wlh"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/fragmen_upload_tv_discription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/biankuang_blue"
+                android:gravity="center"
+                android:text="轻按选择图片或视频\n\nLight according to choose the picture or video"
+                android:textColor="#005DD1" />
+
+
+        </FrameLayout>
+
+
+        <!--<LinearLayout-->
+        <!--android:id="@+id/ll_radiobution"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_weight="1.08"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<RadioGroup-->
+        <!--android:id="@+id/fragment_upload_radioGroup"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<RadioButton-->
+        <!--android:id="@+id/fragmen_upload_rb_pic"-->
+        <!--style="@style/radio_button"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:checked="true"-->
+        <!--android:text="图片"-->
+        <!--android:textColor="@color/gray" />-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="20dp"-->
+        <!--android:layout_height="match_parent"></LinearLayout>-->
+
+        <!--<RadioButton-->
+        <!--android:id="@+id/fragmen_upload_rb_video"-->
+        <!--style="@style/radio_button"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:paddingLeft="5dp"-->
+        <!--android:paddingRight="30dp"-->
+        <!--android:text="视频"-->
+        <!--android:textColor="@color/gray" />-->
+
+        <!--</RadioGroup>-->
+        <!--</LinearLayout>-->
+
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0.88"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="产品编码\nProduct Code"
+                android:textSize="@dimen/dm024" />
+
+            <EditText
+                android:id="@+id/fragment_upload_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/biankuang_dark"
+                android:gravity="center_vertical"
+                android:hint="请输入产品编码\nPlease enter the product code"
+                android:textSize="@dimen/dm024" />
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/fragmen_upload_tv_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dm065"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="70dp"
+            android:layout_marginLeft="50dp"
+
+            android:layout_marginRight="50dp"
+            android:background="@drawable/yuanjiao_blue"
+            android:gravity="center"
+            android:text="上传\nUpload"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/dm020" />
+
+
+        <!--<Button-->
+        <!--android:id="@+id/pragment_upload_btn_up"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="28dp"-->
+        <!--android:layout_weight="3"-->
+        <!--android:background="@color/blue"-->
+        <!--android:text="上传\nUpload" />-->
+
+    </LinearLayout>
+</LinearLayout>
+

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/top_title" />
+
+            <!--搜索-->
+            <LinearLayout
+                android:id="@+id/knowledge_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dm020"
+                android:layout_marginLeft="@dimen/dm020"
+                android:layout_marginRight="@dimen/dm020"
+                android:layout_marginTop="@dimen/dm040"
+                android:background="@drawable/page_home"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/nav_seach" />
+
+                <EditText
+                    android:id="@+id/search_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dm040"
+                    android:layout_marginLeft="@dimen/dm010"
+                    android:background="@null"
+                    android:hint="搜索"
+                    android:imeOptions="actionSearch"
+                    android:textColor="@color/gray"
+                    android:textColorHint="@color/gray"
+                    android:textSize="@dimen/dm024" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dm020"
+                android:layout_marginRight="@dimen/dm020"
+                android:layout_marginTop="@dimen/dm030"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/dm010">
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginRight="@dimen/dm010"
+                    android:layout_weight="9"
+                    android:scrollbarAlwaysDrawVerticalTrack="false"
+                    android:scrollbars="none">
+
+                    <RadioGroup
+                        android:id="@+id/knowledge_rg_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"></RadioGroup>
+                </HorizontalScrollView>
+
+
+                <ImageView
+                    android:id="@+id/knowledge_search_popup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:src="@drawable/nav_seach" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="50dp"
+                android:layout_marginLeft="@dimen/dm020"
+                android:layout_marginRight="@dimen/dm020"
+                android:background="@drawable/biankuang_wite_shixin"
+                android:orientation="horizontal"
+                android:padding="@dimen/dm001">
+
+                <!--<ScrollView-->
+                <!--android:layout_width="@dimen/dm100"-->
+                <!--android:layout_height="match_parent">-->
+
+                <ListView
+                    android:id="@+id/knowledge_group"
+                    android:layout_width="@dimen/dm100"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"></ListView>
+
+                <!--</ScrollView>-->
+
+
+                <cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout
+                    android:id="@+id/refresh_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include layout="@layout/refresh_head" />
+                    <!-- 支持所有实现Pullable接口的View -->
+
+                    <cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView
+                        android:id="@+id/knowledge_items"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:divider="@color/gray"
+                        android:dividerHeight="1dp" />
+
+                    <include layout="@layout/load_more" />
+
+                </cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout>
+
+
+                <!--<FrameLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@drawable/biankuang_dark">-->
+
+                <!--<cn.net.bjsoft.sxdz.view.RefreshListView_1-->
+
+                <!--android:id="@+id/knowledge_items"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"></cn.net.bjsoft.sxdz.view.RefreshListView_1>-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/knowledge_hint"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:gravity="center"-->
+                <!--android:text="正在加载..." />-->
+                <!--</FrameLayout>-->
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/knowledge_add"
+            android:layout_width="@dimen/dm100"
+            android:layout_height="@dimen/dm100"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="50dp"
+            android:src="@drawable/aid_btn_new" />
+    </RelativeLayout>
+
+
+</LinearLayout>

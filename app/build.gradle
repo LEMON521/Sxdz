@@ -1,0 +1,86 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "cn.net.bjsoft.sxdz"
+        minSdkVersion 15
+        targetSdkVersion 25
+//        versionCode 1
+//        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    dexOptions{
+        jumboMode true
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+        //…
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi', 'x86'//只打包armeabi平台的，就算有其他文件夹也不管
+            //include 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'mips', 'x86', 'x86_64'
+
+        }
+    }
+    defaultConfig {
+        applicationId "cn.net.bjsoft.sxdz" //JPush上注册的包名.
+
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "c25f9af39dfcd043fe83db66",//JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+        ]
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    testCompile 'junit:junit:4.12'
+    compile 'org.xutils:xutils:3.3.22'
+    compile files('libs/gson-2.2.1.jar')
+    compile files('libs/ZBarDecoder.jar')
+    compile files('libs/xutils.jar')
+    compile files('libs/alipaySdk-20151103.jar')
+    compile files('libs/open_sdk_r5509.jar')
+    compile files('libs/SocialSDK_WeiXin_1.jar')
+    compile files('libs/org.apache.http.legacy.jar')
+    compile 'junit:junit:4.12'
+    compile files('libs/jcore-android_v1.1.0.jar')
+    compile files('libs/jpush-android_v3.0.1.jar')
+    //    compile files('libs/AMap3DMap_4.1.3_AMapLocation_3.3.0_20170118.jar')
+    compile files('libs/core.jar')
+    compile files('libs/Msc.jar')
+    compile files('libs/Sunflower.jar')
+    compile files('libs/jsoup-1.8.3.jar')
+    compile files('libs/AMap_Location_V3.3.0_20170118.jar')
+    compile files('libs/Android_Map3D_SDK_V4.1.3_20161208.jar')
+    compile files('libs/AMap_Search_V4.0.0_20170111.jar')
+    compile files('libs/Volley.jar')
+    compile files('libs/Amap_2DMap_V4.2.0_20170120.jar')
+    compile 'com.zzhoujay.richtext:richtext:2.4.4'
+}

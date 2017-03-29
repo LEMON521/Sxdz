@@ -1,0 +1,9 @@
+{
+  "app_id": 1,
+  "client_name": "biip",
+  "api_url": "http://api.shuxin.net/service/jsondata.aspx",
+  "loader": "images /loader.png",
+  "title": "",
+  "login": "",
+  "company_id": 1
+}

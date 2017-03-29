@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+    android:background="@drawable/updata"
+
+    android:orientation="vertical">
+
+    <include layout="@layout/top_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/window_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="标题"
+                android:textColor="#000000"
+                android:textSize="@dimen/dm026" />
+            <!--栏目1-->
+            <LinearLayout
+                android:id="@+id/window_ll_entry_1"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/window_tv_1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="栏目"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/dm023" />
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/blue" />
+
+                <EditText
+                    android:id="@+id/window_et_1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/biankuang_dark"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:inputType="textPassword"
+                    android:paddingLeft="3dp"
+                    android:textColorHint="@color/gray"
+                    android:textSize="@dimen/dm023" />
+
+            </LinearLayout>
+            <!--栏目2-->
+            <LinearLayout
+                android:id="@+id/window_ll_entry_2"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/window_tv_2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="栏目"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/dm023" />
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/blue" />
+
+                <EditText
+                    android:id="@+id/window_et_2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/biankuang_dark"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:inputType="textPassword"
+                    android:paddingLeft="3dp"
+                    android:textColorHint="@color/gray"
+                    android:textSize="@dimen/dm023" />
+
+            </LinearLayout>
+            <!--栏目3-->
+            <LinearLayout
+                android:id="@+id/window_ll_entry_3"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/window_tv_3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="栏目"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/dm023" />
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/blue" />
+
+                <EditText
+                    android:id="@+id/window_et_3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/biankuang_dark"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:inputType="textPassword"
+                    android:paddingLeft="3dp"
+                    android:textColorHint="@color/gray"
+                    android:textSize="@dimen/dm023" />
+
+            </LinearLayout>
+
+            <!--栏目4-->
+            <LinearLayout
+                android:id="@+id/window_ll_entry_4"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/window_tv_4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="栏目栏目
+"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/dm023" />
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/blue" />
+
+                <EditText
+                    android:id="@+id/window_et_4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/biankuang_dark"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:paddingLeft="3dp"
+                    android:textColorHint="@color/gray"
+                    android:textSize="@dimen/dm023" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/window_confirm"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="确定"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/dm026" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/blue" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/window_cancle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="取消"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/dm026" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

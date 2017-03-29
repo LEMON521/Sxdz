@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--报销物品的条目-->
+        <ListView
+            android:id="@+id/approve_new_res_entry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></ListView>
+
+
+
+        <TextView
+            android:id="@+id/approve_new_res_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/approve_shixin_blue"
+            android:padding="5dp"
+            android:text="+ 费用明细"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/login_line" />
+
+    </LinearLayout>
+
+</LinearLayout>
+

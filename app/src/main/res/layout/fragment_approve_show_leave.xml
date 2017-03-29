@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+    <!--审批编号-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="审批编号："
+            android:textSize="@dimen/dm023" />
+
+        <TextView
+            android:id="@+id/approve_show_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="123456789"
+            android:textSize="@dimen/dm023" />
+
+    </LinearLayout>
+
+    <!--所在部门-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="所在部门："
+            android:textSize="@dimen/dm023" />
+
+        <TextView
+            android:id="@+id/approve_show_department"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="技术部"
+            android:textSize="@dimen/dm023" />
+
+    </LinearLayout>
+
+
+    <ListView
+        android:layout_marginTop="10dp"
+        android:id="@+id/approve_show_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+</LinearLayout>
+

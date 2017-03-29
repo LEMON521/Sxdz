@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <include layout="@layout/top_title" />
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm250"
+        android:layout_marginBottom="@dimen/dm010"
+        android:layout_marginLeft="@dimen/dm010"
+        android:layout_marginRight="@dimen/dm010"
+        android:layout_marginTop="@dimen/dm030"
+        android:background="@drawable/biankuang_wite_shixin"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dm010"
+            android:layout_marginLeft="@dimen/dm010"
+            android:layout_marginRight="@dimen/dm010"
+            android:layout_marginTop="@dimen/dm010"
+            android:orientation="horizontal"
+            android:padding="@dimen/dm010">
+
+            <TextView
+                android:id="@+id/mine_zdlf_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm015"
+                android:layout_weight="3"
+                android:background="@color/white"
+                android:padding="@dimen/dm005"
+                android:text="小小"
+                android:textColor="@color/aMap_black"
+                android:textSize="@dimen/dm026" />
+
+            <cn.net.bjsoft.sxdz.view.CircleImageView
+                android:id="@+id/mine_zdlf_icon"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dm100"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/wlh" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/mine_zdlf_company"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm020"
+            android:layout_marginRight="@dimen/dm020"
+
+            android:padding="@dimen/dm005"
+            android:text="北京中电联发科技有限公"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/dm024" />
+
+        <TextView
+            android:id="@+id/mine_zdlf_department"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm020"
+            android:layout_marginRight="@dimen/dm020"
+            android:layout_marginTop="@dimen/dm020"
+            android:padding="@dimen/dm005"
+            android:text="销售"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/dm024" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mine_zdlf_address_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dm010"
+        android:layout_marginTop="@dimen/dm010"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/dm020">
+
+        <ImageView
+            android:layout_width="@dimen/dm050"
+            android:layout_height="@dimen/dm050"
+            android:layout_marginLeft="@dimen/dm020"
+            android:src="@drawable/com_icon_word" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm020"
+            android:layout_weight="3"
+            android:text="通讯录"
+            android:textColor="@color/aMap_black"
+            android:textSize="@dimen/dm026" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dm031"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@drawable/common_right" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/mine_zdlf_personnel_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dm010"
+        android:layout_marginTop="@dimen/dm010"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/dm020">
+
+        <ImageView
+            android:layout_width="@dimen/dm050"
+            android:layout_height="@dimen/dm050"
+            android:layout_marginLeft="@dimen/dm020"
+            android:src="@drawable/com_icon_word" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm020"
+            android:layout_weight="3"
+            android:text="人事管理"
+            android:textColor="@color/aMap_black"
+            android:textSize="@dimen/dm026" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dm031"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@drawable/common_right" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mine_zdlf_reset_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dm010"
+        android:layout_marginTop="@dimen/dm010"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/dm020">
+
+        <ImageView
+            android:layout_width="@dimen/dm050"
+            android:layout_height="@dimen/dm050"
+            android:layout_marginLeft="@dimen/dm020"
+            android:src="@drawable/com_icon_word" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm020"
+            android:layout_weight="3"
+            android:text="修改密码"
+            android:textColor="@color/aMap_black"
+            android:textSize="@dimen/dm026" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dm031"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@drawable/common_right" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mine_zdlf_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dm020"
+        android:layout_marginTop="@dimen/dm040">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm040"
+            android:layout_marginRight="@dimen/dm040"
+            android:background="@drawable/approve_shixin_red"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dm015"
+            android:paddingTop="@dimen/dm015"
+            android:text="退出登录"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dm024" />
+    </LinearLayout>
+
+</LinearLayout>
+

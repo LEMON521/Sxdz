@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <include layout="@layout/top_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+
+            android:id="@+id/root_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/scroll"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm300">
+                <!-- 放置轮播图片位置 -->
+                <LinearLayout
+                    android:id="@+id/top_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dm300"
+                    android:orientation="horizontal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dm040"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/dm001"
+                    android:background="#30000000"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <!-- 放置图片标题的位置 -->
+                    <TextView
+                        android:id="@+id/top_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dm010"
+                        android:layout_marginRight="@dimen/dm015"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="图片标题"
+                        android:textColor="#F6F6F6" />
+                    <!-- 放置图片中选中点的位置 -->
+                    <LinearLayout
+                        android:id="@+id/dots_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/dm010"
+                        android:gravity="center"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <!--主要应用-->
+            <LinearLayout
+                android:id="@+id/ll_application_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dm020"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_marginTop="@dimen/dm010"
+                    android:text="主要应用"
+                    android:textSize="@dimen/dm024" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dm001"
+                    android:background="@color/aMap_black"></RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_marginTop="@dimen/dm010"
+                    android:background="@color/white">
+                    <!--主要应用-->
+                    <GridView
+                        android:id="@+id/gv_application_main"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:columnWidth="@dimen/dm130"
+                        android:horizontalSpacing="@dimen/dm010"
+                        android:numColumns="auto_fit"
+                        android:scrollbars="none"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="@dimen/dm010"></GridView>
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+
+            <!--项目相关-->
+            <LinearLayout
+                android:id="@+id/ll_application_project"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm020"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_marginTop="@dimen/dm010"
+                    android:text="项目相关"
+                    android:textSize="@dimen/dm024" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dm001"
+                    android:background="@color/aMap_black"></RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_marginTop="@dimen/dm010"
+                    android:background="@color/white">
+                    <!--项目相关-->
+                    <GridView
+                        android:id="@+id/gv_application_project"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:columnWidth="@dimen/dm130"
+                        android:horizontalSpacing="@dimen/dm010"
+                        android:numColumns="auto_fit"
+                        android:scrollbars="none"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="@dimen/dm010"></GridView>
+                </FrameLayout>
+            </LinearLayout>
+
+            <!--工程相关-->
+            <LinearLayout
+                android:id="@+id/ll_application_work"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dm020"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_marginTop="@dimen/dm010"
+                    android:text="工程相关"
+                    android:textSize="@dimen/dm024" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dm001"
+                    android:background="@color/aMap_black"></RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_marginTop="@dimen/dm010"
+                    android:background="@color/white">
+                    <!--工程应用-->
+                    <GridView
+                        android:id="@+id/gv_application_work"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:columnWidth="@dimen/dm130"
+                        android:horizontalSpacing="@dimen/dm010"
+                        android:numColumns="auto_fit"
+                        android:scrollbars="none"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="@dimen/dm010"></GridView>
+                </FrameLayout>
+            </LinearLayout>
+
+
+            <!--其他应用-->
+            <LinearLayout
+                android:id="@+id/ll_application_other"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm020"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_marginTop="@dimen/dm010"
+                    android:text="其他应用"
+                    android:textSize="@dimen/dm024" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dm001"
+                    android:background="@color/aMap_black"></RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:layout_marginTop="@dimen/dm010"
+                    android:background="@color/white">
+                    <!--其他应用-->
+                    <GridView
+                        android:id="@+id/gv_application_other"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:columnWidth="@dimen/dm130"
+                        android:horizontalSpacing="@dimen/dm010"
+                        android:numColumns="auto_fit"
+                        android:scrollbars="none"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="@dimen/dm010"></GridView>
+                </FrameLayout>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="invisible"></FrameLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

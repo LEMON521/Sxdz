@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:layout_weight="2">
+        <TextView
+            android:id="@+id/homepage_frag_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="@dimen/dm036"/>
+        <!--<ImageView-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:onClick="onback"-->
+            <!--android:src="@drawable/common_back"/>-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_line"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
+    <!--<Button-->
+        <!--android:id="@+id/btn_scan"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:text="扫一扫"-->
+        <!--android:layout_weight="2"/>-->
+    <TextView
+        android:id="@+id/fragmen_home_news_empyt_load"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="21"
+        android:text="暂时没有新闻\n请点击页面重新加载"
+        />
+
+</LinearLayout>
+

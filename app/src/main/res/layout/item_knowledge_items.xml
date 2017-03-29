@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/dm005">
+
+    <ImageView
+        android:id="@+id/item_knowledge_item_image"
+        android:layout_width="@dimen/dm170"
+        android:layout_height="@dimen/dm170" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/dm005">
+
+        <TextView
+            android:id="@+id/item_knowledge_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dm065"
+            android:layout_marginBottom="@dimen/dm010"
+            android:layout_marginTop="@dimen/dm005"
+            android:padding="@dimen/dm005"
+            android:text="为了减肥而努力为了减肥而努力为了减肥而努力为了减肥而努力为了减肥而努力为了减肥而努力为了减肥而努力为了减肥而努力"
+            android:textColor="@color/aMap_black"
+            android:textSize="@dimen/dm024" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dm033"
+            android:orientation="horizontal">
+
+
+
+            <TextView
+                android:id="@+id/item_knowledge_item_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dm005"
+                android:text="2017.02.03"
+                android:textSize="@dimen/dm020" />
+            <TextView
+                android:id="@+id/item_knowledge_item_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/item_knowledge_item_date"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dm005"
+                android:text="作者"
+                android:textSize="@dimen/dm020" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dm033"
+            android:layout_marginBottom="@dimen/dm005"
+            android:layout_marginTop="@dimen/dm010"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/item_knowledge_item_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dm005"
+                android:text="健康,生活"
+                android:textSize="@dimen/dm020" />
+
+            <LinearLayout
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/aMap_chunzi"
+                    android:gravity="center"
+                    android:padding="@dimen/dm005" />
+
+                <TextView
+                    android:id="@+id/item_knowledge_item_reply_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dm005"
+                    android:text="20"
+                    android:textSize="@dimen/dm020" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/aMap_chunzi"
+                    android:gravity="center"
+                    android:padding="@dimen/dm005" />
+
+                <TextView
+                    android:id="@+id/item_knowledge_item_lookover_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dm005"
+                    android:text="100"
+                    android:textSize="@dimen/dm020" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/register"
+            android:textSize="@dimen/dm030" />
+
+        <ImageView
+            android:id="@+id/register_back"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/common_back" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/login_line" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="21"
+        android:background="#F9FDFF"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="2"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp">
+
+            <ImageView
+                android:id="@+id/register_user_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/get_back_passwoed" />
+
+            <ImageView
+                android:id="@+id/register_user_line"
+                android:layout_width="2dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/register_user_icon"
+                android:src="@drawable/login_vertival_line" />
+
+            <EditText
+                android:text="13666666666"
+                android:id="@+id/register_user_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/register_user_line"
+                android:background="@null"
+                android:hint="@string/phonenumber"
+                android:textSize="@dimen/dm028" />
+
+            <Button
+                android:id="@+id/register_sendcode"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/login_btn_blue"
+                android:text="@string/sendyanzhnegma"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/dm028" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="2"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <ImageView
+                android:id="@+id/register_iv_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/get_back_code" />
+
+            <ImageView
+                android:id="@+id/register_iv_line"
+                android:layout_width="2dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/register_iv_code"
+                android:src="@drawable/login_vertival_line" />
+
+            <EditText
+                android:text="111111"
+                android:id="@+id/register_editer_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/register_iv_line"
+                android:background="@null"
+                android:hint="@string/yanzhengma"
+                android:textSize="@dimen/dm028" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="2"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/register_rb_humen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:checked="true"
+                    android:text="个人"
+                    android:textColor="@color/gray" />
+
+                <RadioButton
+                    android:id="@+id/register_rb_company"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="企业"
+                    android:textColor="@color/gray" />
+            </RadioGroup>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:paddingBottom="3dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="注册表示同意"
+                android:textSize="@dimen/dm020" />
+
+            <TextView
+                android:id="@+id/register_txt_agreement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="服务使用协议"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/dm020" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="和"
+                android:textSize="@dimen/dm020" />
+
+            <TextView
+                android:id="@+id/register_txt_privacyClause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="隐私条款"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/dm020" />
+
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="15"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <EditText
+                android:id="@+id/register_editer_summary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:gravity="start"
+                android:hint="个人功能简介"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm028" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/register_btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/login_btn_blue"
+            android:text="下一步"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/dm032" />
+    </LinearLayout>
+</LinearLayout>

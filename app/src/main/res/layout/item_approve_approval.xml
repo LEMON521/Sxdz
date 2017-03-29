@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:padding="@dimen/dm010">
+
+    <LinearLayout
+
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/approve_approval_mater"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="去医院看病"
+            android:textSize="@dimen/dm024" />
+
+        <TextView
+            android:id="@+id/approve_approval_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2017/03/09"
+            android:textSize="@dimen/dm024" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/approve_approval_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="审批中"
+            android:textColor="@color/aMap_chenghuang"
+            android:textSize="@dimen/dm026" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="@dimen/dm010">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <cn.net.bjsoft.sxdz.view.CircleImageView
+            android:id="@+id/knowledge_item_items_avatar"
+            android:layout_width="@dimen/dm050"
+            android:layout_height="@dimen/dm050"
+            android:src="@drawable/wlh" />
+
+        <TextView
+            android:id="@+id/knowledge_item_items_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dm010"
+            android:text="ajian"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/dm020" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dm005">
+
+        <TextView
+            android:id="@+id/knowledge_item_items_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm010"
+            android:padding="@dimen/dm005"
+            android:text="跑步是一种态度,特别是跑步减肥!"
+            android:textColor="@color/aMap_black"
+            android:textSize="@dimen/dm024" />
+
+        <LinearLayout
+            android:layout_marginRight="@dimen/dm020"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/knowledge_item_items_text"
+            android:layout_marginLeft="@dimen/dm010"
+            android:layout_marginTop="@dimen/dm010"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/knowledge_item_items_leavel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1楼"
+                        android:textSize="@dimen/dm020" />
+
+                    <TextView
+                        android:id="@+id/knowledge_item_items_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dm020"
+                        android:text="2017-02-20 20:36"
+                        android:textSize="@dimen/dm020" />
+
+                    <TextView
+                        android:id="@+id/knowledge_item_items_reply"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dm020"
+                        android:text="回复"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/dm020" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <cn.net.bjsoft.sxdz.view.ChildrenListView
+                android:layout_marginTop="@dimen/dm010"
+                android:id="@+id/knowledge_item_items_reply_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+            </cn.net.bjsoft.sxdz.view.ChildrenListView>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

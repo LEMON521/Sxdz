@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/register"
+            android:textSize="@dimen/dm030" />
+
+        <ImageView
+            android:id="@+id/register_company_back"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/common_back" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/login_line" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="21"
+        android:background="#F9FDFF"
+        android:orientation="vertical">
+        <!--营业执照号-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:id="@+id/register_company_text_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="营业执照号"
+                android:textSize="@dimen/dm028" />
+
+            <ImageView
+                android:id="@+id/register_company_iv_line"
+                android:layout_width="2dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/register_company_text_code"
+                android:src="@drawable/login_vertival_line" />
+
+            <EditText
+                android:id="@+id/register_company_editer_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/register_company_iv_line"
+                android:background="@null"
+                android:hint="请输入营业执照号"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm028" />
+        </RelativeLayout>
+
+
+        <!--照片-->
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="8dp"
+                android:text="请上传营业执照" />
+            <RelativeLayout
+                android:id="@+id/regiest_company_rl_front"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="50dp"
+                android:layout_width="@dimen/dm200"
+                android:layout_height="@dimen/dm150"
+                android:layout_centerHorizontal="true">
+                <ImageView
+                    android:id="@+id/regiest_company_iv_front"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/common_photo"
+                    android:layout_centerHorizontal="true"
+                    android:background="#ffffff"/>
+                <ImageView
+                    android:id="@+id/regiest_company_iv_front_delete"
+                    android:layout_width="@dimen/dm030"
+                    android:layout_height="@dimen/dm030"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/common_close"/>
+
+            </RelativeLayout>
+            <TextView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/regiest_company_tv_front"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/regiest_company_rl_front"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="营业执照" />
+        </RelativeLayout>
+            <!--正面-->
+            <!--<ImageView-->
+                <!--android:id="@+id/regiest_company_iv_front"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="70dp"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:layout_marginTop="50dp"-->
+                <!--android:src="@drawable/common_photo" />-->
+            <!--&lt;!&ndash;反面&ndash;&gt;-->
+            <!--<ImageView-->
+            <!--android:id="@+id/regiest_humen_iv_back"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="70dp"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginEnd="30dp"-->
+            <!--android:layout_marginRight="30dp"-->
+            <!--android:layout_marginTop="50dp"-->
+            <!--android:src="@drawable/common_photo" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/regiest_company_tv_front"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/regiest_company_iv_front"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:gravity="center"-->
+        <!--android:text="营业执照" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/regiest_humen_tv_back"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_below="@+id/regiest_humen_iv_back"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:layout_marginLeft="30dp"-->
+            <!--android:layout_marginRight="30dp"-->
+            <!--android:layout_marginTop="15dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="身份证反面" />-->
+
+
+
+        <!--企业邮箱-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <TextView
+
+                android:id="@+id/register_company_text_emile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_horizontal"
+                android:text="企 业 邮 箱"
+                android:textSize="@dimen/dm028" />
+
+            <ImageView
+                android:id="@+id/register_company_iv_emile_line"
+                android:layout_width="2dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/register_company_text_emile"
+                android:src="@drawable/login_vertival_line" />
+
+            <EditText
+                android:id="@+id/register_company_editer_emile_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/register_company_iv_emile_line"
+                android:background="@null"
+                android:hint="请输入电子邮箱"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm028" />
+        </RelativeLayout>
+
+        <!--企业名称-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/biankuang_dark"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:id="@+id/register_company_text_organization_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="企 业 名 称"
+                android:textSize="@dimen/dm028" />
+
+            <ImageView
+                android:id="@+id/register_company_iv_organization_line"
+                android:layout_width="2dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/register_company_text_organization_code"
+                android:src="@drawable/login_vertival_line" />
+
+            <EditText
+                android:id="@+id/register_company_editer_organization_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/register_company_iv_organization_line"
+                android:background="@null"
+                android:hint="请输入企业名称"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm028" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/register_company_btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/login_btn_blue"
+            android:text="完成"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/dm032" />
+    </LinearLayout>
+
+
+</LinearLayout>

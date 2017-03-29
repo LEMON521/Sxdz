@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f4f5ee"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="请假总天数:"
+                android:textSize="@dimen/dm023" />
+
+            <!--总金额-->
+            <TextView
+                android:id="@+id/approve_new_leave_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="0"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:text="天"
+                android:textSize="@dimen/dm023" />
+
+        </LinearLayout>
+
+        <!--请假事由-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/white"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:gravity="center"-->
+                <!--android:text="请假事由："-->
+                <!--android:textSize="@dimen/dm023" />-->
+
+            <!--<EditText-->
+                <!--android:id="@+id/approve_new_leave_mater"-->
+                <!--android:padding="3dp"-->
+                <!--android:textSize="@dimen/dm023"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:background="@drawable/biankuang_dark"-->
+                <!--android:gravity="center" />-->
+        <!--</LinearLayout>-->
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/login_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="3"
+                android:text="请假事由"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="2"
+                android:text="开始时间"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="2"
+                android:text="结束时间"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/approve_new_leave_edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/approve_shixin_blue"
+                android:gravity="center"
+                android:text="编辑"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm023"
+                android:visibility="invisible" />
+        </LinearLayout>
+        <!--报销物品的条目80dp-->
+        <ListView
+
+            android:id="@+id/approve_new_leave_entry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"></ListView>
+
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@drawable/login_line" />-->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/approve_new_leave_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/approve_shixin_blue"
+                android:padding="5dp"
+                android:text="+ 请假明细"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm023" />
+            <!--android:drawableLeft="@drawable/aid_nav_btn_close"-->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/login_line" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+

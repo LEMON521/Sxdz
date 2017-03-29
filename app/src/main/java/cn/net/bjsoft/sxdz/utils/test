@@ -1,0 +1,52 @@
+{
+    "cumm": {
+        "bug": {
+            "num": 1
+        },
+        "community": {
+            "num": 1
+        },
+        "knowledge": {
+            "num": 1
+        },
+        "proposal": {
+            "num": 1
+        },
+        "train": {
+            "num": 1
+        }
+    },
+    "fun": {
+        "payment": {
+            "num": 1
+        },
+        "scan": {
+            "num": 1
+        },
+        "shoot": {
+            "num": 1
+        },
+        "signin": {
+            "num": 1
+        }
+    },
+    "mess": {
+        "approve": {
+            "num": 1
+        },
+        "crm": {
+            "num": 1
+        },
+        "message": {
+            "num": 1
+        },
+        "task": {
+            "num": 1
+        }
+    },
+    "user": {
+        "myself": {
+            "num": 1
+        }
+    }
+}

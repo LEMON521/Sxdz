@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="物品名称："
+                android:textSize="@dimen/dm023" />
+
+
+            <EditText
+                android:id="@+id/item_approve_new_res_res"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="3"
+                android:background="@drawable/biankuang_dark"
+                android:hint="请输入物品信息"
+                android:inputType="number"
+                android:padding="3dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:id="@+id/item_approve_new_res_delete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:background="@drawable/approve_shixin_red"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="删除"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm020" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="物品用途："
+                android:textSize="@dimen/dm023" />
+
+
+            <EditText
+                android:id="@+id/item_approve_new_res_use"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="3"
+                android:background="@drawable/biankuang_dark"
+                android:hint="请输入物品用途"
+                android:inputType="number"
+                android:padding="3dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/dm020" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="物品数量："
+                android:textSize="@dimen/dm023" />
+
+
+            <EditText
+                android:id="@+id/item_approve_new_res_num"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="3"
+                android:background="@drawable/biankuang_dark"
+                android:hint="请输入物品数量"
+                android:inputType="number"
+                android:padding="3dp"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/dm023" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/dm020" />
+        </LinearLayout>
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@drawable/login_line" />-->
+
+    </LinearLayout>
+
+</LinearLayout>
+

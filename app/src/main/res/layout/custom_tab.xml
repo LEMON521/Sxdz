@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="65.32999dip"
+    android:layout_alignParentBottom="true">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/line_2" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="#ffffff"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/frame_home"
+            android:layout_width="fill_parent"
+            android:layout_height="48.0dip"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:id="@+id/tab_home"
+                android:layout_width="22.0dip"
+                android:layout_height="22.0dip"
+                android:layout_gravity="top|center"
+                android:layout_marginTop="5.0dip"
+                android:src="@drawable/tab_home_s" />
+
+            <TextView
+                android:id="@+id/tab_home_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="2.0dip"
+                android:text="主页"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/dm020" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/frame_apply"
+            android:layout_width="fill_parent"
+            android:layout_height="48.0dip"
+            android:layout_marginRight="10.0dip"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:id="@+id/tab_apply"
+                android:layout_width="22.0dip"
+                android:layout_height="22.0dip"
+                android:layout_gravity="top|center"
+                android:layout_marginTop="5.0dip"
+                android:src="@drawable/tab_yingyong_n" />
+
+            <TextView
+                android:id="@+id/tab_bang_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="2.0dip"
+                android:text="应用"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dm020" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" />
+
+        <FrameLayout
+            android:id="@+id/frame_mutual"
+            android:layout_width="fill_parent"
+            android:layout_height="48.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:id="@+id/tab_mutual"
+                android:layout_width="22.0dip"
+                android:layout_height="22.0dip"
+                android:layout_gravity="top|center"
+                android:layout_marginTop="5.0dip"
+                android:src="@drawable/tab_help_n" />
+
+            <TextView
+                android:id="@+id/tab_help_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="2.0dip"
+                android:text="互助"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dm020" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/frame_mine"
+            android:layout_width="fill_parent"
+            android:layout_height="48.0dip"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:id="@+id/tab_mine"
+                android:layout_width="22.0dip"
+                android:layout_height="22.0dip"
+                android:layout_gravity="top|center"
+                android:layout_marginTop="5.0dip"
+                android:src="@drawable/tab_me_n" />
+
+            <TextView
+                android:id="@+id/tab_mine_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="2.0dip"
+                android:text="我的"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dm020" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_made"
+        android:layout_width="wrap_content"
+        android:layout_height="68dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1.0">
+
+        <ImageView
+            android:id="@+id/tab_made"
+            android:layout_width="43dp"
+            android:layout_height="51dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/tab_logo" />
+
+        <TextView
+            android:id="@+id/tab_made_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="5dp"
+            android:text="定制"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/dm020" />
+    </FrameLayout>
+
+</FrameLayout>

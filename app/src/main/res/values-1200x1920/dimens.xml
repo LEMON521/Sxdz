@@ -1,0 +1,8 @@
+<resources>
+
+    <dimen name="dm_a">60dp</dimen>
+    <dimen name="dm_b">60dp</dimen>
+    <dimen name="dm_c">70dp</dimen>
+    <dimen name="dm_d">30dp</dimen>
+
+</resources>

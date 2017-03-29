@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm080"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/message_approve_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/message_approve_new"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/dm030" />
+
+        <ImageView
+            android:id="@+id/message_approve_new_back"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/common_back" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/login_line" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:visibility="gone">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/approve_new_expenses"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/approve_new_radio"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center_horizontal"
+                android:tag="expenses"
+                android:text="报销"
+                android:textColor="@drawable/approve_new_radio"
+                android:textSize="@dimen/dm023" />
+
+            <RadioButton
+                android:id="@+id/approve_new_trip"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/approve_new_radio"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:tag="trip"
+                android:text="出差"
+                android:textColor="@drawable/approve_new_radio"
+                android:textSize="@dimen/dm023" />
+
+            <RadioButton
+                android:id="@+id/approve_new_leave"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/approve_new_radio"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:tag="leave"
+                android:text="请假"
+                android:textColor="@drawable/approve_new_radio"
+                android:textSize="@dimen/dm023" />
+
+            <RadioButton
+                android:id="@+id/approve_new_out"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/approve_new_radio"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:tag="out"
+                android:text="外出"
+                android:textColor="@drawable/approve_new_radio"
+                android:textSize="@dimen/dm023" />
+
+            <RadioButton
+                android:id="@+id/approve_new_buy"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/approve_new_radio"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:tag="buy"
+                android:text="采购"
+                android:textColor="@drawable/approve_new_radio"
+                android:textSize="@dimen/dm023" />
+
+            <RadioButton
+                android:id="@+id/approve_new_agreement"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/approve_new_radio"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:tag="agreement"
+                android:text="合同"
+                android:textColor="@drawable/approve_new_radio"
+                android:textSize="@dimen/dm023" />
+
+            <RadioButton
+                android:id="@+id/approve_new_res"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1.5"
+                android:background="@drawable/approve_new_radio"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:tag="res"
+                android:text="物品领用"
+                android:textColor="@drawable/approve_new_radio"
+                android:textSize="@dimen/dm023" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/approve_new_contant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:padding="10dp">
+                <!--附件-->
+                <GridView
+                    android:scrollbars="none"
+                    android:id="@+id/approve_new_expenses_accessory"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#f4f5ee"
+                    android:columnWidth="70dp"
+                    android:horizontalSpacing="10dp"
+                    android:numColumns="auto_fit"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="10dp">
+
+                </GridView>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/login_line" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textSize="@dimen/dm023"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:text="审批人" />
+                    <TextView
+                        android:textSize="@dimen/dm018"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="(点击头像可删除)" />
+                </LinearLayout>
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/login_line" />
+            </LinearLayout>
+            <!--审批人-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:padding="10dp">
+
+                <GridView
+                    android:scrollbars="none"
+                    android:id="@+id/approve_new_expenses_humen"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#f4f5ee"
+                    android:columnWidth="70dp"
+                    android:horizontalSpacing="10dp"
+                    android:numColumns="auto_fit"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="10dp">
+
+                </GridView>
+            </FrameLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/approve_new_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/approve_shixin_blue"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="提交"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dm023" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+    </ScrollView>
+</LinearLayout>
+

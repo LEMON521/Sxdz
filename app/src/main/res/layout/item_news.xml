@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:background="#10000000"
+    android:paddingTop="2dp">
+
+    <RelativeLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm070"
+        android:layout_marginBottom="2dp"
+        android:orientation="horizontal">
+
+        <TextView
+
+            android:id="@+id/news_title"
+            android:textSize="@dimen/dm024"
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:text="安尔乐产品安尔乐产品安尔乐产品安尔乐产品安尔乐产品安尔乐产品安尔乐产品安尔乐产品"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/news_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="10dp"
+            android:textSize="@dimen/dm018"
+            android:text="2016-12-23 14:41:37"
+            android:textColor="@color/blue" />
+
+    </RelativeLayout>
+
+</LinearLayout>

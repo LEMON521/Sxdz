@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homepage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--tools:context=".main.ui.home.MainActivity">-->
+
+    <FrameLayout
+        android:id="@+id/community_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"></FrameLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e1edf9" />
+
+    <LinearLayout
+        android:id="@+id/community_bar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <!--直播-->
+        <RelativeLayout
+            android:id="@+id/community_live"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="live">
+
+            <ImageView
+                android:id="@+id/community_live_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/aid_tab_btn_live_n" />
+
+            <TextView
+                android:id="@+id/community_live_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/community_live_icon"
+                android:gravity="center"
+                android:text="直播"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/dm022" />
+
+            <TextView
+                android:id="@+id/community_live_num"
+                android:layout_width="@dimen/dm024"
+                android:layout_height="@dimen/dm024"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/community_live_text"
+                android:background="@drawable/common_red"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm018" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/community_live_img"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="#e1edf9" />
+        <!--帮助-->
+        <RelativeLayout
+            android:id="@+id/community_help"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="help">
+
+            <ImageView
+                android:id="@+id/community_help_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/aid_tab_btn_help_n" />
+
+            <TextView
+                android:id="@+id/community_help_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/community_help_icon"
+                android:gravity="center"
+                android:text="帮助"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dm022" />
+
+            <TextView
+                android:id="@+id/community_help_num"
+                android:layout_width="@dimen/dm024"
+                android:layout_height="@dimen/dm024"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/community_help_text"
+                android:background="@drawable/common_red"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm018" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/community_help_img"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="#e1edf9" />
+        <!--建议-->
+        <RelativeLayout
+            android:id="@+id/community_proposal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="proposal">
+
+            <ImageView
+                android:id="@+id/community_proposal_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/aid_tab_btn_adcise_n" />
+
+            <TextView
+                android:id="@+id/community_proposal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/community_proposal_icon"
+                android:gravity="center"
+                android:text="建议"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dm022" />
+
+            <TextView
+                android:id="@+id/community_proposal_num"
+                android:layout_width="@dimen/dm024"
+                android:layout_height="@dimen/dm024"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/community_proposal_text"
+                android:background="@drawable/common_red"
+                android:gravity="center"
+                android:textColor="@color/white"
+
+                android:textSize="@dimen/dm018" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/community_proposal_img"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="#e1edf9" />
+        <!--解惑/报错-->
+        <RelativeLayout
+            android:id="@+id/community_disabuse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="disabuse">
+
+            <ImageView
+                android:id="@+id/community_disabuse_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/aid_tab_btn_bug_n" />
+
+            <TextView
+                android:id="@+id/community_disabuse_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/community_disabuse_icon"
+                android:gravity="center"
+                android:text="报错"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dm022" />
+
+            <TextView
+                android:id="@+id/community_disabuse_num"
+                android:layout_width="@dimen/dm024"
+                android:layout_height="@dimen/dm024"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/community_disabuse_text"
+                android:background="@drawable/common_red"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm018" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/community_disabuse_img"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="#e1edf9" />
+        <!--社区-->
+        <RelativeLayout
+            android:id="@+id/community_community"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:tag="community">
+
+            <ImageView
+                android:id="@+id/community_community_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/aid_tab_btn_live_n" />
+
+            <TextView
+                android:id="@+id/community_community_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/community_community_icon"
+                android:gravity="center"
+                android:text="社区"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dm022" />
+
+            <TextView
+                android:id="@+id/community_community_num"
+                android:layout_width="@dimen/dm024"
+                android:layout_height="@dimen/dm024"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/community_community_text"
+                android:background="@drawable/common_red"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm018" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/community_community_img"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="#e1edf9"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/zhuijia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/zhuijia"
+        android:visibility="gone" />
+</LinearLayout>

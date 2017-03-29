@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="5dp"
+              android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp">
+    <TextView
+        android:id="@+id/taskname"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="安尔乐产品"/>
+    <TextView
+        android:id="@+id/taskstate"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:textColor="@color/blue"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="代拍"/>
+    <RelativeLayout
+        android:layout_gravity="right"
+        android:id="@+id/submit"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:id="@+id/delete"
+            android:layout_width="@dimen/dm070"
+            android:layout_height="@dimen/dm040"
+            android:background="@drawable/login_btn_blue"
+            android:textSize="@dimen/dm019"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:layout_toLeftOf="@+id/tijiao"
+            android:layout_marginRight="@dimen/dm010"
+            android:text="删除"/>
+        <TextView
+            android:id="@+id/tijiao"
+            android:layout_width="@dimen/dm070"
+            android:layout_height="@dimen/dm040"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/login_btn_blue"
+            android:textSize="@dimen/dm019"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:text="提交"/>
+    </RelativeLayout>
+</LinearLayout>
+    <!--<GridView-->
+    <!--android:id="@+id/gridview"-->
+    <!--android:numColumns="auto_fit"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"></GridView>-->
+
+    <!--</cn.zhang.wiky.treelistviewtest.MyGridView>-->
+    <com.lidroid.mutils.views.MyGridView
+        android:id="@+id/gridview"
+        android:numColumns="auto_fit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+    </com.lidroid.mutils.views.MyGridView>
+</LinearLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/dotImg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="90dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="20dp" />
+
+    <Button
+        android:id="@+id/taste"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm070"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="@dimen/dm350"
+        android:background="@drawable/jinru"
+        android:text="立即体验"
+        android:textColor="#56586f"
+        android:textSize="@dimen/dm030"
+        android:visibility="visible" />
+</RelativeLayout>
