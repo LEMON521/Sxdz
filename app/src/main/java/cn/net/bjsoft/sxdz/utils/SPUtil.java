@@ -260,16 +260,16 @@ public class SPUtil {
     }
 
     /**头像 */
-    public static String getTou(Context context) {
+    public static String getAvatar(Context context) {
         SharedPreferences preferences = context.getApplicationContext().getSharedPreferences("touxiang", Context.MODE_PRIVATE);
-        return preferences.getString("touxiang", "");
+        return preferences.getString(Constants.AVATAR, "");
     }
 
     /**头像*/
-    public static void setTou(Context context, String loginPassword) {
+    public static void setAvatar(Context context, String avatar_url) {
         SharedPreferences prefs = context.getApplicationContext().getSharedPreferences("touxiang", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("touxiang", loginPassword);
+        editor.putString(Constants.AVATAR, avatar_url);
         editor.commit();
     }
 

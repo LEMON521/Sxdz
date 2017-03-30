@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
-import cn.net.bjsoft.sxdz.dialog.KnowledgeReplyPopupWindow;
+import cn.net.bjsoft.sxdz.dialog.KnowledgeReplyPopupWindow_1;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
@@ -31,6 +34,8 @@ import cn.net.bjsoft.sxdz.view.CircleImageView;
  */
 
 public class KnowledgeItemsItemAdapter extends BaseAdapter {
+    //private Holder holder;
+
     private BitmapUtils bitmapUtils;
     //private Context context;
     private FragmentActivity mActivity;
@@ -67,58 +72,43 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mActivity).inflate(
                     R.layout.item_knowledge_items_item_1, null);
             holder = new Holder();
+
+
             holder.avatar = (CircleImageView) convertView.findViewById(R.id.knowledge_item_items_avatar);
             holder.name = (TextView) convertView.findViewById(R.id.knowledge_item_items_name);
             holder.text = (TextView) convertView.findViewById(R.id.knowledge_item_items_text);
             //tag.text = (ShowHtmlView) convertView.findViewById(R.id.knowledge_item_items_text);
             holder.leavel = (TextView) convertView.findViewById(R.id.knowledge_item_items_leavel);
             holder.time = (TextView) convertView.findViewById(R.id.knowledge_item_items_time);
-            holder.reply = (TextView) convertView.findViewById(R.id.knowledge_item_items_reply);
+            holder.reply = (CheckBox) convertView.findViewById(R.id.knowledge_item_items_isspread);
             //holder.lv_list = (/*Children*/ListView) convertView.findViewById(R.id.knowledge_item_items_reply_list);
             holder.lv_list = (ChildrenListView) convertView.findViewById(R.id.knowledge_item_items_reply_list);
-            holder.ll_host = (LinearLayout) convertView.findViewById(R.id.knowledge_item_items_reply_host_ll);
+            //holder.ll_host = (LinearLayout) convertView.findViewById(R.id.knowledge_item_items_reply_host_ll);
+            holder.ll_host = (FrameLayout) convertView.findViewById(R.id.knowledge_item_items_reply_host_ll);
             holder.ll_reply = (LinearLayout) convertView.findViewById(R.id.knowledge_item_items_reply_ll);
 
             holder.replyList = new ArrayList<>();
             holder.adpter = new KnowledgeItemsItemReplyAdapter(mActivity, holder.replyList);
-
-            final View finalConvertView = convertView;
             final Holder finalTag = holder;
-            holder.ll_host.setOnClickListener(new View.OnClickListener() {
+
+            holder.reply.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    MyToast.showShort(mActivity, "点击详情" + list.get(position).comment_text);
-                    //调出popuWindow
-                    KnowledgeReplyPopupWindow.setmReplayPopupWindow(mActivity
-                            , null
-                            , finalConvertView
-                            , KnowledgeItemsItemAdapter.this
-                            , finalTag.adpter
-                            , list.get(position).reply_list
-                            , list.get(position));
-                }
-            });
-
-
-            holder.ll_reply.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MyToast.showShort(mActivity, "点击回复" + position);
-                    if (finalTag.reply.getText().toString().equals("收起")) {
-                        finalTag.reply.setText("展开");
-                        finalTag.lv_list.setVisibility(View.GONE);
-
-                    } else {
-                        finalTag.reply.setText("收起");
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    LogUtil.e("是否选中");
+                    //用于记录本次点击的选中状态
+                    if (isChecked) {
                         finalTag.lv_list.setVisibility(View.VISIBLE);
+                        LogUtil.e("是否选中---显示");
+                    } else {
+                        finalTag.lv_list.setVisibility(View.GONE);
+                        LogUtil.e("是否选中--不显示");
                     }
+                    finalTag.isCheck = isChecked;
                 }
             });
-
 
             convertView.setTag(holder);
         } else {
-
             holder = (Holder) convertView.getTag();
         }
         //设置数据
@@ -131,83 +121,61 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
         holder.name.setText(list.get(position).name);
 
         if (list.get(position).reply_list != null && list.get(position).reply_list.size() > 0) {
-            holder.lv_list.setVisibility(View.VISIBLE);
             holder.reply.setVisibility(View.VISIBLE);
-            holder.reply.setText("收起");
-            //if (adapter == null) {
             LogUtil.e("第几条有数据===" + list.get(position).reply_list.size() + "::楼==" + (position + 1));
             holder.replyList.clear();
             holder.replyList.addAll(list.get(position).reply_list);
             holder.lv_list.setAdapter(holder.adpter);
-
-            final Holder finalTag1 = holder;
-            holder.lv_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int positionChild, long id) {
-//                    KnowLedgeItemBean bean = new KnowLedgeItemBean();
-//                    KnowLedgeItemBean.ReplyListDao dao = bean.new ReplyListDao();
-//                    dao.name = "张三";
-//                    dao.avatar_url = "http://www.shuxin.net/api/app_json/wlh.jpg";
-//                    dao.description = "添加测试数据,添加测试数据,添加测试数据,添加测试数据,添加测试数据,添加测试数据";
-//                    dao.reply_to = "李四";
-//                    dao.time = "11111111.";
-                    LogUtil.e("点击前数量" + list.get(position).reply_list.size());
-                    MyToast.showShort(mActivity, "点击条目" + positionChild);
-
-                    //调出popuWindow
-                    KnowledgeReplyPopupWindow.setmReplayPopupWindow(mActivity
-                            , null
-                            , view
-                            , KnowledgeItemsItemAdapter.this
-                            , finalTag1.adpter
-                            , list.get(position).reply_list
-                            , list.get(position).reply_list.get(positionChild));
-                    //list.get(position).reply_list.add(dao);
-                    LogUtil.e("点击后数量" + list.get(position).reply_list.size());
-//                    adapter.notifyDataSetChanged();
-//                    refresh();
-
-                }
-            });
-
             Utility.setListViewHeightBasedOnChildren(holder.lv_list);
 
-        } else {
-            holder.lv_list.setVisibility(View.GONE);
-            holder.reply.setVisibility(View.INVISIBLE);
-            //holder.reply.setText("回复");
-        }
-        RichText.from(list.get(position).comment_text).autoFix(true)/*.fix(new SimpleImageFixCallback() {
-            @Override
-            public void onImageReady(ImageHolder holder, int width, int height) {
-                if (holder.getImageType() != ImageHolder.ImageType.GIF) {
-                    holder.setAutoFix(true);
-                } else {
-                    holder.setHeight(100);
-                    holder.setWidth(100);
-                }
-                if (position == 0) {
-                    holder.setAutoPlay(true);
-                } else {
-                    holder.setAutoPlay(false);
-                }
-                super.onImageReady(holder, width, height);
+            //用于记录上次的选中状态并在显示的时候加载上次的状态
+            if (holder.isCheck) {
+                holder.lv_list.setVisibility(View.VISIBLE);
+            } else {
+                holder.lv_list.setVisibility(View.GONE);
             }
-        })*/.into(holder.text);
-//        holder.text.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MyToast.showShort(mActivity,"点击啦");
-//            }
-//        });
-        //holder.text.setText(HtmlParser.buildSpannedText(list.get(position).comment_text,new CustomerTagHandler_1()));
-        // holder.text.init(list.get(position).comment_text);
-        //holder.text.setText(Html.fromHtml(list.get(position).comment_text));
-        //holder.text.setText(list.get(position).comment_text);
-        holder.leavel.setText("第" + (position + 1) + "楼");
-        holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).time), "-", ":"));
-        refresh();
 
+        } else {
+            holder.reply.setVisibility(View.INVISIBLE);
+            holder.lv_list.setVisibility(View.GONE);
+            // holder.reply.setVisibility(View.GONE);
+        }
+        RichText.from(list.get(position).comment_text).autoFix(false).into(holder.text);
+        holder.leavel.setText((position + 1) + "楼");
+        holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).time), "-", ":"));
+        holder.lv_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int positionChild, long id) {
+                LogUtil.e("点击前数量" + list.get(position).reply_list.size());
+                MyToast.showShort(mActivity, "点击条目" + positionChild);
+
+                //调出popuWindow
+//
+                KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity, view, list.get(position).reply_list.get(positionChild).name);
+                replyWindow.setOnData(new KnowledgeReplyPopupWindow_1.OnGetData() {
+                    @Override
+                    public void onDataCallBack(KnowLedgeItemBean.ReplyListDao replyListDao) {
+                        list.get(position).reply_list.add(replyListDao);
+                    }
+                });
+            }
+        });
+        holder.ll_host.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MyToast.showShort(mActivity, "点击详情" + list.get(position).comment_text);
+                //调出popuWindow
+//
+                KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity, view);
+                replyWindow.setOnData(new KnowledgeReplyPopupWindow_1.OnGetData() {
+                    @Override
+                    public void onDataCallBack(KnowLedgeItemBean.ReplyListDao replyListDao) {
+                        list.get(position).reply_list.add(replyListDao);
+                    }
+                });
+            }
+        });
+        refresh();
         return convertView;
     }
 
@@ -217,14 +185,17 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
 
     public static class Holder {
         public CircleImageView avatar;
-        public TextView /*text,*/ time, name, leavel, reply;//
+        public TextView /*text,*/ time, name, leavel/*, reply*/;//
+        public CheckBox reply;
         //public ShowHtmlView text;
         public TextView text;
         public ChildrenListView lv_list;
-//        public ListView lv_list;
-        public LinearLayout ll_host, ll_reply;
+        //public ListView lv_list;
+        public LinearLayout /*ll_host,*/ ll_reply;
+        public FrameLayout ll_host;
         public KnowledgeItemsItemReplyAdapter adpter;
         public ArrayList<KnowLedgeItemBean.ReplyListDao> replyList;
+        public boolean isCheck = true;
     }
 
     private void setReply(String show) {

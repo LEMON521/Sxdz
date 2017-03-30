@@ -63,6 +63,8 @@
 
         <cn.net.bjsoft.sxdz.view.ChildrenListView
             android:visibility="visible"
+            android:divider="#00000000"
+            android:dividerHeight="0dp"
             android:id="@+id/item_list_headview_knowledge_files"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,9 +106,9 @@
 
                     <ImageView
                         android:id="@+id/item_list_headview_knowledge_check_count_img"
-                        android:layout_width="@dimen/dm022"
-                        android:layout_height="@dimen/dm022"
-                        android:src="@drawable/aid_btn_new" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/reading_quantity" />
 
                     <TextView
                         android:id="@+id/item_list_headview_knowledge_check_count"
@@ -120,10 +122,10 @@
 
                     <ImageView
                         android:id="@+id/item_list_headview_knowledge_reply_count_img"
-                        android:layout_width="@dimen/dm022"
-                        android:layout_height="@dimen/dm022"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dm020"
-                        android:src="@drawable/aid_btn_new" />
+                        android:src="@mipmap/comment" />
 
                     <TextView
                         android:id="@+id/item_list_headview_knowledge_reply_count"
@@ -138,4 +140,8 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
+    <FrameLayout
+        android:background="#f0f0f0"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm010"></FrameLayout>
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -29,6 +30,7 @@ import cn.net.bjsoft.sxdz.utils.MyToast;
 
 public class KnowledgeSearchPopupWindow_1/* extends PopupWindow*/ implements View.OnClickListener {
     private AppProgressDialog progressDialog;
+    private InputMethodManager imm;//输入框相关
 
     private PopupWindow mSearchPopupWindow;
     private FragmentActivity mActivity;
@@ -64,6 +66,9 @@ public class KnowledgeSearchPopupWindow_1/* extends PopupWindow*/ implements Vie
     }
 
     private void InitData() {
+
+        //弹出软键盘
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         mSearchPopupWindow = null;
 
         LayoutInflater mLayoutInflater = LayoutInflater.from(mActivity);
@@ -139,12 +144,13 @@ public class KnowledgeSearchPopupWindow_1/* extends PopupWindow*/ implements Vie
                 search = "";
                 mOnGetData.onDataCallBack(search, itemsDataList);
                 // LogUtil.e("搜索后的条目数==@@@@"+this.cacheItemsDataList.size());
+
                 mSearchPopupWindow.dismiss();
                 break;
 
 
         }
-
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 
     }
 

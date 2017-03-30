@@ -203,11 +203,13 @@ public class LoginFragment extends BaseFragment {
                     if (jsonObject != null) {
                         boolean success = jsonObject.optBoolean("success");
                         if (success) {
+
                             SPUtil.setUserRandCode(getActivity(), jsonObject.optString("randcode"));
                             SPUtil.setUserEmail(getActivity(), jsonObject.optString("email"));
                             SPUtil.setUserId(getActivity(), jsonObject.optString("user_id"));
                             SPUtil.setUserName(getActivity(), jsonObject.optString("name"));
                             SPUtil.setUserUUID(getActivity(), jsonObject.optString("uuid"));
+
                             getDeviceId();
                         } else {
                             MyToast.showShort(getActivity(), jsonObject.optString("feedback"));
@@ -268,7 +270,8 @@ public class LoginFragment extends BaseFragment {
                     SPUtil.setUserUUID(getActivity(), datasBean.data.user.uuid);
                     SPUtil.setUserRandCode(getActivity(), datasBean.data.user.randcode);
                     SPUtil.setUserPUUID(getActivity(), datasBean.data.user.phone_uuid);
-
+                    SPUtil.setAvatar(getActivity(), datasBean.data.user.avatar);
+                    LogUtil.e("头像====="+datasBean.data.user.avatar);
                     //T.showShort(LoginActivity.this, datasBean.toString());
                     Intent i3 = new Intent(getActivity(), MainActivity.class);
                     LogUtil.e("数据请求=json=" + json);

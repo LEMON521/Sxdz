@@ -110,8 +110,8 @@ public class KnowledgeReplyPopupWindow {
                     dao.reply_list = new ArrayList<KnowLedgeItemBean.ReplyListDao>();
                 }
                 list.add(dao);
-                if (adapterParent != null)
-                    adapterParent.notifyDataSetChanged();
+//                if (adapterParent != null)
+//                    adapterParent.notifyDataSetChanged();
                 if (adapterChildren != null)
                     adapterChildren.notifyDataSetChanged();
 

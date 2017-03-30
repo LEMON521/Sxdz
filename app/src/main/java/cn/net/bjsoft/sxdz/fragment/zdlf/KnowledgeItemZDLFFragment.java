@@ -32,6 +32,7 @@ import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
@@ -89,7 +90,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
     private KnowledgeItemsItemAdapter knowledgeItemsItemAdapter;
 
     //下载文件保存的地址
-    private static String BASE_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + "shuxin" + File.separator + "app" + File.separator;
+    private static String BASE_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + "shuxin" + File.separator + "download" + File.separator;
 
 
     @Override
@@ -215,7 +216,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         bitmapUtils.display(head_avatar, hostDao.avatar);
         head_name.setText(hostDao.name);
         head_mark.setText(hostDao.mark);
-        RichText.from(hostDao.content).autoFix(true).into(head_content);
+        RichText.from(hostDao.content).autoFix(false).into(head_content);
         //附件
         filesList.clear();
         filesList.addAll(hostDao.files);
@@ -244,63 +245,68 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
      */
     private void downloadFile(int positon) {
         String url = hostDao.files.get(positon).file_url;
-        LogUtil.e("下载的路径为====11111"+url);
         String file_name = url.substring(url.lastIndexOf("/"));
-        LogUtil.e("下载的路径为====22222"+url);
-        LogUtil.e("下载的文件名为====22222"+file_name);
+        String path = "";
         // 首先判定是否有SDcard,并且可用
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             //一定要指定文件名，不然会将下载的文件保存成为.tmp的文件
-            BASE_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + "shuxin" + File.separator + "download" + File.separator + file_name;
+            path = BASE_PATH + file_name;
         } else {
-            BASE_PATH = mActivity.getFilesDir().getAbsolutePath() + File.separator + file_name;
+            path = mActivity.getFilesDir().getAbsolutePath() + File.separator + file_name;
             Toast.makeText(mActivity, "SD卡不可用,将下载到手机内部", Toast.LENGTH_SHORT).show();
         }
-        RequestParams params = new RequestParams(url);
-        params.setSaveFilePath(BASE_PATH);
-        //设置断点续传
-        params.setAutoResume(true);
 
-        x.http().get(params, new Callback.ProgressCallback<File>() {
-            @Override
-            public void onWaiting() {
+        File file = new File(path);
+        if (file.exists() && file.length() > 0) {
+            MyToast.showShort(mActivity, "文件已经下载过了,无需重新下载");
+            return;
+        } else {
+            RequestParams params = new RequestParams(url);
+            params.setSaveFilePath(path);
+            //设置断点续传
+            params.setAutoResume(true);
 
-            }
+            x.http().get(params, new Callback.ProgressCallback<File>() {
+                @Override
+                public void onWaiting() {
 
-            @Override
-            public void onStarted() {
-
-            }
-
-            @Override
-            public void onLoading(long total, long current, boolean isDownloading) {
-                // 设置下载进度信息
-                if (isDownloading) {
                 }
-            }
 
-            @Override
-            public void onSuccess(File file) {
-                // 下载成功之后就安装akp
-                MyToast.showShort(mActivity, "下载成功\n请到相册或文件管理器查看");
-            }
+                @Override
+                public void onStarted() {
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                MyToast.showShort(mActivity, "下载失败了");
-            }
+                }
 
-            @Override
-            public void onCancelled(CancelledException cex) {
+                @Override
+                public void onLoading(long total, long current, boolean isDownloading) {
+                    // 设置下载进度信息
+                    if (isDownloading) {
+                    }
+                }
 
-            }
+                @Override
+                public void onSuccess(File file) {
+                    // 下载成功之后就安装akp
+                    MyToast.showShort(mActivity, "下载成功\n请到相册或文件管理器查看");
+                }
 
-            @Override
-            public void onFinished() {
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    MyToast.showShort(mActivity, "下载失败了");
+                }
 
-            }
+                @Override
+                public void onCancelled(CancelledException cex) {
 
-        });
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+
+            });
+        }
     }
 
     @Event(value = {R.id.knowledge_item_reply
@@ -336,8 +342,8 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
             newDao.reply_list = new ArrayList<>();
         }
         newDao.reply_list.clear();
-        newDao.name = "李四";
-        newDao.avatar_url = "";
+        newDao.name = SPUtil.getUserName(mActivity);
+        newDao.avatar_url = SPUtil.getAvatar(mActivity);
         newDao.time = System.currentTimeMillis() + "";
         newDao.comment_text = reply.getText().toString().trim();
         newDao.reply_to = "";

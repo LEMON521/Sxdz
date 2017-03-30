@@ -10,9 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
-import com.zzhoujay.richtext.ImageHolder;
-import com.zzhoujay.richtext.RichText;
-import com.zzhoujay.richtext.callback.SimpleImageFixCallback;
 
 import java.util.ArrayList;
 
@@ -91,24 +88,24 @@ public class KnowledgeItemsItemReplyAdapter extends BaseAdapter {
             holder.layer_ll.setVisibility(View.GONE);
         }
 
-        //holder.text.setText(list.get(position).comment_text);
-        RichText.from(list.get(position).comment_text).autoFix(false).fix(new SimpleImageFixCallback() {
-            @Override
-            public void onImageReady(ImageHolder holder, int width, int height) {
-                if (holder.getImageType() != ImageHolder.ImageType.GIF) {
-                    holder.setAutoFix(true);
-                } else {
-                    holder.setHeight(40);
-                    holder.setWidth(40);
-                }
-                if (position == 0) {
-                    holder.setAutoPlay(true);
-                } else {
-                    holder.setAutoPlay(false);
-                }
-                super.onImageReady(holder, width, height);
-            }
-        }).into(holder.text);
+        holder.text.setText(list.get(position).comment_text);
+//        RichText.from(list.get(position).comment_text).autoFix(false).fix(new SimpleImageFixCallback() {
+//            @Override
+//            public void onImageReady(ImageHolder holder, int width, int height) {
+//                if (holder.getImageType() != ImageHolder.ImageType.GIF) {
+//                    holder.setAutoFix(true);
+//                } else {
+//                    holder.setHeight(40);
+//                    holder.setWidth(40);
+//                }
+//                if (position == 0) {
+//                    holder.setAutoPlay(true);
+//                } else {
+//                    holder.setAutoPlay(false);
+//                }
+//                super.onImageReady(holder, width, height);
+//            }
+//        }).into(holder.text);
 
 
         holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).time), "-", ":"));
