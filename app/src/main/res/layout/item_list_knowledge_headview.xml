@@ -55,17 +55,18 @@
                 android:textSize="@dimen/dm020" />
         </LinearLayout>
 
-        <cn.net.bjsoft.sxdz.view.ShowHtmlView
-            android:id="@+id/item_list_headview_knowledge"
+        <TextView
+            android:id="@+id/item_list_headview_knowledge_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dm020"></cn.net.bjsoft.sxdz.view.ShowHtmlView>
+            android:layout_marginTop="@dimen/dm020"></TextView>
 
-        <ListView
+        <cn.net.bjsoft.sxdz.view.ChildrenListView
+            android:visibility="visible"
             android:id="@+id/item_list_headview_knowledge_files"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dm010"></ListView>
+            android:layout_marginTop="@dimen/dm010"></cn.net.bjsoft.sxdz.view.ChildrenListView>
 
         <LinearLayout
             android:layout_width="match_parent"

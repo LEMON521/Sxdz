@@ -16,10 +16,30 @@ public class KnowLedgeItemBean implements Serializable {
      * 封装的数据
      */
     public class KnowledgeItemData implements Serializable {
-        public String title = "";//标题
+        public HostKnowledgeItemDao host;
         //public ArrayList<KnowledgeItemDao> knowledge_item;//回复列表
         public ArrayList<ReplyListDao> knowledge_item;//回复列表
 
+    }
+
+    /**
+     * 楼主的信息
+     */
+    public class HostKnowledgeItemDao implements Serializable {
+        public String title = "";//楼主标题
+        public String avatar = "";//楼主头像
+        public String name = "";//楼主名字
+        public String mark = "";//文章标签
+        public String content = "";//文章内容
+        public ArrayList<FilesKnowledgeItemDao> files;//附件列表
+        public String time = "";//回复人的名字文章发布时间
+        public String check_count = "";//文章查看数
+        public String reply_count = "";//文章回复数
+    }
+
+    public class FilesKnowledgeItemDao implements Serializable {
+        public String file_url = "";
+        public String file_name = "";
     }
 
 //    /**

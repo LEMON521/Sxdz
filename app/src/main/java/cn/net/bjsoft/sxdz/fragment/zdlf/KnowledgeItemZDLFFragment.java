@@ -1,10 +1,17 @@
 package cn.net.bjsoft.sxdz.fragment.zdlf;
 
+import android.os.Environment;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.lidroid.xutils.BitmapUtils;
+import com.zzhoujay.richtext.RichText;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
@@ -14,16 +21,22 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemHeadFilesListAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemsItemAdapter;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
-import cn.net.bjsoft.sxdz.view.ShowHtmlView;
+import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
+import cn.net.bjsoft.sxdz.utils.function.Utility;
+import cn.net.bjsoft.sxdz.view.ChildrenListView;
+import cn.net.bjsoft.sxdz.view.CircleImageView;
 
 /**
  * 中电联发的知识---条目界面
@@ -43,13 +56,40 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
     @ViewInject(R.id.knowledge_item_edite)
     private EditText reply;
 
+    //headView 的控件
     private View headView;
-    private ShowHtmlView headWebView;
+    //private ShowHtmlView headWebView;
 
+    //@ViewInject(R.id.item_list_headview_knowledge_title)
+    private TextView head_title;
+    // @ViewInject(R.id.item_list_headview_knowledge_avatar)
+    private CircleImageView head_avatar;
+    //@ViewInject(R.id.item_list_headview_knowledge_name)
+    private TextView head_name;
+    //@ViewInject(R.id.item_list_headview_knowledge_mark)
+    private TextView head_mark;
+    //@ViewInject(R.id.item_list_headview_knowledge_content)
+    private TextView head_content;
+    //@ViewInject(R.id.item_list_headview_knowledge_files)
+    private ChildrenListView head_files;
+    //@ViewInject(R.id.item_list_headview_knowledge_time)
+    private TextView head_time;
+    //@ViewInject(R.id.item_list_headview_knowledge_check_count)
+    private TextView head_check_count;
+    //@ViewInject(R.id.item_list_headview_knowledge_reply_count)
+    private TextView head_reply_count;
+    private BitmapUtils bitmapUtils;
+
+    private KnowLedgeItemBean.HostKnowledgeItemDao hostDao;
+    private ArrayList<KnowLedgeItemBean.FilesKnowledgeItemDao> filesList;
+    private KnowledgeItemHeadFilesListAdapter filesListAdapter;
 
     private KnowLedgeItemBean knowLedgeItemBean;
     private ArrayList<KnowLedgeItemBean.ReplyListDao> knowledgeItemList;
     private KnowledgeItemsItemAdapter knowledgeItemsItemAdapter;
+
+    //下载文件保存的地址
+    private static String BASE_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + "shuxin" + File.separator + "app" + File.separator;
 
 
     @Override
@@ -58,6 +98,41 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         title.setText("知识详情");
 
         showProgressDialog();
+        headView = View.inflate(mActivity, R.layout.item_list_knowledge_headview, null);
+        head_title = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_title);
+        head_avatar = (CircleImageView) headView.findViewById(R.id.item_list_headview_knowledge_avatar);
+        head_name = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_name);
+        head_mark = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_mark);
+        head_content = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_content);
+        head_files = (ChildrenListView) headView.findViewById(R.id.item_list_headview_knowledge_files);
+        head_time = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_time);
+        head_check_count = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_check_count);
+        head_reply_count = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_reply_count);
+
+        head_files.setOnTouchListener(new View.OnTouchListener() {
+            //屏蔽掉滑动事件
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+
+        if (filesList == null) {
+            filesList = new ArrayList<>();
+        }
+        filesList.clear();
+
+        if (filesListAdapter == null) {
+            filesListAdapter = new KnowledgeItemHeadFilesListAdapter(mActivity, filesList);
+        }
+        head_files.setAdapter(filesListAdapter);
+
 
         if (knowledgeItemList == null) {
             knowledgeItemList = new ArrayList<>();
@@ -67,8 +142,6 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
             knowledgeItemsItemAdapter = new KnowledgeItemsItemAdapter(mActivity, knowledgeItemList);
         }
 
-        headView = View.inflate(mActivity, R.layout.item_list_knowledge_headview, null);
-        headWebView = (ShowHtmlView) headView.findViewById(R.id.item_list_headview_knowledge);
 
         lv_items.addHeaderView(headView);
         lv_items.setAdapter(knowledgeItemsItemAdapter);
@@ -88,7 +161,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                 //LogUtil.e("获取到的条目-----------" + result);
                 knowLedgeItemBean = GsonUtil.getKnowledgeItemsItemBean(result);
                 if (knowLedgeItemBean.result) {
-
+                    hostDao = knowLedgeItemBean.data.host;
                     knowledgeItemList.addAll(knowLedgeItemBean.data.knowledge_item);
                     setData();
                     //LogUtil.e("获取到的条目-----------" + knowledgeItemList.get(0).avatar_url);
@@ -133,9 +206,101 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
 
 
     private void setData() {
-        headWebView.init(knowLedgeItemBean.data.title);
+
+
+        head_title.setText(hostDao.title);
+        bitmapUtils = new BitmapUtils(mActivity, AddressUtils.img_cache_url);//初始化头像
+        bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
+        bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
+        bitmapUtils.display(head_avatar, hostDao.avatar);
+        head_name.setText(hostDao.name);
+        head_mark.setText(hostDao.mark);
+        RichText.from(hostDao.content).autoFix(true).into(head_content);
+        //附件
+        filesList.clear();
+        filesList.addAll(hostDao.files);
+        filesListAdapter.notifyDataSetChanged();
+        Utility.setListViewHeightBasedOnChildren(head_files);
+        head_files.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                downloadFile(position);
+            }
+        });
+
+        head_time.setText(TimeUtils.getTimeDifference(Long.parseLong(hostDao.time)));
+        head_check_count.setText(hostDao.check_count);
+        head_reply_count.setText(hostDao.reply_count);
+
+
         knowledgeItemsItemAdapter.notifyDataSetChanged();
 
+    }
+
+    /**
+     * 下载附件
+     *
+     * @param positon
+     */
+    private void downloadFile(int positon) {
+        String url = hostDao.files.get(positon).file_url;
+        LogUtil.e("下载的路径为====11111"+url);
+        String file_name = url.substring(url.lastIndexOf("/"));
+        LogUtil.e("下载的路径为====22222"+url);
+        LogUtil.e("下载的文件名为====22222"+file_name);
+        // 首先判定是否有SDcard,并且可用
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            //一定要指定文件名，不然会将下载的文件保存成为.tmp的文件
+            BASE_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + "shuxin" + File.separator + "download" + File.separator + file_name;
+        } else {
+            BASE_PATH = mActivity.getFilesDir().getAbsolutePath() + File.separator + file_name;
+            Toast.makeText(mActivity, "SD卡不可用,将下载到手机内部", Toast.LENGTH_SHORT).show();
+        }
+        RequestParams params = new RequestParams(url);
+        params.setSaveFilePath(BASE_PATH);
+        //设置断点续传
+        params.setAutoResume(true);
+
+        x.http().get(params, new Callback.ProgressCallback<File>() {
+            @Override
+            public void onWaiting() {
+
+            }
+
+            @Override
+            public void onStarted() {
+
+            }
+
+            @Override
+            public void onLoading(long total, long current, boolean isDownloading) {
+                // 设置下载进度信息
+                if (isDownloading) {
+                }
+            }
+
+            @Override
+            public void onSuccess(File file) {
+                // 下载成功之后就安装akp
+                MyToast.showShort(mActivity, "下载成功\n请到相册或文件管理器查看");
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                MyToast.showShort(mActivity, "下载失败了");
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+
+        });
     }
 
     @Event(value = {R.id.knowledge_item_reply
