@@ -83,11 +83,11 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@color/aMap_chunzi"
+                    android:src="@mipmap/comment"
                     android:gravity="center"
                     android:padding="@dimen/dm005" />
 
@@ -102,13 +102,13 @@
                     android:textSize="@dimen/dm020" />
 
                 <ImageView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
+                    android:src="@mipmap/reading_quantity"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@color/aMap_chunzi"
                     android:gravity="center"
-                    android:padding="@dimen/dm005" />
+                     />
 
                 <TextView
                     android:id="@+id/item_knowledge_item_lookover_count"

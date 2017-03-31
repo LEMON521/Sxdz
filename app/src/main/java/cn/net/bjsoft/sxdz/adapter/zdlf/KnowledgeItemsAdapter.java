@@ -16,7 +16,7 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
 
 /**
- * 中电联发---work页面的功能列表适配器
+ * 中电联发---知识模块分组条目适配器
  * Created by 靳宁宁 on 2017/2/21.
  */
 

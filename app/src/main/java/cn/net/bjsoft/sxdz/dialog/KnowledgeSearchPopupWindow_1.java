@@ -1,5 +1,6 @@
 package cn.net.bjsoft.sxdz.dialog;
 
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -60,6 +61,8 @@ public class KnowledgeSearchPopupWindow_1/* extends PopupWindow*/ implements Vie
         this.search = search;
         //this.cacheItemsDataList = cacheItemsDataList;
         this.itemsDataList = itemsDataList;
+        //软键盘管理器
+        imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         InitData();
         InitUI();
 
