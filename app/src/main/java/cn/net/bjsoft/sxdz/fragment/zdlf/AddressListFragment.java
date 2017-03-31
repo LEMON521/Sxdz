@@ -213,7 +213,6 @@ public class AddressListFragment extends BaseFragment {
                     String url = mDatas.get(position).getUrl();
 
                     if (node.getType().equals("employee")) {
-
                         DialingPopupWindow window = new DialingPopupWindow(mActivity, address_change, node.getPhone_number());
                     }
 

@@ -82,6 +82,8 @@ public class PullToRefreshLayout extends RelativeLayout
 	private View pullView;
 	// 正在刷新的图标
 	private View refreshingView;
+	//刷新时间
+	private TextView refeshTime;
 	// 刷新结果图标
 	private View refreshStateImageView;
 	// 刷新结果：成功或失败
@@ -576,6 +578,7 @@ public class PullToRefreshLayout extends RelativeLayout
 				.findViewById(R.id.state_tv);
 		refreshingView = refreshView.findViewById(R.id.refreshing_icon);
 		refreshStateImageView = refreshView.findViewById(R.id.state_iv);
+		refeshTime  = (TextView) refreshView.findViewById(R.id.state_time);
 		// 初始化上拉布局
 		pullUpView = loadmoreView.findViewById(R.id.pullup_icon);
 		loadStateTextView = (TextView) loadmoreView

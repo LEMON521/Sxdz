@@ -23,7 +23,7 @@
             android:layout_marginBottom="@dimen/dm010"
             android:layout_marginTop="@dimen/dm005"
             android:padding="@dimen/dm005"
-            android:text="为了减肥而努力为了减肥而努力为了减肥而努力为了减肥而努力为了减肥而努力为了减肥而努力为了减肥而努力为了减肥而努力"
+            android:text=""
             android:textColor="@color/aMap_black"
             android:textSize="@dimen/dm024" />
 
@@ -52,12 +52,13 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:padding="@dimen/dm005"
-                android:text="作者"
+                android:text=""
                 android:textSize="@dimen/dm020" />
 
         </RelativeLayout>
 
         <RelativeLayout
+            android:layout_gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dm033"
             android:layout_marginBottom="@dimen/dm005"
@@ -73,13 +74,14 @@
                 android:layout_alignParentRight="true"
                 android:gravity="center_vertical"
                 android:padding="@dimen/dm005"
-                android:text="健康,生活"
+                android:text=""
                 android:textSize="@dimen/dm020" />
 
             <LinearLayout
+                android:gravity="center"
                 android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -89,19 +91,20 @@
                     android:layout_weight="1"
                     android:src="@mipmap/comment"
                     android:gravity="center"
-                    android:padding="@dimen/dm005" />
+                />
 
                 <TextView
+                    android:layout_marginLeft="@dimen/dm010"
                     android:id="@+id/item_knowledge_item_reply_count"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2.5"
                     android:gravity="center_vertical"
-                    android:padding="@dimen/dm005"
                     android:text="20"
                     android:textSize="@dimen/dm020" />
 
                 <ImageView
+                    android:layout_marginLeft="@dimen/dm020"
                     android:layout_width="wrap_content"
                     android:src="@mipmap/reading_quantity"
                     android:layout_height="wrap_content"
@@ -111,13 +114,13 @@
                      />
 
                 <TextView
+                    android:layout_marginLeft="@dimen/dm010"
                     android:id="@+id/item_knowledge_item_lookover_count"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:gravity="center_vertical"
-                    android:padding="@dimen/dm005"
-                    android:text="100"
+                    android:text="1000"
                     android:textSize="@dimen/dm020" />
             </LinearLayout>
         </RelativeLayout>

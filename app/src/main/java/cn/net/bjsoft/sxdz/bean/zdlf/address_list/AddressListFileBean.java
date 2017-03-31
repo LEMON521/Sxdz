@@ -32,13 +32,13 @@ public class AddressListFileBean {
 
     public AddressListFileBean(int _id, int parentId, String name, String station, String phone_number, String type, String avatar_url) {
         super();
-        this._id = _id;
-        this.parentId = parentId;
-        this.name = name;
-        this.station = station;
-        this.phone_number = phone_number;
-        this.type = type;
-        this.avatar_url = avatar_url;
+        set_id(_id);
+        setParentId(parentId);
+        setName(name);
+        setStation(station);
+        setPhone_number(phone_number);
+        setType(type);
+        setAvatar_url(avatar_url);
 
     }
 

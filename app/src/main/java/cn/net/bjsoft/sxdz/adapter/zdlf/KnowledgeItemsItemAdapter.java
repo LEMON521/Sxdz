@@ -66,7 +66,7 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         Holder holder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(mActivity).inflate(

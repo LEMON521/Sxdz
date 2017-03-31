@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
 
+import org.xutils.common.util.LogUtil;
+
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
@@ -64,6 +66,7 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
         bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
 
+        LogUtil.e("department@@@@@@@@@@@@"+node.getId()+"::V"+position);
         if (node.getType().equals("department")) {//如果是部门
             if (node.getIcon() == -1) {
                 viewHolder.parent_icon.setVisibility(View.INVISIBLE);

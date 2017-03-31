@@ -57,7 +57,6 @@ public class KnowledgeReplyPopupWindow_1 implements View.OnClickListener {
         this.replyTo = replyTo;
         //软键盘管理器
         imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-
         setmReplayPopupWindow();
     }
 

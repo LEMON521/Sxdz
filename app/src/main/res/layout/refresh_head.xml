@@ -3,19 +3,19 @@
     android:id="@+id/head_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_blue" >
+    android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:paddingBottom="20dp"
-        android:paddingTop="20dp" >
+        android:paddingTop="20dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" >
+            android:layout_centerInParent="true">
 
             <ImageView
                 android:id="@+id/pull_icon"
@@ -34,14 +34,32 @@
                 android:background="@drawable/refreshing"
                 android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/state_tv"
+            <LinearLayout
+                android:gravity="center"
+                android:id="@+id/state_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="下拉刷新"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/state_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="下拉刷新"
+                    android:textColor="@color/aMap_black"
+                    android:textSize="@dimen/dm020" />
+
+                <TextView
+                    android:id="@+id/state_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2017.03.31 15:33"
+                    android:textColor="@color/aMap_black"
+                    android:textSize="@dimen/dm020" />
+
+            </LinearLayout>
+
 
             <ImageView
                 android:id="@+id/state_iv"
@@ -49,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="8dp"
-                android:layout_toLeftOf="@id/state_tv"
+                android:layout_toLeftOf="@id/state_ll"
                 android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>

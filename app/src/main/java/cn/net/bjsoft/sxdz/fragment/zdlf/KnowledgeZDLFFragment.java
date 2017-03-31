@@ -247,12 +247,14 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                         // 千万别忘了告诉控件刷新完毕了哦！
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
 
+                        itemsDataList.clear();
+                        cacheItemsDataList.clear();
+                        LogUtil.e("setOnRefreshListener-----------");
+                        getItemsData(mSearchUrl);
+
                     }
                 }.sendEmptyMessageDelayed(0, 500);
-                itemsDataList.clear();
-                cacheItemsDataList.clear();
-                LogUtil.e("setOnRefreshListener-----------");
-                getItemsData(mSearchUrl);
+
             }
 
             @Override
@@ -263,10 +265,12 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                     public void handleMessage(Message msg) {
                         // 千万别忘了告诉控件加载完毕了哦！
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+
+                        LogUtil.e("onLoadMore-----------");
+                        getItemsData(mSearchUrl);
                     }
                 }.sendEmptyMessageDelayed(0, 500);
-                LogUtil.e("onLoadMore-----------");
-                getItemsData(mSearchUrl);
+
             }
 
         });

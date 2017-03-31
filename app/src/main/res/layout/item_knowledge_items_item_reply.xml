@@ -30,7 +30,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dm010"
-                android:text="David"
                 android:textColor="#2D64b3"
                 android:textSize="@dimen/dm020" />
 
@@ -53,7 +52,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dm010"
-                    android:text="Tom"
                     android:textColor="#2D64b3"
                     android:textSize="@dimen/dm020" />
 
@@ -64,7 +62,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dm010"
-                android:text="我好佩服你,你刚开始的时候不会喘不过气来吗?"
                 android:textColor="#333333"
                 android:textSize="@dimen/dm020" />
 
@@ -85,23 +82,22 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:textColor="#999999"
                     android:id="@+id/item_knowledge_item_reply_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dm020"
-                    android:text="2017-02-20 20:36"
+                    android:textColor="#999999"
                     android:textSize="@dimen/dm020" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/item_knowledge_item_reply_reply"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dm020"
                     android:text="回复"
                     android:textColor="@color/blue"
-                    android:textSize="@dimen/dm020" />
+                    android:textSize="@dimen/dm020"
+                    android:visibility="gone" />
 
             </LinearLayout>
         </RelativeLayout>

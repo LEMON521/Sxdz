@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dm088"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -23,12 +23,13 @@
                 android:src="@drawable/wlh" />
 
             <TextView
+                android:singleLine="true"
+                android:gravity="center"
                 android:id="@+id/knowledge_item_items_name"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/dm088"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dm010"
                 android:maxWidth="@dimen/dm088"
-                android:text="名字名子"
                 android:textColor="@color/name_color"
                 android:textSize="@dimen/dm022" />
 
@@ -55,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:minHeight="@dimen/dm170"
-                    android:text="回复信息,回复信息,回复信息,回复信息,回复信息,回复信息,回复信息,回复信息,回复信息,回复信息,"
+                    android:text=""
                     android:textColor="#333333"
                     android:textSize="@dimen/dm024" />
 
@@ -85,7 +86,6 @@
                         android:id="@+id/knowledge_item_items_leavel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1楼"
                         android:textColor="#999999"
                         android:textSize="@dimen/dm020" />
 
@@ -94,13 +94,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dm020"
-                        android:text="2017.02.03"
                         android:textColor="#999999"
                         android:textSize="@dimen/dm020" />
 
                     <CheckBox
-                        style="@style/CheckboxStyle_Knowledge_reply_item"
                         android:id="@+id/knowledge_item_items_isspread"
+                        style="@style/CheckboxStyle_Knowledge_reply_item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dm020"
@@ -117,10 +116,10 @@
             <cn.net.bjsoft.sxdz.view.ChildrenListView
                 android:id="@+id/knowledge_item_items_reply_list"
                 android:layout_width="match_parent"
-                android:divider="#00000000"
-                android:dividerHeight="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dm020"></cn.net.bjsoft.sxdz.view.ChildrenListView>
+                android:layout_marginTop="@dimen/dm020"
+                android:divider="#00000000"
+                android:dividerHeight="0dp"></cn.net.bjsoft.sxdz.view.ChildrenListView>
         </LinearLayout>
     </LinearLayout>
 

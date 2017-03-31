@@ -1,8 +1,10 @@
 package cn.net.bjsoft.sxdz.fragment.zdlf;
 
+import android.content.Context;
 import android.os.Environment;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -93,10 +95,15 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
     private static String BASE_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + "shuxin" + File.separator + "download" + File.separator;
 
 
+    private InputMethodManager imm;
+
     @Override
     public void initData() {
         title_back.setVisibility(View.VISIBLE);
         title.setText("知识详情");
+
+        //软键盘管理器
+        imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         showProgressDialog();
         headView = View.inflate(mActivity, R.layout.item_list_knowledge_headview, null);
@@ -257,6 +264,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         }
 
         File file = new File(path);
+        MyToast.showShort(mActivity, "开始下载附件!");
         if (file.exists() && file.length() > 0) {
             MyToast.showShort(mActivity, "文件已经下载过了,无需重新下载");
             return;
@@ -326,6 +334,8 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
 
                 replyHost();
                 reply.setText("");//清除输入框
+
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
         }
     }
