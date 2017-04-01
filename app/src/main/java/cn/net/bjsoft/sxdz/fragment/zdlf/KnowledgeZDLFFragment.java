@@ -326,7 +326,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
             radioButtons = new ArrayList<>();
         }
         radioButtons.clear();
-        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
         params.leftMargin = 5;
         params.rightMargin = 5;
         //对radio添加数据
@@ -335,7 +335,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
             RadioButton tempButton = new RadioButton(mActivity);
             tempButton.setBackgroundResource(R.drawable.function_sign_history_selector);   // 设置RadioButton的背景图片--这里为选择器
             tempButton.setButtonDrawable(android.R.color.transparent);// 设置按钮的样式//隐藏单选圆形按钮
-            tempButton.setPadding(5, 2, 5, 2);                 // 设置文字距离按钮四周的距离
+            tempButton.setPadding(38, 20, 38, 13);                 // 设置文字距离按钮四周的距离
             tempButton.setText(groupDataList.get(i).name);
             tempButton.setId(i);
             radioButtons.add(tempButton);

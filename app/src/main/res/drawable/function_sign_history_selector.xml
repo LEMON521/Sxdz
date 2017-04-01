@@ -3,12 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_checked="false"
-        android:color="@color/gray"
-        android:drawable="@drawable/radiobotton_uncheck" />
+        android:color="@color/radio_button_color_gray"
+        android:drawable="@drawable/knowledge_zdlf_tab_click_before" />
     <item
         android:state_checked="true"
-        android:color="@color/blue"
-        android:drawable="@drawable/radiobotton_check"
+        android:color="@color/radio_button_color_blue"
+        android:drawable="@drawable/knowledge_zdlf_tab_click_after"
          />
 
 </selector>

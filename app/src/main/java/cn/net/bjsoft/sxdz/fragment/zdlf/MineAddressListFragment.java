@@ -1,6 +1,8 @@
 package cn.net.bjsoft.sxdz.fragment.zdlf;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.adapter.zdlf.AddressListTreeAdapter;
 import cn.net.bjsoft.sxdz.bean.ylyd.form.YLYDFormDao;
 import cn.net.bjsoft.sxdz.bean.zdlf.address_list.AddressListBean;
@@ -38,7 +41,7 @@ import cn.net.bjsoft.sxdz.view.treeview.helper.TreeListViewAdapter;
  * Created by Zrzc on 2017/3/24.
  */
 @ContentView(R.layout.fragment_address_list)
-public class AddressListFragment extends BaseFragment {
+public class MineAddressListFragment extends BaseFragment {
     @ViewInject(R.id.title_back)
     private ImageView title_back;
     @ViewInject(R.id.title_title)
@@ -61,6 +64,9 @@ public class AddressListFragment extends BaseFragment {
 
     private YLYDFormDao.TreeListBean treeListBean;
     private ArrayList<AddressListBean.AddressListDao> tree_list;
+    private ArrayList<String> childAvatarList;
+    private ArrayList<String> childNameList;
+    private ArrayList<String> childNumList;
 
     private AddressListFileBean bean;
     private List<AddressListFileBean> mDatas;
@@ -75,6 +81,21 @@ public class AddressListFragment extends BaseFragment {
         title_back.setVisibility(View.VISIBLE);
         title.setText("通讯录");
         //setTreeView();
+
+        if (childAvatarList==null) {
+            childAvatarList = new ArrayList<>();
+        }
+        childAvatarList.clear();
+
+        if (childNameList==null) {
+            childNameList = new ArrayList<>();
+        }
+        childNameList.clear();
+
+        if (childNumList==null) {
+            childNumList = new ArrayList<>();
+        }
+        childNumList.clear();
 
         addressChange(address_parent);
     }
@@ -95,7 +116,23 @@ public class AddressListFragment extends BaseFragment {
                 break;
 
             case R.id.search_text://搜索按钮
-                MyToast.showShort(mActivity, "搜索");
+                String searchStr = search_edittext.getText().toString().trim();
+                if (!searchStr.equals("")) {
+                    Intent searchIntent = new Intent(mActivity, EmptyActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArrayList("address_list_avatar",childAvatarList);
+                    bundle.putStringArrayList("address_list_name",childNameList);
+                    bundle.putStringArrayList("address_list_num",childNumList);
+                    LogUtil.e("size"+childAvatarList.size()+"::"+childAvatarList.size()+"::"+childAvatarList.size()+"::");
+
+                    bundle.putString("address_list_search_str",searchStr);
+                    searchIntent.putExtra("address_list_search_result_bundle",bundle);
+                    searchIntent.putExtra("fragment_name","mine_zdlf_address_search");
+                    mActivity.startActivity(searchIntent);
+                } else {
+                    MyToast.showShort(mActivity, "请输入搜索内容!");
+                    return;
+                }
                 break;
 
             case R.id.search_delete://清空按钮
@@ -120,7 +157,7 @@ public class AddressListFragment extends BaseFragment {
             case R.id.address_parent://
                 showProgressDialog();
 
-                MyToast.showShort(mActivity, "总公司");
+                //MyToast.showShort(mActivity, "总公司");
                 address_parent.setBackgroundResource(R.drawable.approve_left_shixin);
                 address_parent.setTextColor(Color.parseColor("#FFFFFF"));
                 address_filiale.setBackgroundResource(R.drawable.approve_right_kongxin);
@@ -257,6 +294,13 @@ public class AddressListFragment extends BaseFragment {
                     if (!TextUtils.isEmpty(children.url)) {
                         bean.setUrl(children.url);
                     }
+                    //搜索相关
+                    childAvatarList.add(children.avatar_url);
+                    childNameList.add(children.name);
+                    childNumList.add(children.phone_number);
+
+                    LogUtil.e("size"+childAvatarList.size()+"::"+childAvatarList.size()+"::"+childAvatarList.size()+"::");
+
                     mDatas.add(bean);
                 }
             }

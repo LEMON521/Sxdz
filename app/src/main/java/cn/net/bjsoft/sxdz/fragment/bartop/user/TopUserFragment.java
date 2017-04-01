@@ -20,8 +20,6 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import java.io.File;
-
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.home.MainActivity;
 import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
@@ -142,7 +140,7 @@ public class TopUserFragment extends BaseFragment {
         params.addBodyParameter("asname", "asname");
         params.addBodyParameter("name", "asname");
 
-        params.addBodyParameter("avatar", new File(filepath),"multipart/form-data","muwu_1.mp3");
+        params.addBodyParameter("avatar", io);
 
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

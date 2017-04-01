@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+    <include layout="@layout/top_title" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,57 +14,21 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/top_title" />
 
-            <!--搜索-->
-            <LinearLayout
-                android:id="@+id/knowledge_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dm020"
-                android:layout_marginLeft="@dimen/dm020"
-                android:layout_marginRight="@dimen/dm020"
-                android:layout_marginTop="@dimen/dm040"
-                android:background="@drawable/page_home"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <ImageView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/nav_seach" />
-
-                <EditText
-                    android:id="@+id/search_edittext"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dm040"
-                    android:layout_marginLeft="@dimen/dm010"
-                    android:background="@null"
-                    android:hint="搜索"
-                    android:imeOptions="actionSearch"
-                    android:textColor="@color/gray"
-                    android:textColorHint="@color/gray"
-                    android:textSize="@dimen/dm024" />
-
-            </LinearLayout>
 
             <LinearLayout
+                android:layout_marginRight="@dimen/dm020"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dm020"
-                android:layout_marginRight="@dimen/dm020"
-                android:layout_marginTop="@dimen/dm030"
                 android:background="@color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="@dimen/dm010">
+                android:paddingBottom="@dimen/dm020"
+                android:paddingTop="@dimen/dm020">
 
                 <HorizontalScrollView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-
                     android:layout_marginRight="@dimen/dm010"
                     android:layout_weight="9"
                     android:scrollbarAlwaysDrawVerticalTrack="false"
@@ -87,13 +51,18 @@
                     android:src="@drawable/nav_seach" />
             </LinearLayout>
 
-            <LinearLayout
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm002"
+                android:background="#F0F0F0"></FrameLayout>
 
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="50dp"
                 android:layout_marginLeft="@dimen/dm020"
                 android:layout_marginRight="@dimen/dm020"
+                android:layout_marginTop="@dimen/dm020"
                 android:background="@drawable/biankuang_wite_shixin"
                 android:orientation="horizontal"
                 android:padding="@dimen/dm001">

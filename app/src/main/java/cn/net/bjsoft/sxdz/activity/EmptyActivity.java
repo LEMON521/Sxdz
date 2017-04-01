@@ -7,8 +7,9 @@ import org.xutils.view.annotation.ContentView;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
-import cn.net.bjsoft.sxdz.fragment.zdlf.AddressListFragment;
+import cn.net.bjsoft.sxdz.fragment.zdlf.MineAddressListFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.KnowledgeItemZDLFFragment;
+import cn.net.bjsoft.sxdz.fragment.zdlf.MineAddressListSearchResultFragment;
 
 /**
  * Created by Zrzc on 2017/3/20.
@@ -35,8 +36,12 @@ public class EmptyActivity extends BaseActivity {
                     fragment = new KnowledgeItemZDLFFragment();//中电联发知识详情条目
                     LogUtil.e("Fragment 的值为" + fragment_name);
                 }else if (fragment_name.equals("addressList")) {
-                    fragment = new AddressListFragment();//中电联发知识详情条目
+                    fragment = new MineAddressListFragment();//中电联发知识详情条目
                     LogUtil.e("Fragment 的值为" + fragment_name);
+                }else if (fragment_name.equals("mine_zdlf_address_search")){//中电联发搜索联系人结果
+                    fragment = new MineAddressListSearchResultFragment();
+                    Bundle b = getIntent().getBundleExtra("address_list_search_result_bundle");
+                    bundle.putBundle("address_list_search_result_bundle",b);
                 }
 
                 bundle.putString("json","");
