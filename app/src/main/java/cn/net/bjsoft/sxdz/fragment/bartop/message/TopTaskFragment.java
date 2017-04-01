@@ -36,14 +36,16 @@ public class TopTaskFragment extends BaseFragment {
     @ViewInject(R.id.message_task_query)
     private ImageView query;
 
+    @ViewInject(R.id.fragment_task_all)
+    private TextView task_all;
+    @ViewInject(R.id.fragment_task_branch)
+    private TextView task_branch;
     @ViewInject(R.id.fragment_task_on)
     private TextView task_on;
     @ViewInject(R.id.fragment_task_off)
     private TextView task_off;
-    @ViewInject(R.id.fragment_task_allocation)
-    private TextView task_allocation;
-    @ViewInject(R.id.fragment_task_alltask)
-    private TextView task_alltask;
+    @ViewInject(R.id.fragment_task_mine)
+    private TextView task_mine;
 
     @ViewInject(R.id.fragment_task_list)
     private RefreshListView_1 task_list;
@@ -137,6 +139,8 @@ public class TopTaskFragment extends BaseFragment {
             task_on.setBackgroundResource(R.drawable.approve_left_kongxin);
             task_off.setTextColor(Color.parseColor("#000000"));
             task_off.setBackgroundResource(R.drawable.approve_middle_kongxin);
+            task_allocation.setTextColor(Color.parseColor("#000000"));
+            task_allocation.setBackgroundResource(R.drawable.approve_middle_kongxin);
             task_allocation.setTextColor(Color.parseColor("#000000"));
             task_allocation.setBackgroundResource(R.drawable.approve_middle_kongxin);
             task_alltask.setTextColor(Color.parseColor("#000000"));

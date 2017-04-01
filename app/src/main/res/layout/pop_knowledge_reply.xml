@@ -39,7 +39,7 @@
                     android:textSize="@dimen/dm022" />
 
                 <EditText
-                    android:textColor="#D2D2D2"
+                    android:textColor="@color/gray"
                     android:id="@+id/pop_knowledge_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                     android:background="@null"
                     android:hint="请填入回复内容"
                     android:padding="@dimen/dm010"
-                    android:textColorHint="@color/gray"
+                    android:textColorHint="#D2D2D2"
                     android:textSize="@dimen/dm024" />
             </LinearLayout>
 
