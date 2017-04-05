@@ -264,7 +264,7 @@ public class MineAddressListFragment extends BaseFragment {
         level++;
 
         for (AddressListBean.AddressListDao children : list) {
-
+            bean = null;
             if (children.children != null) {
                 bean = new AddressListFileBean(Integer.parseInt(children.id)
                         , Integer.parseInt(children.pid)
@@ -302,6 +302,7 @@ public class MineAddressListFragment extends BaseFragment {
                     mDatas.add(bean);
                 }
             }
+
         }
         setTreeView();
     }

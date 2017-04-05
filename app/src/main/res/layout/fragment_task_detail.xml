@@ -95,19 +95,14 @@
                     android:text="完成度" />
 
                 <com.xw.repo.BubbleSeekBar
+                    app:bsb_second_track_color="@color/blue"
                     android:id="@+id/fragment_task_progress"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="16dp"
                     android:layout_marginTop="8dp"
-                    app:bsb_auto_adjust_section_mark="true"
-                    app:bsb_second_track_color="@color/blue"
-                    app:bsb_section_count="10"
-                    app:bsb_section_text_position="below_section_mark"
                     app:bsb_show_section_mark="true"
                     app:bsb_show_section_text="true"
-                    app:bsb_show_thumb_text="true"
-                    app:bsb_thumb_text_size="18sp"
-                    app:bsb_touch_to_seek="true" />
+                    app:bsb_show_thumb_text="true"/>
 
 
             </LinearLayout>

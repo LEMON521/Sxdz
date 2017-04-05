@@ -20,15 +20,14 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/scroll"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dm300">
+                android:layout_height="@dimen/dm240">
                 <!-- 放置轮播图片位置 -->
                 <LinearLayout
                     android:id="@+id/top_viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dm300"
+                    android:layout_height="@dimen/dm240"
                     android:orientation="horizontal" />
 
                 <LinearLayout
@@ -71,15 +70,16 @@
                 android:layout_marginTop="@dimen/dm020"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:visibility="gone">
+                >
 
                 <TextView
+                    android:textColor="#333333"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginBottom="@dimen/dm020"
                     android:layout_marginLeft="@dimen/dm020"
                     android:layout_marginRight="@dimen/dm020"
-                    android:layout_marginTop="@dimen/dm010"
+                    android:layout_marginTop="@dimen/dm020"
                     android:text="主要应用"
                     android:textSize="@dimen/dm024" />
 
@@ -125,12 +125,13 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:textColor="#333333"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginBottom="@dimen/dm020"
                     android:layout_marginLeft="@dimen/dm020"
                     android:layout_marginRight="@dimen/dm020"
-                    android:layout_marginTop="@dimen/dm010"
+                    android:layout_marginTop="@dimen/dm020"
                     android:text="项目相关"
                     android:textSize="@dimen/dm024" />
 
@@ -173,12 +174,13 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:textColor="#333333"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginBottom="@dimen/dm020"
                     android:layout_marginLeft="@dimen/dm020"
                     android:layout_marginRight="@dimen/dm020"
-                    android:layout_marginTop="@dimen/dm010"
+                    android:layout_marginTop="@dimen/dm020"
                     android:text="工程相关"
                     android:textSize="@dimen/dm024" />
 
@@ -222,12 +224,13 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:textColor="#333333"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dm010"
+                    android:layout_marginBottom="@dimen/dm020"
                     android:layout_marginLeft="@dimen/dm020"
                     android:layout_marginRight="@dimen/dm020"
-                    android:layout_marginTop="@dimen/dm010"
+                    android:layout_marginTop="@dimen/dm020"
                     android:text="其他应用"
                     android:textSize="@dimen/dm024" />
 
