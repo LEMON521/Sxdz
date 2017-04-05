@@ -1,9 +1,6 @@
 package cn.net.bjsoft.sxdz.bean.zdlf.address_list;
 
-import cn.net.bjsoft.sxdz.view.treeview.bean.TreeNodeId;
-import cn.net.bjsoft.sxdz.view.treeview.bean.TreeNodeLabel;
-import cn.net.bjsoft.sxdz.view.treeview.bean.TreeNodePid;
-import cn.net.bjsoft.sxdz.view.treeview.bean.TreeNodeUrl;
+
 
 public class AddressListFileBean {
     @TreeNodeId
@@ -20,8 +17,6 @@ public class AddressListFileBean {
     private String phone_number;
     @TreeNodeType
     private String type;
-
-
     @TreeNodeAvatar_url
     private String avatar_url;
 

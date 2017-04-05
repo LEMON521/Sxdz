@@ -66,8 +66,8 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
         bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
 
-        LogUtil.e("department@@@@@@@@@@@@"+node.getId()+"::V"+position);
-        if (node.getType().equals("department")) {//如果是部门
+        LogUtil.e("department@@@@@@@@@@@@"+node.getType()+"::V"+position);
+        if (node.getType().toString().equals("department")) {//如果是部门
             if (node.getIcon() == -1) {
                 viewHolder.parent_icon.setVisibility(View.INVISIBLE);
                 //x.image().bind(viewHolder.icon, "http://192.168.1.119:8080/android/form/form_1.jpg");
@@ -80,7 +80,7 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
             viewHolder.child_ll.setVisibility(View.GONE);
             viewHolder.parent_label.setText(node.getName());
 
-        } else if (node.getType().equals("employee")) {//员工
+        } else if (node.getType().toString().equals("employee")) {//员工
             viewHolder.parent_ll.setVisibility(View.GONE);
             viewHolder.child_ll.setVisibility(View.VISIBLE);
             bitmapUtils.display(viewHolder.child_icon, node.getAvatar_url());

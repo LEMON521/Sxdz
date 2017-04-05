@@ -8,6 +8,7 @@ import cn.net.bjsoft.sxdz.bean.UpdateBean;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveShowDao;
 import cn.net.bjsoft.sxdz.bean.function.sign.FunctionSignHistoryBean;
+import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
 import cn.net.bjsoft.sxdz.bean.ylyd.form.YLYDFormDao;
 import cn.net.bjsoft.sxdz.bean.zdlf.address_list.AddressListBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
@@ -140,6 +141,15 @@ public class GsonUtil {
      */
     public static AddressListBean getAddressListBean(String json){
         return getGson().fromJson(json , AddressListBean.class);
+    }
+
+    /**
+     * 中电联发信息模块-任务--模块json
+     * @param json
+     * @return
+     */
+    public static MessageTaskBean getMessageTaskBean(String json){
+        return getGson().fromJson(json , MessageTaskBean.class);
     }
 
 }

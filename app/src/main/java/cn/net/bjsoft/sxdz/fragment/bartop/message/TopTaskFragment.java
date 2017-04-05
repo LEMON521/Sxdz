@@ -1,7 +1,9 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,12 +19,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemsAdapter;
-import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
+import cn.net.bjsoft.sxdz.activity.EmptyActivity;
+import cn.net.bjsoft.sxdz.adapter.message.task.TaskZDLFAdapter;
+import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
 import cn.net.bjsoft.sxdz.dialog.TaskQueryPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 import cn.net.bjsoft.sxdz.view.RefreshListView_1;
 
 /**
@@ -50,9 +54,9 @@ public class TopTaskFragment extends BaseFragment {
     @ViewInject(R.id.fragment_task_list)
     private RefreshListView_1 task_list;
 
-    private KnowledgeBean.ItemsBean itemsBean;
-    private ArrayList<KnowledgeBean.ItemsDataDao> itemsDataList;
-    private KnowledgeItemsAdapter itemsAdapter;
+    private MessageTaskBean taskBean;
+    private ArrayList<MessageTaskBean.TasksDao> tasksDaos;
+    private TaskZDLFAdapter taskAdapter;
 
 
     private TaskQueryPopupWindow window;
@@ -79,33 +83,42 @@ public class TopTaskFragment extends BaseFragment {
             }
         });
 
-        taskChange(task_on);
+        taskChange(task_all);
 
 
-        if (itemsDataList == null) {
-            itemsDataList = new ArrayList<>();
+        if (tasksDaos == null) {
+            tasksDaos = new ArrayList<>();
         } else
-            itemsDataList.clear();
+            tasksDaos.clear();
 
-        if (itemsAdapter == null) {
-            itemsAdapter = new KnowledgeItemsAdapter(mActivity, itemsDataList);
+        if (taskAdapter == null) {
+            taskAdapter = new TaskZDLFAdapter(mActivity, tasksDaos);
         }
 
-        task_list.setAdapter(itemsAdapter);
+        task_list.setAdapter(taskAdapter);
+
+        task_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mActivity, EmptyActivity.class);
+                intent.putExtra("fragment_name","task_detail");
+                mActivity.startActivity(intent);
+            }
+        });
 
         task_list.setOnRefreshListener(new RefreshListView_1.OnRefreshListener() {
             @Override
             public void pullDownRefresh() {
                 //SystemClock.sleep(2000);
                 LogUtil.e("下拉刷新");
-                itemsAdapter.notifyDataSetChanged();
+                taskAdapter.notifyDataSetChanged();
                 task_list.onRefreshFinish();
             }
 
             @Override
             public void pullUpLoadMore() {
                 LogUtil.e("上啦加载");
-                itemsAdapter.notifyDataSetChanged();
+                taskAdapter.notifyDataSetChanged();
                 task_list.onRefreshFinish();
                 //SystemClock.sleep(2000);
             }
@@ -189,18 +202,18 @@ public class TopTaskFragment extends BaseFragment {
     }
 
     private void getData() {
-        RequestParams params = new RequestParams("http://www.shuxin.net/api/app_json/android/knowledge/knowledge_items_life.json");
+        RequestParams params = new RequestParams(TestAddressUtils.test_get_message_task_list_url);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 //LogUtil.e("获取到的条目-----------" + result);
-                itemsBean = GsonUtil.getKnowledgeItemsBean(result);
-                if (itemsBean.result) {
+                taskBean = GsonUtil.getMessageTaskBean(result);
+                if (taskBean.result) {
                     //LogUtil.e("获取到的条目-----------" + result);
-                    itemsDataList.clear();
-                    itemsDataList.addAll(itemsBean.items);
-                    itemsAdapter.notifyDataSetChanged();
-                    itemsBean = null;
+                    tasksDaos.clear();
+                    tasksDaos.addAll(taskBean.data);
+                    taskAdapter.notifyDataSetChanged();
+                    taskBean = null;
                 } else {
                 }
 

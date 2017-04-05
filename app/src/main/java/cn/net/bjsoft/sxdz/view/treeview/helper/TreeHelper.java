@@ -6,13 +6,14 @@ import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeAvatar_url;
+import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeId;
+import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeLabel;
 import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodePhone_number;
+import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodePid;
 import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeStation;
 import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeType;
-import cn.net.bjsoft.sxdz.view.treeview.bean.TreeNodeId;
-import cn.net.bjsoft.sxdz.view.treeview.bean.TreeNodeLabel;
-import cn.net.bjsoft.sxdz.view.treeview.bean.TreeNodePid;
-import cn.net.bjsoft.sxdz.view.treeview.bean.TreeNodeUrl;
+import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeUrl;
+
 
 /**
  * Created by Zrzc on 2017/3/13.
@@ -85,12 +86,12 @@ public class TreeHelper {
         for (T t : datas) {
             int id = -1;
             int pId = -1;
-            String label = null;
-            String url = null;
-            String station = null;
-            String phone_number = null;
-            String type = null;
-            String avatar_url = null;
+            String label = "";
+            String url = "";
+            String station = "";
+            String phone_number = "";
+            String type = "";
+            String avatar_url = "";
 
 
             Class<? extends Object> clazz = t.getClass();

@@ -26,4 +26,7 @@ public class TestAddressUtils {
     public static String test_get_knowledge_item_url="http://www.shuxin.net/api/app_json/android/knowledge/knowledge_item.json";
 
     public static String test_get_address_list_url="http://www.shuxin.net/api/app_json/android/address_list/address_list.json";
+
+    public static String test_get_message_task_list_url="http://www.shuxin.net/api/app_json/android/message/message_task_list.json";
+
 }
