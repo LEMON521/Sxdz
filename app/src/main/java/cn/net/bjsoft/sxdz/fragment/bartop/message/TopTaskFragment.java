@@ -128,29 +128,46 @@ public class TopTaskFragment extends BaseFragment {
 
         }
     }
+//
+//    private TextView task_all;
+//    private TextView task_branch;
+//    private TextView task_on;
+//    private TextView task_off;
+//    private TextView task_mine;
 
-    @Event(value = {R.id.fragment_task_on
+    @Event(value = {R.id.fragment_task_all
+            , R.id.fragment_task_branch
+            , R.id.fragment_task_on
             , R.id.fragment_task_off
-            , R.id.fragment_task_allocation
-            , R.id.fragment_task_alltask})
+            , R.id.fragment_task_mine})
     private void taskChange(View view) {
         {//先把全部设置成默认的样式
+            task_all.setTextColor(Color.parseColor("#000000"));
+            task_all.setBackgroundResource(R.drawable.approve_left_kongxin);
+            task_branch.setTextColor(Color.parseColor("#000000"));
+            task_branch.setBackgroundResource(R.drawable.approve_middle_kongxin);
             task_on.setTextColor(Color.parseColor("#000000"));
-            task_on.setBackgroundResource(R.drawable.approve_left_kongxin);
+            task_on.setBackgroundResource(R.drawable.approve_middle_kongxin);
             task_off.setTextColor(Color.parseColor("#000000"));
             task_off.setBackgroundResource(R.drawable.approve_middle_kongxin);
-            task_allocation.setTextColor(Color.parseColor("#000000"));
-            task_allocation.setBackgroundResource(R.drawable.approve_middle_kongxin);
-            task_allocation.setTextColor(Color.parseColor("#000000"));
-            task_allocation.setBackgroundResource(R.drawable.approve_middle_kongxin);
-            task_alltask.setTextColor(Color.parseColor("#000000"));
-            task_alltask.setBackgroundResource(R.drawable.approve_right_kongxin);
+            task_mine.setTextColor(Color.parseColor("#000000"));
+            task_mine.setBackgroundResource(R.drawable.approve_right_kongxin);
         }
 
         switch (view.getId()) {
+            case R.id.fragment_task_all:
+                task_all.setTextColor(Color.parseColor("#FFFFFF"));
+                task_all.setBackgroundResource(R.drawable.approve_left_shixin);
+                getData();
+                break;
+            case R.id.fragment_task_branch:
+                task_branch.setTextColor(Color.parseColor("#FFFFFF"));
+                task_branch.setBackgroundResource(R.drawable.approve_middle_shixin);
+                getData();
+                break;
             case R.id.fragment_task_on:
                 task_on.setTextColor(Color.parseColor("#FFFFFF"));
-                task_on.setBackgroundResource(R.drawable.approve_left_shixin);
+                task_on.setBackgroundResource(R.drawable.approve_middle_shixin);
                 getData();
                 break;
             case R.id.fragment_task_off:
@@ -158,14 +175,9 @@ public class TopTaskFragment extends BaseFragment {
                 task_off.setBackgroundResource(R.drawable.approve_middle_shixin);
                 getData();
                 break;
-            case R.id.fragment_task_allocation:
-                task_allocation.setTextColor(Color.parseColor("#FFFFFF"));
-                task_allocation.setBackgroundResource(R.drawable.approve_middle_shixin);
-                getData();
-                break;
-            case R.id.fragment_task_alltask:
-                task_alltask.setTextColor(Color.parseColor("#FFFFFF"));
-                task_alltask.setBackgroundResource(R.drawable.approve_right_shixin);
+            case R.id.fragment_task_mine:
+                task_mine.setTextColor(Color.parseColor("#FFFFFF"));
+                task_mine.setBackgroundResource(R.drawable.approve_right_shixin);
                 getData();
                 break;
 
@@ -176,7 +188,7 @@ public class TopTaskFragment extends BaseFragment {
          */
     }
 
-    private void getData(){
+    private void getData() {
         RequestParams params = new RequestParams("http://www.shuxin.net/api/app_json/android/knowledge/knowledge_items_life.json");
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override

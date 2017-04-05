@@ -2,12 +2,12 @@ package cn.net.bjsoft.sxdz.fragment.zdlf;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.xutils.common.util.LogUtil;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.adapter.zdlf.AddressListSearchResultAdapter;
 import cn.net.bjsoft.sxdz.bean.zdlf.address_list.AddressListBean;
+import cn.net.bjsoft.sxdz.dialog.DialingPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 
@@ -87,12 +88,20 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
         //resultList = (ArrayList<AddressListBean.AddressListDao>) getArguments().get("address_list");
         Bundle bundle = getArguments().getBundle("address_list_search_result_bundle");
         childAvatarList.addAll(bundle.getStringArrayList("address_list_avatar"));
-        childAvatarList.addAll(bundle.getStringArrayList("address_list_name"));
-        childAvatarList.addAll(bundle.getStringArrayList("address_list_num"));
+        childNameList.addAll(bundle.getStringArrayList("address_list_name"));
+        childNumList.addAll(bundle.getStringArrayList("address_list_num"));
         searchStr = bundle.getString("address_list_search_str").toString();
-        LogUtil.e("size" + childAvatarList.size() + "::" + childAvatarList.size() + "::" + childAvatarList.size() + "::");
+
+        search_edit.setText(searchStr);
+
         searchData(searchStr);
 
+        resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DialingPopupWindow window = new DialingPopupWindow(mActivity, view, resultList.get(position).phone_number);
+            }
+        });
 
     }
 
@@ -110,8 +119,6 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
 //            }
 //        }
 
-        LogUtil.e("size" + childAvatarList.size() + "::" + childAvatarList.size() + "::" + childAvatarList.size() + "::");
-
         for (int i = 0; i < childAvatarList.size(); i++) {
             AddressListBean bean = new AddressListBean();
             AddressListBean.AddressListDao dao = bean.new AddressListDao();
@@ -119,12 +126,15 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
                 dao.avatar_url = childAvatarList.get(i);
                 dao.name = childNameList.get(i);
                 dao.phone_number = childNumList.get(i);
+                resultList.add(dao);
+                break;
             } else if (childNumList.get(i).contains(searchStr)) {
                 dao.avatar_url = childAvatarList.get(i);
                 dao.name = childNameList.get(i);
                 dao.phone_number = childNumList.get(i);
+                resultList.add(dao);
             }
-            resultList.add(dao);
+
         }
         if (resultList.size() > 0) {
             hint.setVisibility(View.GONE);

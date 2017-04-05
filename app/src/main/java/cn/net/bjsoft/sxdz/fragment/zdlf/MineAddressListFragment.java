@@ -123,8 +123,6 @@ public class MineAddressListFragment extends BaseFragment {
                     bundle.putStringArrayList("address_list_avatar",childAvatarList);
                     bundle.putStringArrayList("address_list_name",childNameList);
                     bundle.putStringArrayList("address_list_num",childNumList);
-                    LogUtil.e("size"+childAvatarList.size()+"::"+childAvatarList.size()+"::"+childAvatarList.size()+"::");
-
                     bundle.putString("address_list_search_str",searchStr);
                     searchIntent.putExtra("address_list_search_result_bundle",bundle);
                     searchIntent.putExtra("fragment_name","mine_zdlf_address_search");
