@@ -1,8 +1,10 @@
 package cn.net.bjsoft.sxdz.fragment.zdlf;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -10,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.xutils.common.Callback;
-import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.home.WebActivity;
 import cn.net.bjsoft.sxdz.adapter.zdlf.WorkAdapter;
 import cn.net.bjsoft.sxdz.bean.zdlf.work.WorkBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
@@ -93,6 +95,9 @@ public class WorkFragment extends BaseFragment {
     private WorkAdapter workWorkAdapter;
     private WorkAdapter otherWorkAdapter;
 
+    private AdapterView.OnItemClickListener itemClickListener;
+    private Intent intent;
+
 
     protected static final int SUCCESS = 1;
     protected static final int ERROR = -1;
@@ -114,7 +119,7 @@ public class WorkFragment extends BaseFragment {
                 case ERROR:
                     //
                     //test.setText("网络异常,暂时无法获取数据/n点击刷新");
-                    LogUtil.e("获取到的条目--------失败!!!---");
+                    //LogUtil.e("获取到的条目--------失败!!!---");
                     dismissProgressDialog();
                     break;
 
@@ -150,7 +155,7 @@ public class WorkFragment extends BaseFragment {
             public void onSuccess(String result) {
                 workBean = GsonUtil.getWorkBean(result);
                 if (workBean.result) {
-                    LogUtil.e("获取到的条目-----------" + result);
+                    //LogUtil.e("获取到的条目-----------" + result);
                     workDatas = workBean.data;
                     message.what = SUCCESS;
                 } else {
@@ -161,7 +166,7 @@ public class WorkFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("获取到的条目--------失败!!!---"+ex);
+                //LogUtil.e("获取到的条目--------失败!!!---" + ex);
                 message.what = ERROR;
             }
 
@@ -192,25 +197,84 @@ public class WorkFragment extends BaseFragment {
         }
         scrollListDaos.clear();
 
+        intent = new Intent(mActivity, WebActivity.class);
+        itemClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //LogUtil.e("parent" + parent.toString() + "::position" + position+"++parent.getId()"+parent.getId());
+
+                switch (parent.getId()) {
+                    case R.id.gv_application_main:
+                        intent.putExtra("url", mainDaos.get(position).url);
+                        intent.putExtra("title", mainDaos.get(position).name);
+
+                        break;
+                    case R.id.gv_application_project:
+                        intent.putExtra("url", projectDaos.get(position).url);
+                        intent.putExtra("title", projectDaos.get(position).name);
+
+                        break;
+                    case R.id.gv_application_work:
+                        intent.putExtra("url", workDaos.get(position).url);
+                        intent.putExtra("title", workDaos.get(position).name);
+
+                        break;
+                    case R.id.gv_application_other:
+                        intent.putExtra("url", otherDaos.get(position).url);
+                        intent.putExtra("title", otherDaos.get(position).name);
+
+                        break;
+                }
+                startActivity(intent);
+            }
+        };
+
+        //主要应用
         if (mainDaos == null) {
             mainDaos = new ArrayList<>();
         }
         mainDaos.clear();
+        if (mainWorkAdapter == null) {
+            mainWorkAdapter = new WorkAdapter(mActivity, mainDaos);
+        }
+        gv_main.setAdapter(mainWorkAdapter);
+        gv_main.setOnItemClickListener(itemClickListener);
 
+
+        //项目相关
         if (projectDaos == null) {
             projectDaos = new ArrayList<>();
         }
         projectDaos.clear();
+        if (projectWorkAdapter == null) {
+            projectWorkAdapter = new WorkAdapter(mActivity, projectDaos);
+        }
+        gv_project.setAdapter(projectWorkAdapter);
+        gv_project.setOnItemClickListener(itemClickListener);
 
+
+        //工作相关
         if (workDaos == null) {
             workDaos = new ArrayList<>();
         }
         workDaos.clear();
+        if (workWorkAdapter == null) {
+            workWorkAdapter = new WorkAdapter(mActivity, workDaos);
+        }
+        gv_work.setAdapter(workWorkAdapter);
+        gv_work.setOnItemClickListener(itemClickListener);
 
+
+        //其他相关
         if (otherDaos == null) {
             otherDaos = new ArrayList<>();
         }
         otherDaos.clear();
+        if (otherWorkAdapter == null) {
+            otherWorkAdapter = new WorkAdapter(mActivity, otherDaos);
+        }
+        gv_other.setAdapter(otherWorkAdapter);
+        gv_other.setOnItemClickListener(itemClickListener);
         //=============初始化完毕
 
         //============添加数据
@@ -247,11 +311,8 @@ public class WorkFragment extends BaseFragment {
 
         if (mainDaos.size() > 0) {
             ll_main.setVisibility(View.VISIBLE);
-            if (mainWorkAdapter == null) {
-                mainWorkAdapter = new WorkAdapter(mActivity, mainDaos);
-            }
-            gv_main.setAdapter(mainWorkAdapter);
-            Utility.setGridViewHeightBasedOnChildren(gv_main,4);
+
+            Utility.setGridViewHeightBasedOnChildren(gv_main, 4);
         } else {
             ll_main.setVisibility(View.GONE);
         }
@@ -259,11 +320,8 @@ public class WorkFragment extends BaseFragment {
 
         if (projectDaos.size() > 0) {
             ll_project.setVisibility(View.VISIBLE);
-            if (projectWorkAdapter == null) {
-                projectWorkAdapter = new WorkAdapter(mActivity, projectDaos);
-            }
-            gv_project.setAdapter(projectWorkAdapter);
-            Utility.setGridViewHeightBasedOnChildren(gv_project,4);
+
+            Utility.setGridViewHeightBasedOnChildren(gv_project, 4);
         } else {
             ll_project.setVisibility(View.GONE);
         }
@@ -271,11 +329,8 @@ public class WorkFragment extends BaseFragment {
 
         if (workDaos.size() > 0) {
             ll_work.setVisibility(View.VISIBLE);
-            if (workWorkAdapter == null) {
-                workWorkAdapter = new WorkAdapter(mActivity, workDaos);
-            }
-            gv_work.setAdapter(workWorkAdapter);
-            Utility.setGridViewHeightBasedOnChildren(gv_work,4);
+
+            Utility.setGridViewHeightBasedOnChildren(gv_work, 4);
         } else {
             ll_work.setVisibility(View.GONE);
         }
@@ -283,11 +338,8 @@ public class WorkFragment extends BaseFragment {
 
         if (otherDaos.size() > 0) {
             ll_other.setVisibility(View.VISIBLE);
-            if (otherWorkAdapter == null) {
-                otherWorkAdapter = new WorkAdapter(mActivity, otherDaos);
-            }
-            gv_other.setAdapter(otherWorkAdapter);
-            Utility.setGridViewHeightBasedOnChildren(gv_other,4);
+
+            Utility.setGridViewHeightBasedOnChildren(gv_other, 4);
         } else {
             ll_other.setVisibility(View.GONE);
         }

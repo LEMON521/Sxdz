@@ -31,8 +31,8 @@ public class WebActivity extends BaseActivity {
     private TextView title;//标题
     @ViewInject(R.id.loading)
     private LinearLayout loading;//标题
-    @ViewInject(R.id.title)
-    private LinearLayout titles;//标题
+//    @ViewInject(R.id.title)
+//    private LinearLayout titles;//标题
 
 
 
@@ -42,7 +42,7 @@ public class WebActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        titles.setVisibility(View.GONE);
+//        titles.setVisibility(View.GONE);
         back.setVisibility(View.VISIBLE);
         url = getIntent().getStringExtra("url");
         LogUtil.e("底部栏url为=====" + url);

@@ -43,7 +43,7 @@
                     android:layout_marginTop="@dimen/dm020"
                     android:textSize="@dimen/dm024"
                     android:textColor="#55616A"
-                    android:id="@+id/fragment_task_detail"
+                    android:id="@+id/fragment_task_detail_host"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目" />
@@ -66,10 +66,10 @@
                     android:textStyle="bold"
                     android:text="任务附件" />
 
-                <GridView
+                <ListView
                     android:id="@+id/fragment_task_attachment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></GridView>
+                    android:layout_height="wrap_content"></ListView>
 
             </LinearLayout>
 
@@ -81,13 +81,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <ListView
+                <cn.net.bjsoft.sxdz.view.ChildrenListView
                     android:id="@+id/fragment_task_detail_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                </ListView>
+                </cn.net.bjsoft.sxdz.view.ChildrenListView>
 
                 <RelativeLayout
                     android:layout_marginTop="@dimen/dm020"
@@ -152,11 +151,11 @@
                     android:textStyle="bold"
                     android:text="任务文件" />
 
-                <GridView
+                <ListView
                     android:layout_marginTop="@dimen/dm020"
                     android:id="@+id/fragment_task_files"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></GridView>
+                    android:layout_height="wrap_content"></ListView>
             </LinearLayout>
 
             <LinearLayout

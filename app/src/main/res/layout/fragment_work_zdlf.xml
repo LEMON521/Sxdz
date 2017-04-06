@@ -98,6 +98,7 @@
                     android:background="@color/white">
                     <!--主要应用-->
                     <GridView
+                        android:tag=""
                         android:id="@+id/gv_application_main"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

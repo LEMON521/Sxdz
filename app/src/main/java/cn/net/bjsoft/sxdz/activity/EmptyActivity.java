@@ -8,6 +8,7 @@ import org.xutils.view.annotation.ContentView;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TaskDetailFragment;
+import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TopAddTaskFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.MineAddressListFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.KnowledgeItemZDLFFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.MineAddressListSearchResultFragment;
@@ -45,8 +46,9 @@ public class EmptyActivity extends BaseActivity {
                     bundle.putBundle("address_list_search_result_bundle", b);
                 } else if (fragment_name.equals("task_detail")) {
                     fragment = new TaskDetailFragment();
+                } else if(fragment_name.equals("addTaskFragment")){
+                    fragment = new TopAddTaskFragment();
                 }
-
                 bundle.putString("json", "");
                 fragment.setArguments(bundle);
                 getSupportFragmentManager()

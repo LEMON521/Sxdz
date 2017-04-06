@@ -39,7 +39,10 @@ public class KnowLedgeItemBean implements Serializable {
 
     public class FilesKnowledgeItemDao implements Serializable {
         public String file_url = "";
+        public String file_path = "";
         public String file_name = "";
+        public boolean isEditing = false;
+        public boolean isAdd = false;
     }
 
 //    /**

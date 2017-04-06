@@ -132,7 +132,9 @@ public class TopTaskFragment extends BaseFragment {
                 mActivity.finish();
                 break;
             case R.id.message_task_add:
-                MyToast.showShort(mActivity, "添加新任务");
+                Intent intent = new Intent(mActivity,EmptyActivity.class);
+                intent.putExtra("fragment_name","addTaskFragment");
+                mActivity.startActivity(intent);
                 break;
             case R.id.message_task_query:
                 //MyToast.showShort(mActivity,"添加新任务");

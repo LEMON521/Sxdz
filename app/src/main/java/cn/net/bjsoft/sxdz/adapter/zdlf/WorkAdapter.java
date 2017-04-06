@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.xutils.common.util.LogUtil;
 import org.xutils.x;
 
 import java.util.ArrayList;
@@ -30,9 +29,9 @@ public class WorkAdapter extends BaseAdapter {
         this.context = context;
         this.list = list;
         //LogUtil.e("适配器中==="+list.getClass().toString());
-        for (WorkBean.FunctionListDao dao : list) {
-            LogUtil.e("查看数据===" + dao.type + "::" + dao.name + "::");
-        }
+//        for (WorkBean.FunctionListDao dao : list) {
+//            LogUtil.e("查看数据===" + dao.type + "::" + dao.name + "::");
+//        }
     }
 
     @Override
@@ -64,7 +63,7 @@ public class WorkAdapter extends BaseAdapter {
             convertView.setTag(tag);
         }
         //设置数据
-        LogUtil.e("适配器中===" + list.get(position).type + "::" + list.get(position).name + "::" + position);
+        //LogUtil.e("适配器中===" + list.get(position).type + "::" + list.get(position).name + "::" + position);
         Holder holder = (Holder) convertView.getTag();
         holder.work_name.setText(list.get(position).name);
         holder.work_num.setText(Integer.parseInt(list.get(position).push_count) + "");//注意,这里要讲int类型转换为String的!!!!!!!

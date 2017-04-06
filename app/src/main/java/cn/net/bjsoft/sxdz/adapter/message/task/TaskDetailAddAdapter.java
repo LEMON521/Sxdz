@@ -15,18 +15,20 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskDetailAddBean;
-import cn.net.bjsoft.sxdz.utils.function.Utility;
 
 public class TaskDetailAddAdapter extends BaseAdapter {
 
     private FragmentActivity mActivity;
     private MessageTaskDetailAddBean addBean;
     private ArrayList<MessageTaskDetailAddBean> tasksDaos;
+    private ListView listView;
 
     public TaskDetailAddAdapter(FragmentActivity mActivity
+            , ListView listView
             , ArrayList<MessageTaskDetailAddBean> tasksDaos) {
         this.mActivity = mActivity;
         this.tasksDaos = tasksDaos;
+        this.listView = listView;
     }
 
 
@@ -47,7 +49,7 @@ public class TaskDetailAddAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
-
+        addBean = tasksDaos.get(position);
         ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(mActivity).inflate(
@@ -62,6 +64,22 @@ public class TaskDetailAddAdapter extends BaseAdapter {
             viewHolder.discription_et = (EditText) convertView
                     .findViewById(R.id.item_task_detail_add_discription_et);
 
+            viewHolder.title_et.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    addBean.title = s.toString();
+                }
+            });
             viewHolder.discription_et.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -75,7 +93,10 @@ public class TaskDetailAddAdapter extends BaseAdapter {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    Utility.setListViewHeightBasedOnChildren((ListView) parent);
+                    //Utility.setListViewHeightBasedOnChildren(listView);
+                    addBean.discription = editable.toString();
+
+
                 }
             });
 
@@ -84,7 +105,7 @@ public class TaskDetailAddAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        addBean = tasksDaos.get(position);
+
         if (addBean.isEditing) {//判断是否可编辑状态
             viewHolder.title_tv.setVisibility(View.GONE);
             viewHolder.discription_tv.setVisibility(View.GONE);
@@ -92,7 +113,7 @@ public class TaskDetailAddAdapter extends BaseAdapter {
             viewHolder.discription_et.setVisibility(View.VISIBLE);
             viewHolder.title_et.setText(addBean.title);
             viewHolder.discription_et.setText(addBean.discription);
-        }else {
+        } else {
             viewHolder.title_tv.setVisibility(View.VISIBLE);
             viewHolder.discription_tv.setVisibility(View.VISIBLE);
             viewHolder.title_et.setVisibility(View.GONE);
@@ -107,8 +128,8 @@ public class TaskDetailAddAdapter extends BaseAdapter {
 
     private final class ViewHolder {
 
-        public EditText title_et,discription_et;
-        public TextView title_tv,discription_tv;
+        public EditText title_et, discription_et;
+        public TextView title_tv, discription_tv;
 
     }
 
