@@ -1,6 +1,8 @@
 package cn.net.bjsoft.sxdz.fragment.zdlf;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -92,9 +94,36 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
         childNumList.addAll(bundle.getStringArrayList("address_list_num"));
         searchStr = bundle.getString("address_list_search_str").toString();
 
-        search_edit.setText(searchStr);
+        //addressList
+        for (int i = 0; i < childAvatarList.size(); i++) {
+            AddressListBean bean = null;
+            bean = new AddressListBean();
+            AddressListBean.AddressListDao dao = null;
+            dao = bean.new AddressListDao();
+            dao.avatar_url = childAvatarList.get(i);
+            dao.name = childNameList.get(i);
+            dao.phone_number = childNumList.get(i);
+            addressList.add(dao);
+        }
 
-        searchData(searchStr);
+        search_edit.setText(searchStr);
+        search_edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchData(s.toString());
+            }
+        });
+        //searchData(searchStr);
 
         resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -108,6 +137,11 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
 
     private void searchData(String searchStr) {
         resultList.clear();
+
+        if (searchStr.equals("")) {
+            resultList.addAll(addressList);
+        } else {
+
 //        for (AddressListBean.AddressListDao dao : addressList) {
 //            if (dao.name.contains(searchStr)) {
 //                resultList.add(dao);
@@ -119,22 +153,36 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
 //            }
 //        }
 
-        for (int i = 0; i < childAvatarList.size(); i++) {
-            AddressListBean bean = new AddressListBean();
-            AddressListBean.AddressListDao dao = bean.new AddressListDao();
-            if (childNameList.get(i).contains(searchStr)) {
-                dao.avatar_url = childAvatarList.get(i);
-                dao.name = childNameList.get(i);
-                dao.phone_number = childNumList.get(i);
-                resultList.add(dao);
-                break;
-            } else if (childNumList.get(i).contains(searchStr)) {
-                dao.avatar_url = childAvatarList.get(i);
-                dao.name = childNameList.get(i);
-                dao.phone_number = childNumList.get(i);
-                resultList.add(dao);
-            }
+//            for (int i = 0; i < childAvatarList.size(); i++) {
+//                AddressListBean bean = new AddressListBean();
+//                AddressListBean.AddressListDao dao = bean.new AddressListDao();
+//                if (childNameList.get(i).contains(searchStr)) {
+//                    dao.avatar_url = childAvatarList.get(i);
+//                    dao.name = childNameList.get(i);
+//                    dao.phone_number = childNumList.get(i);
+//                    resultList.add(dao);
+//                    break;
+//                } else if (childNumList.get(i).contains(searchStr)) {
+//                    dao.avatar_url = childAvatarList.get(i);
+//                    dao.name = childNameList.get(i);
+//                    dao.phone_number = childNumList.get(i);
+//                    resultList.add(dao);
+//                }
+//
+//            }
 
+            for (int i = 0; i < addressList.size(); i++) {
+                String name = addressList.get(i).name;
+                String number = addressList.get(i).phone_number;
+
+                if (name.contains(searchStr)) {
+                    resultList.add(addressList.get(i));
+                    break;
+                } else if (number.contains(searchStr)) {
+                    resultList.add(addressList.get(i));
+                }
+
+            }
         }
         if (resultList.size() > 0) {
             hint.setVisibility(View.GONE);

@@ -101,7 +101,7 @@ public class TopTaskFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(mActivity, EmptyActivity.class);
-                intent.putExtra("fragment_name","task_detail");
+                intent.putExtra("fragment_name", "task_detail");
                 mActivity.startActivity(intent);
             }
         });
@@ -154,6 +154,7 @@ public class TopTaskFragment extends BaseFragment {
             , R.id.fragment_task_off
             , R.id.fragment_task_mine})
     private void taskChange(View view) {
+        showProgressDialog();
         {//先把全部设置成默认的样式
             task_all.setTextColor(Color.parseColor("#000000"));
             task_all.setBackgroundResource(R.drawable.approve_left_kongxin);
@@ -230,6 +231,7 @@ public class TopTaskFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
+                dismissProgressDialog();
             }
         });
     }
