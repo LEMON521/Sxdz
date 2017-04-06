@@ -86,12 +86,12 @@ public class TreeHelper {
         for (T t : datas) {
             int id = -1;
             int pId = -1;
-            String label = "";
-            String url = "";
-            String station = "";
-            String phone_number = "";
-            String type = "";
-            String avatar_url = "";
+            String label = null;
+            String url = null;
+            String station = null;
+            String phone_number = null;
+            String type = null;
+            String avatar_url = null;
 
 
             Class<? extends Object> clazz = t.getClass();

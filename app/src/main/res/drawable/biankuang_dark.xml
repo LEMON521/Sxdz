@@ -6,4 +6,5 @@
         android:color="#70000000" />
     <!-- 圆角 -->
     <corners android:radius="3dp" />
+    <solid android:color="#FFFFFF" />
 </shape>

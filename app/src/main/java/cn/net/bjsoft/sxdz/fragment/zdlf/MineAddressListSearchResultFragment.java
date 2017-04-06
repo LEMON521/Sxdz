@@ -106,7 +106,7 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
             addressList.add(dao);
         }
 
-        search_edit.setText(searchStr);
+
         search_edit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -125,6 +125,8 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
         });
         //searchData(searchStr);
 
+
+        search_edit.setText(searchStr);
         resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -141,35 +143,6 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
         if (searchStr.equals("")) {
             resultList.addAll(addressList);
         } else {
-
-//        for (AddressListBean.AddressListDao dao : addressList) {
-//            if (dao.name.contains(searchStr)) {
-//                resultList.add(dao);
-//                break;
-//            }
-//            if (dao.phone_number.contains(searchStr)) {
-//                resultList.add(dao);
-//                break;
-//            }
-//        }
-
-//            for (int i = 0; i < childAvatarList.size(); i++) {
-//                AddressListBean bean = new AddressListBean();
-//                AddressListBean.AddressListDao dao = bean.new AddressListDao();
-//                if (childNameList.get(i).contains(searchStr)) {
-//                    dao.avatar_url = childAvatarList.get(i);
-//                    dao.name = childNameList.get(i);
-//                    dao.phone_number = childNumList.get(i);
-//                    resultList.add(dao);
-//                    break;
-//                } else if (childNumList.get(i).contains(searchStr)) {
-//                    dao.avatar_url = childAvatarList.get(i);
-//                    dao.name = childNameList.get(i);
-//                    dao.phone_number = childNumList.get(i);
-//                    resultList.add(dao);
-//                }
-//
-//            }
 
             for (int i = 0; i < addressList.size(); i++) {
                 String name = addressList.get(i).name;

@@ -82,15 +82,15 @@ public class TaskZDLFAdapter extends BaseAdapter {
         switch (tasksDaos.get(position).state){
             case 1:
                 viewHolder.state.setText("非常重要");
-                viewHolder.state.setTextColor(Color.parseColor("#FF0000"));
+                viewHolder.state.setTextColor(Color.parseColor("#FF0101"));
                 break;
             case 2:
                 viewHolder.state.setText("重要");
-                viewHolder.state.setTextColor(Color.parseColor("#00FF00"));
+                viewHolder.state.setTextColor(Color.parseColor("#02ED02"));
                 break;
             case 3:
                 viewHolder.state.setText("一般");
-                viewHolder.state.setTextColor(Color.parseColor("#000000"));
+                viewHolder.state.setTextColor(Color.parseColor("#666666"));
                 break;
         }
 
@@ -103,16 +103,19 @@ public class TaskZDLFAdapter extends BaseAdapter {
         switch (tasksDaos.get(position).level){
             case 1:
                 viewHolder.level.setText("完成");
-                viewHolder.level.setTextColor(Color.parseColor("#00FF00"));
+                viewHolder.level.setTextColor(Color.parseColor("#FBBB0E"));
                 break;
             case 2:
                 viewHolder.level.setText("进行中");
-                viewHolder.level.setTextColor(Color.parseColor("#0000FF"));
+                viewHolder.level.setTextColor(Color.parseColor("#0156E2"));
                 break;
-            case 3:
-                viewHolder.level.setText("新到");
+//            case 3:
+//                viewHolder.level.setText("新到");
+//                viewHolder.level.setTextColor(Color.parseColor("#FF0000"));
+//                break;
+            default:
+                viewHolder.level.setText("");
                 viewHolder.level.setTextColor(Color.parseColor("#FF0000"));
-                break;
         }
         return convertView;
     }

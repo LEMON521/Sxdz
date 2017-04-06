@@ -59,6 +59,8 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:paddingRight="@dimen/dm037"
+            android:paddingLeft="@dimen/dm037"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dm020"
@@ -68,64 +70,73 @@
 
 
             <TextView
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:id="@+id/fragment_task_all"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/approve_left_shixin"
-                android:paddingBottom="@dimen/dm005"
-                android:paddingLeft="@dimen/dm020"
-                android:paddingRight="@dimen/dm010"
-                android:paddingTop="@dimen/dm005"
+                android:paddingBottom="@dimen/dm010"
+                android:paddingTop="@dimen/dm010"
                 android:text="全部"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm024" />
 
             <TextView
+                android:gravity="center"
                 android:id="@+id/fragment_task_branch"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:background="@drawable/approve_middle_shixin"
-                android:paddingBottom="@dimen/dm005"
-                android:paddingLeft="@dimen/dm010"
-                android:paddingRight="@dimen/dm010"
-                android:paddingTop="@dimen/dm005"
+                android:paddingBottom="@dimen/dm010"
+
+                android:paddingTop="@dimen/dm010"
                 android:text="下属任务"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm024" />
 
             <TextView
+                android:gravity="center"
                 android:id="@+id/fragment_task_on"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:background="@drawable/approve_middle_shixin"
-                android:paddingBottom="@dimen/dm005"
-                android:paddingLeft="@dimen/dm010"
-                android:paddingRight="@dimen/dm010"
-                android:paddingTop="@dimen/dm005"
+                android:paddingBottom="@dimen/dm010"
+
+                android:paddingTop="@dimen/dm010"
                 android:text="进行中"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm024" />
 
             <TextView
+                android:gravity="center"
                 android:id="@+id/fragment_task_off"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:background="@drawable/approve_middle_shixin"
-                android:paddingBottom="@dimen/dm005"
-                android:paddingLeft="@dimen/dm010"
-                android:paddingRight="@dimen/dm010"
-                android:paddingTop="@dimen/dm005"
+                android:paddingBottom="@dimen/dm010"
+
+                android:paddingTop="@dimen/dm010"
                 android:text="已完成"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm024" />
 
             <TextView
+                android:gravity="center"
                 android:id="@+id/fragment_task_mine"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:background="@drawable/approve_right_shixin"
-                android:paddingBottom="@dimen/dm005"
-                android:paddingLeft="@dimen/dm010"
-                android:paddingRight="@dimen/dm020"
-                android:paddingTop="@dimen/dm005"
+                android:paddingBottom="@dimen/dm010"
+
+                android:paddingTop="@dimen/dm010"
                 android:text="我发布的"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm024" />
         </LinearLayout>
 
         <LinearLayout

@@ -2,17 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/dm020"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/item_task_detail_add_title"
+    <FrameLayout
+        android:layout_marginTop="@dimen/dm020"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/biankuang_gray" />
-    <EditText
-        android:id="@+id/item_task_detail_add_discription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/biankuang_gray" />
+        android:layout_height="wrap_content">
+        <EditText
+            android:hint="请填写标题"
+            android:textSize="@dimen/dm028"
+            android:padding="@dimen/dm005"
+            android:id="@+id/item_task_detail_add_title_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/biankuang_gray" />
+        <TextView
+            android:gravity="center_vertical"
+            android:padding="@dimen/dm005"
+            android:id="@+id/item_task_detail_add_title_tv"
+            android:textColor="#333333"
+            android:textSize="@dimen/dm028"
+            android:textStyle="bold"
+            android:text="标题"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 
+    <FrameLayout
+        android:layout_marginTop="@dimen/dm020"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:hint="请填写详情"
+            android:textSize="@dimen/dm024"
+            android:padding="@dimen/dm005"
+            android:id="@+id/item_task_detail_add_discription_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/biankuang_gray" />
+        <TextView
+            android:gravity="center_vertical"
+            android:padding="@dimen/dm005"
+            android:id="@+id/item_task_detail_add_discription_tv"
+            android:textColor="#55616A"
+            android:textSize="@dimen/dm024"
+            android:textStyle="bold"
+            android:text="标题"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 </LinearLayout>

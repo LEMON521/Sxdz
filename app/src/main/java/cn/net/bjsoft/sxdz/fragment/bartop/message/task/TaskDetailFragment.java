@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.xw.repo.BubbleSeekBar;
@@ -44,6 +45,8 @@ public class TaskDetailFragment extends BaseFragment {
     @ViewInject(R.id.item_task_sxdz_state)
     private TextView sxdz_state;
 
+    @ViewInject(R.id.fragment_task_scroll)
+    private ScrollView scroll;
     @ViewInject(R.id.fragment_task_detail)
     private TextView detail;
     @ViewInject(R.id.fragment_task_attachment)
@@ -93,6 +96,8 @@ public class TaskDetailFragment extends BaseFragment {
         });
 
 
+
+
     }
 
 
@@ -103,11 +108,14 @@ public class TaskDetailFragment extends BaseFragment {
                 mActivity.finish();
                 break;
             case R.id.fragment_task_add_detail://添加详情条目
+                progress.correctOffsetWhenContainerOnScrolling();
                 addBean = null;
                 addBean = new MessageTaskDetailAddBean();
+                addBean.isEditing = true;
                 addBeenList.add(addBean);
                 addAdapter.notifyDataSetChanged();
                 Utility.setListViewHeightBasedOnChildren(detail_list);
+
                 break;
         }
     }

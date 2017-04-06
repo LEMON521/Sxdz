@@ -9,6 +9,7 @@
     <include layout="@layout/top_title" />
 
     <ScrollView
+        android:id="@+id/fragment_task_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,9 +19,12 @@
             android:orientation="vertical">
 
 
-            <include layout="@layout/item_task_sxdz" />
-
+            <!--<include layout="@layout/item_task_sxdz" />-->
+            <include layout="@layout/item_task_zdlf" />
             <LinearLayout
+                android:layout_marginTop="@dimen/dm020"
+                android:paddingRight="@dimen/dm020"
+                android:paddingLeft="@dimen/dm020"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -28,9 +32,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="任务详情" />
+                    android:text="任务详情"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/dm028"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:lineSpacingExtra="3dp"
+                    android:lineSpacingMultiplier="1.5"
+                    android:layout_marginTop="@dimen/dm020"
+                    android:textSize="@dimen/dm024"
+                    android:textColor="#55616A"
                     android:id="@+id/fragment_task_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -39,6 +51,9 @@
             </LinearLayout>
 
             <LinearLayout
+                android:paddingTop="@dimen/dm050"
+                android:paddingRight="@dimen/dm020"
+                android:paddingLeft="@dimen/dm020"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -46,6 +61,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/dm028"
+                    android:textStyle="bold"
                     android:text="任务附件" />
 
                 <GridView
@@ -56,6 +74,10 @@
             </LinearLayout>
 
             <LinearLayout
+                android:paddingRight="@dimen/dm020"
+                android:paddingLeft="@dimen/dm020"
+                android:paddingTop="@dimen/dm040"
+                android:layout_marginTop="@dimen/dm020"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -68,6 +90,7 @@
                 </ListView>
 
                 <RelativeLayout
+                    android:layout_marginTop="@dimen/dm020"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -85,6 +108,9 @@
             </LinearLayout>
 
             <LinearLayout
+                android:paddingTop="@dimen/dm020"
+                android:paddingRight="@dimen/dm020"
+                android:paddingLeft="@dimen/dm020"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -92,6 +118,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/dm028"
+                    android:textStyle="bold"
                     android:text="完成度" />
 
                 <com.xw.repo.BubbleSeekBar
@@ -108,6 +137,9 @@
             </LinearLayout>
 
             <LinearLayout
+                android:paddingRight="@dimen/dm020"
+                android:paddingLeft="@dimen/dm020"
+                android:paddingTop="@dimen/dm040"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -115,12 +147,35 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/dm028"
+                    android:textStyle="bold"
                     android:text="任务文件" />
 
-                <ListView
+                <GridView
+                    android:layout_marginTop="@dimen/dm020"
                     android:id="@+id/fragment_task_files"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ListView>
+                    android:layout_height="wrap_content"></GridView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingRight="@dimen/dm020"
+                android:paddingLeft="@dimen/dm020"
+                android:paddingBottom="@dimen/dm020"
+                android:paddingTop="@dimen/dm020"
+                android:layout_marginTop="@dimen/dm030"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:background="@drawable/approve_shixin_blue"
+                    android:textColor="@color/aMap_wite"
+                    android:gravity="center"
+                    android:text="提交"
+                    android:padding="@dimen/dm015"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>

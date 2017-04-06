@@ -9,4 +9,5 @@ import java.io.Serializable;
 public class MessageTaskDetailAddBean  implements Serializable {
     public String title = "";
     public String discription = "";
+    public boolean isEditing = false;//是否可编辑状态
 }

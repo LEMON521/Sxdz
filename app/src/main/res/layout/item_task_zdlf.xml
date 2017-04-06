@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="@dimen/dm020"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,73 +11,111 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+
+                android:id="@+id/task_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标题"
+                android:textSize="@dimen/dm024"
+                android:textStyle="bold" />
+            <cn.net.bjsoft.sxdz.view.CircleImageView
+                android:layout_marginLeft="@dimen/dm004"
+                android:id="@+id/task_item_overdue"
+                android:layout_width="@dimen/dm020"
+                android:layout_height="@dimen/dm020"
+                android:src="@color/red" />
+
+        </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/task_item_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="标题" />
-        <TextView
-            android:id="@+id/task_item_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="状态" />
 
-        <cn.net.bjsoft.sxdz.view.CircleImageView
-            android:id="@+id/task_item_overdue"
-            android:layout_width="@dimen/dm020"
-            android:layout_height="@dimen/dm020"
-            android:src="@color/red" />
+        <RelativeLayout
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="#FF0101"
+                android:textSize="@dimen/dm020"
+                android:layout_alignParentRight="true"
+                android:id="@+id/task_item_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="状态" />
+
+        </RelativeLayout>
+
+
+
     </LinearLayout>
 
     <LinearLayout
+        android:layout_marginTop="@dimen/dm030"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
 
         <RelativeLayout
-            android:layout_width="@dimen/dm080"
-            android:layout_height="@dimen/dm080"
+            android:layout_width="@dimen/dm130"
+            android:layout_height="@dimen/dm130"
             android:layout_gravity="center"
             android:gravity="center">
 
             <cn.net.bjsoft.sxdz.view.CircleImageView
-                android:layout_width="@dimen/dm080"
-                android:layout_height="@dimen/dm080"
+                android:layout_width="@dimen/dm130"
+                android:layout_height="@dimen/dm130"
                 android:src="@color/blue" />
 
             <TextView
+                android:maxWidth="@dimen/dm090"
+                android:maxHeight="@dimen/dm090"
                 android:id="@+id/task_item_classify"
-                android:layout_width="@dimen/dm060"
-                android:layout_height="@dimen/dm060"
+                android:layout_width="@dimen/dm090"
+                android:layout_height="@dimen/dm090"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:gravity="center"
-                android:text="分类"
+                android:text="分类管理分类管理"
                 android:textColor="@color/white" />
         </RelativeLayout>
 
 
         <LinearLayout
+            android:layout_marginLeft="@dimen/dm020"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
+
+                android:textSize="@dimen/dm024"
+                android:textColor="#333333"
                 android:id="@+id/task_item_name"
                 android:text="发起人:王力宏"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:layout_marginTop="@dimen/dm030"
+                android:textColor="#999999"
+                android:textSize="@dimen/dm022"
                 android:id="@+id/task_item_start"
                 android:text="发起时间:2017-12-13 13:13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:layout_marginTop="@dimen/dm010"
+                android:textColor="#999999"
+                android:textSize="@dimen/dm022"
                 android:id="@+id/task_item_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,6 +128,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:textSize="@dimen/dm022"
                 android:id="@+id/task_item_level"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

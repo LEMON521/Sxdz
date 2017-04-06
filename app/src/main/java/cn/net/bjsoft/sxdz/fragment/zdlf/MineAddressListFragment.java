@@ -116,21 +116,7 @@ public class MineAddressListFragment extends BaseFragment {
                 break;
 
             case R.id.search_text://搜索按钮
-                String searchStr = search_edittext.getText().toString().trim();
-                if (!searchStr.equals("")) {
-                    Intent searchIntent = new Intent(mActivity, EmptyActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArrayList("address_list_avatar",childAvatarList);
-                    bundle.putStringArrayList("address_list_name",childNameList);
-                    bundle.putStringArrayList("address_list_num",childNumList);
-                    bundle.putString("address_list_search_str",searchStr);
-                    searchIntent.putExtra("address_list_search_result_bundle",bundle);
-                    searchIntent.putExtra("fragment_name","mine_zdlf_address_search");
-                    mActivity.startActivity(searchIntent);
-                } else {
-                    MyToast.showShort(mActivity, "请输入搜索内容!");
-                    return;
-                }
+                searchAddressList();
                 break;
 
             case R.id.search_delete://清空按钮
@@ -141,6 +127,23 @@ public class MineAddressListFragment extends BaseFragment {
         }
     }
 
+    private void searchAddressList(){
+        String searchStr = search_edittext.getText().toString().trim();
+        if (!searchStr.equals("")) {
+            Intent searchIntent = new Intent(mActivity, EmptyActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("address_list_avatar",childAvatarList);
+            bundle.putStringArrayList("address_list_name",childNameList);
+            bundle.putStringArrayList("address_list_num",childNumList);
+            bundle.putString("address_list_search_str",searchStr);
+            searchIntent.putExtra("address_list_search_result_bundle",bundle);
+            searchIntent.putExtra("fragment_name","mine_zdlf_address_search");
+            mActivity.startActivity(searchIntent);
+        } else {
+            MyToast.showShort(mActivity, "请输入搜索内容!");
+            return;
+        }
+    }
 
     /**
      * 切换

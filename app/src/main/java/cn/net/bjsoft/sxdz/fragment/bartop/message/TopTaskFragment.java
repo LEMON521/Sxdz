@@ -156,15 +156,15 @@ public class TopTaskFragment extends BaseFragment {
     private void taskChange(View view) {
         showProgressDialog();
         {//先把全部设置成默认的样式
-            task_all.setTextColor(Color.parseColor("#000000"));
+            task_all.setTextColor(Color.parseColor("#999999"));
             task_all.setBackgroundResource(R.drawable.approve_left_kongxin);
-            task_branch.setTextColor(Color.parseColor("#000000"));
+            task_branch.setTextColor(Color.parseColor("#999999"));
             task_branch.setBackgroundResource(R.drawable.approve_middle_kongxin);
-            task_on.setTextColor(Color.parseColor("#000000"));
+            task_on.setTextColor(Color.parseColor("#999999"));
             task_on.setBackgroundResource(R.drawable.approve_middle_kongxin);
-            task_off.setTextColor(Color.parseColor("#000000"));
+            task_off.setTextColor(Color.parseColor("#999999"));
             task_off.setBackgroundResource(R.drawable.approve_middle_kongxin);
-            task_mine.setTextColor(Color.parseColor("#000000"));
+            task_mine.setTextColor(Color.parseColor("#999999"));
             task_mine.setBackgroundResource(R.drawable.approve_right_kongxin);
         }
 

@@ -11,5 +11,5 @@
         android:bottomRightRadius="3dp"
         android:topLeftRadius="0dp"
         android:topRightRadius="3dp" />
-    <!--<solid android:color="#FFFFFF" />-->
+    <solid android:color="#FFFFFF" />
 </shape>
