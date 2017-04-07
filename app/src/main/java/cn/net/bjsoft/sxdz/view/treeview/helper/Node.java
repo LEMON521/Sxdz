@@ -40,6 +40,7 @@ public class Node {
 
     private String station = "";
 
+    private String number = "";
 
     private String phone_number = "";
 
@@ -167,6 +168,14 @@ public class Node {
 
     public void setParent(Node parent) {
         this.parent = parent;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     /**

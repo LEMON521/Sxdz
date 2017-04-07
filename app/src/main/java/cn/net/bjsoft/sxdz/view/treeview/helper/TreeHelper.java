@@ -203,9 +203,9 @@ public class TreeHelper {
      */
     private static void setNodeIcon(Node node) {
         if (node.getChildren().size() > 0 && node.isExpand()) {
-            node.setIcon(R.drawable.common_down);
+            node.setIcon(R.mipmap.mail_list_zdlf_down_arrow);
         } else if (node.getChildren().size() > 0 && !node.isExpand()) {
-            node.setIcon(R.drawable.common_right);
+            node.setIcon(R.mipmap.mail_list_zdlf_right_arrow);
         } else
             node.setIcon(-1);
 

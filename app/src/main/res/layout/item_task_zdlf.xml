@@ -13,24 +13,25 @@
 
         <LinearLayout
             android:gravity="center_vertical"
-            android:layout_weight="4"
+            android:layout_weight="5"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
 
             <TextView
-
+                android:maxWidth="@dimen/dm480"
+                android:singleLine="true"
                 android:id="@+id/task_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="标题"
+                android:text="标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题"
                 android:textSize="@dimen/dm024"
                 android:textStyle="bold" />
-            <cn.net.bjsoft.sxdz.view.CircleImageView
+            <ImageView
+                android:src="@mipmap/task_zdlf_attention"
                 android:layout_marginLeft="@dimen/dm004"
                 android:id="@+id/task_item_overdue"
-                android:layout_width="@dimen/dm020"
-                android:layout_height="@dimen/dm020"
-                android:src="@color/red" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -42,13 +43,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content">
             <TextView
+                android:gravity="center_vertical"
                 android:textColor="#FF0101"
                 android:textSize="@dimen/dm020"
                 android:layout_alignParentRight="true"
-                android:id="@+id/task_item_state"
+                android:id="@+id/task_item_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="状态" />
+                android:text="任务等级" />
 
         </RelativeLayout>
 
@@ -72,7 +74,7 @@
             <cn.net.bjsoft.sxdz.view.CircleImageView
                 android:layout_width="@dimen/dm130"
                 android:layout_height="@dimen/dm130"
-                android:src="@color/blue" />
+                android:src="#66CCFF" />
 
             <TextView
                 android:maxWidth="@dimen/dm090"
@@ -89,19 +91,32 @@
 
 
         <LinearLayout
+            android:layout_weight="5"
             android:layout_marginLeft="@dimen/dm020"
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content">
 
-            <TextView
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:textSize="@dimen/dm024"
+                    android:textColor="#333333"
+                    android:text="执行人："
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:textSize="@dimen/dm024"
+                    android:textColor="#333333"
+                    android:id="@+id/task_item_name"
+                    android:text="王力宏"
+                    android:singleLine="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-                android:textSize="@dimen/dm024"
-                android:textColor="#333333"
-                android:id="@+id/task_item_name"
-                android:text="发起人:王力宏"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_marginTop="@dimen/dm030"
@@ -124,16 +139,17 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
 
             <TextView
                 android:textSize="@dimen/dm022"
-                android:id="@+id/task_item_level"
+                android:id="@+id/task_item_state"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="end"
-                android:text="任务等级" />
+                android:text="状态" />
 
         </LinearLayout>
 

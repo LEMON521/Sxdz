@@ -47,7 +47,7 @@
                         android:layout_marginRight="@dimen/dm015"
                         android:layout_weight="1"
                         android:singleLine="true"
-                        android:text="图片标题"
+                        android:text=""
                         android:textColor="#F6F6F6" />
                     <!-- 放置图片中选中点的位置 -->
                     <LinearLayout
@@ -97,6 +97,8 @@
                     android:layout_marginTop="@dimen/dm010"
                     android:background="@color/white">
                     <!--主要应用-->
+                    <!--android:verticalSpacing="@dimen/dm010"-->
+                    <!--android:horizontalSpacing="@dimen/dm010"-->
                     <GridView
                         android:tag=""
                         android:id="@+id/gv_application_main"
@@ -104,11 +106,11 @@
                         android:layout_height="match_parent"
                         android:background="@color/white"
                         android:columnWidth="@dimen/dm130"
-                        android:horizontalSpacing="@dimen/dm010"
+
                         android:numColumns="auto_fit"
                         android:scrollbars="none"
                         android:stretchMode="columnWidth"
-                        android:verticalSpacing="@dimen/dm010"></GridView>
+                        ></GridView>
                 </FrameLayout>
 
 
@@ -150,17 +152,19 @@
                     android:layout_marginTop="@dimen/dm010"
                     android:background="@color/white">
                     <!--项目相关-->
+                    <!--android:verticalSpacing="@dimen/dm010"-->
+                    <!--android:horizontalSpacing="@dimen/dm010"-->
                     <GridView
                         android:id="@+id/gv_application_project"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
                         android:columnWidth="@dimen/dm130"
-                        android:horizontalSpacing="@dimen/dm010"
+
                         android:numColumns="auto_fit"
                         android:scrollbars="none"
                         android:stretchMode="columnWidth"
-                        android:verticalSpacing="@dimen/dm010"></GridView>
+                        ></GridView>
                 </FrameLayout>
             </LinearLayout>
 
@@ -199,17 +203,19 @@
                     android:layout_marginTop="@dimen/dm010"
                     android:background="@color/white">
                     <!--工程应用-->
+                    <!--android:verticalSpacing="@dimen/dm010"-->
+                    <!--android:horizontalSpacing="@dimen/dm010"-->
                     <GridView
                         android:id="@+id/gv_application_work"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
                         android:columnWidth="@dimen/dm130"
-                        android:horizontalSpacing="@dimen/dm010"
+
                         android:numColumns="auto_fit"
                         android:scrollbars="none"
                         android:stretchMode="columnWidth"
-                        android:verticalSpacing="@dimen/dm010"></GridView>
+                        ></GridView>
                 </FrameLayout>
             </LinearLayout>
 
@@ -249,17 +255,19 @@
                     android:layout_marginTop="@dimen/dm010"
                     android:background="@color/white">
                     <!--其他应用-->
+                    <!--android:horizontalSpacing="@dimen/dm010"-->
+                    <!--android:verticalSpacing="@dimen/dm010"-->
                     <GridView
                         android:id="@+id/gv_application_other"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
-                        android:columnWidth="@dimen/dm130"
-                        android:horizontalSpacing="@dimen/dm010"
+                        android:columnWidth="@dimen/dm135"
+
                         android:numColumns="auto_fit"
                         android:scrollbars="none"
                         android:stretchMode="columnWidth"
-                        android:verticalSpacing="@dimen/dm010"></GridView>
+                       ></GridView>
                 </FrameLayout>
             </LinearLayout>
 

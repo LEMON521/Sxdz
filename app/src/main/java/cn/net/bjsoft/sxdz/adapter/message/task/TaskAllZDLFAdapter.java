@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -13,15 +14,14 @@ import java.util.ArrayList;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
-import cn.net.bjsoft.sxdz.view.CircleImageView;
 
-public class TaskZDLFAdapter extends BaseAdapter {
+public class TaskAllZDLFAdapter extends BaseAdapter {
 
     private FragmentActivity mActivity;
-    private ArrayList<MessageTaskBean.TasksDao> tasksDaos;
+    private ArrayList<MessageTaskBean.TasksAllDao> tasksDaos;
 
-    public TaskZDLFAdapter(FragmentActivity mActivity
-            , ArrayList<MessageTaskBean.TasksDao> tasksDaos) {
+    public TaskAllZDLFAdapter(FragmentActivity mActivity
+            , ArrayList<MessageTaskBean.TasksAllDao> tasksDaos) {
         this.mActivity = mActivity;
         this.tasksDaos = tasksDaos;
     }
@@ -54,7 +54,7 @@ public class TaskZDLFAdapter extends BaseAdapter {
                     .findViewById(R.id.task_item_state);
             viewHolder.title = (TextView) convertView
                     .findViewById(R.id.task_item_title);
-            viewHolder.overdue = (CircleImageView) convertView
+            viewHolder.overdue = (ImageView) convertView
                     .findViewById(R.id.task_item_overdue);
             viewHolder.classify = (TextView) convertView
                     .findViewById(R.id.task_item_classify);
@@ -78,50 +78,59 @@ public class TaskZDLFAdapter extends BaseAdapter {
         }
 
 
-
-        switch (tasksDaos.get(position).state){
+        switch (tasksDaos.get(position).level) {
             case 1:
-                viewHolder.state.setText("非常重要");
-                viewHolder.state.setTextColor(Color.parseColor("#FF0101"));
+                viewHolder.level.setText("非常重要");
+                viewHolder.level.setTextColor(Color.parseColor("#FF0101"));
                 break;
             case 2:
-                viewHolder.state.setText("重要");
-                viewHolder.state.setTextColor(Color.parseColor("#02ED02"));
+                viewHolder.level.setText("重要");
+                viewHolder.level.setTextColor(Color.parseColor("#02ED02"));
                 break;
             case 3:
-                viewHolder.state.setText("一般");
-                viewHolder.state.setTextColor(Color.parseColor("#666666"));
+                viewHolder.level.setText("一般");
+                viewHolder.level.setTextColor(Color.parseColor("#666666"));
                 break;
+            default:
+                viewHolder.level.setText("");
+                viewHolder.level.setTextColor(Color.parseColor("#666666"));
         }
 
         viewHolder.title.setText(tasksDaos.get(position).title);
         viewHolder.classify.setText(tasksDaos.get(position).classify);
-        viewHolder.name.setText(tasksDaos.get(position).name);
-        viewHolder.start.setText("开始时间:"+TimeUtils.getFormateTime(tasksDaos.get(position).start,"-",":"));
-        viewHolder.end.setText("结束时间:"+TimeUtils.getFormateTime(tasksDaos.get(position).end,"-",":"));
+        StringBuffer name = new StringBuffer();
+        for (int i = 0; i < tasksDaos.get(position).name.size(); i++) {
+            name.append(tasksDaos.get(position).name.get(i).name);
+            if (i + 1 != tasksDaos.get(position).name.size()) {
+                name.append("、");
+            }
+        }
+        viewHolder.name.setText(name);
+        viewHolder.start.setText("开始时间:" + TimeUtils.getFormateTime(tasksDaos.get(position).start, "-", ":"));
+        viewHolder.end.setText("结束时间:" + TimeUtils.getFormateTime(tasksDaos.get(position).end, "-", ":"));
 
-        switch (tasksDaos.get(position).level){
+        switch (tasksDaos.get(position).state) {
             case 1:
-                viewHolder.level.setText("完成");
-                viewHolder.level.setTextColor(Color.parseColor("#FBBB0E"));
+                viewHolder.state.setText("完成");
+                viewHolder.state.setTextColor(Color.parseColor("#FBBB0E"));
                 break;
             case 2:
-                viewHolder.level.setText("进行中");
-                viewHolder.level.setTextColor(Color.parseColor("#0156E2"));
+                viewHolder.state.setText("进行中");
+                viewHolder.state.setTextColor(Color.parseColor("#0156E2"));
                 break;
 //            case 3:
 //                viewHolder.level.setText("新到");
 //                viewHolder.level.setTextColor(Color.parseColor("#FF0000"));
 //                break;
             default:
-                viewHolder.level.setText("");
-                viewHolder.level.setTextColor(Color.parseColor("#FF0000"));
+                viewHolder.state.setText("");
+                viewHolder.state.setTextColor(Color.parseColor("#FF0000"));
         }
         return convertView;
     }
 
     private final class ViewHolder {
-        public CircleImageView overdue;
+        public ImageView overdue;
         public TextView state, title, classify, name, start, end, level;
 
     }

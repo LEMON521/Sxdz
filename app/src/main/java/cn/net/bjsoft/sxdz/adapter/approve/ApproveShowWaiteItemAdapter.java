@@ -85,7 +85,7 @@ public class ApproveShowWaiteItemAdapter extends BaseAdapter {
         }
         switch (type) {
             case 1/*ConstantApprove.NEW_EXPENSES*/://报销
-                holder.type.setImageResource(R.drawable.common_av);
+                holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_reimbursement);
                 /**
                  * list  在这里强转,然后将list中的数据设置在列表中
                  */
@@ -93,32 +93,32 @@ public class ApproveShowWaiteItemAdapter extends BaseAdapter {
                 holder.type_2.setText("报销");
                 break;
             case 2/*ConstantApprove.NEW_TRIP*/://出差
-                holder.type.setImageResource(R.drawable.common_av);
+                holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_a_business_travel);
                 holder.type_1.setText("出差");
                 holder.type_2.setText("出差");
                 break;
             case 3/*ConstantApprove.NEW_LEAVE*/://请假
-                holder.type.setImageResource(R.drawable.common_av);
+                holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_a_business_leave);
                 holder.type_1.setText("请假");
                 holder.type_2.setText("请假");
                 break;
             case 4/*ConstantApprove.NEW_OUT*/://外出
-                holder.type.setImageResource(R.drawable.common_av);
+                holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_go_out);
                 holder.type_1.setText("外出");
                 holder.type_2.setText("外出");
                 break;
             case 5/*ConstantApprove.NEW_BUY*/://采购
-                holder.type.setImageResource(R.drawable.common_av);
+                holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_purchase);
                 holder.type_1.setText("采购");
                 holder.type_2.setText("采购");
                 break;
             case 6/*ConstantApprove.NEW_AGREEMENT*/://合同
-                holder.type.setImageResource(R.drawable.common_av);
+                holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_approval);
                 holder.type_1.setText("合同签订");
                 holder.type_2.setText("合同签订");
                 break;
             case 7/*ConstantApprove.NEW_RES*/://物品
-                holder.type.setImageResource(R.drawable.common_av);
+                holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_goods_claim);
                 holder.type_1.setText("物品申领");
                 holder.type_2.setText("物品申领");
                 break;

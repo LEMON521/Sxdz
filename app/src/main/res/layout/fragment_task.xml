@@ -146,6 +146,7 @@
             android:orientation="vertical">
 
             <cn.net.bjsoft.sxdz.view.RefreshListView_1
+                android:visibility="gone"
                 android:id="@+id/fragment_task_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"></cn.net.bjsoft.sxdz.view.RefreshListView_1>

@@ -202,29 +202,28 @@ public class WorkFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //LogUtil.e("parent" + parent.toString() + "::position" + position+"++parent.getId()"+parent.getId());
-
+                String title = "";
+                String url = "";
                 switch (parent.getId()) {
                     case R.id.gv_application_main:
-                        intent.putExtra("url", mainDaos.get(position).url);
-                        intent.putExtra("title", mainDaos.get(position).name);
-
+                        title = mainDaos.get(position).name;
+                        url = mainDaos.get(position).url;
                         break;
                     case R.id.gv_application_project:
-                        intent.putExtra("url", projectDaos.get(position).url);
-                        intent.putExtra("title", projectDaos.get(position).name);
-
+                        url = projectDaos.get(position).url;
+                        title = projectDaos.get(position).name;
                         break;
                     case R.id.gv_application_work:
-                        intent.putExtra("url", workDaos.get(position).url);
-                        intent.putExtra("title", workDaos.get(position).name);
-
+                        url = workDaos.get(position).url;
+                        title = workDaos.get(position).name;
                         break;
                     case R.id.gv_application_other:
-                        intent.putExtra("url", otherDaos.get(position).url);
-                        intent.putExtra("title", otherDaos.get(position).name);
-
+                        url = otherDaos.get(position).url;
+                        title = otherDaos.get(position).name;
                         break;
                 }
+                intent.putExtra("url", url);
+                intent.putExtra("title", title);
                 startActivity(intent);
             }
         };

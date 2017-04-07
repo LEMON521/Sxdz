@@ -62,11 +62,8 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
-        bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
-        bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
 
-        LogUtil.e("department@@@@@@@@@@@@"+node.getType()+"::V"+position);
+        LogUtil.e("department@@@@@@@@@@@@" + node.getType() + "::V" + position);
         if (node.getType().toString().equals("department")) {//如果是部门
             if (node.getIcon() == -1) {
                 viewHolder.parent_icon.setVisibility(View.INVISIBLE);
@@ -83,6 +80,9 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
         } else if (node.getType().toString().equals("employee")) {//员工
             viewHolder.parent_ll.setVisibility(View.GONE);
             viewHolder.child_ll.setVisibility(View.VISIBLE);
+            bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
+            bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
+            bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
             bitmapUtils.display(viewHolder.child_icon, node.getAvatar_url());
             //x.image().bind(viewHolder.child_icon, node.getAvatar_url());
             viewHolder.child_name.setText(node.getName());

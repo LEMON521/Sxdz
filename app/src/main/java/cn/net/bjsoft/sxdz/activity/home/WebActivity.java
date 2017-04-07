@@ -35,7 +35,6 @@ public class WebActivity extends BaseActivity {
 //    private LinearLayout titles;//标题
 
 
-
     private String url = "";
     private String titleStr = "";
 
