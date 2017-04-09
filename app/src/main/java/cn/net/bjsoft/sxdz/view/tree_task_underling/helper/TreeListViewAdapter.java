@@ -18,12 +18,12 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
     /**
      * 存储所有可见的Node
      */
-    protected List<Node> mNodes;
+    protected List<NodeTaskUnderling> mNodes;
     protected LayoutInflater mInflater;
     /**
      * 存储所有的Node
      */
-    protected List<Node> mAllNodes;
+    protected List<NodeTaskUnderling> mAllNodes;
 
     /**
      * 点击的回调接口
@@ -32,7 +32,7 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
 
     public interface OnTreeNodeClickListener
     {
-        void onClick(Node node, int position);
+        void onClick(NodeTaskUnderling node, int position);
     }
 
     public void setOnTreeNodeClickListener(
@@ -95,7 +95,7 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
      */
     public void expandOrCollapse(int position)
     {
-        Node n = mNodes.get(position);
+        NodeTaskUnderling n = mNodes.get(position);
 
         if (n != null)// 排除传入参数错误异常
         {
@@ -129,14 +129,14 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        Node node = mNodes.get(position);
+        NodeTaskUnderling node = mNodes.get(position);
         convertView = getConvertView(node, position, convertView, parent);
         // 设置内边距
         convertView.setPadding(node.getLevel() * 30, 3, 3, 3);
         return convertView;
     }
 
-    public abstract View getConvertView(Node node, int position,
+    public abstract View getConvertView(NodeTaskUnderling node, int position,
                                         View convertView, ViewGroup parent);
 
 }

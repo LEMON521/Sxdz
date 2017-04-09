@@ -20,7 +20,7 @@ public class SimpleTreeAdapter<T> extends TreeListViewAdapter<T> {
     }
 
     @Override
-    public View getConvertView(Node node, int position, View convertView, ViewGroup parent) {
+    public View getConvertView(NodeTaskUnderling node, int position, View convertView, ViewGroup parent) {
 
         ViewHolder viewHolder = null;
         if (convertView == null) {

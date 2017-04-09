@@ -30,19 +30,19 @@ public class TreeHelper {
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
-    public static <T> List<Node> getSortedNodes(List<T> datas,
+    public static <T> List<NodeTaskUnderling> getSortedNodes(List<T> datas,
                                                 int defaultExpandLevel)
             throws IllegalArgumentException,
             IllegalAccessException
 
     {
-        List<Node> result = new ArrayList<Node>();
+        List<NodeTaskUnderling> result = new ArrayList<NodeTaskUnderling>();
         //将用户数据转化为List<Node>以及设置Node间关系
-        List<Node> nodes = convetData2Node(datas);
+        List<NodeTaskUnderling> nodes = convetData2Node(datas);
         //拿到根节点
-        List<Node> rootNodes = getRootNodes(nodes);
+        List<NodeTaskUnderling> rootNodes = getRootNodes(nodes);
         //排序
-        for (Node node : rootNodes) {
+        for (NodeTaskUnderling node : rootNodes) {
             addNode(result, node, defaultExpandLevel, 1);
         }
         return result;
@@ -54,10 +54,10 @@ public class TreeHelper {
      * @param nodes
      * @return
      */
-    public static List<Node> filterVisibleNode(List<Node> nodes) {
-        List<Node> result = new ArrayList<Node>();
+    public static List<NodeTaskUnderling> filterVisibleNode(List<NodeTaskUnderling> nodes) {
+        List<NodeTaskUnderling> result = new ArrayList<NodeTaskUnderling>();
 
-        for (Node node : nodes) {
+        for (NodeTaskUnderling node : nodes) {
             // 如果为跟节点，或者上层目录为展开状态
             if (node.isRoot() || node.isParentExpand()) {
                 setNodeIcon(node);
@@ -76,12 +76,12 @@ public class TreeHelper {
      * @throws IllegalAccessException
      * @throws IllegalArgumentException
      */
-    private static <T> List<Node> convetData2Node(List<T> datas)
+    private static <T> List<NodeTaskUnderling> convetData2Node(List<T> datas)
             throws IllegalArgumentException, IllegalAccessException
 
     {
-        List<Node> nodes = new ArrayList<Node>();
-        Node node = null;
+        List<NodeTaskUnderling> nodes = new ArrayList<NodeTaskUnderling>();
+        NodeTaskUnderling node = null;
 
         for (T t : datas) {
             int id = -1;
@@ -135,12 +135,12 @@ public class TreeHelper {
                     break;
                 }
             }
-            node = new Node(id, pId, label);
-            node.setUrl(url);
-            node.setStation(station);
-            node.setPhone_number(phone_number);
-            node.setType(type);
-            node.setAvatar_url(avatar_url);
+//            node = new NodeTaskUnderling(id, pId, label,);
+//            node.setUrl(url);
+//            node.setStation(station);
+//            node.setPhone_number(phone_number);
+//            node.setType(type);
+//            node.setAvatar_url(avatar_url);
             nodes.add(node);
         }
 
@@ -148,9 +148,9 @@ public class TreeHelper {
          * 设置Node间，父子关系;让每两个节点都比较一次，即可设置其中的关系
          */
         for (int i = 0; i < nodes.size(); i++) {
-            Node n = nodes.get(i);
+            NodeTaskUnderling n = nodes.get(i);
             for (int j = i + 1; j < nodes.size(); j++) {
-                Node m = nodes.get(j);
+                NodeTaskUnderling m = nodes.get(j);
                 if (m.getpId() == n.getId()) {
                     n.getChildren().add(m);
                     m.setParent(n);
@@ -162,15 +162,15 @@ public class TreeHelper {
         }
 
         // 设置图片
-        for (Node n : nodes) {
+        for (NodeTaskUnderling n : nodes) {
             setNodeIcon(n);
         }
         return nodes;
     }
 
-    private static List<Node> getRootNodes(List<Node> nodes) {
-        List<Node> root = new ArrayList<Node>();
-        for (Node node : nodes) {
+    private static List<NodeTaskUnderling> getRootNodes(List<NodeTaskUnderling> nodes) {
+        List<NodeTaskUnderling> root = new ArrayList<NodeTaskUnderling>();
+        for (NodeTaskUnderling node : nodes) {
             if (node.isRoot())
                 root.add(node);
         }
@@ -180,7 +180,7 @@ public class TreeHelper {
     /**
      * 把一个节点上的所有的内容都挂上去
      */
-    private static void addNode(List<Node> nodes, Node node,
+    private static void addNode(List<NodeTaskUnderling> nodes, NodeTaskUnderling node,
                                 int defaultExpandLeval, int currentLevel) {
 
         nodes.add(node);
@@ -201,7 +201,7 @@ public class TreeHelper {
      *
      * @param node
      */
-    private static void setNodeIcon(Node node) {
+    private static void setNodeIcon(NodeTaskUnderling node) {
         if (node.getChildren().size() > 0 && node.isExpand()) {
             node.setIcon(R.mipmap.mail_list_zdlf_down_arrow);
         } else if (node.getChildren().size() > 0 && !node.isExpand()) {
