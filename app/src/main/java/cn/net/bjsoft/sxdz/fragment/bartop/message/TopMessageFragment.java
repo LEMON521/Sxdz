@@ -1,23 +1,33 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.xutils.common.Callback;
+import org.xutils.common.util.LogUtil;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.home.bartop.message.MessageListItemActivity;
-import cn.net.bjsoft.sxdz.adapter.MessageAdapter;
-import cn.net.bjsoft.sxdz.bean.message.MessageBean;
+import cn.net.bjsoft.sxdz.activity.home.WebActivity;
+import cn.net.bjsoft.sxdz.adapter.MessageMessageAdapter;
+import cn.net.bjsoft.sxdz.bean.message.MessageMessageBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
+import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
+import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
 
 /**
  * Created by Zrzc on 2017/1/10.
@@ -28,21 +38,90 @@ public class TopMessageFragment extends BaseFragment {
     @ViewInject(R.id.message_message_title)
     private TextView title;
     @ViewInject(R.id.message_message_lv)
-    private ListView messageListView;
+    private PullableListView messageListView;
+    @ViewInject(R.id.refresh_view)
+    private PullToRefreshLayout refresh_view;
+    @ViewInject(R.id.message_message_add)
+    private ImageView add_message;
 
-    private ArrayList<MessageBean> messageItemList;
-    private MessageAdapter messageAdapter;
-    private MessageBean messageBean;
+
+    private MessageMessageBean messageBean;
+    private ArrayList<MessageMessageBean.MessageDataDao> dataDaos;
+    private MessageMessageAdapter messageAdapter;
 
 
     @Override
     public void initData() {
         title.setText("消息");
+        add_message.setVisibility(View.INVISIBLE);
 
-        if (messageItemList != null) {
-            messageItemList = null;
+        if (dataDaos == null) {
+            dataDaos = new ArrayList<>();
         }
-        messageItemList = new ArrayList<>();
+        dataDaos.clear();
+
+        if (messageAdapter == null) {
+            messageAdapter = new MessageMessageAdapter(getActivity(), dataDaos);
+        }
+
+        messageListView.setAdapter(messageAdapter);
+
+        messageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                //intent.setClass(getActivity(), MessageListItemActivity.class);
+                intent.setClass(getActivity(), WebActivity.class);
+                intent.putExtra("url","http://www.baidu.com");
+                intent.putExtra("title","消息详情");
+                //intent.putExtra("json", mJson);
+                getContext().startActivity(intent);
+            }
+        });
+
+
+        /**
+         * 刷新///加载     的操作
+         */
+        refresh_view.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
+
+                // 下拉刷新操作
+                new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        // 千万别忘了告诉控件刷新完毕了哦！
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+
+                        dataDaos.clear();
+                        LogUtil.e("setOnRefreshListener-----------");
+                        getData();
+
+                    }
+                }.sendEmptyMessageDelayed(0, 500);
+
+            }
+
+            @Override
+            public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
+                // 加载操作
+                new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        // 千万别忘了告诉控件加载完毕了哦！
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+
+                        LogUtil.e("onLoadMore-----------");
+                        getData();
+                    }
+                }.sendEmptyMessageDelayed(0, 500);
+
+            }
+
+        });
+
+
         getData();
     }
 
@@ -52,32 +131,38 @@ public class TopMessageFragment extends BaseFragment {
      */
     private void getData() {
 
-        for (int i = 0; i < 10; i++) {
-            if (messageBean != null) {
-                messageBean = null;
-            }
-            messageBean = new MessageBean();
-            messageBean.avatarUrl = "http://api.shuxin.net/Data/biip/upload/OA_USERS/2/avatar.png";
-            messageBean.title = "标题" + i;
-            messageBean.name = "管理员" + i;
-            messageBean.time = "04月0" + i + "号" + "  08:3" + i;
-            messageBean.dis = "测试专用，测试专用，测试专用，测试专用，测试专用，测试专用，测试专用，测试专用，" + i;
-            messageItemList.add(messageBean);
-        }
-
-
-        messageAdapter = new MessageAdapter(getActivity(), messageItemList);
-        messageListView.setAdapter(messageAdapter);
-
-        messageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        showProgressDialog();
+        RequestParams params = new RequestParams(TestAddressUtils.test_get_message_message_list_url);
+        x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), MessageListItemActivity.class);
-                intent.putExtra("json",mJson);
-                getContext().startActivity(intent);
+            public void onSuccess(String result) {
+                //LogUtil.e("获取到的条目-----------" + result);
+                messageBean = GsonUtil.getMessageMessageBean(result);
+                if (messageBean.result) {
+                    //LogUtil.e("获取到的条目-----------" + result);
+                    dataDaos.addAll(messageBean.data.message_list);
+                    messageAdapter.notifyDataSetChanged();
+                    messageBean = null;
+                } else {
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("获取到的条目--------失败!!!---" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
             }
         });
+
 
     }
 

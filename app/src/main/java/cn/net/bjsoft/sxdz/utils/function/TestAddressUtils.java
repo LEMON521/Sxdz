@@ -29,4 +29,8 @@ public class TestAddressUtils {
 
     public static String test_get_message_task_list_url="http://www.shuxin.net/api/app_json/android/message/message_task_list.json";
 
+    public static String test_get_message_message_list_url="http://www.shuxin.net/api/app_json/android/message/message_message_list.json";
+
+    public static String test_get_message_task_detail_url="http://www.shuxin.net/api/app_json/android/message/message_task_detail.json";
+
 }

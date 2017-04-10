@@ -14,18 +14,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.message.MessageTaskDetailAddBean;
+import cn.net.bjsoft.sxdz.bean.message.MessageTaskDetailBean;
 
 public class TaskDetailAddAdapter extends BaseAdapter {
 
     private FragmentActivity mActivity;
-    private MessageTaskDetailAddBean addBean;
-    private ArrayList<MessageTaskDetailAddBean> tasksDaos;
+    private MessageTaskDetailBean.DetailAddDao detailAddDao;
+    private ArrayList<MessageTaskDetailBean.DetailAddDao> tasksDaos;
     private ListView listView;
 
     public TaskDetailAddAdapter(FragmentActivity mActivity
             , ListView listView
-            , ArrayList<MessageTaskDetailAddBean> tasksDaos) {
+            , ArrayList<MessageTaskDetailBean.DetailAddDao> tasksDaos) {
         this.mActivity = mActivity;
         this.tasksDaos = tasksDaos;
         this.listView = listView;
@@ -49,7 +49,7 @@ public class TaskDetailAddAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
-        addBean = tasksDaos.get(position);
+        detailAddDao = tasksDaos.get(position);
         ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(mActivity).inflate(
@@ -77,7 +77,7 @@ public class TaskDetailAddAdapter extends BaseAdapter {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    addBean.title = s.toString();
+                    detailAddDao.detail_title = s.toString();
                 }
             });
             viewHolder.discription_et.addTextChangedListener(new TextWatcher() {
@@ -94,7 +94,7 @@ public class TaskDetailAddAdapter extends BaseAdapter {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     //Utility.setListViewHeightBasedOnChildren(listView);
-                    addBean.discription = editable.toString();
+                    detailAddDao.detail_description = editable.toString();
 
 
                 }
@@ -106,20 +106,20 @@ public class TaskDetailAddAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (addBean.isEditing) {//判断是否可编辑状态
+        if (detailAddDao.isEditing) {//判断是否可编辑状态
             viewHolder.title_tv.setVisibility(View.GONE);
             viewHolder.discription_tv.setVisibility(View.GONE);
             viewHolder.title_et.setVisibility(View.VISIBLE);
             viewHolder.discription_et.setVisibility(View.VISIBLE);
-            viewHolder.title_et.setText(addBean.title);
-            viewHolder.discription_et.setText(addBean.discription);
+            viewHolder.title_et.setText(detailAddDao.detail_title);
+            viewHolder.discription_et.setText(detailAddDao.detail_description);
         } else {
             viewHolder.title_tv.setVisibility(View.VISIBLE);
             viewHolder.discription_tv.setVisibility(View.VISIBLE);
             viewHolder.title_et.setVisibility(View.GONE);
             viewHolder.discription_et.setVisibility(View.GONE);
-            viewHolder.title_tv.setText(addBean.title);
-            viewHolder.discription_tv.setText(addBean.discription);
+            viewHolder.title_tv.setText(detailAddDao.detail_title);
+            viewHolder.discription_tv.setText(detailAddDao.detail_description);
         }
 
 

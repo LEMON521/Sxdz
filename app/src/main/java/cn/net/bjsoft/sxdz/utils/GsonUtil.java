@@ -8,7 +8,9 @@ import cn.net.bjsoft.sxdz.bean.UpdateBean;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveShowDao;
 import cn.net.bjsoft.sxdz.bean.function.sign.FunctionSignHistoryBean;
+import cn.net.bjsoft.sxdz.bean.message.MessageMessageBean;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
+import cn.net.bjsoft.sxdz.bean.message.MessageTaskDetailBean;
 import cn.net.bjsoft.sxdz.bean.ylyd.form.YLYDFormDao;
 import cn.net.bjsoft.sxdz.bean.zdlf.address_list.AddressListBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
@@ -150,6 +152,25 @@ public class GsonUtil {
      */
     public static MessageTaskBean getMessageTaskBean(String json){
         return getGson().fromJson(json , MessageTaskBean.class);
+    }
+
+
+    /**
+     * 中电联发信息模块-消息列表--模块json
+     * @param json
+     * @return
+     */
+    public static MessageMessageBean getMessageMessageBean(String json){
+        return getGson().fromJson(json , MessageMessageBean.class);
+    }
+
+    /**
+     * 中电联发信息模块-任务详情--模块json
+     * @param json
+     * @return
+     */
+    public static MessageTaskDetailBean getMessageTaskDetailBean(String json){
+        return getGson().fromJson(json , MessageTaskDetailBean.class);
     }
 
 }

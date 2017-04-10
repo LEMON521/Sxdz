@@ -5,7 +5,7 @@
         <!--android:width="0.5dp"-->
         <!--android:color="#10ffffff" />-->
     <!-- 圆角 -->
-    <solid android:color="#4e4e4e" />
+    <solid android:color="#999999" />
     <corners android:radius="5dp" />
 
 </shape>

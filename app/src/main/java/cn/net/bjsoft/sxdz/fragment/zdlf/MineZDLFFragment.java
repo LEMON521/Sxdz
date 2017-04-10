@@ -27,6 +27,7 @@ import cn.net.bjsoft.sxdz.activity.home.MainActivity;
 import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
 import cn.net.bjsoft.sxdz.activity.ylyd.ShowYLYDActivity;
 import cn.net.bjsoft.sxdz.bean.DatasBean;
+import cn.net.bjsoft.sxdz.dialog.PickerScrollViewPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.test.PullableListViewActivity;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
@@ -63,6 +64,7 @@ public class MineZDLFFragment extends BaseFragment {
     @ViewInject(R.id.mine_zdlf_department)
     private TextView department;
 
+    PickerScrollViewPopupWindow pickerPopupWindowl;
 
     private WindowRecettingPasswordView passwordView;
     private Dialog dialog;
@@ -91,7 +93,14 @@ public class MineZDLFFragment extends BaseFragment {
         name.setText(mUserDao.name);
         company.setText("北京中电联发科技有限公司");
 
+        pickerPopupWindowl = new PickerScrollViewPopupWindow();
 
+        pickerPopupWindowl.setOnData(new PickerScrollViewPopupWindow.OnGetData() {
+            @Override
+            public void onDataCallBack(String string) {
+                department.setText(string);
+            }
+        });
     }
 
 
@@ -105,7 +114,8 @@ public class MineZDLFFragment extends BaseFragment {
             , R.id.mine_zdlf_personnel_file
             , R.id.mine_zdlf_reset_password
             , R.id.mine_zdlf_logout
-            ,R.id.mine_zdlf_icon})
+            ,R.id.mine_zdlf_icon
+            ,R.id.mine_zdlf_department})
     private void approveChangeOnClick(View view) {
         switch (view.getId()) {
             case R.id.title_back://返回
@@ -143,6 +153,10 @@ public class MineZDLFFragment extends BaseFragment {
 
             case R.id.mine_zdlf_icon://更改头像
                 PhotoOrVideoUtils.doPhoto(mActivity, this, view);
+                break;
+
+            case R.id.mine_zdlf_department://切换岗位
+                pickerPopupWindowl.setPickerScrollViewPopupWindow(mActivity,null,department);
                 break;
 
         }

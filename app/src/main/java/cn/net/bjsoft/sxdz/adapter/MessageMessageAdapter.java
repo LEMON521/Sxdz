@@ -12,9 +12,9 @@ import com.lidroid.xutils.BitmapUtils;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.message.MessageBean;
-import cn.net.bjsoft.sxdz.dialog.AppProgressDialog;
+import cn.net.bjsoft.sxdz.bean.message.MessageMessageBean;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
+import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
 
 /**
@@ -22,13 +22,12 @@ import cn.net.bjsoft.sxdz.view.CircleImageView;
  * Created by Zrzc on 2017/1/12.
  */
 
-public class MessageAdapter extends BaseAdapter {
+public class MessageMessageAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<MessageBean> list;
+    private ArrayList<MessageMessageBean.MessageDataDao> list;
     private BitmapUtils bitmapUtils;
 
-    private AppProgressDialog progressDialog;
-    public MessageAdapter(Context context, ArrayList<MessageBean> list){
+    public MessageMessageAdapter(Context context, ArrayList<MessageMessageBean.MessageDataDao> list){
         this.context=context;
         this.list=list;
     }
@@ -70,11 +69,11 @@ public class MessageAdapter extends BaseAdapter {
         Holder holder = (Holder) convertView.getTag();
         holder.name.setText(list.get(position).name);
         holder.title.setText(list.get(position).title);
-        holder.time.setText(list.get(position).time);
-        holder.dis.setText(list.get(position).dis);
+        holder.time.setText(TimeUtils.getFormateTime(list.get(position).time,"-",":"));
+        holder.dis.setText(list.get(position).detail);
 
 
-        bitmapUtils.display(holder.avatar, list.get(position).avatarUrl);
+        bitmapUtils.display(holder.avatar, list.get(position).avatar_url);
 
         return convertView;
     }

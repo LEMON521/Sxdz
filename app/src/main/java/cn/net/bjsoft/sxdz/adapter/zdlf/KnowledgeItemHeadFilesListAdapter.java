@@ -60,6 +60,7 @@ public class KnowledgeItemHeadFilesListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     list.remove(position);
+                    KnowledgeItemHeadFilesListAdapter.this.notifyDataSetChanged();
                 }
             });
             convertView.setTag(holder);

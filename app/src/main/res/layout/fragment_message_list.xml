@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/background"
     android:paddingBottom="@dimen/dm018"
     android:paddingLeft="@dimen/dm030"
     android:paddingRight="@dimen/dm030"
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dm018"
-                android:background="@drawable/page_home"
+                android:background="@mipmap/zdlf_shadow"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/dm040"
                 android:paddingLeft="@dimen/dm020"
@@ -70,6 +70,7 @@
                 android:paddingTop="@dimen/dm040">
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/message_item_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
