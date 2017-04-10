@@ -26,22 +26,24 @@ import cn.net.bjsoft.sxdz.view.picker_scroll_view.Pickers;
 public class PickerScrollViewPopupWindow implements View.OnClickListener {
     private FragmentActivity mActivity;
     private View view;
-    private ArrayList<String> itemsDataList;
+    private ArrayList<Pickers> itemsDataList;
 
     private PopupWindow mPickerScrollViewPopupWindow;
 
     private TextView cancel,submit;
     private PickerScrollView picker;
+    private int select;
 
     private List<Pickers> list; // 滚动选择器数据
+    private Pickers pickerData;
     private String[] id;
     private String[] name;
 
-    private String selete = "";
+    //private String selete = "";
 
 
     // 数据接口
-    OnGetData mOnGetData;
+    private OnGetData mOnGetData;
 
     public PickerScrollViewPopupWindow() {
 
@@ -61,15 +63,18 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
     }
 
     public void setPickerScrollViewPopupWindow(FragmentActivity activity
-            , ArrayList<String> itemsDataList
+            , ArrayList<Pickers> itemsDataList
+            , int pickerSelect
             , View view) {
 
         this.mActivity = activity;
         this.view = view;
         //this.cacheItemsDataList = cacheItemsDataList;
         this.itemsDataList = itemsDataList;
+        this.select = pickerSelect;
+        LogUtil.e("Pop内%%"+select);
 
-        initData();
+        //initData();
 
         View contentView;
         mPickerScrollViewPopupWindow = null;
@@ -83,8 +88,8 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
         picker = (PickerScrollView) contentView.findViewById(R.id.pop_picker_pick);
 
         // 设置数据，默认选择第一条
-        picker.setData(list);
-        picker.setSelected(0);
+        picker.setData(itemsDataList);
+        picker.setSelected(select);
         cancel.setOnClickListener(this);
         submit.setOnClickListener(this);
         // 滚动选择器选中事件
@@ -94,9 +99,10 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
             public void onSelect(Pickers pickers) {
                 LogUtil.e("选择：" + pickers.getShowId() + "--银行："
                         + pickers.getShowConetnt());
-                selete = "";
-                selete = "选择：" + pickers.getShowId() + "--银行："
-                        + pickers.getShowConetnt();
+//                selete = "";
+//                selete = pickers.getShowConetnt();
+                pickerData = pickers;
+                select = Integer.parseInt(pickers.getShowId());
             }
         });
 
@@ -135,12 +141,12 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
     public interface OnGetData {
         //abstract ArrayList<KnowledgeBean.ItemsDataDao> cacheItemsDataList();
 
-        abstract void onDataCallBack(String string);
+        abstract void onDataCallBack(int pickers);
     }
 
     // 数据接口设置,数据源接口传入
-    public void setOnData(OnGetData string) {
-        mOnGetData = string;
+    public void setOnData(OnGetData pickers) {
+        mOnGetData = pickers;
     }
 
 
@@ -148,11 +154,12 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.pop_picker_cancel:
-                mOnGetData.onDataCallBack("");
+                //mOnGetData.onDataCallBack(null);
                 break;
 
             case R.id.pop_picker_submit:
-                mOnGetData.onDataCallBack(selete);
+
+                mOnGetData.onDataCallBack(select);
                 break;
 
 

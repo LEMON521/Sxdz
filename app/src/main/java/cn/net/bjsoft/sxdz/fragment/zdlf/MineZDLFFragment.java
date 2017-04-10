@@ -21,6 +21,8 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.util.ArrayList;
+
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.activity.home.MainActivity;
@@ -42,6 +44,7 @@ import cn.net.bjsoft.sxdz.utils.UrlUtil;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
 import cn.net.bjsoft.sxdz.view.WindowRecettingPasswordView;
+import cn.net.bjsoft.sxdz.view.picker_scroll_view.Pickers;
 
 
 /**
@@ -64,7 +67,9 @@ public class MineZDLFFragment extends BaseFragment {
     @ViewInject(R.id.mine_zdlf_department)
     private TextView department;
 
-    PickerScrollViewPopupWindow pickerPopupWindowl;
+    private PickerScrollViewPopupWindow pickerPopupWindow;
+    private ArrayList<Pickers> pickersList;
+    private int pickerSelecect = 0;
 
     private WindowRecettingPasswordView passwordView;
     private Dialog dialog;
@@ -81,7 +86,7 @@ public class MineZDLFFragment extends BaseFragment {
     public void initData() {
         title.setText("我的");
 
-        LogUtil.e("json"+mJson);
+        LogUtil.e("json" + mJson);
         mDatasBean = GsonUtil.getDatasBean(mJson);
         mUserDao = mDatasBean.data.user;
 
@@ -93,14 +98,39 @@ public class MineZDLFFragment extends BaseFragment {
         name.setText(mUserDao.name);
         company.setText("北京中电联发科技有限公司");
 
-        pickerPopupWindowl = new PickerScrollViewPopupWindow();
+        pickerPopupWindow = new PickerScrollViewPopupWindow();
 
-        pickerPopupWindowl.setOnData(new PickerScrollViewPopupWindow.OnGetData() {
+        if (pickersList == null) {
+            pickersList = new ArrayList<>();
+        }
+        pickersList.clear();
+
+        setPickers();
+
+        pickerPopupWindow.setOnData(new PickerScrollViewPopupWindow.OnGetData() {
             @Override
-            public void onDataCallBack(String string) {
-                department.setText(string);
+            public void onDataCallBack(int select) {
+                //pickerSelecect = Integer.parseInt(pickers.getShowId());
+                pickerSelecect = select;
+                LogUtil.e("返回select@@@"+pickerSelecect);
+                department.setText(pickersList.get(pickerSelecect).getShowConetnt());
             }
         });
+    }
+
+    /**
+     * 设置切换岗位数据源
+     */
+    private void setPickers() {
+        //这里先静态设置
+        for (int i = 0; i < 5; i++) {
+            pickersList.add(new Pickers("职位" + i, (i + 0) + ""));
+        }
+
+        for (Pickers pickers:pickersList){
+            LogUtil.e("添加 的数据为"+pickers.getShowConetnt()+"::"+pickers.getShowId());
+        }
+
     }
 
 
@@ -114,8 +144,8 @@ public class MineZDLFFragment extends BaseFragment {
             , R.id.mine_zdlf_personnel_file
             , R.id.mine_zdlf_reset_password
             , R.id.mine_zdlf_logout
-            ,R.id.mine_zdlf_icon
-            ,R.id.mine_zdlf_department})
+            , R.id.mine_zdlf_icon
+            , R.id.mine_zdlf_department})
     private void approveChangeOnClick(View view) {
         switch (view.getId()) {
             case R.id.title_back://返回
@@ -156,7 +186,8 @@ public class MineZDLFFragment extends BaseFragment {
                 break;
 
             case R.id.mine_zdlf_department://切换岗位
-                pickerPopupWindowl.setPickerScrollViewPopupWindow(mActivity,null,department);
+                LogUtil.e("点击select¥¥¥"+pickerSelecect);
+                pickerPopupWindow.setPickerScrollViewPopupWindow(mActivity, pickersList, pickerSelecect, department);
                 break;
 
         }
