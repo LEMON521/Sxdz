@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.xutils.common.util.LogUtil;
 
 import java.util.ArrayList;
 
@@ -48,7 +51,7 @@ public class TaskDetailAddAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, final ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         detailAddDao = tasksDaos.get(position);
         ViewHolder viewHolder = null;
         if (convertView == null) {
@@ -63,7 +66,23 @@ public class TaskDetailAddAdapter extends BaseAdapter {
                     .findViewById(R.id.item_task_detail_add_title_et);
             viewHolder.discription_et = (EditText) convertView
                     .findViewById(R.id.item_task_detail_add_discription_et);
+            viewHolder.delete = (ImageView) convertView
+                    .findViewById(R.id.item_task_detail_delete);
 
+            convertView.setTag(viewHolder);
+
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        if (detailAddDao.isEditing) {//判断是否可编辑状态
+            viewHolder.title_tv.setVisibility(View.GONE);
+            viewHolder.discription_tv.setVisibility(View.GONE);
+            viewHolder.title_et.setVisibility(View.VISIBLE);
+            viewHolder.discription_et.setVisibility(View.VISIBLE);
+            viewHolder.delete.setVisibility(View.VISIBLE);
+            viewHolder.title_et.setText(detailAddDao.detail_title);
+            viewHolder.discription_et.setText(detailAddDao.detail_description);
             viewHolder.title_et.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,25 +118,21 @@ public class TaskDetailAddAdapter extends BaseAdapter {
 
                 }
             });
-
-            convertView.setTag(viewHolder);
-
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
-
-        if (detailAddDao.isEditing) {//判断是否可编辑状态
-            viewHolder.title_tv.setVisibility(View.GONE);
-            viewHolder.discription_tv.setVisibility(View.GONE);
-            viewHolder.title_et.setVisibility(View.VISIBLE);
-            viewHolder.discription_et.setVisibility(View.VISIBLE);
-            viewHolder.title_et.setText(detailAddDao.detail_title);
-            viewHolder.discription_et.setText(detailAddDao.detail_description);
+            //一定要绑定到具体条目上,如果写在复用的里面,就会造成混乱
+            viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tasksDaos.remove(position);
+                    LogUtil.e("删除的条目为" + position);
+                    TaskDetailAddAdapter.this.notifyDataSetChanged();
+                }
+            });
         } else {
             viewHolder.title_tv.setVisibility(View.VISIBLE);
             viewHolder.discription_tv.setVisibility(View.VISIBLE);
             viewHolder.title_et.setVisibility(View.GONE);
             viewHolder.discription_et.setVisibility(View.GONE);
+            viewHolder.delete.setVisibility(View.GONE);
             viewHolder.title_tv.setText(detailAddDao.detail_title);
             viewHolder.discription_tv.setText(detailAddDao.detail_description);
         }
@@ -130,6 +145,7 @@ public class TaskDetailAddAdapter extends BaseAdapter {
 
         public EditText title_et, discription_et;
         public TextView title_tv, discription_tv;
+        public ImageView delete;
 
     }
 

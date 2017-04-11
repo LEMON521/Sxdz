@@ -47,8 +47,11 @@ public class MineAddressListFragment extends BaseFragment {
     @ViewInject(R.id.title_title)
     private TextView title;
 
-    @ViewInject(R.id.search_edittext)
-    private EditText search_edittext;
+    //    @ViewInject(R.id.search_edittext)
+//    private EditText search_edittext;
+    @ViewInject(R.id.address_search)
+    private EditText address_search;
+
 
     @ViewInject(R.id.address_parent)
     private TextView address_parent;
@@ -82,17 +85,17 @@ public class MineAddressListFragment extends BaseFragment {
         title.setText("通讯录");
         //setTreeView();
 
-        if (childAvatarList==null) {
+        if (childAvatarList == null) {
             childAvatarList = new ArrayList<>();
         }
         childAvatarList.clear();
 
-        if (childNameList==null) {
+        if (childNameList == null) {
             childNameList = new ArrayList<>();
         }
         childNameList.clear();
 
-        if (childNumList==null) {
+        if (childNumList == null) {
             childNumList = new ArrayList<>();
         }
         childNumList.clear();
@@ -107,43 +110,52 @@ public class MineAddressListFragment extends BaseFragment {
      * @param view
      */
     @Event(value = {R.id.title_back
-            , R.id.search_text
-            , R.id.search_delete})
+            ,R.id.address_search
+            /*, R.id.search_text
+            , R.id.search_delete*/})
     private void addressOnClick(View view) {
         switch (view.getId()) {
             case R.id.title_back://返回
                 mActivity.finish();
                 break;
 
-            case R.id.search_text://搜索按钮
+            case R.id.address_search://返回
                 searchAddressList();
                 break;
 
-            case R.id.search_delete://清空按钮
-                MyToast.showShort(mActivity, "清空输入框");
-                search_edittext.setText("");
-                break;
+//            case R.id.search_text://搜索按钮
+//                searchAddressList();
+//                break;
+
+//            case R.id.search_delete://清空按钮
+//                MyToast.showShort(mActivity, "清空输入框");
+//                search_edittext.setText("");
+//                break;
 
         }
     }
 
-    private void searchAddressList(){
-        String searchStr = search_edittext.getText().toString().trim();
-        if (!searchStr.equals("")) {
-            Intent searchIntent = new Intent(mActivity, EmptyActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("address_list_avatar",childAvatarList);
-            bundle.putStringArrayList("address_list_name",childNameList);
-            bundle.putStringArrayList("address_list_num",childNumList);
-            bundle.putString("address_list_search_str",searchStr);
-            searchIntent.putExtra("address_list_search_result_bundle",bundle);
-            searchIntent.putExtra("fragment_name","mine_zdlf_address_search");
-            mActivity.startActivity(searchIntent);
-        } else {
-            MyToast.showShort(mActivity, "请输入搜索内容!");
-            return;
-        }
-    }
+    private void searchAddressList() {
+        //String searchStr = search_edittext.getText().toString().trim();
+        //if (!searchStr.equals("")) {
+        Intent searchIntent = new Intent(mActivity, EmptyActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("address_list_avatar", childAvatarList);
+        bundle.putStringArrayList("address_list_name", childNameList);
+        bundle.putStringArrayList("address_list_num", childNumList);
+//            bundle.putString("address_list_search_str",searchStr);
+        bundle.putString("address_list_search_str", "");
+        searchIntent.putExtra("address_list_search_result_bundle", bundle);
+        searchIntent.putExtra("fragment_name", "mine_zdlf_address_search");
+        mActivity.startActivity(searchIntent);
+//    } else
+//
+//    {
+//        MyToast.showShort(mActivity, "请输入搜索内容!");
+//        return;
+//    }
+
+}
 
     /**
      * 切换
@@ -300,7 +312,7 @@ public class MineAddressListFragment extends BaseFragment {
                     childNameList.add(children.name);
                     childNumList.add(children.phone_number);
 
-                    LogUtil.e("size"+childAvatarList.size()+"::"+childAvatarList.size()+"::"+childAvatarList.size()+"::");
+                    LogUtil.e("size" + childAvatarList.size() + "::" + childAvatarList.size() + "::" + childAvatarList.size() + "::");
 
                     mDatas.add(bean);
                 }

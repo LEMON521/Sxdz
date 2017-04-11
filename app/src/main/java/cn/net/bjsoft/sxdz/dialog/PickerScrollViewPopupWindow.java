@@ -30,7 +30,7 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
 
     private PopupWindow mPickerScrollViewPopupWindow;
 
-    private TextView cancel,submit;
+    private TextView cancel, submit;
     private PickerScrollView picker;
     private int select;
 
@@ -52,10 +52,11 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
 
 
     }
-    private void initData(){
+
+    private void initData() {
         list = new ArrayList<Pickers>();
-        id = new String[] { "1", "2", "3", "4", "5", "6" };
-        name = new String[] { "中国银行", "农业银行", "招商银行", "工商银行", "建设银行", "民生银行" };
+        id = new String[]{"1", "2", "3", "4", "5", "6"};
+        name = new String[]{"中国银行", "农业银行", "招商银行", "工商银行", "建设银行", "民生银行"};
         for (int i = 0; i < name.length; i++) {
             list.add(new Pickers(name[i], id[i]));
         }
@@ -70,9 +71,9 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
         this.mActivity = activity;
         this.view = view;
         //this.cacheItemsDataList = cacheItemsDataList;
-        this.itemsDataList=itemsDataList;
+        this.itemsDataList = itemsDataList;
         this.select = selectPicker;
-        LogUtil.e("Pop内%%"+select);
+        LogUtil.e("Pop内%%" + select);
 
         //initData();
 
@@ -98,10 +99,6 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
 
             @Override
             public void onSelect(Pickers pickers) {
-                LogUtil.e("选择：" + pickers.getShowId() + "--银行："
-                        + pickers.getShowConetnt());
-//                selete = "";
-//                selete = pickers.getShowConetnt();
                 pickerData = pickers;
                 select = Integer.parseInt(pickers.getShowId());
             }
@@ -135,14 +132,11 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
     }
 
 
-
-
-
     // 数据接口抽象方法
     public interface OnGetData {
         //abstract ArrayList<KnowledgeBean.ItemsDataDao> cacheItemsDataList();
 
-        abstract void onDataCallBack(int  pickers);
+        abstract void onDataCallBack(int pickers);
     }
 
     // 数据接口设置,数据源接口传入
@@ -153,7 +147,7 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.pop_picker_cancel:
                 //mOnGetData.onDataCallBack(null);
                 break;

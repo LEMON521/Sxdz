@@ -110,6 +110,7 @@ public class MineZDLFFragment extends BaseFragment {
         pickersItemList.clear();
 
         setPickers();
+        department.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
         pickerPopupWindow = new PickerScrollViewPopupWindow();
         pickerPopupWindow.setOnData(new PickerScrollViewPopupWindow.OnGetData() {
             @Override

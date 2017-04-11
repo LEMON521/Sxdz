@@ -8,7 +8,7 @@
 
     <include layout="@layout/top_title" />
 
-    <ScrollView
+    <cn.net.bjsoft.sxdz.view.observable_scroll_view.ObservableScrollView
         android:id="@+id/fragment_task_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -163,6 +163,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dm020"></cn.net.bjsoft.sxdz.view.ChildrenListView>
+
+                <RelativeLayout
+                    android:layout_marginBottom="@dimen/dm020"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dm020">
+
+                    <TextView
+                        android:id="@+id/fragment_task_add_files"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/approve_shixin_blue"
+                        android:padding="@dimen/dm005"
+                        android:text="+ 任务文件"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -186,6 +205,6 @@
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </cn.net.bjsoft.sxdz.view.observable_scroll_view.ObservableScrollView>
 
 </LinearLayout>

@@ -10,7 +10,31 @@ import java.util.ArrayList;
 
 public class MessageTaskBean implements Serializable {
     public boolean result = false;
-    public ArrayList<TasksAllDao> data;
+    public TasksDao data;
+
+
+    public class TasksDao implements Serializable {
+
+        public ArrayList<TasksAllDao> task_list;
+        public TaskQueryDao query_dao;
+        public String query_type;
+
+    }
+
+    public class TaskQueryDao implements Serializable {
+        public String time_start = "";
+        public String time_end = "";
+        public ArrayList<TaskQueryTypeDao> type_list;
+        public ArrayList<TaskQueryLevelDao> level_list;
+    }
+
+    public class TaskQueryTypeDao implements Serializable {
+        public String type = "";
+    }
+
+    public class TaskQueryLevelDao implements Serializable {
+        public String level = "";
+    }
 
     public class TasksAllDao implements Serializable {
         public int state = -1;//状态

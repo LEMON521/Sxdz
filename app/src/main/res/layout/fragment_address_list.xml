@@ -5,9 +5,29 @@
     android:background="@color/background"
     android:orientation="vertical">
 
-    <include layout="@layout/top_title" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/top_title" />
+        <RelativeLayout
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <include layout="@layout/pop_knowledge_search" />
+            <ImageView
+                android:id="@+id/address_search"
+                android:padding="@dimen/dm020"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical"
+                android:src="@drawable/nav_seach"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+    </FrameLayout>
+
+
+    <!--<include layout="@layout/pop_knowledge_search" />-->
 
     <LinearLayout
 
