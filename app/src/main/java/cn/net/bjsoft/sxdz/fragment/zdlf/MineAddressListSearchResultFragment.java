@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,7 +40,7 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
     @ViewInject(R.id.address_list_result)
     private ListView resultListView;
     @ViewInject(R.id.address_list_result_hint)
-    private TextView hint;
+    private LinearLayout hint;
 
 
     private ArrayList<String> childAvatarList;

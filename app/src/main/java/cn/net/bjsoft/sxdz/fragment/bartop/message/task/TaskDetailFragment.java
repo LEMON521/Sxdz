@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.xw.repo.BubbleSeekBar;
@@ -31,11 +30,13 @@ import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.function.DownLoadFilesUtils;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.ChildrenListView;
+import cn.net.bjsoft.sxdz.view.observable_scroll_view.ObservableScrollView;
 
 /**
  * Created by Zrzc on 2017/4/5.
@@ -79,7 +80,7 @@ public class TaskDetailFragment extends BaseFragment {
 
 
     @ViewInject(R.id.fragment_task_scroll)
-    private ScrollView scroll;
+    private ObservableScrollView scroll;
     @ViewInject(R.id.fragment_task_detail_host)
     private TextView detail;
     @ViewInject(R.id.fragment_task_attachment_show)
@@ -94,6 +95,8 @@ public class TaskDetailFragment extends BaseFragment {
     private BubbleSeekBar progress;
     @ViewInject(R.id.fragment_task_files)
     private ChildrenListView files;//执行人新增附件
+    @ViewInject(R.id.fragment_task_add_files)
+    private TextView add_files;
 
     private MessageTaskDetailBean detailBean;
     private MessageTaskDetailBean.MessageTaskDetailDao detailDao;
@@ -150,6 +153,24 @@ public class TaskDetailFragment extends BaseFragment {
         }
         attachment.setAdapter(filesHostAdapter);
         attachment.setOnTouchListener(touchListener);
+        attachment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!filesAddList.get(position).isEditing) {
+                    //不可编辑状态,就下载文件
+                    DownLoadFilesUtils downLoad = new DownLoadFilesUtils();
+                    String url = "";
+                    url = filesHostList.get(position).file_url;
+                    if (downLoad.downloadFile(mActivity, url)) {
+                        filesAddList.get(position).file_path = url.substring(url.lastIndexOf("/") + 1);//不包含 (/)线
+                        filesAddAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    MyToast.showShort(mActivity, "打开文件！");
+                }
+            }
+        });
+
 
         //执行人添加详情的列表
         if (detailList == null) {
@@ -184,12 +205,33 @@ public class TaskDetailFragment extends BaseFragment {
         files.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == (filesAddList.size() - 1)) {
-                    //添加附件动作
-                    PhotoOrVideoUtils.doFiles(mActivity, TaskDetailFragment.this);//打开文件管理器意图
+                if (!filesAddList.get(position).isEditing) {
+                    //不可编辑状态,就下载文件
+                    DownLoadFilesUtils downLoad = new DownLoadFilesUtils();
+                    String url = "";
+                    url = filesAddList.get(position).file_url;
+                    if (downLoad.downloadFile(mActivity, url)) {
+                        filesAddList.get(position).file_path = url.substring(url.lastIndexOf("/") + 1);//不包含 (/)线
+                        filesAddAdapter.notifyDataSetChanged();
+                    }
                 } else {
                     MyToast.showShort(mActivity, "打开文件！");
                 }
+            }
+        });
+
+        //滚动监听
+        scroll.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
+            @Override
+            public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
+                progress.correctOffsetWhenContainerOnScrolling();
+            }
+        });
+        //高度改变的时候的监听
+        scroll.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                progress.correctOffsetWhenContainerOnScrolling();
             }
         });
 
@@ -320,36 +362,45 @@ public class TaskDetailFragment extends BaseFragment {
         }
 
 
+        //增加一个添加条目
         //if (!(filesAddList.size() > 0)) {
-        bean = new KnowLedgeItemBean();
-        filesAddDao = bean.new FilesKnowledgeItemDao();
 
-        filesAddDao.isAdd = true;
-        filesAddList.add(filesAddList.size(), filesAddDao);
-
+//        bean = new KnowLedgeItemBean();
+//        filesAddDao = bean.new FilesKnowledgeItemDao();
+//
+//        filesAddDao.isAdd = true;
+//        filesAddList.add(filesAddList.size(), filesAddDao);
+//}
         filesHostAdapter.notifyDataSetChanged();
         detailAddAdapter.notifyDataSetChanged();
         filesAddAdapter.notifyDataSetChanged();
-        //}
+
 
     }
 
     @Event(value = {R.id.title_back
-            , R.id.fragment_task_add_detail})
+            , R.id.fragment_task_add_detail
+            , R.id.fragment_task_add_files})
     private void taskDetailOnClick(View view) {
         switch (view.getId()) {
             case R.id.title_back://添加详情条目
                 mActivity.finish();
                 break;
             case R.id.fragment_task_add_detail://添加详情条目
-                progress.correctOffsetWhenContainerOnScrolling();
                 //addBean = new MessageTaskDetailAddBean();
                 detailBean = new MessageTaskDetailBean();
                 addBean = detailBean.new DetailAddDao();
                 addBean.isEditing = true;
-                detailList.add(addBean);
+                detailList.add(detailList.size(), addBean);
                 detailAddAdapter.notifyDataSetChanged();
+                LogUtil.e("正价的条目为" + detailList.size());
                 //Utility.setListViewHeightBasedOnChildren(detail_list);
+
+
+                break;
+
+            case R.id.fragment_task_add_files://添加任务附件条目
+                PhotoOrVideoUtils.doFiles(mActivity, this);//打开文件管理器意图
 
                 break;
         }
@@ -375,7 +426,7 @@ public class TaskDetailFragment extends BaseFragment {
             filesAddDao.file_name = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
             filesAddDao.isAdd = false;
             filesAddDao.isEditing = true;
-            filesAddList.add(filesAddList.size() - 1, filesAddDao);
+            filesAddList.add(filesAddList.size(), filesAddDao);
             filesAddAdapter.notifyDataSetChanged();
             Utility.setListViewHeightBasedOnChildren(files);
         }

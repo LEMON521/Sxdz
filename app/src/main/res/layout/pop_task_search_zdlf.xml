@@ -102,7 +102,8 @@
                     android:textColor="#333333"
                     android:textSize="@dimen/dm024" />
 
-                <TextView
+                <EditText
+                    android:editable="false"
                     android:id="@+id/pop_task_search_zdlf_time_start"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -130,7 +131,8 @@
                     android:textSize="@dimen/dm024"
                     android:visibility="invisible" />
 
-                <TextView
+                <EditText
+                    android:editable="false"
                     android:id="@+id/pop_task_search_zdlf_time_end"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -21,6 +21,8 @@ import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 
 /**
+ *
+ * 拨打电话,复制电话号码的popupWindow
  * Created by Zrzc on 2017/3/21.
  */
 

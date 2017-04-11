@@ -1,13 +1,17 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
@@ -17,10 +21,12 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.adapter.message.task.TaskAllZDLFAdapter;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
+import cn.net.bjsoft.sxdz.dialog.TaskSearchPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
-import cn.net.bjsoft.sxdz.view.RefreshListView_1;
+import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
+import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
 
 /**
  * 全部任务列表
@@ -29,21 +35,33 @@ import cn.net.bjsoft.sxdz.view.RefreshListView_1;
 
 @ContentView(R.layout.fragment_task_all)
 public class TopTaskAllFragment extends BaseFragment {
+
+    @ViewInject(R.id.root_view)
+    private FrameLayout root_view;
+
     @ViewInject(R.id.fragment_task_list_all)
-    private RefreshListView_1 task_list;
+    private PullableListView task_list;
+    @ViewInject(R.id.refresh_view)
+    private PullToRefreshLayout refresh_view;
+
 
     private MessageTaskBean taskBean;
     private ArrayList<MessageTaskBean.TasksAllDao> tasksAllDao;
     private TaskAllZDLFAdapter taskAdapter;
 
+    private MessageTaskBean.TaskQueryDao taskQueryDao;
+    private TaskSearchPopupWindow window;
+
 
     @Override
     public void initData() {
 
+
         if (tasksAllDao == null) {
             tasksAllDao = new ArrayList<>();
-        } else
+        } else {
             tasksAllDao.clear();
+        }
 
         if (taskAdapter == null) {
             taskAdapter = new TaskAllZDLFAdapter(mActivity, tasksAllDao);
@@ -60,24 +78,48 @@ public class TopTaskAllFragment extends BaseFragment {
             }
         });
 
-        task_list.setOnRefreshListener(new RefreshListView_1.OnRefreshListener() {
+        /**
+         * 刷新///加载     的操作
+         */
+        refresh_view.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
             @Override
-            public void pullDownRefresh() {
-                //SystemClock.sleep(2000);
-                LogUtil.e("下拉刷新");
-                taskAdapter.notifyDataSetChanged();
-                task_list.onRefreshFinish();
+            public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
+
+                // 下拉刷新操作
+                new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        // 千万别忘了告诉控件刷新完毕了哦！
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+
+                        tasksAllDao.clear();
+                        LogUtil.e("setOnRefreshListener-----------");
+                        getData();
+
+                    }
+                }.sendEmptyMessageDelayed(0, 500);
+
             }
 
             @Override
-            public void pullUpLoadMore() {
-                LogUtil.e("上啦加载");
-                taskAdapter.notifyDataSetChanged();
-                task_list.onRefreshFinish();
-                //SystemClock.sleep(2000);
+            public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
+                // 加载操作
+                new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        // 千万别忘了告诉控件加载完毕了哦！
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+
+                        LogUtil.e("onLoadMore-----------");
+                        getData();
+                    }
+                }.sendEmptyMessageDelayed(0, 500);
+
             }
+
         });
 
+        window = new TaskSearchPopupWindow(mActivity,root_view);
 
         getData();
     }
@@ -92,8 +134,10 @@ public class TopTaskAllFragment extends BaseFragment {
                 taskBean = GsonUtil.getMessageTaskBean(result);
                 if (taskBean.result) {
                     //LogUtil.e("获取到的条目-----------" + result);
-                    tasksAllDao.clear();
-                    tasksAllDao.addAll(taskBean.data);
+                    taskQueryDao = taskBean.data.query_dao;
+
+                    //tasksAllDao.clear();
+                    tasksAllDao.addAll(taskBean.data.task_list);
                     taskAdapter.notifyDataSetChanged();
                     taskBean = null;
                 } else {
@@ -115,5 +159,16 @@ public class TopTaskAllFragment extends BaseFragment {
                 dismissProgressDialog();
             }
         });
+    }
+
+    @Event(value = {R.id.fragment_task_list_all_search})
+    private void click(View view) {
+        switch (view.getId()) {
+            case R.id.fragment_task_list_all_search:
+
+                window.showWindow(taskQueryDao);
+
+                break;
+        }
     }
 }

@@ -1,12 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <cn.net.bjsoft.sxdz.view.RefreshListView_1
-        android:id="@+id/fragment_task_list_doing"
+    <FrameLayout
+        android:id="@+id/root_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></cn.net.bjsoft.sxdz.view.RefreshListView_1>
+        android:layout_height="@dimen/dm001"
+        android:background="#00000000"></FrameLayout>
 
-</LinearLayout>
+    <cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout
+        android:id="@+id/refresh_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/refresh_head" />
+        <!-- 支持所有实现Pullable接口的View -->
+
+        <cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView
+            android:id="@+id/fragment_task_list_doing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:divider="#00FFFFFF"
+            android:dividerHeight="0dp"
+            android:footerDividersEnabled="false" />
+
+        <include layout="@layout/load_more" />
+
+    </cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+
+        <ImageView
+            android:id="@+id/fragment_task_list_all_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/dm060"
+            android:src="@mipmap/all_task_zdlf_search" />
+    </RelativeLayout>
+
+</FrameLayout>

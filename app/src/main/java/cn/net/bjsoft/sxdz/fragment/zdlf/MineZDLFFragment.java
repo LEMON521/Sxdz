@@ -27,7 +27,6 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.activity.home.MainActivity;
 import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
-import cn.net.bjsoft.sxdz.activity.ylyd.ShowYLYDActivity;
 import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.dialog.PickerScrollViewPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
@@ -169,9 +168,8 @@ public class MineZDLFFragment extends BaseFragment {
             case R.id.mine_zdlf_reset_password://重置密码
 //                passwordView = new WindowRecettingPasswordView(mActivity);
 //                showRecettingPassword(mActivity,passwordView);
-
-                Intent resetting_passwordIntent = new Intent(mActivity, ShowYLYDActivity.class);
-                resetting_passwordIntent.setAction("resetting_password");
+                Intent resetting_passwordIntent = new Intent(mActivity, EmptyActivity.class);
+                resetting_passwordIntent.putExtra("fragment_name", "resetting_password");
                 startActivity(resetting_passwordIntent);
                 break;
 

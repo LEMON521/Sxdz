@@ -30,14 +30,13 @@
     <!--<include layout="@layout/pop_knowledge_search" />-->
 
     <LinearLayout
-
         android:id="@+id/address_change"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/dm010">
+        android:padding="@dimen/dm020">
 
         <TextView
             android:id="@+id/address_parent"
@@ -71,7 +70,7 @@
         android:id="@+id/address_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dm015"
+        android:layout_marginTop="@dimen/dm020"
         android:background="@color/white"
         android:orientation="horizontal"
         android:padding="@dimen/dm010">

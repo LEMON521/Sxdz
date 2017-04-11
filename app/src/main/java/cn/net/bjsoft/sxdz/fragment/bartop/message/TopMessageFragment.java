@@ -37,10 +37,12 @@ public class TopMessageFragment extends BaseFragment {
 
     @ViewInject(R.id.message_message_title)
     private TextView title;
+
     @ViewInject(R.id.message_message_lv)
     private PullableListView messageListView;
     @ViewInject(R.id.refresh_view)
     private PullToRefreshLayout refresh_view;
+
     @ViewInject(R.id.message_message_add)
     private ImageView add_message;
 

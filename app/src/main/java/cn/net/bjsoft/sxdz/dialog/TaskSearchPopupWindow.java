@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
+import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 
 /**
  * Created by Zrzc on 2017/3/21.
@@ -44,18 +46,25 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 //    private ArrayList<String> levelList;
 
     private ImageView exit;
-    private TextView type, level, start, end, submit, reset;
+    private TextView type, level, /*start, end,*/
+            submit, reset;
+    private EditText start, end;
     private String startStr = "";
     private String endStr = "";
 
     // 数据接口
     OnGetData mOnGetData;
 
+    private ListPopupWindow typePopupWindow;
+    private ListPopupWindow levelPopupWindow;
+    private ArrayList<String> typeStrList;
+    private ArrayList<String> levelStrList;
 
     public TaskSearchPopupWindow(FragmentActivity activity
             , View view) {
         this.mActivity = activity;
         this.view = view;
+
         //this.cacheItemsDataList = cacheItemsDataList;
     }
 
@@ -75,10 +84,24 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         this.levelList = taskQueryDao.level_list;
         this.startStr = taskQueryDao.time_start;
         this.endStr = taskQueryDao.time_end;
+        if (typeStrList == null) {
+            typeStrList = new ArrayList<>();
+        }
+        typeStrList.clear();
+        if (levelStrList == null) {
+            levelStrList = new ArrayList<>();
+        }
+        levelStrList.clear();
+        for (MessageTaskBean.TaskQueryTypeDao dao : typeList) {
+            typeStrList.add(dao.type);
+        }
+        for (MessageTaskBean.TaskQueryLevelDao dao : levelList) {
+            levelStrList.add(dao.level);
+        }
+
         InitData();
         InitUI();
     }
-
 
 
     private void InitData() {
@@ -122,8 +145,8 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         exit = (ImageView) mRootView.findViewById(R.id.pop_task_search_zdlf_exit);
         type = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_type);
         level = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_level);
-        start = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_time_start);
-        end = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_time_end);
+        start = (EditText) mRootView.findViewById(R.id.pop_task_search_zdlf_time_start);
+        end = (EditText) mRootView.findViewById(R.id.pop_task_search_zdlf_time_end);
         submit = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_submit);
         reset = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_reset);
 
@@ -133,8 +156,8 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         if (levelList.size() > 0) {
             level.setText(levelList.get(0).level);
         }
-        start.setText(startStr);
-        end.setText(endStr);
+        start.setText(TimeUtils.getFormateDate(Long.parseLong(startStr), "-"));
+        end.setText(TimeUtils.getFormateDate(Long.parseLong(endStr), "-"));
 
         exit.setOnClickListener(this);
         type.setOnClickListener(this);
@@ -144,6 +167,22 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         submit.setOnClickListener(this);
         reset.setOnClickListener(this);
 
+
+        typePopupWindow = new ListPopupWindow(mActivity, view);
+        typePopupWindow.setOnData(new OnGetData() {
+            @Override
+            public void onDataCallBack(String strJson) {
+                type.setText(strJson);
+            }
+        });
+
+        levelPopupWindow = new ListPopupWindow(mActivity, view);
+        levelPopupWindow.setOnData(new OnGetData() {
+            @Override
+            public void onDataCallBack(String strJson) {
+                level.setText(strJson);
+            }
+        });
     }
 
     @Override
@@ -151,18 +190,24 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 
         switch (v.getId()) {
             case R.id.pop_task_search_zdlf_exit:
+                mSearchPopupWindow.dismiss();
                 break;
 
             case R.id.pop_task_search_zdlf_type:
+
+                typePopupWindow.showWindow(typeStrList);
                 break;
 
             case R.id.pop_task_search_zdlf_level:
+                levelPopupWindow.showWindow(levelStrList);
                 break;
 
             case R.id.pop_task_search_zdlf_time_start:
+                PickerDialog.showDatePickerDialog(mActivity, start, "-");
                 break;
 
             case R.id.pop_task_search_zdlf_time_end:
+                PickerDialog.showDatePickerDialog(mActivity, end, "-");
                 break;
 
             case R.id.pop_task_search_zdlf_submit:
