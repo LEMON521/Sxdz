@@ -39,7 +39,7 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
     private String[] id;
     private String[] name;
 
-    //private String selete = "";
+    private String selectStr = "";
 
 
     // 数据接口
@@ -64,14 +64,14 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
 
     public void setPickerScrollViewPopupWindow(FragmentActivity activity
             , ArrayList<Pickers> itemsDataList
-            , int pickerSelect
+            , int selectPicker
             , View view) {
 
         this.mActivity = activity;
         this.view = view;
         //this.cacheItemsDataList = cacheItemsDataList;
-        this.itemsDataList = itemsDataList;
-        this.select = pickerSelect;
+        this.itemsDataList=itemsDataList;
+        this.select = selectPicker;
         LogUtil.e("Pop内%%"+select);
 
         //initData();
@@ -90,6 +90,7 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
         // 设置数据，默认选择第一条
         picker.setData(itemsDataList);
         picker.setSelected(select);
+        //picker.setSelected(selectStr);
         cancel.setOnClickListener(this);
         submit.setOnClickListener(this);
         // 滚动选择器选中事件
@@ -141,7 +142,7 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
     public interface OnGetData {
         //abstract ArrayList<KnowledgeBean.ItemsDataDao> cacheItemsDataList();
 
-        abstract void onDataCallBack(int pickers);
+        abstract void onDataCallBack(int  pickers);
     }
 
     // 数据接口设置,数据源接口传入
@@ -161,7 +162,6 @@ public class PickerScrollViewPopupWindow implements View.OnClickListener {
 
                 mOnGetData.onDataCallBack(select);
                 break;
-
 
         }
         mPickerScrollViewPopupWindow.dismiss();

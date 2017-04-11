@@ -68,7 +68,8 @@ public class MineZDLFFragment extends BaseFragment {
     private TextView department;
 
     private PickerScrollViewPopupWindow pickerPopupWindow;
-    private ArrayList<Pickers> pickersList;
+    private ArrayList<Pickers> pickersCacheList;
+    private ArrayList<Pickers> pickersItemList;
     private int pickerSelecect = 0;
 
     private WindowRecettingPasswordView passwordView;
@@ -98,22 +99,24 @@ public class MineZDLFFragment extends BaseFragment {
         name.setText(mUserDao.name);
         company.setText("北京中电联发科技有限公司");
 
-        pickerPopupWindow = new PickerScrollViewPopupWindow();
 
-        if (pickersList == null) {
-            pickersList = new ArrayList<>();
+        if (pickersCacheList == null) {
+            pickersCacheList = new ArrayList<>();
         }
-        pickersList.clear();
+        pickersCacheList.clear();
+        if (pickersItemList == null) {
+            pickersItemList = new ArrayList<>();
+        }
+        pickersItemList.clear();
 
         setPickers();
-
+        pickerPopupWindow = new PickerScrollViewPopupWindow();
         pickerPopupWindow.setOnData(new PickerScrollViewPopupWindow.OnGetData() {
             @Override
             public void onDataCallBack(int select) {
                 //pickerSelecect = Integer.parseInt(pickers.getShowId());
                 pickerSelecect = select;
-                LogUtil.e("返回select@@@"+pickerSelecect);
-                department.setText(pickersList.get(pickerSelecect).getShowConetnt());
+                department.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
             }
         });
     }
@@ -124,11 +127,8 @@ public class MineZDLFFragment extends BaseFragment {
     private void setPickers() {
         //这里先静态设置
         for (int i = 0; i < 5; i++) {
-            pickersList.add(new Pickers("职位" + i, (i + 0) + ""));
-        }
-
-        for (Pickers pickers:pickersList){
-            LogUtil.e("添加 的数据为"+pickers.getShowConetnt()+"::"+pickers.getShowId());
+            pickersCacheList.add(new Pickers("职位" + i, (i + 0) + ""));
+            pickersItemList.add(new Pickers("职位" + i, (i + 0) + ""));
         }
 
     }
@@ -186,8 +186,11 @@ public class MineZDLFFragment extends BaseFragment {
                 break;
 
             case R.id.mine_zdlf_department://切换岗位
-                LogUtil.e("点击select¥¥¥"+pickerSelecect);
-                pickerPopupWindow.setPickerScrollViewPopupWindow(mActivity, pickersList, pickerSelecect, department);
+                //LogUtil.e("点击select¥¥¥"+pickerSelecect+"::getShowConetnt:"+pickersList.get(pickerSelecect).getShowConetnt());
+                LogUtil.e("点击select¥¥¥" + pickerSelecect + "::getShowConetnt:" + pickerSelecect);
+                pickersCacheList.clear();
+                pickersCacheList.addAll(pickersItemList);
+                pickerPopupWindow.setPickerScrollViewPopupWindow(mActivity, pickersCacheList, pickerSelecect, department);
                 break;
 
         }

@@ -45,13 +45,13 @@
                 android:paddingTop="@dimen/dm024"
                 android:text="确认"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/dm020" />
+                android:textSize="@dimen/dm024" />
         </RelativeLayout>
     </LinearLayout>
 
     <cn.net.bjsoft.sxdz.view.picker_scroll_view.PickerScrollView
         android:id="@+id/pop_picker_pick"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dm120" />
+        android:layout_height="@dimen/dm180" />
 
 </LinearLayout>
