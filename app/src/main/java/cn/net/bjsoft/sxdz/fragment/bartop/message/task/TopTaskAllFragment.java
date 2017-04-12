@@ -46,7 +46,9 @@ public class TopTaskAllFragment extends BaseFragment {
 
 
     private MessageTaskBean taskBean;
+    private MessageTaskBean taskCacheBean;
     private ArrayList<MessageTaskBean.TasksAllDao> tasksAllDao;
+    private ArrayList<MessageTaskBean.TasksAllDao> tasksCacheAllDao;
     private TaskAllZDLFAdapter taskAdapter;
 
     private MessageTaskBean.TaskQueryDao taskQueryDao;
@@ -61,6 +63,11 @@ public class TopTaskAllFragment extends BaseFragment {
             tasksAllDao = new ArrayList<>();
         } else {
             tasksAllDao.clear();
+        }
+        if (tasksCacheAllDao == null) {
+            tasksCacheAllDao = new ArrayList<>();
+        } else {
+            tasksCacheAllDao.clear();
         }
 
         if (taskAdapter == null) {
@@ -93,6 +100,7 @@ public class TopTaskAllFragment extends BaseFragment {
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
 
                         tasksAllDao.clear();
+                        tasksCacheAllDao.clear();
                         LogUtil.e("setOnRefreshListener-----------");
                         getData();
 
@@ -121,6 +129,17 @@ public class TopTaskAllFragment extends BaseFragment {
 
         window = new TaskSearchPopupWindow(mActivity,root_view);
 
+        window.setOnData(new TaskSearchPopupWindow.OnGetData() {
+            @Override
+            public void onDataCallBack(String strJson) {
+                taskCacheBean = GsonUtil.getMessageTaskBean(strJson);
+                if (taskCacheBean.result) {
+                    tasksAllDao.clear();
+                    tasksAllDao.addAll(taskCacheBean.data.task_list);
+                    taskAdapter.notifyDataSetChanged();
+                }
+            }
+        });
         getData();
     }
 
@@ -136,6 +155,7 @@ public class TopTaskAllFragment extends BaseFragment {
                     //LogUtil.e("获取到的条目-----------" + result);
                     taskQueryDao = taskBean.data.query_dao;
 
+                    tasksCacheAllDao.addAll(taskBean.data.task_list);
                     //tasksAllDao.clear();
                     tasksAllDao.addAll(taskBean.data.task_list);
                     taskAdapter.notifyDataSetChanged();

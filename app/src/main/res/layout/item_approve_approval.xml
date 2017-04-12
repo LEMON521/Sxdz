@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:background="@color/white"
-    android:padding="@dimen/dm010">
+    android:padding="@dimen/dm020">
 
     <LinearLayout
 
@@ -14,18 +14,21 @@
         android:orientation="vertical">
 
         <TextView
+            android:textColor="#333333"
             android:id="@+id/approve_approval_mater"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="去医院看病"
-            android:textSize="@dimen/dm024" />
+            android:textSize="@dimen/dm026" />
 
         <TextView
+            android:textColor="#999999"
+            android:layout_marginTop="@dimen/dm010"
             android:id="@+id/approve_approval_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="2017/03/09"
-            android:textSize="@dimen/dm024" />
+            android:textSize="@dimen/dm022" />
     </LinearLayout>
 
     <LinearLayout
@@ -34,11 +37,12 @@
         android:layout_weight="1">
 
         <TextView
+            android:gravity="end"
             android:id="@+id/approve_approval_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="审批中"
-            android:textColor="@color/aMap_chenghuang"
+            android:textColor="#F67F00"
             android:textSize="@dimen/dm026" />
     </LinearLayout>
 </LinearLayout>

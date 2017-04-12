@@ -73,10 +73,10 @@ public class ApproveShowHistoryItemAdapter extends BaseAdapter {
             //holder.state.setText("审批通过");
             if (list.get(position).approve_result.equals("agree")){
                 holder.state.setText("已通过");
-                holder.state.setTextColor(Color.argb(255,0,255,0));
+                holder.state.setTextColor(Color.argb(255,42,194,128));
             }else if (list.get(position).approve_result.equals("reject")){
                 holder.state.setText("驳回");
-                holder.state.setTextColor(Color.argb(255,255,0,0));
+                holder.state.setTextColor(Color.argb(255,242,38,38));
             }else {
                 holder.state.setText("未知");
                 holder.state.setTextColor(Color.argb(255,255,255,255));

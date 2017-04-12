@@ -125,6 +125,21 @@ public class TopTaskDoneFragment extends BaseFragment {
 
         window = new TaskSearchPopupWindow(mActivity,root_view);
 
+        /**
+         * 搜索框接口回调
+         */
+        window.setOnData(new TaskSearchPopupWindow.OnGetData() {
+            @Override
+            public void onDataCallBack(String strJson) {
+                taskBean = GsonUtil.getMessageTaskBean(strJson);
+                if (taskBean.result) {
+                    tasksAllDao.clear();
+                    tasksAllDao.addAll(taskBean.data.task_list);
+                    taskAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
         getData();
     }
 

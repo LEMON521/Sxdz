@@ -10,6 +10,7 @@ import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TaskDetailFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TopAddTaskFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.KnowledgeItemZDLFFragment;
+import cn.net.bjsoft.sxdz.fragment.zdlf.KnowledgeNewZDLFFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.MineAddressListFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.MineAddressListSearchResultFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.ResettingPasswordZDLFFragment;
@@ -51,6 +52,9 @@ public class EmptyActivity extends BaseActivity {
                     fragment = new TopAddTaskFragment();
                 } else if (fragment_name.equals("resetting_password")) {
                     fragment = new ResettingPasswordZDLFFragment();
+                }
+                else if (fragment_name.equals("KnowledgeNewZDLFFragment")) {
+                    fragment = new KnowledgeNewZDLFFragment();
                 }
                 bundle.putString("json", "");
                 fragment.setArguments(bundle);

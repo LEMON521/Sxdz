@@ -3,31 +3,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp"
-    tools:context=".activity.home.bartop.function.SignHistoryActivity">
+    android:orientation="vertical">
 
+    <include layout="@layout/top_title" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/dm020">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <Spinner
-                android:paddingRight="@dimen/dm050"
+            <EditText
                 android:id="@+id/function_sing_history_partment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/attendance_history_technical_department"
-                android:entries="@array/sping_sign_history"></Spinner>
+                android:background="@drawable/attendance_history_technical_department"
+                android:editable="false"
+                android:entries="@array/sping_sign_history"
+                android:paddingBottom="@dimen/dm010"
+                android:paddingLeft="@dimen/dm020"
+                android:paddingRight="@dimen/dm080"
+                android:paddingTop="@dimen/dm010"
+                android:textColor="#59A0F7"
+                android:textSize="@dimen/dm024"></EditText>
 
+            <EditText
+                android:id="@+id/function_sing_history_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dm020"
+                android:background="@mipmap/task_search_zdlf_date"
+                android:editable="false"
+                android:padding="@dimen/dm010"
+                android:textColor="#999999"
+                android:textSize="@dimen/dm020" />
 
         </LinearLayout>
 

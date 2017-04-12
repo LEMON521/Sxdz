@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/item_knowledge_new_pic_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/item_knowledge_new_pic"
+            android:layout_width="@dimen/dm125"
+            android:layout_height="@dimen/dm135"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/wlh" />
+
+        <ImageView
+            android:id="@+id/item_knowledge_new_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/item_knowledge_new_pic"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/item_knowledge_new_pic"
+            android:padding="@dimen/dm004"
+            android:src="@mipmap/release_zdlf_delete_picture" />
+
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:id="@+id/item_knowledge_new_add"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="@dimen/dm125"
+        android:layout_height="@dimen/dm135">
+        
+        <ImageView
+            android:src="@mipmap/release_zdlf_add_picture"
+            android:layout_width="@dimen/dm092"
+            android:layout_height="@dimen/dm092" />
+        <TextView
+            android:layout_marginTop="@dimen/dm006"
+            android:textSize="@dimen/dm024"
+            android:textColor="#333333"
+            android:text="添加图片"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</FrameLayout>

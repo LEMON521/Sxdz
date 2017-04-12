@@ -2,7 +2,6 @@ package cn.net.bjsoft.sxdz.dialog;
 
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,7 @@ public class ListPopupWindow {
     private ArrayList<String> stringList;
     private PopShowAdapter stringListAdapter;
     // 数据接口
-    TaskSearchPopupWindow.OnGetData mOnGetData;
+    private OnGetData mOnGetData;
 
 
     public ListPopupWindow(FragmentActivity activity
@@ -81,8 +80,8 @@ public class ListPopupWindow {
         mSearchPopupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
         mSearchPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ////////////////////////////
-        mSearchPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-        //mSearchPopupWindow.showAsDropDown(view);
+        //mSearchPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        mSearchPopupWindow.showAsDropDown(view);
         //mSearchPopupWindow.setAnimationStyle(R.style.PopupAnimation);
         mSearchPopupWindow.update();
 //        mSearchPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -121,7 +120,7 @@ public class ListPopupWindow {
     }
 
     // 数据接口设置,数据源接口传入
-    public void setOnData(TaskSearchPopupWindow.OnGetData sd) {
+    public void setOnData(OnGetData sd) {
         mOnGetData = sd;
     }
 

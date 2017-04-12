@@ -392,6 +392,7 @@ public class TaskDetailFragment extends BaseFragment {
                 addBean = detailBean.new DetailAddDao();
                 addBean.isEditing = true;
                 detailList.add(detailList.size(), addBean);
+                Utility.setListViewHeightBasedOnChildren(detail_list);
                 detailAddAdapter.notifyDataSetChanged();
                 LogUtil.e("正价的条目为" + detailList.size());
                 //Utility.setListViewHeightBasedOnChildren(detail_list);
@@ -400,7 +401,7 @@ public class TaskDetailFragment extends BaseFragment {
                 break;
 
             case R.id.fragment_task_add_files://添加任务附件条目
-                PhotoOrVideoUtils.doFiles(mActivity, this);//打开文件管理器意图
+                PhotoOrVideoUtils.doFiles(null, TaskDetailFragment.this);//打开文件管理器意图
 
                 break;
         }
@@ -418,8 +419,10 @@ public class TaskDetailFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
         String path = "";
+        LogUtil.e("onActivityResult-----uri"+uri);
         if (uri != null) {
             path = PhotoOrVideoUtils.getPath(mActivity, uri);
+            LogUtil.e("onActivityResult-----path"+path);
             bean = new KnowLedgeItemBean();
             filesAddDao = bean.new FilesKnowledgeItemDao();
             filesAddDao.file_path = path;
@@ -429,6 +432,7 @@ public class TaskDetailFragment extends BaseFragment {
             filesAddList.add(filesAddList.size(), filesAddDao);
             filesAddAdapter.notifyDataSetChanged();
             Utility.setListViewHeightBasedOnChildren(files);
+
         }
 
 

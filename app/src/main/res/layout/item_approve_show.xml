@@ -3,15 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
+    android:paddingRight="@dimen/dm030"
+    android:paddingLeft="@dimen/dm030"
+    android:paddingTop="@dimen/dm017"
+    android:paddingBottom="@dimen/dm017"
     android:orientation="horizontal">
 
 
     <ImageView
-        android:padding="3dp"
         android:id="@+id/approve_show_item_type"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/nav_add" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/examination_and_approval_zdlf_contract_a_business_leave" />
 
     <LinearLayout
 
@@ -31,16 +34,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="类型"
-                android:textSize="@dimen/dm023" />
+                android:textColor="#55616A"
+                android:textSize="@dimen/dm024" />
 
             <TextView
                 android:id="@+id/approve_show_item_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:gravity="end"
                 android:text="时间"
-                android:textSize="@dimen/dm023" />
+                android:textColor="#999999"
+                android:textSize="@dimen/dm020" />
         </LinearLayout>
 
         <LinearLayout
@@ -56,7 +60,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="部门"
-                android:textSize="@dimen/dm023" />
+                android:textColor="#999999"
+                android:textSize="@dimen/dm022" />
 
             <TextView
                 android:id="@+id/approve_show_item_name"
@@ -64,20 +69,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="姓名"
-                android:textSize="@dimen/dm023" />
+                android:textColor="#999999"
+                android:textSize="@dimen/dm022" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="申请"
-                android:textSize="@dimen/dm023" />
+                android:textColor="#999999"
+                android:textSize="@dimen/dm022" />
 
             <TextView
                 android:id="@+id/approve_show_item_type_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="类型"
-                android:textSize="@dimen/dm023" />
+                android:textColor="#999999"
+                android:textSize="@dimen/dm022" />
 
 
             <TextView
@@ -85,14 +93,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="事由："
-                android:textSize="@dimen/dm023" />
+                android:textColor="#999999"
+                android:textSize="@dimen/dm022" />
 
             <TextView
                 android:id="@+id/approve_show_item_mater"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="事由"
-                android:textSize="@dimen/dm023" />
+                android:textColor="#999999"
+                android:textSize="@dimen/dm022" />
         </LinearLayout>
 
 

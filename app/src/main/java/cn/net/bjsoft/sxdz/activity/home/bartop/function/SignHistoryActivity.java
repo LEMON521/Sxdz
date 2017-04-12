@@ -3,16 +3,16 @@ package cn.net.bjsoft.sxdz.activity.home.bartop.function;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
@@ -30,6 +30,7 @@ import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
@@ -40,6 +41,8 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
 import cn.net.bjsoft.sxdz.adapter.function.sign.FunctionSignHistoryAdapter;
 import cn.net.bjsoft.sxdz.bean.function.sign.FunctionSignHistoryBean;
+import cn.net.bjsoft.sxdz.dialog.ListPopupWindow;
+import cn.net.bjsoft.sxdz.dialog.PickerDialog;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
@@ -52,13 +55,18 @@ import cn.net.bjsoft.sxdz.utils.function.Utility;
 @ContentView(R.layout.activity_function_sign_history)
 public class SignHistoryActivity extends BaseActivity {
 
+    //    @ViewInject(R.id.function_sing_history_partment)
+//    private Spinner spinner_partment;
     @ViewInject(R.id.function_sing_history_partment)
-    private Spinner spinner_partment;
+    private EditText spinner_partment;
+    @ViewInject(R.id.function_sing_history_date)
+    private EditText history_date;
 
     @ViewInject(R.id.function_sing_history_humen)
     private GridView gridView_humen;
 
     @ViewInject(R.id.function_sing_history_map)
+
 
     private FunctionSignHistoryBean signHistoryBean;//总数据
 
@@ -71,8 +79,9 @@ public class SignHistoryActivity extends BaseActivity {
 
     private ArrayAdapter spinnerAdapter;
 
-
+    @ViewInject(R.id.function_sing_history_map)
     private MapView mapView;
+
     private AMap aMap;
 
     private ArrayList<Marker> markers;
@@ -85,57 +94,25 @@ public class SignHistoryActivity extends BaseActivity {
 
     private ArrayList<LatLng> latLngs;
 
-    protected static final int SUCCESS = 1;
-    protected static final int ERROR = -1;
-    private Message message = null;
-    /**
-     * 向主线程发送消息的Handler
-     */
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                // 对数据进行解析和封装
-                case SUCCESS:
+    private ListPopupWindow listPopupWindow;
 
-                {//将获取到的信息分类
-                    departmentNames.add("请选择部门");
-                    departmentMap.put("0",humenList);//添加一条空的部门和部门人的列表
-                    // for (FunctionSignHistoryBean.DepartmentListDao department:departments){
-                    for (int i = 0; i < departments.size(); i++) {
-                        if (departments.get(i).department.equals("技术部")) {
-                            departmentMap.put(i + 1 + "", departments.get(i).person);
-                            departmentNames.add(departments.get(i).department);
-                        } else if (departments.get(i).department.equals("销售部")) {
-                            departmentMap.put(i + 1 + "", departments.get(i).person);
-                            departmentNames.add(departments.get(i).department);
-                        } else {
-                            departmentMap.put(i + 1 + "", departments.get(i).person);
-                            departmentNames.add(departments.get(i).department);
-                        }
-                    }
-                }
-
-                init();
+    @Event(value = {R.id.function_sing_history_date
+            , R.id.function_sing_history_partment})
+    private void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.function_sing_history_date:
+                PickerDialog.showDatePickerDialog(this, history_date, "-");
                 break;
-
-                case ERROR:
-                    //
-                    //test.setText("网络异常,暂时无法获取数据/n点击刷新");
-                    dismissProgressDialog();
-                    break;
-
-                default:
-                    break;
-            }
+            case R.id.function_sing_history_partment:
+                listPopupWindow.showWindow(departmentNames);
+                break;
         }
-
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_function_sign_history);
+        //setContentView(R.layout.activity_function_sign_history);
 
         x.view().inject(this);
 //        spinner_partment = (Spinner) findViewById(R.id.function_sing_history_partment);
@@ -144,9 +121,6 @@ public class SignHistoryActivity extends BaseActivity {
         mapView.onCreate(savedInstanceState);
 
         showProgressDialog();
-        if (message != null) {
-            message = null;
-        }
         if (markers == null) {
             markers = new ArrayList<>();
         }
@@ -185,7 +159,7 @@ public class SignHistoryActivity extends BaseActivity {
         polylinesMap.clear();
         markerMap.clear();
 
-        message = Message.obtain();
+
         getData();
     }
 
@@ -198,16 +172,32 @@ public class SignHistoryActivity extends BaseActivity {
                 if (signHistoryBean.result) {
                     LogUtil.e("获取到的条目-----------" + result);
                     departments.addAll(signHistoryBean.data);
-                    message.what = SUCCESS;
+                    {//将获取到的信息分类
+                        departmentNames.add("请选择部门");
+                        departmentMap.put(departmentNames.get(0), humenList);//添加一条空的部门和部门人的列表
+                        // for (FunctionSignHistoryBean.DepartmentListDao department:departments){
+                        for (int i = 0; i < departments.size(); i++) {
+                            if (departments.get(i).department.equals("技术部")) {
+                                departmentNames.add(departments.get(i).department);
+                                departmentMap.put(departmentNames.get(i + 1), departments.get(i).person);
+                            } else if (departments.get(i).department.equals("销售部")) {
+                                departmentNames.add(departments.get(i).department);
+                                departmentMap.put(departmentNames.get(i + 1), departments.get(i).person);
+                            } else {
+                                departmentNames.add(departments.get(i).department);
+                                departmentMap.put(departmentNames.get(i + 1), departments.get(i).person);
+                            }
+                        }
+                    }
+
+                    init();
                 } else {
-                    message.what = ERROR;
                 }
 
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                message.what = ERROR;
             }
 
             @Override
@@ -217,7 +207,7 @@ public class SignHistoryActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-                handler.sendMessage(message);
+                dismissProgressDialog();
             }
         });
     }
@@ -229,22 +219,73 @@ public class SignHistoryActivity extends BaseActivity {
 
         spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, departmentNames);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_partment.setAdapter(spinnerAdapter);
+//        spinner_partment.setAdapter(spinnerAdapter);
+//
+//        spinner_partment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                LogUtil.e("选择的条目id" + position);
+//                //if (position != 0) {
+//                setGridViewData(departmentMap.get(position + ""));
+//                //}
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
-        spinner_partment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        spinner_partment.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                LogUtil.e("选择的条目id" + position);
-                //if (position != 0) {
-                    setGridViewData(departmentMap.get(position + ""));
-                //}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setGridViewData(departmentMap.get(s.toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
+
+
+        listPopupWindow = new ListPopupWindow(this, spinner_partment);
+        listPopupWindow.setOnData(new ListPopupWindow.OnGetData() {
+            @Override
+            public void onDataCallBack(String result) {
+                spinner_partment.setText(result);
+            }
+        });
+
+
+        history_date.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                /**
+                 * 当日期改变时,查询网络,获取最新数据
+                 */
+                getData();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        spinner_partment.setText(departmentNames.get(0));
 
 
         if (aMap == null) {
@@ -257,7 +298,7 @@ public class SignHistoryActivity extends BaseActivity {
     private void setGridViewData(ArrayList<FunctionSignHistoryBean.HumenListDao> humen) {
 
         humenList.clear();
-        if (humen!=null) {
+        if (humen != null) {
             humenList.addAll(humen);
         }
 

@@ -85,4 +85,38 @@ public abstract class BaseFragment extends Fragment {
     }
 
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LogUtil.e("BaseFragment==onDestroy");
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LogUtil.e("BaseFragment==onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        LogUtil.e("BaseFragment==onPause");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LogUtil.e("BaseFragment==onStart");
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        LogUtil.e("BaseFragment==onStop");
+    }
+
+
+
 }

@@ -25,14 +25,12 @@ import java.util.HashMap;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
-import cn.net.bjsoft.sxdz.activity.home.bartop.proposal.NewProposalActivity;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeGroupAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemsAdapter;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
 import cn.net.bjsoft.sxdz.dialog.KnowledgeSearchPopupWindow_1;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
-import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
@@ -468,8 +466,9 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                 break;
 
             case R.id.knowledge_add:
-                MyToast.showShort(mActivity, "走,去发帖!");
-                Intent intent = new Intent(mActivity, NewProposalActivity.class);
+                //MyToast.showShort(mActivity, "走,去发帖!");
+                Intent intent = new Intent(mActivity, EmptyActivity.class);
+                intent.putExtra("fragment_name","KnowledgeNewZDLFFragment");
                 startActivity(intent);
 
                 break;

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
-import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
+import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 
 /**
  * Created by Zrzc on 2017/3/21.
@@ -36,11 +36,12 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
     private View mRootView;
     private LayoutInflater mInflater;
 
+    private MessageTaskBean taskBean;
     private MessageTaskBean.TaskQueryDao taskQueryDao;
-    public String time_start = "";
-    public String time_end = "";
-    public ArrayList<MessageTaskBean.TaskQueryTypeDao> typeList;
-    public ArrayList<MessageTaskBean.TaskQueryLevelDao> levelList;
+    private String time_start = "";
+    private String time_end = "";
+    private ArrayList<MessageTaskBean.TaskQueryTypeDao> typeList;
+    private ArrayList<MessageTaskBean.TaskQueryLevelDao> levelList;
 
 //    private ArrayList<String> typeList;
 //    private ArrayList<String> levelList;
@@ -150,14 +151,14 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         submit = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_submit);
         reset = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_reset);
 
-        if (typeList.size() > 0) {
-            type.setText(typeList.get(0).type);
-        }
-        if (levelList.size() > 0) {
-            level.setText(levelList.get(0).level);
-        }
-        start.setText(TimeUtils.getFormateDate(Long.parseLong(startStr), "-"));
-        end.setText(TimeUtils.getFormateDate(Long.parseLong(endStr), "-"));
+//        if (typeList.size() > 0) {
+//            type.setText(typeList.get(0).type);
+//        }
+//        if (levelList.size() > 0) {
+//            level.setText(levelList.get(0).level);
+//        }
+//        start.setText(TimeUtils.getFormateDate(Long.parseLong(startStr), "-"));
+//        end.setText(TimeUtils.getFormateDate(Long.parseLong(endStr), "-"));
 
         exit.setOnClickListener(this);
         type.setOnClickListener(this);
@@ -169,18 +170,18 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 
 
         typePopupWindow = new ListPopupWindow(mActivity, view);
-        typePopupWindow.setOnData(new OnGetData() {
+        typePopupWindow.setOnData(new ListPopupWindow.OnGetData() {
             @Override
-            public void onDataCallBack(String strJson) {
-                type.setText(strJson);
+            public void onDataCallBack(String result) {
+                type.setText(result);
             }
         });
 
         levelPopupWindow = new ListPopupWindow(mActivity, view);
-        levelPopupWindow.setOnData(new OnGetData() {
+        levelPopupWindow.setOnData(new ListPopupWindow.OnGetData() {
             @Override
-            public void onDataCallBack(String strJson) {
-                level.setText(strJson);
+            public void onDataCallBack(String result) {
+                level.setText(result);
             }
         });
     }
@@ -194,7 +195,6 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
                 break;
 
             case R.id.pop_task_search_zdlf_type:
-
                 typePopupWindow.showWindow(typeStrList);
                 break;
 
@@ -211,9 +211,14 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
                 break;
 
             case R.id.pop_task_search_zdlf_submit:
+                getDataFromService();
                 break;
 
             case R.id.pop_task_search_zdlf_reset:
+                type.setText("");
+                level.setText("");
+                start.setText("");
+                end.setText("");
                 break;
 
         }
@@ -236,8 +241,8 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
      * 查询服务器,获取列表信息
      */
     private void getDataFromService() {
-
-        RequestParams params = new RequestParams("http://www.shuxin.net/api/app_json/android/knowledge/knowledge_items_life.json");
+        showProgressDialog();
+        RequestParams params = new RequestParams(TestAddressUtils.test_get_message_task_list_url);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

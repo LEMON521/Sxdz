@@ -28,6 +28,7 @@
             android:src="@drawable/common_back" />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/message_task_query"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,6 +38,7 @@
             android:src="@drawable/nav_add" />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/message_task_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
