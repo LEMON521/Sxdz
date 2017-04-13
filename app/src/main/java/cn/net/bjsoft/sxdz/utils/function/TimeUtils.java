@@ -100,7 +100,7 @@ public class TimeUtils {
      * @param timeString
      * @return
      */
-    public static String getTimeStamp(String timeString, String timeDecollator) {
+    public static String getDateStamp(String timeString, String timeDecollator) {
         String timeStamp = null;
 
         if (TextUtils.isEmpty(timeDecollator)) {
@@ -125,7 +125,7 @@ public class TimeUtils {
      * @param timeString
      * @return
      */
-    public static String getDataStamp(String timeString, String timeDecollator, String dataDecollator) {
+    public static String getTimeStamp(String timeString, String timeDecollator, String dataDecollator) {
         String timeStamp = null;
 
         if (TextUtils.isEmpty(timeDecollator)) {

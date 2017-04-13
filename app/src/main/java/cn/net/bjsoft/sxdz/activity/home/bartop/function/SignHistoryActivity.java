@@ -25,6 +25,7 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
+import com.lidroid.xutils.BitmapUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
@@ -36,6 +37,8 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
@@ -45,6 +48,7 @@ import cn.net.bjsoft.sxdz.dialog.ListPopupWindow;
 import cn.net.bjsoft.sxdz.dialog.PickerDialog;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
+import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 
 
@@ -55,6 +59,10 @@ import cn.net.bjsoft.sxdz.utils.function.Utility;
 @ContentView(R.layout.activity_function_sign_history)
 public class SignHistoryActivity extends BaseActivity {
 
+    @ViewInject(R.id.title_title)
+    private TextView title;
+    @ViewInject(R.id.title_back)
+    private ImageView back;
     //    @ViewInject(R.id.function_sing_history_partment)
 //    private Spinner spinner_partment;
     @ViewInject(R.id.function_sing_history_partment)
@@ -96,8 +104,14 @@ public class SignHistoryActivity extends BaseActivity {
 
     private ListPopupWindow listPopupWindow;
 
+    private BitmapUtils bitmapUtils;
+
+    private long signDate = 0;
+
+
     @Event(value = {R.id.function_sing_history_date
-            , R.id.function_sing_history_partment})
+            , R.id.function_sing_history_partment
+            , R.id.title_back})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.function_sing_history_date:
@@ -105,6 +119,9 @@ public class SignHistoryActivity extends BaseActivity {
                 break;
             case R.id.function_sing_history_partment:
                 listPopupWindow.showWindow(departmentNames);
+                break;
+            case R.id.title_back:
+                finish();
                 break;
         }
     }
@@ -117,199 +134,58 @@ public class SignHistoryActivity extends BaseActivity {
         x.view().inject(this);
 //        spinner_partment = (Spinner) findViewById(R.id.function_sing_history_partment);
 //        gridView_humen = (GridView) findViewById(R.id.function_sing_history_humen);
+
+
         mapView = (MapView) findViewById(R.id.function_sing_history_map);
         mapView.onCreate(savedInstanceState);
 
-        showProgressDialog();
+        title.setText("签到历史");
+        back.setVisibility(View.VISIBLE);
+
         if (markers == null) {
             markers = new ArrayList<>();
         }
-
-        if (departmentNames == null) {
-            departmentNames = new ArrayList<>();
-        }
-
-        if (departments == null) {
-            departments = new ArrayList<>();
-        }
+        markers.clear();
 
         if (departmentMap == null) {
             departmentMap = new HashMap<>();
         }
+        departmentMap.clear();
 
-        if (humenList == null) {
-            humenList = new ArrayList<>();
-        }
         if (latLngs == null) {
             latLngs = new ArrayList<LatLng>();
         }
+        latLngs.clear();
+
         if (polylinesMap == null) {
             //polylines = new ArrayList<>();
             polylinesMap = new HashMap<>();
         }
-        if (markerMap == null) {
-            markerMap = new HashMap<>();
-        }
-        markers.clear();
-        latLngs.clear();
-        departmentMap.clear();
-        departmentNames.clear();
-        departments.clear();
-        humenList.clear();
         polylinesMap.clear();
-        markerMap.clear();
 
 
-        getData();
-    }
-
-    private void getData() {
-        RequestParams params = new RequestParams(TestAddressUtils.test_get_lastsign_url);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                signHistoryBean = GsonUtil.getSignLastBean(result);
-                if (signHistoryBean.result) {
-                    LogUtil.e("获取到的条目-----------" + result);
-                    departments.addAll(signHistoryBean.data);
-                    {//将获取到的信息分类
-                        departmentNames.add("请选择部门");
-                        departmentMap.put(departmentNames.get(0), humenList);//添加一条空的部门和部门人的列表
-                        // for (FunctionSignHistoryBean.DepartmentListDao department:departments){
-                        for (int i = 0; i < departments.size(); i++) {
-                            if (departments.get(i).department.equals("技术部")) {
-                                departmentNames.add(departments.get(i).department);
-                                departmentMap.put(departmentNames.get(i + 1), departments.get(i).person);
-                            } else if (departments.get(i).department.equals("销售部")) {
-                                departmentNames.add(departments.get(i).department);
-                                departmentMap.put(departmentNames.get(i + 1), departments.get(i).person);
-                            } else {
-                                departmentNames.add(departments.get(i).department);
-                                departmentMap.put(departmentNames.get(i + 1), departments.get(i).person);
-                            }
-                        }
-                    }
-
-                    init();
-                } else {
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                dismissProgressDialog();
-            }
-        });
-    }
-
-    /**
-     * 初始化AMap对象
-     */
-    private void init() {
-
-        spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, departmentNames);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner_partment.setAdapter(spinnerAdapter);
-//
-//        spinner_partment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                LogUtil.e("选择的条目id" + position);
-//                //if (position != 0) {
-//                setGridViewData(departmentMap.get(position + ""));
-//                //}
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
-
-        spinner_partment.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                setGridViewData(departmentMap.get(s.toString()));
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-
-        listPopupWindow = new ListPopupWindow(this, spinner_partment);
-        listPopupWindow.setOnData(new ListPopupWindow.OnGetData() {
-            @Override
-            public void onDataCallBack(String result) {
-                LogUtil.e("获取到的结果为====");
-                spinner_partment.setText(result);
-            }
-        });
-
-
-        history_date.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                /**
-                 * 当日期改变时,查询网络,获取最新数据
-                 */
-                getData();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-
-        spinner_partment.setText(departmentNames.get(0));
-
-
-        if (aMap == null) {
-            aMap = mapView.getMap();
-            setUpMap();
+        //全部信息的集合
+        if (departments == null) {
+            departments = new ArrayList<>();
         }
+        departments.clear();
 
-    }
+        //部门名称
+        if (departmentNames == null) {
+            departmentNames = new ArrayList<>();
+        }
+        departmentNames.clear();
 
-    private void setGridViewData(ArrayList<FunctionSignHistoryBean.HumenListDao> humen) {
-
+        //每个人的集合
+        if (humenList == null) {
+            humenList = new ArrayList<>();
+        }
         humenList.clear();
-        if (humen != null) {
-            humenList.addAll(humen);
+        if (signHistoryAdapter == null) {
+            signHistoryAdapter = new FunctionSignHistoryAdapter(SignHistoryActivity.this, humenList);
         }
-
-        signHistoryAdapter = null;
-        aMap.clear();
-        signHistoryAdapter = new FunctionSignHistoryAdapter(SignHistoryActivity.this, humenList);
         gridView_humen.setVisibility(View.VISIBLE);
         gridView_humen.setAdapter(signHistoryAdapter);
-
-
         gridView_humen.setOnTouchListener(new View.OnTouchListener() {
             //屏蔽掉滑动事件
             @Override
@@ -355,6 +231,154 @@ public class SignHistoryActivity extends BaseActivity {
                 //LogUtil.e(humenList.get(position));
             }
         });
+
+        //标签集合
+        if (markerMap == null) {
+            markerMap = new HashMap<>();
+        }
+        markerMap.clear();
+
+
+        //部门下拉菜单相关
+        spinner_partment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setGridViewData(departmentMap.get(s.toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        listPopupWindow = new ListPopupWindow(this, spinner_partment);
+        listPopupWindow.setOnData(new ListPopupWindow.OnGetData() {
+            @Override
+            public void onDataCallBack(String result) {
+                LogUtil.e("获取到的结果为====");
+                spinner_partment.setText(result);
+            }
+        });
+
+
+        //时间选择相关
+        history_date.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                /**
+                 * 当日期改变时,查询网络,获取最新数据
+                 */
+
+
+                getData();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        //获取系统时间,并截取当天时间,设置时间---获取数据
+        signDate = System.currentTimeMillis();
+        String signDate_str = TimeUtils.getFormateDate(signDate, "-");
+        signDate = Long.parseLong(TimeUtils.getDateStamp(signDate_str, "-"));
+        history_date.setText(signDate_str);
+
+
+    }
+
+    private void getData() {
+        showProgressDialog();
+
+        //先清空数据
+//        departments.clear();//先清空
+//        departmentMap.clear();
+//        humenList.clear();
+//        signHistoryAdapter.notifyDataSetChanged();
+//        Utility.setGridViewHeightBasedOnChildren(gridView_humen, 5);
+
+        RequestParams params = new RequestParams(TestAddressUtils.test_get_lastsign_url);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                signHistoryBean = GsonUtil.getSignLastBean(result);
+                if (signHistoryBean.result) {
+                    //LogUtil.e("获取到的条目-----------" + result);
+
+                    departments.addAll(signHistoryBean.data);
+
+                    {
+                        //信息分类
+                        for (int i = 0; i < departments.size(); i++) {
+                            departmentMap.put(departments.get(i).department, departments.get(i).person);
+                        }
+
+                        departmentNames.clear();
+                        Iterator iter = departmentMap.entrySet().iterator();
+                        while (iter.hasNext()) {
+                            Map.Entry entry = (Map.Entry) iter.next();
+                            departmentNames.add(entry.getKey().toString());
+                        }
+
+                    }
+
+                    init();
+                    spinner_partment.setText(departmentNames.get(0));
+                } else {
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+    }
+
+    /**
+     * 初始化AMap对象
+     */
+    private void init() {
+
+
+        if (aMap == null) {
+            aMap = mapView.getMap();
+            setUpMap();
+        }
+
+    }
+
+    private void setGridViewData(ArrayList<FunctionSignHistoryBean.HumenListDao> humen) {
+        aMap.clear();
+        humenList.clear();
+        if (humen != null) {
+            humenList.addAll(humen);
+        }
+        signHistoryAdapter.notifyDataSetChanged();
         Utility.getGridViewHeightBasedOnChildren(gridView_humen, 5);
     }
 
@@ -411,6 +435,10 @@ public class SignHistoryActivity extends BaseActivity {
             }
             if (!sign.pic_url.equals("")) {
                 final int finalI = i;
+//                bitmapUtils = new BitmapUtils(getActivity(), AddressUtils.img_cache_url);
+//                bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);
+//                bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);
+//                bitmapUtils.display(imageViewMarker, sign.pic_url);
                 x.image().bind(imageViewMarker, sign.pic_url, new Callback.CommonCallback<Drawable>() {
                     Marker marker;
 

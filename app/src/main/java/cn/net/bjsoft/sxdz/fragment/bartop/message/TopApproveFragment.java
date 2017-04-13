@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.xutils.common.Callback;
@@ -38,7 +39,7 @@ public class TopApproveFragment extends BaseFragment {
     @ViewInject(R.id.message_approve_title)
     private TextView title;
     @ViewInject(R.id.message_approve_back)
-    private TextView back;
+    private ImageView back;
     @ViewInject(R.id.empty_text)
     private TextView test;
 
