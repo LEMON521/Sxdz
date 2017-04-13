@@ -48,7 +48,7 @@ public class EmptyActivity extends BaseActivity {
                     bundle.putBundle("address_list_search_result_bundle", b);
                 } else if (fragment_name.equals("task_detail")) {
                     fragment = new TaskDetailFragment();
-                } else if (fragment_name.equals("addTaskFragment")) {
+                } else if (fragment_name.equals("TopAddTaskFragment")) {
                     fragment = new TopAddTaskFragment();
                 } else if (fragment_name.equals("resetting_password")) {
                     fragment = new ResettingPasswordZDLFFragment();

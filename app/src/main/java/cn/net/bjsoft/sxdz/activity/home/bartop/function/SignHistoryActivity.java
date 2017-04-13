@@ -259,6 +259,7 @@ public class SignHistoryActivity extends BaseActivity {
         listPopupWindow.setOnData(new ListPopupWindow.OnGetData() {
             @Override
             public void onDataCallBack(String result) {
+                LogUtil.e("获取到的结果为====");
                 spinner_partment.setText(result);
             }
         });

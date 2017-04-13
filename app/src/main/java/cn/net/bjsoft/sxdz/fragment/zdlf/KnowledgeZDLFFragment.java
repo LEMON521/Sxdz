@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.annotation.IdRes;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -43,8 +42,8 @@ import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
 
 @ContentView(R.layout.fragment_konwledge)
 public class KnowledgeZDLFFragment extends BaseFragment {
-    @ViewInject(R.id.knowledge_search)
-    private LinearLayout search;
+//    @ViewInject(R.id.knowledge_search)
+//    private LinearLayout search;
     //    @ViewInject(R.id.search_edittext)
 //    private EditText search_edit;
     @ViewInject(R.id.knowledge_rg_group)

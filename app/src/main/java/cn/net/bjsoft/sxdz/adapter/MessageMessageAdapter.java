@@ -51,7 +51,7 @@ public class MessageMessageAdapter extends BaseAdapter {
         Holder tag = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(
-                    R.layout.fragment_message_list, null);
+                    R.layout.item_message_list, null);
             tag = new Holder();
             tag.avatar= (CircleImageView) convertView.findViewById(R.id.message_item_avatar);
             tag.name= (TextView) convertView.findViewById(R.id.message_item_name);

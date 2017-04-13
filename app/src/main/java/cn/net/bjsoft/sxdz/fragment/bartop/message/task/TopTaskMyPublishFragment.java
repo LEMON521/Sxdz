@@ -188,7 +188,7 @@ public class TopTaskMyPublishFragment extends BaseFragment {
             case R.id.fragment_task_list_all_add:
 
                 Intent intent = new Intent(mActivity, EmptyActivity.class);
-                intent.putExtra("fragment_name", "addTaskFragment");
+                intent.putExtra("fragment_name", "TopAddTaskFragment");
                 mActivity.startActivity(intent);
 
                 break;

@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
+import cn.net.bjsoft.sxdz.utils.function.Utility;
 
 /**
  * 中电联发---页面的功能列表适配器
@@ -46,7 +48,7 @@ public class KnowledgeItemHeadFilesListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         Holder holder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(mActivity).inflate(
@@ -56,13 +58,7 @@ public class KnowledgeItemHeadFilesListAdapter extends BaseAdapter {
             holder.delete = (ImageView) convertView.findViewById(R.id.item_list_headview_knowledge_item_delete);
             holder.detail = (LinearLayout) convertView.findViewById(R.id.item_list_headview_knowledge_item_detail);
             holder.add = (LinearLayout) convertView.findViewById(R.id.item_list_headview_knowledge_item_add);
-            holder.delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    list.remove(position);
-                    KnowledgeItemHeadFilesListAdapter.this.notifyDataSetChanged();
-                }
-            });
+
             convertView.setTag(holder);
         } else {
             holder = (Holder) convertView.getTag();
@@ -77,6 +73,14 @@ public class KnowledgeItemHeadFilesListAdapter extends BaseAdapter {
             holder.detail.setVisibility(View.VISIBLE);
             if (list.get(position).isEditing) {
                 holder.delete.setVisibility(View.VISIBLE);
+                holder.delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        list.remove(position);
+                        KnowledgeItemHeadFilesListAdapter.this.notifyDataSetChanged();
+                        Utility.setListViewHeightBasedOnChildren((ListView) parent);
+                    }
+                });
             } else {
                 holder.delete.setVisibility(View.INVISIBLE);
             }

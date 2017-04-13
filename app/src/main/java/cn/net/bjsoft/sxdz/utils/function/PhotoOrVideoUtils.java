@@ -76,10 +76,18 @@ public class PhotoOrVideoUtils {
 
 
     public static void doFiles(FragmentActivity activity, BaseFragment fragment) {
+
+
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType("*/*");
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
         setActivity(activity);
         setFragment(fragment);
         Intent intent = new Intent();
-        intent.setType("text/plain;application/msword;application/vnd.ms-powerpoint;");
+        //intent.setType("*/*");
+        intent.setType("file/*");
+        //intent.setType("text/plain;application/msword;application/vnd.ms-powerpoint;image/*;video/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         if (getFragment() == null) {
             getActivity().startActivityForResult(intent, REQUEST_CODE_GET_FILES);

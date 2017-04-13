@@ -112,7 +112,7 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         LayoutInflater mLayoutInflater = LayoutInflater.from(mActivity);
         mRootView = mLayoutInflater.inflate(R.layout.pop_task_search_zdlf, null);
         mSearchPopupWindow = new PopupWindow(mRootView, ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.MATCH_PARENT);
 
         ColorDrawable cd = new ColorDrawable(0x000000);
         mSearchPopupWindow.setBackgroundDrawable(cd);

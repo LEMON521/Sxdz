@@ -17,7 +17,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <ImageView
                 android:layout_width="0dp"
@@ -62,14 +63,23 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:visibility="gone">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dm020"
-                android:src="@mipmap/add_to" />
+                android:layout_marginLeft="@dimen/dm015"
+                android:src="@mipmap/release_zdlf_add_accessories" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dm015"
+                android:text="点击添加附件"
+                android:textColor="#999999"
+                android:textSize="@dimen/dm020" />
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

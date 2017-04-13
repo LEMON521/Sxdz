@@ -37,6 +37,8 @@ import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 public class TopApproveFragment extends BaseFragment {
     @ViewInject(R.id.message_approve_title)
     private TextView title;
+    @ViewInject(R.id.message_approve_back)
+    private TextView back;
     @ViewInject(R.id.empty_text)
     private TextView test;
 
@@ -91,6 +93,7 @@ public class TopApproveFragment extends BaseFragment {
     public void initData() {
         showProgressDialog();
         title.setText("审批");
+        back.setVisibility(View.VISIBLE);
         test.setText("");
         if (message != null) {
             message = null;

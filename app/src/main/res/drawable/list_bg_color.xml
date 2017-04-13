@@ -2,5 +2,5 @@
 <selector
   xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true" android:drawable="@color/list_backgroud_color"></item>
-    <item android:drawable="@drawable/layout_backgroud"></item>
+    <item android:drawable="@color/background"></item>
 </selector>

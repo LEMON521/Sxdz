@@ -71,6 +71,7 @@
                     android:textStyle="bold" />
 
                 <cn.net.bjsoft.sxdz.view.ChildrenListView
+                    android:divider="#00000000"
                     android:id="@+id/fragment_task_attachment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"></cn.net.bjsoft.sxdz.view.ChildrenListView>
@@ -87,10 +88,10 @@
                 android:paddingRight="@dimen/dm020">
 
                 <cn.net.bjsoft.sxdz.view.ChildrenListView
+
                     android:id="@+id/fragment_task_detail_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                 </cn.net.bjsoft.sxdz.view.ChildrenListView>
 
                 <RelativeLayout
@@ -159,6 +160,7 @@
                     android:textStyle="bold" />
 
                 <cn.net.bjsoft.sxdz.view.ChildrenListView
+                    android:divider="#00000000"
                     android:id="@+id/fragment_task_files"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
