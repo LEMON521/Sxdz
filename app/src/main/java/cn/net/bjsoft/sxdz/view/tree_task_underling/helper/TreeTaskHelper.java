@@ -5,21 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeAvatar_url;
-import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeId;
-import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeLabel;
-import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodePhone_number;
-import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodePid;
-import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeStation;
-import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeType;
-import cn.net.bjsoft.sxdz.bean.zdlf.address_list.TreeNodeUrl;
+import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodeDepartment;
+import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodeId;
+import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodeLabel;
+import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodeTask_number;
+import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodePid;
+import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodeUrl;
 
 
 /**
  * Created by Zrzc on 2017/3/13.
  */
 
-public class TreeHelper {
+public class TreeTaskHelper {
 
     /**
      * 传入我们的普通bean，转化为我们排序后的Node
@@ -88,59 +86,45 @@ public class TreeHelper {
             int pId = -1;
             String label = null;
             String url = null;
-            String station = null;
-            String phone_number = null;
-            String type = null;
-            String avatar_url = null;
+            String department = null;
+            String task_num = null;
+
 
 
             Class<? extends Object> clazz = t.getClass();
             Field[] declaredFields = clazz.getDeclaredFields();
             for (Field f : declaredFields) {
-                if (f.getAnnotation(TreeNodeId.class) != null) {
+                if (f.getAnnotation(TreeTaskNodeId.class) != null) {
                     f.setAccessible(true);
                     id = f.getInt(t);
                 }
-                if (f.getAnnotation(TreeNodePid.class) != null) {
+                if (f.getAnnotation(TreeTaskNodePid.class) != null) {
                     f.setAccessible(true);
                     pId = f.getInt(t);
                 }
-                if (f.getAnnotation(TreeNodeLabel.class) != null) {
+                if (f.getAnnotation(TreeTaskNodeLabel.class) != null) {
                     f.setAccessible(true);
                     label = (String) f.get(t);
                 }
-                if (f.getAnnotation(TreeNodeUrl.class) != null) {
+                if (f.getAnnotation(TreeTaskNodeUrl.class) != null) {
                     f.setAccessible(true);
                     url = (String) f.get(t);
                 }
 
-                if (f.getAnnotation(TreeNodeStation.class) != null) {
+                if (f.getAnnotation(TreeTaskNodeDepartment.class) != null) {
                     f.setAccessible(true);
-                    station = (String) f.get(t);
+                    department = (String) f.get(t);
                 }
-                if (f.getAnnotation(TreeNodePhone_number.class) != null) {
+                if (f.getAnnotation(TreeTaskNodeTask_number.class) != null) {
                     f.setAccessible(true);
-                    phone_number = (String) f.get(t);
-                }
-                if (f.getAnnotation(TreeNodeType.class) != null) {
-                    f.setAccessible(true);
-                    type = (String) f.get(t);
-                }
-                if (f.getAnnotation(TreeNodeAvatar_url.class) != null) {
-                    f.setAccessible(true);
-                    avatar_url = (String) f.get(t);
+                    task_num = (String) f.get(t);
                 }
 
                 if (id != -1 && pId != -1 && label != null) {
                     break;
                 }
             }
-//            node = new NodeTaskUnderling(id, pId, label,);
-//            node.setUrl(url);
-//            node.setStation(station);
-//            node.setPhone_number(phone_number);
-//            node.setType(type);
-//            node.setAvatar_url(avatar_url);
+            node = new NodeTaskUnderling(id, pId, label,url,department,task_num);
             nodes.add(node);
         }
 
@@ -203,11 +187,11 @@ public class TreeHelper {
      */
     private static void setNodeIcon(NodeTaskUnderling node) {
         if (node.getChildren().size() > 0 && node.isExpand()) {
-            node.setIcon(R.mipmap.mail_list_zdlf_down_arrow);
+            node.setIcon(R.mipmap.subordinate_task_zdlf_extend);
         } else if (node.getChildren().size() > 0 && !node.isExpand()) {
-            node.setIcon(R.mipmap.mail_list_zdlf_right_arrow);
+            node.setIcon(R.mipmap.subordinate_task_zdlf_extend);
         } else
-            node.setIcon(-1);
+            node.setIcon(R.mipmap.subordinate_task_zdlf_post);
 
     }
 }

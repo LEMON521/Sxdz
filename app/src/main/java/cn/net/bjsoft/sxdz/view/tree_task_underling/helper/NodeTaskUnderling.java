@@ -35,37 +35,30 @@ public class NodeTaskUnderling {
      */
     private NodeTaskUnderling parent;
 
-    public String getNumber() {
-        return number;
-    }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
+    private String url = "";
 
-    public String getPosition() {
-        return position;
-    }
 
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    private String number = "";
-
-    private String position = "";
+    private String department = "";
+    private String task_num = "";
 
 
     public NodeTaskUnderling() {
     }
 
-    public NodeTaskUnderling(int id, int pId, String name, String position, String number) {
+    public NodeTaskUnderling(int id
+            , int pId
+            , String name
+            , String url
+            , String department
+            , String task_num) {
         super();
         this.id = id;
         this.pId = pId;
         this.name = name;
-        this.number = number;
-        this.position = position;
+        this.url = url;
+        this.department = department;
+        this.task_num = task_num;
 
 
     }
@@ -127,6 +120,29 @@ public class NodeTaskUnderling {
         this.parent = parent;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public String getTask_num() {
+        return task_num;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public void setTask_num(String task_num) {
+        this.task_num = task_num;
+    }
 
     /**
      * 是否为跟节点

@@ -16,6 +16,7 @@ import cn.net.bjsoft.sxdz.bean.zdlf.address_list.AddressListBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.work.WorkBean;
+import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.ListTaskBean;
 
 /**
  * Created by zkagang on 2016/1/8.
@@ -172,5 +173,15 @@ public class GsonUtil {
     public static MessageTaskDetailBean getMessageTaskDetailBean(String json){
         return getGson().fromJson(json , MessageTaskDetailBean.class);
     }
+
+    /**
+     * 中电联发信息模块-下属任务-模块json
+     * @param json
+     * @return
+     */
+    public static ListTaskBean getListTaskBean(String json){
+        return getGson().fromJson(json , ListTaskBean.class);
+    }
+
 
 }

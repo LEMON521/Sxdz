@@ -7,24 +7,26 @@ import java.util.ArrayList;
  * Created by lemon on 2017/3/12.
  */
 
-public class ListBean implements Serializable {
+public class ListTaskBean implements Serializable {
 
-    public String result = "";
-    public DataDao data;
+    public boolean result = false;
+    public TaskDataDao data;
 
-    public class DataDao{
+    public class TaskDataDao{
 
         public ArrayList<ScrollListDao> scroll_list;
-        public ArrayList<TreeListDao> tree_list;
+        public ArrayList<TreeTaskListDao> tree_list;
 
     }
 
-    public class TreeListDao{
-        public ArrayList<TreeListDao> children;
+    public class TreeTaskListDao{
+        public ArrayList<TreeTaskListDao> children;
         public String id = "";
         public String name = "";
         public String pid = "";
         public String url = "";
+        public String department = "";
+        public String task_num = "";
     }
 
 //    public class ChildListDao{

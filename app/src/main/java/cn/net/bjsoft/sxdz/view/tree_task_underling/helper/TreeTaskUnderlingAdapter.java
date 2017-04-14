@@ -1,4 +1,4 @@
-package cn.net.bjsoft.sxdz.adapter.zdlf;
+package cn.net.bjsoft.sxdz.view.tree_task_underling.helper;
 
 import android.content.Context;
 import android.view.View;
@@ -7,26 +7,16 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.lidroid.xutils.BitmapUtils;
-
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.view.tree_task_underling.helper.NodeTaskUnderling;
-import cn.net.bjsoft.sxdz.view.tree_task_underling.helper.TreeTaskListViewAdapter;
 
-public class TaskUnderlingTreeAdapter<T> extends TreeTaskListViewAdapter<T> {
+public class TreeTaskUnderlingAdapter<T> extends TreeTaskListViewAdapter<T> {
 
-    private BitmapUtils bitmapUtils;
-    private Context context;
-
-    public TaskUnderlingTreeAdapter(ListView mTree
-            , Context context
-            , List<T> datas
-            , int defaultExpandLevel) throws IllegalArgumentException,
+    public TreeTaskUnderlingAdapter(ListView mTree, Context context, List<T> datas,
+                                    int defaultExpandLevel) throws IllegalArgumentException,
             IllegalAccessException {
         super(mTree, context, datas, defaultExpandLevel);
-        this.context = context;
     }
 
     @Override
@@ -34,10 +24,9 @@ public class TaskUnderlingTreeAdapter<T> extends TreeTaskListViewAdapter<T> {
 
         ViewHolder viewHolder = null;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.item_address_list, parent, false);
+            convertView = mInflater.inflate(R.layout.item_task_underling, parent, false);
             viewHolder = new ViewHolder();
-
-            viewHolder.background = (FrameLayout) convertView
+            viewHolder.number_background = (FrameLayout) convertView
                     .findViewById(R.id.item_task_underling_number_background);
             viewHolder.department = (TextView) convertView
                     .findViewById(R.id.item_task_underling_department);
@@ -51,25 +40,22 @@ public class TaskUnderlingTreeAdapter<T> extends TreeTaskListViewAdapter<T> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.department.setText(node.getDepartment());
-        viewHolder.label.setText(node.getName());
-        if (!(Integer.parseInt(node.getTask_num())<1)) {
-            viewHolder.background.setVisibility(View.VISIBLE);
+        int number = Integer.parseInt(node.getTask_num());
+        if (number<1) {
+            viewHolder.number_background.setVisibility(View.GONE);
+        } else {
+            viewHolder.number_background.setVisibility(View.VISIBLE);
             viewHolder.number.setText(node.getTask_num());
         }
-        else {
-            viewHolder.background.setVisibility(View.GONE);
-        }
-
+        viewHolder.label.setText(node.getName());
+        viewHolder.department.setText(node.getDepartment());
 
         return convertView;
     }
 
     private final class ViewHolder {
-        public FrameLayout background;
-        public TextView department
-                ,label
-                ,number;
+        public FrameLayout number_background;
+        public TextView department,label,number;
     }
 
 }

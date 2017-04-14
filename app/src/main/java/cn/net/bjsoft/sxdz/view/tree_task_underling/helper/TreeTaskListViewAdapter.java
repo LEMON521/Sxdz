@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
-public abstract class TreeListViewAdapter<T> extends BaseAdapter
+public abstract class TreeTaskListViewAdapter<T> extends BaseAdapter
 {
 
     protected Context mContext;
@@ -51,7 +51,7 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
-    public TreeListViewAdapter(ListView mTree, Context context, List<T> datas,
+    public TreeTaskListViewAdapter(ListView mTree, Context context, List<T> datas,
                                int defaultExpandLevel) throws IllegalArgumentException,
             IllegalAccessException
     {
@@ -59,11 +59,11 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
         /**
          * 对所有的Node进行排序
          */
-        mAllNodes = TreeHelper.getSortedNodes(datas, defaultExpandLevel);
+        mAllNodes = TreeTaskHelper.getSortedNodes(datas, defaultExpandLevel);
         /**
          * 过滤出可见的Node
          */
-        mNodes = TreeHelper.filterVisibleNode(mAllNodes);
+        mNodes = TreeTaskHelper.filterVisibleNode(mAllNodes);
         mInflater = LayoutInflater.from(context);
 
         /**
@@ -102,7 +102,7 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
             if (!n.isLeaf())
             {
                 n.setExpand(!n.isExpand());
-                mNodes = TreeHelper.filterVisibleNode(mAllNodes);
+                mNodes = TreeTaskHelper.filterVisibleNode(mAllNodes);
                 notifyDataSetChanged();// 刷新视图
             }
         }
