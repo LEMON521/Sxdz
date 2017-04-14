@@ -56,7 +56,7 @@ public class TopTaskUnderlingFragment extends BaseFragment {
     private void getFormData() {
 
 
-        RequestParams params = new RequestParams(TestAddressUtils.test_get_address_list_url);
+        RequestParams params = new RequestParams(TestAddressUtils.test_get_message_task_list_underling_url);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
