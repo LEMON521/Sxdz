@@ -208,6 +208,5 @@ public class TreeHelper {
             node.setIcon(R.mipmap.mail_list_zdlf_right_arrow);
         } else
             node.setIcon(-1);
-
     }
 }

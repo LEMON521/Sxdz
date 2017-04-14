@@ -1,5 +1,6 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 
+import android.content.Intent;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
@@ -54,20 +56,24 @@ public class TopTaskUnderlingFragment extends BaseFragment {
      * 从服务端获取数据
      */
     private void getFormData() {
-
-
+        showProgressDialog();
+        LogUtil.e("获取到报表数据&&&&&&&&" + tree_list.size());
         RequestParams params = new RequestParams(TestAddressUtils.test_get_message_task_list_underling_url);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 bean = GsonUtil.getListTaskBean(result);
+                LogUtil.e("获取到报表数据&&&&&&&&" + bean.result);
                 if (bean.result) {
-                    LogUtil.e("获取到报表数据-----------" + result);
+                    //LogUtil.e("获取到报表数据-----------" + result);
                     //scroll_list.clear();
                     treeListDao = bean.data;
+
                     tree_list.addAll(treeListDao.tree_list);
                     //LogUtil.e("获取到报表数据-----------" + result);
                     getItems(tree_list, 1);
+
+                    LogUtil.e("获取到报表数据&&&&&&&&" + tree_list.size());
 
                 } else {
                 }
@@ -75,7 +81,7 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                LogUtil.e("获取到报表数据&&&&&&&&错误信息" + ex);
             }
 
             @Override
@@ -85,6 +91,7 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
+                dismissProgressDialog();
             }
         });
     }
@@ -113,7 +120,9 @@ public class TopTaskUnderlingFragment extends BaseFragment {
                 @Override
                 public void onClick(NodeTaskUnderling node, int position) {
                     Log.e("点击的条目", "tiaomu wei ====" + position);
-
+                    Intent intent = new Intent(mActivity, EmptyActivity.class);
+                    intent.putExtra("fragment_name", "TopTaskUnderlingDetailFragment");
+                    mActivity.startActivity(intent);
 
                 }
             });
@@ -139,6 +148,8 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
                 mDatas.add(fileTaskBean);
 
+                LogUtil.e("获取到报表数据&&&&&&&&" + fileTaskBean.getName());
+
                 getItems(children.children, level);
             } else {
                 if (!children.name.equals("")) {
@@ -151,6 +162,7 @@ public class TopTaskUnderlingFragment extends BaseFragment {
                             , children.task_num);
 
                     mDatas.add(fileTaskBean);
+                    LogUtil.e("获取到报表数据&&&&&&&&" + fileTaskBean.getName());
                 }
             }
 

@@ -132,7 +132,7 @@ public abstract class TreeTaskListViewAdapter<T> extends BaseAdapter
         NodeTaskUnderling node = mNodes.get(position);
         convertView = getConvertView(node, position, convertView, parent);
         // 设置内边距
-        convertView.setPadding(node.getLevel() * 30, 3, 3, 3);
+        convertView.setPadding(node.getLevel() * 50, 5, 5, 5);
         return convertView;
     }
 

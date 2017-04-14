@@ -1,5 +1,7 @@
 package cn.net.bjsoft.sxdz.view.tree_task_underling.helper;
 
+import org.xutils.common.util.LogUtil;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ public class TreeTaskHelper {
      * @throws IllegalAccessException
      */
     public static <T> List<NodeTaskUnderling> getSortedNodes(List<T> datas,
-                                                int defaultExpandLevel)
+                                                             int defaultExpandLevel)
             throws IllegalArgumentException,
             IllegalAccessException
 
@@ -90,7 +92,6 @@ public class TreeTaskHelper {
             String task_num = null;
 
 
-
             Class<? extends Object> clazz = t.getClass();
             Field[] declaredFields = clazz.getDeclaredFields();
             for (Field f : declaredFields) {
@@ -124,7 +125,7 @@ public class TreeTaskHelper {
                     break;
                 }
             }
-            node = new NodeTaskUnderling(id, pId, label,url,department,task_num);
+            node = new NodeTaskUnderling(id, pId, label, url, department, task_num);
             nodes.add(node);
         }
 
@@ -148,6 +149,7 @@ public class TreeTaskHelper {
         // 设置图片
         for (NodeTaskUnderling n : nodes) {
             setNodeIcon(n);
+            LogUtil.e("设置了图标---展开"+node.getIcon());
         }
         return nodes;
     }
@@ -187,11 +189,15 @@ public class TreeTaskHelper {
      */
     private static void setNodeIcon(NodeTaskUnderling node) {
         if (node.getChildren().size() > 0 && node.isExpand()) {
-            node.setIcon(R.mipmap.subordinate_task_zdlf_extend);
+            node.setIcon(R.mipmap.subordinate_task_zdlf_open);
+            LogUtil.e("设置了图标---展开" + node.getIcon());
         } else if (node.getChildren().size() > 0 && !node.isExpand()) {
             node.setIcon(R.mipmap.subordinate_task_zdlf_extend);
-        } else
+            LogUtil.e("设置了图标---展开" + node.getIcon());
+        } else {
             node.setIcon(R.mipmap.subordinate_task_zdlf_post);
+            LogUtil.e("设置了图标---展开"+node.getIcon());
+        }
 
     }
 }

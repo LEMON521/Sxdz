@@ -4,7 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:background="#999999"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm001"></RelativeLayout>
     <ListView
+        android:divider="#00000000"
+        android:padding="@dimen/dm020"
         android:id="@+id/fragment_task_list_underling"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
