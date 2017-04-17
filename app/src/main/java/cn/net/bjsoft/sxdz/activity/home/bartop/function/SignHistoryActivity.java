@@ -118,7 +118,10 @@ public class SignHistoryActivity extends BaseActivity {
                 PickerDialog.showDatePickerDialog(this, history_date, "-");
                 break;
             case R.id.function_sing_history_partment:
-                listPopupWindow.showWindow(departmentNames);
+                int[] location = new int[2];//窗口位置
+                spinner_partment.getLocationOnScreen(location);
+                location[1] = location[1] + spinner_partment.getHeight();
+                listPopupWindow.showWindow(departmentNames, location);
                 break;
             case R.id.title_back:
                 finish();
@@ -220,13 +223,16 @@ public class SignHistoryActivity extends BaseActivity {
                         //addMarkersToMap(humenList.get(position));
                     }
                     humenList.get(position).isCheck = false;
+
                 } else {
                     if (aMap != null) {
                         addMarkersToMap(humenList.get(position));
-                    }
+                        }
                     humenList.get(position).isCheck = true;
                     //view.setBackgroundResource(R.drawable.biankuang_blue);
                     view.setBackgroundColor(Color.parseColor("#" + humenList.get(position).color));
+                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(markerMap.get(humenList.get(position).name).get(0).getPosition()));//设置镜头
+
                 }
                 //LogUtil.e(humenList.get(position));
             }

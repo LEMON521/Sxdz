@@ -1,46 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="@dimen/dm080"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@drawable/attendance_history_zdlf_prompt_box"
     android:gravity="center"
-    android:orientation="horizontal"
-    >
+    android:orientation="horizontal">
 
-    <cn.net.bjsoft.sxdz.view.RoundImageView
-        android:id="@+id/marker_sign_iv"
-        android:layout_width="@dimen/dm080"
-        android:layout_height="@dimen/dm080"
-        android:src="@drawable/wlh" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dm080">
 
-    <LinearLayout
-        android:id="@+id/marker_sign_ll"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dm060"
-        android:layout_marginLeft="@dimen/dm020"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/marker_sign_tv_time"
+        <LinearLayout
+            android:layout_marginLeft="@dimen/dm040"
+            android:background="@drawable/sign_last_background"
+            android:padding="@dimen/dm010"
+            android:id="@+id/marker_sign_ll"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="签到时间:2017.02.03"
-            android:textColor="#333333"
-            android:textSize="@dimen/dm020" />
+            android:layout_height="@dimen/dm080"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/marker_sign_tv_space"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="@dimen/dm010"
-            android:text="签到地点:北京市朝阳区朝阳路8号朗廷大厦"
-            android:textColor="#333333"
-            android:textSize="@dimen/dm020" />
+            <TextView
+                android:id="@+id/marker_sign_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dm060"
+                android:text="签到时间:2017.02.03"
+                android:textColor="#333333"
+                android:textSize="@dimen/dm020" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/marker_sign_tv_space"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dm060"
+                android:layout_marginTop="@dimen/dm010"
+                android:text="签到地点:北京市朝阳区朝阳路8号朗廷大厦"
+                android:textColor="#333333"
+                android:textSize="@dimen/dm020" />
+
+        </LinearLayout>
+
+        <cn.net.bjsoft.sxdz.view.RoundImageView
+            android:id="@+id/marker_sign_iv"
+            android:layout_width="@dimen/dm080"
+            android:layout_height="@dimen/dm080"
+            android:src="@drawable/wlh" />
+    </FrameLayout>
+
 
 </LinearLayout>

@@ -188,18 +188,32 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 
     @Override
     public void onClick(View v) {
-
+        int[] location = null;
+        location = new int[2];
         switch (v.getId()) {
             case R.id.pop_task_search_zdlf_exit:
                 mSearchPopupWindow.dismiss();
                 break;
 
             case R.id.pop_task_search_zdlf_type:
-                typePopupWindow.showWindow(typeStrList);
+                type.getLocationOnScreen(location);
+                location[1] = location[1]+type.getHeight();
+                //type.getLocationInWindow(location);
+//                location[0] = type.getLeft();
+//                location[1] = type.getRight();
+//                LogUtil.e("type=getLeft=="+type.getLeft());
+//                LogUtil.e("type=getRight=="+type.getRight());
+//
+//                LogUtil.e("type=getRight=="+location[0]+"::"+location[1]);
+                typePopupWindow.showWindow(typeStrList,location);
+
                 break;
 
             case R.id.pop_task_search_zdlf_level:
-                levelPopupWindow.showWindow(levelStrList);
+                level.getLocationOnScreen(location);
+                location[1] = location[1]+type.getHeight();
+                levelPopupWindow.showWindow(levelStrList,location);
+
                 break;
 
             case R.id.pop_task_search_zdlf_time_start:
