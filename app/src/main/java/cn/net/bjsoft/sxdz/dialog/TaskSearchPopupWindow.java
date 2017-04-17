@@ -206,16 +206,14 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 //
 //                LogUtil.e("type=getRight=="+location[0]+"::"+location[1]);
                 typePopupWindow.showWindow(typeStrList,location);
+
                 break;
 
             case R.id.pop_task_search_zdlf_level:
-
-
-                //type.getLocationOnScreen(location);
-
                 level.getLocationOnScreen(location);
                 location[1] = location[1]+type.getHeight();
                 levelPopupWindow.showWindow(levelStrList,location);
+
                 break;
 
             case R.id.pop_task_search_zdlf_time_start:

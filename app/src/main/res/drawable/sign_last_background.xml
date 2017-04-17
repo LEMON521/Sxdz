@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!--android:centerColor="#77333333"-->
+    <gradient
+        android:angle="270"
+        android:centerX="0"
+        android:centerY="0"
+        android:endColor="#FFDCDCDC"
+        android:startColor="#FFF5F5F5"
+        android:type="linear" />
+
+    <!-- 圆角 -->
+    <corners
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="5dp"
+        android:topLeftRadius="0dp"
+        android:topRightRadius="5dp" />
+    <!--<solid android:color="#005DD1" />-->
+
+</shape>
+

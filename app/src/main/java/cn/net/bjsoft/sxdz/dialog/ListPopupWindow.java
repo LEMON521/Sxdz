@@ -45,6 +45,9 @@ public class ListPopupWindow {
     private OnGetData mOnGetData;
 
 
+    int[] location = new int[2];//窗口位置
+
+
     public ListPopupWindow(FragmentActivity activity
             , View view) {
         this.mActivity = activity;
@@ -58,6 +61,7 @@ public class ListPopupWindow {
         InitData();
         InitUI();
     }
+
 
 
     private void InitData() {
