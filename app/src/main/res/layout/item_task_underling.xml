@@ -2,18 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
-    android:orientation="vertical"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
     android:padding="@dimen/dm010">
 
+    <ImageView
+        android:id="@+id/item_task_underling_node"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
-        android:paddingBottom="@dimen/dm015"
-        android:paddingTop="@dimen/dm015"
-        android:layout_marginLeft="@dimen/dm020"
+        android:id="@+id/item_task_underling_click"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dm020"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/dm015"
+        android:paddingTop="@dimen/dm015">
 
 
         <TextView

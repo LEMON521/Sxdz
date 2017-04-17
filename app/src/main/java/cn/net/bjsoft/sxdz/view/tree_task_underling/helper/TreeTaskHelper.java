@@ -189,10 +189,10 @@ public class TreeTaskHelper {
      */
     private static void setNodeIcon(NodeTaskUnderling node) {
         if (node.getChildren().size() > 0 && node.isExpand()) {
-            node.setIcon(R.mipmap.subordinate_task_zdlf_open);
+            node.setIcon(R.mipmap.subordinate_task_zdlf_extend);
             LogUtil.e("设置了图标---展开" + node.getIcon());
         } else if (node.getChildren().size() > 0 && !node.isExpand()) {
-            node.setIcon(R.mipmap.subordinate_task_zdlf_extend);
+            node.setIcon(R.mipmap.subordinate_task_zdlf_open);
             LogUtil.e("设置了图标---展开" + node.getIcon());
         } else {
             node.setIcon(R.mipmap.subordinate_task_zdlf_post);

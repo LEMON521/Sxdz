@@ -1,6 +1,5 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 
-import android.content.Intent;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.EmptyActivity;
+import cn.net.bjsoft.sxdz.adapter.zdlf.TaskUnderlingTreeAdapter;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
@@ -41,7 +40,7 @@ public class TopTaskUnderlingFragment extends BaseFragment {
     private List<FileTaskBean> mDatas;
     private ListTaskBean.TaskDataDao treeListDao;
     private ArrayList<ListTaskBean.TreeTaskListDao> tree_list;
-    private TreeTaskUnderlingAdapter mAdapter;
+    private TaskUnderlingTreeAdapter mAdapter;
 
     @Override
     public void initData() {
@@ -113,16 +112,14 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
         //getItems(tree_list, 0);
         try {
-            mAdapter = new TreeTaskUnderlingAdapter<FileTaskBean>(list_underling, mActivity, mDatas, 1);
+            mAdapter = new TaskUnderlingTreeAdapter<FileTaskBean>(list_underling, mActivity, mDatas, 1);
             list_underling.setAdapter(mAdapter);
 
             mAdapter.setOnTreeNodeClickListener(new TreeTaskUnderlingAdapter.OnTreeNodeClickListener() {
                 @Override
                 public void onClick(NodeTaskUnderling node, int position) {
                     Log.e("点击的条目", "tiaomu wei ====" + position);
-                    Intent intent = new Intent(mActivity, EmptyActivity.class);
-                    intent.putExtra("fragment_name", "TopTaskUnderlingDetailFragment");
-                    mActivity.startActivity(intent);
+
 
                 }
             });

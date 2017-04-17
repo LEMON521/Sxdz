@@ -30,7 +30,6 @@ import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
 import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.dialog.PickerScrollViewPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
-import cn.net.bjsoft.sxdz.test.PullableListViewActivity;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.Constants;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
@@ -91,8 +90,8 @@ public class MineZDLFFragment extends BaseFragment {
         mUserDao = mDatasBean.data.user;
 
         bitmapUtils = new BitmapUtils(getActivity(), AddressUtils.img_cache_url);
-        bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);
-        bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);
+        bitmapUtils.configDefaultLoadingImage(R.mipmap.application_zdlf_loding);
+        bitmapUtils.configDefaultLoadFailedImage(R.mipmap.application_zdlf_loding);
         bitmapUtils.display(avatar, mUserDao.avatar);
 
         name.setText(mUserDao.name);
@@ -147,20 +146,21 @@ public class MineZDLFFragment extends BaseFragment {
             , R.id.mine_zdlf_icon
             , R.id.mine_zdlf_department})
     private void approveChangeOnClick(View view) {
+        Intent intent = new Intent(mActivity, EmptyActivity.class);
         switch (view.getId()) {
             case R.id.title_back://返回
                 mActivity.finish();
                 break;
 
             case R.id.mine_zdlf_address_list://通讯录
-                Intent addressIntent = new Intent(mActivity, EmptyActivity.class);
-                addressIntent.putExtra("fragment_name", "addressList");
-                startActivity(addressIntent);
+                intent.putExtra("fragment_name", "addressList");
+                startActivity(intent);
                 break;
 
 
             case R.id.mine_zdlf_personnel_file://人事管理
-                Intent intent = new Intent(mActivity, PullableListViewActivity.class);
+
+                intent.putExtra("fragment_name", "TestFragment_1");
                 mActivity.startActivity(intent);
                 break;
 
@@ -168,9 +168,8 @@ public class MineZDLFFragment extends BaseFragment {
             case R.id.mine_zdlf_reset_password://重置密码
 //                passwordView = new WindowRecettingPasswordView(mActivity);
 //                showRecettingPassword(mActivity,passwordView);
-                Intent resetting_passwordIntent = new Intent(mActivity, EmptyActivity.class);
-                resetting_passwordIntent.putExtra("fragment_name", "resetting_password");
-                startActivity(resetting_passwordIntent);
+                intent.putExtra("fragment_name", "resetting_password");
+                startActivity(intent);
                 break;
 
             case R.id.mine_zdlf_logout://退出登录
