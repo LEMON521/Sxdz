@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
@@ -74,6 +75,7 @@ public class SignHistoryActivity extends BaseActivity {
     private GridView gridView_humen;
 
     @ViewInject(R.id.function_sing_history_map)
+    private MapView mapView;
 
 
     private FunctionSignHistoryBean signHistoryBean;//总数据
@@ -84,11 +86,12 @@ public class SignHistoryActivity extends BaseActivity {
 
     private HashMap<String, ArrayList<FunctionSignHistoryBean.HumenListDao>> departmentMap;//将每个部门分组
     private FunctionSignHistoryAdapter signHistoryAdapter;//分组后(每个部门)的全部的人的GridView的适配器
+    private LinearLayout signHistoryChild;
+    private TextView signHistoryChildText;
+    private RelativeLayout sign_history_background;
 
     private ArrayAdapter spinnerAdapter;
 
-    @ViewInject(R.id.function_sing_history_map)
-    private MapView mapView;
 
     private AMap aMap;
 
@@ -134,12 +137,12 @@ public class SignHistoryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_function_sign_history);
 
-        x.view().inject(this);
+        //x.view().inject(this);
 //        spinner_partment = (Spinner) findViewById(R.id.function_sing_history_partment);
 //        gridView_humen = (GridView) findViewById(R.id.function_sing_history_humen);
 
 
-        mapView = (MapView) findViewById(R.id.function_sing_history_map);
+        //mapView = (MapView) findViewById(R.id.function_sing_history_map);
         mapView.onCreate(savedInstanceState);
 
         title.setText("签到历史");
@@ -207,6 +210,9 @@ public class SignHistoryActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = humenList.get(position).name;
+                signHistoryChild = (LinearLayout) parent.getChildAt(position);
+                signHistoryChildText = (TextView) signHistoryChild.findViewById(R.id.sign_history_name);
+                sign_history_background = (RelativeLayout) signHistoryChild.findViewById(R.id.sign_history_background);
                 if (humenList.get(position).isCheck) {
                     if (aMap != null) {
                         //markers.get(position).destroy();
@@ -217,22 +223,30 @@ public class SignHistoryActivity extends BaseActivity {
                         }
                         markerMap.remove(name);
                         //view.setBackgroundResource(R.drawable.biankuang_gray);
-                        view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                        //sign_history_background.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                        signHistoryChildText.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                        signHistoryChildText.setTextColor(Color.parseColor("#666666"));
                         polylinesMap.get(name).remove();
                         //polylines.remove(name);
                         //addMarkersToMap(humenList.get(position));
                     }
                     humenList.get(position).isCheck = false;
-
                 } else {
                     if (aMap != null) {
                         addMarkersToMap(humenList.get(position));
-                        }
+                    }
                     humenList.get(position).isCheck = true;
                     //view.setBackgroundResource(R.drawable.biankuang_blue);
-                    view.setBackgroundColor(Color.parseColor("#" + humenList.get(position).color));
-                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(markerMap.get(humenList.get(position).name).get(0).getPosition()));//设置镜头
+                    //view.setBackgroundColor(Color.parseColor("#" + humenList.get(position).color));
 
+                    //sign_history_background.setBackgroundColor(Color.parseColor("#" + humenList.get(position).color));
+                    signHistoryChildText.setBackgroundColor(Color.parseColor("#" + humenList.get(position).color));
+                    signHistoryChildText.setTextColor(Color.parseColor("#FFFFFF"));
+                    if (markerMap.get(humenList.get(position).name).size() == 0) {
+
+                    } else {
+                        aMap.moveCamera(CameraUpdateFactory.changeLatLng(markerMap.get(humenList.get(position).name).get(0).getPosition()));//设置镜头
+                    }
                 }
                 //LogUtil.e(humenList.get(position));
             }
@@ -254,6 +268,15 @@ public class SignHistoryActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int gridView_count  = gridView_humen.getCount();
+                //设置成默认的颜色和背景
+                for (int i = 0;i<gridView_count;i++){
+                    signHistoryChild = (LinearLayout) gridView_humen.getChildAt(i);
+                    signHistoryChildText = (TextView) signHistoryChild.findViewById(R.id.sign_history_name);
+                    sign_history_background = (RelativeLayout) signHistoryChild.findViewById(R.id.sign_history_background);
+                    signHistoryChildText.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    signHistoryChildText.setTextColor(Color.parseColor("#666666"));
+                }
                 setGridViewData(departmentMap.get(s.toString()));
             }
 
@@ -287,6 +310,8 @@ public class SignHistoryActivity extends BaseActivity {
                  * 当日期改变时,查询网络,获取最新数据
                  */
 
+                departmentMap.clear();
+                signHistoryAdapter.notifyDataSetChanged();
 
                 getData();
             }
@@ -394,7 +419,7 @@ public class SignHistoryActivity extends BaseActivity {
      */
     private void setUpMap() {
 
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(10));
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(11));
         aMap.setMapTextZIndex(2);
 
         dismissProgressDialog();
@@ -459,7 +484,7 @@ public class SignHistoryActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
                         //加载失败的时候显示的图片
-                        marker = drawMarkerOnMap(latLngs.get(finalI), BitmapDescriptorFactory.fromResource(R.drawable.wlh), bean.name);
+                        marker = drawMarkerOnMap(latLngs.get(finalI), BitmapDescriptorFactory.fromResource(R.mipmap.application_zdlf_loding), bean.name);
 
                     }
 

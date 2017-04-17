@@ -372,7 +372,7 @@ public class SplashActivity extends BaseActivity {
     private void getData() {
         RequestParams params = new RequestParams(UrlUtil.baseUrl);
         params.addBodyParameter("action", "init");
-        params.addBodyParameter("app_id", Constants.app_id_zdlf);
+        params.addBodyParameter("app_id", Constants.app_id);
         params.addBodyParameter("client_name", Constants.app_name);
 //        params.addBodyParameter("client_name", "0.0");//测试用
         params.addBodyParameter("phone_uuid", DeviceIdUtils.getDeviceId(this));

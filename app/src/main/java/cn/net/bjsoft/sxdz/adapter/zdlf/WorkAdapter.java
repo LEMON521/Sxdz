@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.ArrayList;
@@ -24,10 +25,14 @@ public class WorkAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<WorkBean.FunctionListDao> list;
+    private ImageOptions imageOptions;
 
     public WorkAdapter(Context context, ArrayList<WorkBean.FunctionListDao> list) {
         this.context = context;
         this.list = list;
+        imageOptions = new ImageOptions.Builder()
+                .setFailureDrawableId(R.mipmap.application_zdlf_loding) //以资源id设置加载失败的动画
+                .setLoadingDrawableId(R.mipmap.application_zdlf_loding).build();
         //LogUtil.e("适配器中==="+list.getClass().toString());
 //        for (WorkBean.FunctionListDao dao : list) {
 //            LogUtil.e("查看数据===" + dao.type + "::" + dao.name + "::");
@@ -67,7 +72,7 @@ public class WorkAdapter extends BaseAdapter {
         Holder holder = (Holder) convertView.getTag();
         holder.work_name.setText(list.get(position).name);
         holder.work_num.setText(Integer.parseInt(list.get(position).push_count) + "");//注意,这里要讲int类型转换为String的!!!!!!!
-        x.image().bind(holder.work_icon, list.get(position).image_url);
+        x.image().bind(holder.work_icon, list.get(position).image_url, imageOptions);
         return convertView;
     }
 

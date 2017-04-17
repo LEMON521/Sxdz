@@ -19,6 +19,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
+
 /**
  * 自定义的布局，用来管理三个子控件，其中一个是下拉头，一个是包含内容的pullableView（可以是实现Pullable接口的的任何View），
  * 还有一个上拉头，更多详解见博客http://blog.csdn.net/zhongkejingwang/article/details/38868463
@@ -323,6 +325,8 @@ public class PullToRefreshLayout extends RelativeLayout
 			loadStateTextView.setText("上拉加载更多");
 			pullUpView.clearAnimation();
 			pullUpView.setVisibility(View.VISIBLE);
+
+			refeshTime.setText(TimeUtils.getFormateTime(System.currentTimeMillis(),"-",":"));
 			break;
 		case RELEASE_TO_REFRESH:
 			// 释放刷新状态
@@ -585,6 +589,8 @@ public class PullToRefreshLayout extends RelativeLayout
 				.findViewById(R.id.loadstate_tv);
 		loadingView = loadmoreView.findViewById(R.id.loading_icon);
 		loadStateImageView = loadmoreView.findViewById(R.id.loadstate_iv);
+
+		refeshTime.setText(TimeUtils.getFormateTime(System.currentTimeMillis(),"-",":"));
 	}
 
 	@Override
