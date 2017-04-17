@@ -197,6 +197,7 @@
                 android:paddingTop="@dimen/dm020">
 
                 <TextView
+                    android:id="@+id/fragment_task_add_submit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/approve_shixin_blue"

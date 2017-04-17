@@ -30,7 +30,7 @@
 
     </cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout>
 
-    \
+
 
     <RelativeLayout
         android:layout_width="match_parent"

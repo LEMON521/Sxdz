@@ -181,7 +181,7 @@ public class LoginFragment extends BaseFragment {
         submitLock = true;
 //        getContext().showProgressDialog();
         RequestParams params = new RequestParams(UrlUtil.baseUrl);
-        params.addBodyParameter("app_id", Constants.app_id_zdlf);
+        params.addBodyParameter("app_id", Constants.app_id);
         params.addBodyParameter("client_name", Constants.app_name);
         params.addBodyParameter("phone_uuid", SPUtil.getUserPUUID(getActivity()));
         params.addBodyParameter("single_code", SPUtil.getUserRandCode(getActivity()));
@@ -248,7 +248,7 @@ public class LoginFragment extends BaseFragment {
     public void getDeviceId() {
         //showProgressDialog();
         RequestParams params = new RequestParams(UrlUtil.baseUrl);
-        params.addBodyParameter("app_id", Constants.app_id_zdlf);
+        params.addBodyParameter("app_id", Constants.app_id);
         params.addBodyParameter("appname", Constants.app_name);
         params.addBodyParameter("phone_uuid", DeviceIdUtils.getDeviceId(getActivity()));//"shufuma"
         //Log.e("tag",DeviceIdUtils.getDeviceId(this));

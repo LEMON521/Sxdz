@@ -1,5 +1,7 @@
 package cn.net.bjsoft.sxdz.view.tree_task_underling.helper;
 
+import org.xutils.common.util.LogUtil;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +10,8 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodeDepartment;
 import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodeId;
 import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodeLabel;
-import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodePid;
 import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodeTask_number;
+import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodePid;
 import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.TreeTaskNodeUrl;
 
 
@@ -29,7 +31,7 @@ public class TreeTaskHelper {
      * @throws IllegalAccessException
      */
     public static <T> List<NodeTaskUnderling> getSortedNodes(List<T> datas,
-                                                int defaultExpandLevel)
+                                                             int defaultExpandLevel)
             throws IllegalArgumentException,
             IllegalAccessException
 
@@ -123,7 +125,7 @@ public class TreeTaskHelper {
                     break;
                 }
             }
-            node = new NodeTaskUnderling(id, pId, label,url,department,task_num);
+            node = new NodeTaskUnderling(id, pId, label, url, department, task_num);
             nodes.add(node);
         }
 
@@ -147,6 +149,7 @@ public class TreeTaskHelper {
         // 设置图片
         for (NodeTaskUnderling n : nodes) {
             setNodeIcon(n);
+            LogUtil.e("设置了图标---展开"+node.getIcon());
         }
         return nodes;
     }
@@ -186,11 +189,15 @@ public class TreeTaskHelper {
      */
     private static void setNodeIcon(NodeTaskUnderling node) {
         if (node.getChildren().size() > 0 && node.isExpand()) {
-            node.setIcon(R.mipmap.mail_list_zdlf_down_arrow);
+            node.setIcon(R.mipmap.subordinate_task_zdlf_extend);
+            LogUtil.e("设置了图标---展开" + node.getIcon());
         } else if (node.getChildren().size() > 0 && !node.isExpand()) {
-            node.setIcon(R.mipmap.mail_list_zdlf_right_arrow);
-        } else
-            //node.setIcon(-1);
+            node.setIcon(R.mipmap.subordinate_task_zdlf_open);
+            LogUtil.e("设置了图标---展开" + node.getIcon());
+        } else {
             node.setIcon(R.mipmap.subordinate_task_zdlf_post);
+            LogUtil.e("设置了图标---展开"+node.getIcon());
+        }
+
     }
 }

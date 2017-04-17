@@ -26,7 +26,6 @@ import cn.net.bjsoft.sxdz.adapter.zdlf.WorkAdapter;
 import cn.net.bjsoft.sxdz.bean.zdlf.work.WorkBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
-import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.RollViewPager;
@@ -355,7 +354,7 @@ public class WorkFragment extends BaseFragment {
                         @Override
                         public void viewClickListener(String imgUrl) {
                             //在当前的方法中要去获取图片的链接地址
-                            MyToast.showShort(mActivity, imgUrl);
+                            //MyToast.showShort(mActivity, imgUrl);
                         }
                     });
 

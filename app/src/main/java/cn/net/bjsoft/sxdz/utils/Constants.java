@@ -19,6 +19,7 @@ public class Constants {
     public static String app_id_rcjg="4878704752557545429";//热刺激光
     public static String app_id_ylyd="5248838326746830499";//誉龙亚东
     public static String app_id_zdlf="5647951308111750793";//誉龙亚东
+    public static String app_id=app_id_zdlf;//誉龙亚东
 
     public static boolean isfullscreen=false;
     public static boolean isForeground = true;

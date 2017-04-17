@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        android:src="@drawable/wlh"
+        android:src="@drawable/http_loading_image"
         />
 
 </LinearLayout>

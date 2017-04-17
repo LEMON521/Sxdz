@@ -8,6 +8,7 @@
     android:paddingTop="@dimen/dm020">
 
     <ImageView
+        android:src="@drawable/http_loading_image"
         android:id="@+id/item_knowledge_item_image"
         android:layout_width="@dimen/dm170"
         android:layout_height="@dimen/dm195" />

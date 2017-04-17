@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.ArrayList;
@@ -24,10 +25,14 @@ public class KnowledgeItemsAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<KnowledgeBean.ItemsDataDao> list;
+    private ImageOptions imageOptions;
 
     public KnowledgeItemsAdapter(Context context, ArrayList<KnowledgeBean.ItemsDataDao> list) {
         this.context = context;
         this.list = list;
+        imageOptions = new ImageOptions.Builder()
+                .setFailureDrawableId(R.drawable.http_loading_image) //以资源id设置加载失败的动画
+                .setLoadingDrawableId(R.drawable.http_loading_image).build();
         //LogUtil.e("适配器中==="+list.getClass().toString());
     }
 
@@ -66,7 +71,7 @@ public class KnowledgeItemsAdapter extends BaseAdapter {
         Holder holder = (Holder) convertView.getTag();
         if (list.get(position).image_url != null && !list.get(position).image_url.equals("")) {
             holder.image.setVisibility(View.VISIBLE);
-            x.image().bind(holder.image, list.get(position).image_url);
+            x.image().bind(holder.image, list.get(position).image_url, imageOptions);
             //LogUtil.e("图片路径--"+list.get(position).image_url);
         } else {
             holder.image.setVisibility(View.GONE);

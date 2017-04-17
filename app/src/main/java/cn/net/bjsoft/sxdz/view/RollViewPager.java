@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.List;
@@ -83,7 +84,6 @@ public class RollViewPager extends ViewPager {
         }
         return super.dispatchTouchEvent(ev);
     }
-
 
 
     public interface OnViewClickListener {
@@ -194,10 +194,12 @@ public class RollViewPager extends ViewPager {
             //文件（链接地址作为图片文件的名称，将文件中获取出来的图片再一次的放置到内存中去）
             //放置获取图片的地方，对应图片的下载地址
             //bitmapUtils.display(imageView, imgUrlList.get(position));
-            x.image().bind(imageView, imgUrlList.get(position));
+            ImageOptions imageOptions = new ImageOptions.Builder()
+                    .setFailureDrawableId(R.drawable.http_work_loading) //以资源id设置加载失败的动画
+                    .setLoadingDrawableId(R.drawable.http_work_loading).build();
+            x.image().bind(imageView, imgUrlList.get(position),imageOptions);
             //给viewpager添加一个放置了图片的view对象操作
             container.addView(view);
-
             //viewpager和内部view事件的一个交互过程
             //1，如果获取按下事件，就将其传递到内部控件中去，内部控件响应action_down事件,
             //2,如果手势不去滑动，就抬起Action_up，viewpager优先获取，传递给内部的view，作用在view上
