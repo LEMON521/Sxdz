@@ -1,6 +1,7 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -59,12 +60,14 @@ public class TopTaskDoingFragment extends BaseFragment {
 
         if (tasksAllDao == null) {
             tasksAllDao = new ArrayList<>();
-        } else{
-            tasksAllDao.clear();}
+        } else {
+            tasksAllDao.clear();
+        }
         if (tasksDoneDao == null) {
             tasksDoneDao = new ArrayList<>();
-        } else{
-            tasksDoneDao.clear();}
+        } else {
+            tasksDoneDao.clear();
+        }
 
         if (taskAdapter == null) {
             taskAdapter = new TaskAllZDLFAdapter(mActivity, tasksDoneDao);
@@ -76,6 +79,9 @@ public class TopTaskDoingFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(mActivity, EmptyActivity.class);
                 intent.putExtra("fragment_name", "task_detail");
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isEdited", true);
+                intent.putExtra("isEdited", bundle);
                 mActivity.startActivity(intent);
             }
         });
@@ -120,7 +126,7 @@ public class TopTaskDoingFragment extends BaseFragment {
             }
 
         });
-        window = new TaskSearchPopupWindow(mActivity,root_view);
+        window = new TaskSearchPopupWindow(mActivity, root_view);
         /**
          * 接口回调
          */
@@ -177,10 +183,10 @@ public class TopTaskDoingFragment extends BaseFragment {
         });
     }
 
-    private void sortData(){
-        for (MessageTaskBean.TasksAllDao dao :tasksAllDao){
+    private void sortData() {
+        for (MessageTaskBean.TasksAllDao dao : tasksAllDao) {
             //
-            if (dao.state==2){
+            if (dao.state == 2) {
                 dao.state = -1;
                 tasksDoneDao.add(dao);
             }

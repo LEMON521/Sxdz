@@ -3,6 +3,7 @@ package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -97,6 +98,8 @@ public class TaskDetailFragment extends BaseFragment {
     private ChildrenListView files;//执行人新增附件
     @ViewInject(R.id.fragment_task_add_files)
     private TextView add_files;
+    @ViewInject(R.id.fragment_task_add_submit)
+    private TextView submit;
 
     private MessageTaskDetailBean detailBean;
     private MessageTaskDetailBean.MessageTaskDetailDao detailDao;
@@ -120,6 +123,7 @@ public class TaskDetailFragment extends BaseFragment {
     private ArrayList<KnowLedgeItemBean.FilesKnowledgeItemDao> filesAddList;
     private KnowledgeItemHeadFilesListAdapter filesAddAdapter;
 
+    private boolean isEdited = false;
 
     private View.OnTouchListener touchListener;//屏蔽滑动事件的监听器
 
@@ -127,6 +131,20 @@ public class TaskDetailFragment extends BaseFragment {
     public void initData() {
         back.setVisibility(View.VISIBLE);
         title.setText("任务详情");
+
+        Bundle bundle = getArguments().getBundle("isEdited");
+        if (bundle != null) {
+            isEdited = bundle.getBoolean("isEdited");
+        }
+
+        //TODO 初始化页面的时候,或者获取到数据的时候,如果姓名中没有我,或者id不是用户id,那么就是不可编辑状态
+
+        if (!isEdited) {
+            submit.setVisibility(View.GONE);
+            add_detail.setVisibility(View.GONE);
+            add_files.setVisibility(View.GONE);
+        }
+
 
         touchListener = new View.OnTouchListener() {
             //屏蔽掉滑动事件
@@ -380,7 +398,8 @@ public class TaskDetailFragment extends BaseFragment {
 
     @Event(value = {R.id.title_back
             , R.id.fragment_task_add_detail
-            , R.id.fragment_task_add_files})
+            , R.id.fragment_task_add_files
+            , R.id.fragment_task_add_submit})
     private void taskDetailOnClick(View view) {
         switch (view.getId()) {
             case R.id.title_back://添加详情条目
@@ -395,13 +414,23 @@ public class TaskDetailFragment extends BaseFragment {
                 Utility.setListViewHeightBasedOnChildren(detail_list);
                 detailAddAdapter.notifyDataSetChanged();
                 LogUtil.e("正价的条目为" + detailList.size());
+
+
                 //Utility.setListViewHeightBasedOnChildren(detail_list);
 
 
                 break;
 
             case R.id.fragment_task_add_files://添加任务附件条目
+
                 PhotoOrVideoUtils.doFiles(null, TaskDetailFragment.this);//打开文件管理器意图
+
+
+                break;
+
+            case R.id.fragment_task_add_submit://添加任务附件条目
+                submitToServicer();
+
 
                 break;
         }
@@ -419,10 +448,10 @@ public class TaskDetailFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
         String path = "";
-        LogUtil.e("onActivityResult-----uri"+uri);
+        LogUtil.e("onActivityResult-----uri" + uri);
         if (uri != null) {
             path = PhotoOrVideoUtils.getPath(mActivity, uri);
-            LogUtil.e("onActivityResult-----path"+path);
+            LogUtil.e("onActivityResult-----path" + path);
             bean = new KnowLedgeItemBean();
             filesAddDao = bean.new FilesKnowledgeItemDao();
             filesAddDao.file_path = path;
@@ -436,5 +465,14 @@ public class TaskDetailFragment extends BaseFragment {
         }
 
 
+    }
+
+    /**
+     * 提交数据到服务器
+     */
+    private void submitToServicer() {
+
+
+        mActivity.finish();
     }
 }
