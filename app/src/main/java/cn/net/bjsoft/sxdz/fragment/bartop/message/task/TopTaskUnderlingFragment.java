@@ -57,13 +57,12 @@ public class TopTaskUnderlingFragment extends BaseFragment {
      */
     private void getFormData() {
         showProgressDialog();
-        LogUtil.e("获取到报表数据&&&&&&&&" + tree_list.size());
+
         RequestParams params = new RequestParams(TestAddressUtils.test_get_message_task_list_underling_url);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 bean = GsonUtil.getListTaskBean(result);
-                LogUtil.e("获取到报表数据&&&&&&&&" + bean.result);
                 if (bean.result) {
                     //LogUtil.e("获取到报表数据-----------" + result);
                     //scroll_list.clear();
@@ -72,8 +71,6 @@ public class TopTaskUnderlingFragment extends BaseFragment {
                     tree_list.addAll(treeListDao.tree_list);
                     //LogUtil.e("获取到报表数据-----------" + result);
                     getItems(tree_list, 1);
-
-                    LogUtil.e("获取到报表数据&&&&&&&&" + tree_list.size());
 
                 } else {
                 }

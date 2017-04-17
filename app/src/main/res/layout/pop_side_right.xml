@@ -4,11 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/pop_side_left"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#00000000"></LinearLayout>
+        android:background="#00000000"></RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"

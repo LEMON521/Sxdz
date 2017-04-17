@@ -118,7 +118,10 @@ public class SignHistoryActivity extends BaseActivity {
                 PickerDialog.showDatePickerDialog(this, history_date, "-");
                 break;
             case R.id.function_sing_history_partment:
-                listPopupWindow.showWindow(departmentNames);
+                int[] location = new int[2];//窗口位置
+                spinner_partment.getLocationOnScreen(location);
+                location[1] = location[1]+spinner_partment.getHeight();
+                listPopupWindow.showWindow(departmentNames,location);
                 break;
             case R.id.title_back:
                 finish();

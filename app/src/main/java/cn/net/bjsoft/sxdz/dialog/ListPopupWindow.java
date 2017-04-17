@@ -2,6 +2,7 @@ package cn.net.bjsoft.sxdz.dialog;
 
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,8 @@ public class ListPopupWindow {
 
     private ArrayList<String> stringList;
     private PopShowAdapter stringListAdapter;
+
+    int[] location = new int[2];//窗口位置
     // 数据接口
     private OnGetData mOnGetData;
 
@@ -49,8 +52,9 @@ public class ListPopupWindow {
     }
 
 
-    public void showWindow(ArrayList<String> list) {
+    public void showWindow(ArrayList<String> list, int[] location) {
         this.stringList = list;
+        this.location = location;
         InitData();
         InitUI();
     }
@@ -80,7 +84,7 @@ public class ListPopupWindow {
         mSearchPopupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
         mSearchPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ////////////////////////////
-        //mSearchPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        mSearchPopupWindow.showAtLocation(view, Gravity.NO_GRAVITY, location[0], location[1]);
         mSearchPopupWindow.showAsDropDown(view);
         //mSearchPopupWindow.setAnimationStyle(R.style.PopupAnimation);
         mSearchPopupWindow.update();

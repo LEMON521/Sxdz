@@ -207,6 +207,7 @@ public class TreeHelper {
         } else if (node.getChildren().size() > 0 && !node.isExpand()) {
             node.setIcon(R.mipmap.mail_list_zdlf_right_arrow);
         } else
-            node.setIcon(-1);
+            //node.setIcon(-1);
+            node.setIcon(R.mipmap.subordinate_task_zdlf_post);
     }
 }

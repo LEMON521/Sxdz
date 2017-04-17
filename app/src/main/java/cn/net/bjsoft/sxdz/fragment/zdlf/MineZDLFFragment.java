@@ -47,7 +47,7 @@ import cn.net.bjsoft.sxdz.view.picker_scroll_view.Pickers;
 
 
 /**
- * 裕隆亚东药业的我的页面   - -   我的页面
+ * 中电联发的我的页面   - -   我的页面
  * Created by 靳宁宁 on 2017/3/8.
  */
 @ContentView(R.layout.fragment_mine_zdlf)

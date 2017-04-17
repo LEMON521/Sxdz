@@ -151,6 +151,7 @@ public class PhotoOrVideoUtils {
                         /* 开启Pictures画面Type设定为image */
                         intent.setType("image/*");
                          /* 使用Intent.ACTION_GET_CONTENT这个Action */
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
                         intent.setAction(Intent.ACTION_GET_CONTENT);
                         /* 取得相片后返回本画面 */
                         if (getFragment() == null) {
@@ -266,6 +267,7 @@ public class PhotoOrVideoUtils {
                 /* 开启Pictures画面Type设定为image */
                     intent.setType("image/*;video/*");
                 /* 使用Intent.ACTION_GET_CONTENT这个Action */
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                 /* 取得相片后返回本画面 */
                     if (getFragment() == null) {

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ public class SideRightPopupWindow {
     // 根视图
     private View mRootView;
 
+    private RelativeLayout pop_side_left;
     private ChildrenListView listView;
 
 
@@ -96,6 +98,7 @@ public class SideRightPopupWindow {
     }
 
     private void InitUI() {
+        pop_side_left = (RelativeLayout) mRootView.findViewById(R.id.pop_side_left);
         listView = (ChildrenListView) mRootView.findViewById(R.id.pop_side_right_listview);
 
         if (stringListAdapter == null) {
@@ -106,6 +109,12 @@ public class SideRightPopupWindow {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mOnGetData.onDataCallBack(stringList.get(position));
+                mSearchPopupWindow.dismiss();
+            }
+        });
+        pop_side_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 mSearchPopupWindow.dismiss();
             }
         });
