@@ -269,7 +269,7 @@ public class SignHistoryActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int gridView_count  = gridView_humen.getCount();
-                //设置成默认的颜色和背景
+                //设置成默认的颜色和背景   水电费
                 for (int i = 0;i<gridView_count;i++){
                     signHistoryChild = (LinearLayout) gridView_humen.getChildAt(i);
                     signHistoryChildText = (TextView) signHistoryChild.findViewById(R.id.sign_history_name);
