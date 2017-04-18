@@ -33,6 +33,9 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
             IllegalAccessException {
         super(mTree, context, datas, defaultExpandLevel);
         this.context = context;
+        bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
+        bitmapUtils.configDefaultLoadingImage(R.mipmap.application_zdlf_loding);//初始化头像
+        bitmapUtils.configDefaultLoadFailedImage(R.mipmap.application_zdlf_loding);//初始化头像
     }
 
     @Override
@@ -80,9 +83,7 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
         } else if (node.getType().toString().equals("employee")) {//员工
             viewHolder.parent_ll.setVisibility(View.GONE);
             viewHolder.child_ll.setVisibility(View.VISIBLE);
-            bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
-            bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
-            bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
+
             bitmapUtils.display(viewHolder.child_icon, node.getAvatar_url());
             //x.image().bind(viewHolder.child_icon, node.getAvatar_url());
             viewHolder.child_name.setText(node.getName());

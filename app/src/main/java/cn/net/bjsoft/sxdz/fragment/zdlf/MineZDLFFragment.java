@@ -293,12 +293,13 @@ public class MineZDLFFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
         if (uri != null) {
             String imagePath = PhotoOrVideoUtils.getPath(mActivity, uri);
             upLoadFile(imagePath, "", "");
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     /**

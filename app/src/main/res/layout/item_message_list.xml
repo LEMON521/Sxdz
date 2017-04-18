@@ -83,6 +83,8 @@
 
                 <!--android:layout_marginTop="@dimen/dm016"-->
                 <TextView
+                    android:paddingBottom="@dimen/dm040"
+                    android:paddingTop="@dimen/dm020"
                     android:background="@drawable/zdlf_shadow"
                     android:paddingLeft="@dimen/dm030"
                     android:paddingRight="@dimen/dm030"

@@ -213,6 +213,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
         if (uri != null) {
             if (selectType != -1) {
@@ -243,6 +244,6 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }

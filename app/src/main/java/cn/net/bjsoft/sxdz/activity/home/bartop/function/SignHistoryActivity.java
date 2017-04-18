@@ -210,9 +210,10 @@ public class SignHistoryActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = humenList.get(position).name;
+                signHistoryChild = null;
                 signHistoryChild = (LinearLayout) parent.getChildAt(position);
                 signHistoryChildText = (TextView) signHistoryChild.findViewById(R.id.sign_history_name);
-                sign_history_background = (RelativeLayout) signHistoryChild.findViewById(R.id.sign_history_background);
+                //sign_history_background = (RelativeLayout) signHistoryChild.findViewById(R.id.sign_history_background);
                 if (humenList.get(position).isCheck) {
                     if (aMap != null) {
                         //markers.get(position).destroy();
@@ -268,15 +269,6 @@ public class SignHistoryActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int gridView_count  = gridView_humen.getCount();
-                //设置成默认的颜色和背景
-                for (int i = 0;i<gridView_count;i++){
-                    signHistoryChild = (LinearLayout) gridView_humen.getChildAt(i);
-                    signHistoryChildText = (TextView) signHistoryChild.findViewById(R.id.sign_history_name);
-                    sign_history_background = (RelativeLayout) signHistoryChild.findViewById(R.id.sign_history_background);
-                    signHistoryChildText.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    signHistoryChildText.setTextColor(Color.parseColor("#666666"));
-                }
                 setGridViewData(departmentMap.get(s.toString()));
             }
 

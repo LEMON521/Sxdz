@@ -9,6 +9,7 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.fragment.TestFragment_1;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TaskDetailFragment;
+import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TopAddTaskAddressListFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TopAddTaskFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TopTaskUnderlingDetailFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.KnowledgeItemZDLFFragment;
@@ -65,6 +66,9 @@ public class EmptyActivity extends BaseActivity {
                 }
                 else if (fragment_name.equals("TestFragment_1")) {
                     fragment = new TestFragment_1();
+                }
+                else if (fragment_name.equals("TopAddTaskAddressListFragment")) {
+                    fragment = new TopAddTaskAddressListFragment();
                 }
                 bundle.putString("json", "");
                 fragment.setArguments(bundle);

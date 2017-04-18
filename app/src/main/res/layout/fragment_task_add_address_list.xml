@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <include layout="@layout/top_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="@dimen/dm020">
+
+        <CheckBox
+            android:visibility="gone"
+            android:id="@+id/fragmen_task_add_address_checkbox"
+            style="@style/TaskAddAddressListCheckboxStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm020"
+            android:text="全选"
+            android:textColor="#333333"
+            android:textSize="@dimen/dm026" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--android:layout_alignParentRight="true"-->
+            <EditText
+                android:id="@+id/fragmen_task_add_address_department"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@mipmap/new_task_details_zdlf_drop_down_box"
+                android:editable="false"
+                android:paddingLeft="@dimen/dm010"
+                android:paddingRight="@dimen/dm070"
+                android:text="辽宁分公司"
+                android:textColor="#666666"
+                android:textSize="@dimen/dm024" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dm020"
+        android:layout_weight="5"
+        android:background="@color/white">
+
+        <ListView
+            android:id="@+id/fragmen_task_add_address_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dm020"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/dm020"
+        android:paddingLeft="@dimen/dm030"
+        android:paddingRight="@dimen/dm030"
+        android:paddingTop="@dimen/dm020">
+
+        <LinearLayout
+            android:id="@+id/fragmen_task_add_address_list_submin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/approve_shixin_blue"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/dm020"
+            android:paddingTop="@dimen/dm020">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm026" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dm020"
+                android:text="定"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dm026" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

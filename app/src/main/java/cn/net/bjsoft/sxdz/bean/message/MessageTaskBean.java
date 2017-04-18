@@ -45,6 +45,7 @@ public class MessageTaskBean implements Serializable {
         public long end = 0;//结束时间--时间戳
         public int level = -1;//任务等级
         public boolean isOverdue = false;//是否过期
+        public int type = 0;//0发起人---要执行的任务,1执行人----看任务
     }
 
     public class AddressListDao implements Serializable {

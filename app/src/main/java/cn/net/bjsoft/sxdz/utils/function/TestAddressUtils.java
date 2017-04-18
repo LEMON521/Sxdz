@@ -29,10 +29,15 @@ public class TestAddressUtils {
 
     public static String test_get_message_task_list_url="http://www.shuxin.net/api/app_json/android/message/message_task_list.json";
 
+    public static String test_get_message_task_do_list_url="http://www.shuxin.net/api/app_json/android/message/message_task_do_list.json";
+
     public static String test_get_message_task_list_underling_url="http://www.shuxin.net/api/app_json/android/message/message_task_underling.json";
 
     public static String test_get_message_message_list_url="http://www.shuxin.net/api/app_json/android/message/message_message_list.json";
 
     public static String test_get_message_task_detail_url="http://www.shuxin.net/api/app_json/android/message/message_task_detail.json";
+
+
+    public static String test_get_message_task_add_address_listl_url="http://www.shuxin.net/api/app_json/android/message/message_task_add_address_list.json";
 
 }

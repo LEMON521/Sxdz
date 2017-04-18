@@ -601,7 +601,7 @@ public class MainActivity extends BaseActivity {
     private void onAnimationClick(View v) {
         switch (v.getId()) {
             case R.id.main_show_hide:
-                if (mTopBarIsShow) {
+                if (mTopBarIsShow) {//点击之后隐藏
 //                    ObjectAnimator.ofFloat(showOrHide, "TranslationY",-20)
 //                            .setDuration(500).start();
                     ObjectAnimator.ofFloat(mTopBar_ll, "TranslationY", -WidgetUtils.getWidthHigh(1, mTopBar_ll)[0])
@@ -617,7 +617,7 @@ public class MainActivity extends BaseActivity {
 //                    main_content.startAnimation(mUpAnimation);
 //                    showOrHide.startAnimation(mUpAnimation);
                     mTopBarIsShow = false;
-                } else {
+                } else {//点击之后显示
                     ObjectAnimator.ofFloat(mTopBar_ll, "TranslationY", 0)
                             .setDuration(500).start();
                     ObjectAnimator.ofFloat(main_content, "TranslationY", 0)
