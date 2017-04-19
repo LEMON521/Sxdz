@@ -19,7 +19,7 @@ import org.xutils.x;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.EmptyActivity;
+import cn.net.bjsoft.sxdz.activity.home.bartop.message.TaskDetailActivity;
 import cn.net.bjsoft.sxdz.adapter.message.task.TaskAllZDLFAdapter;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
 import cn.net.bjsoft.sxdz.dialog.TaskSearchPopupWindow;
@@ -77,7 +77,7 @@ public class TopTaskDoingFragment extends BaseFragment {
         task_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mActivity, EmptyActivity.class);
+                Intent intent = new Intent(mActivity, TaskDetailActivity.class);
                 intent.putExtra("fragment_name", "task_detail");
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("isEdited", true);

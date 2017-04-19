@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
 
+import org.xutils.common.util.LogUtil;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,12 +22,18 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
+import cn.net.bjsoft.sxdz.view.tree_task_add_addresslist.bean.FileTreeTaskAddAddressListBean;
 
 public class TreeTaskAddAddressListAdapter<T> extends TreeTaskAddAddressListListViewAdapter<T> {
 
     private BitmapUtils bitmapUtils;
     private Context context;
     private HashMap<Integer, NodeTaskAddAddressList> nodes;//用来存放选中人的信息
+
+    private ArrayList<FileTreeTaskAddAddressListBean> mDatas;
+
+    // 用来控制CheckBox的选中状况
+    private HashMap<Integer, Boolean> isSelected;
 
     public TreeTaskAddAddressListAdapter(ListView mTree, Context context, List<T> datas,
                                          HashMap<Integer, NodeTaskAddAddressList> nodes,
@@ -33,9 +42,22 @@ public class TreeTaskAddAddressListAdapter<T> extends TreeTaskAddAddressListList
         super(mTree, context, datas, defaultExpandLevel);
         this.context = context;
         this.nodes = nodes;
+
         bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
         bitmapUtils.configDefaultLoadingImage(R.mipmap.application_zdlf_loding);//初始化头像
         bitmapUtils.configDefaultLoadFailedImage(R.mipmap.application_zdlf_loding);//初始化头像
+
+        //设置复选框默认状态
+        if (isSelected==null) {
+
+        }
+        isSelected = new HashMap<>();
+        this.mDatas = (ArrayList<FileTreeTaskAddAddressListBean>) datas;
+        for (FileTreeTaskAddAddressListBean data : mDatas) {
+            isSelected.put(data.get_id(), false);
+        }
+        LogUtil.e(nodes.size() + "::" + "数量--------@@@@@@@@@@@@@--------");
+
     }
 
     @Override
@@ -70,6 +92,7 @@ public class TreeTaskAddAddressListAdapter<T> extends TreeTaskAddAddressListList
         }
 
         String type = node.getType().toString();
+        LogUtil.e("-------------------"+node.getId()+"::"+node.getName()+"----------------");
 
         if (type.equals("department")) {
             viewHolder.ll_department.setVisibility(View.VISIBLE);
@@ -87,22 +110,39 @@ public class TreeTaskAddAddressListAdapter<T> extends TreeTaskAddAddressListList
 
             viewHolder.humen_department.setText(node.getDepartment());
 
+
+            viewHolder.checkBox.setTag(node.getId());
+            LogUtil.e("外边id===" + node.getId() + "::" + viewHolder.checkBox.getTag());
+            //isSelected.put(node.getId(), viewHolder.checkBox.isChecked());
+
+            if ((Integer) viewHolder.checkBox.getTag() == node.getId()) {
+                viewHolder.checkBox.setChecked(isSelected.get(node.getId()));
+                LogUtil.e("里边id===" + node.getId() + node.getId());
+                LogUtil.e("设置结果----"+isSelected.get(node.getId()));
+            }
+
+            // 选中监听
+            //viewHolder.checkBox.setOnCheckedChangeListener(new onCbCheck(node));
+            viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        nodes.put(node.getId(), node);
+                        isSelected.put(node.getId(), isChecked);
+                        LogUtil.e("添加" + nodes.size() + "::" + node.getId() + "::" + node.getName() + "--------$$$$$$$$$$$--------");
+                        LogUtil.e("添加结果----"+isSelected.get(node.getId()));
+                    } else {
+                        nodes.remove(node.getId());
+                        isSelected.put(node.getId(), isChecked);
+                        LogUtil.e("删除" + nodes.size() + "::" + node.getId() + "::" + node.getName() + "--------￥￥￥￥￥￥￥￥￥￥--------");
+                        LogUtil.e("删除结果----"+isSelected.get(node.getId()));
+                    }
+                }
+            });
         }
 
+        LogUtil.e("====================================================================================");
         viewHolder.icon.setImageResource(node.getIcon());
-
-        // 选中监听
-        //viewHolder.checkBox.setOnCheckedChangeListener(new onCbCheck(node));
-        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    nodes.put(node.getId(), node);
-                } else {
-                    nodes.remove(node.getId());
-                }
-            }
-        });
 
 
         return convertView;

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
+import cn.net.bjsoft.sxdz.adapter.message.task.TaskAddAddressListAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemHeadFilesListAdapter;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.dialog.PickerDialog;
@@ -29,6 +30,7 @@ import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
+import cn.net.bjsoft.sxdz.view.tree_task_add_addresslist.bean.TreeTaskAddAddressListBean;
 
 /**
  * Created by Zrzc on 2017/4/6.
@@ -78,8 +80,12 @@ public class TopAddTaskFragment extends BaseFragment {
     private KnowledgeItemHeadFilesListAdapter filesAddAdapter;
 
     private ArrayList<String> nodeId;
+    private ArrayList<String> nodeAvatar;
     private ArrayList<String> nodeName;
     private ArrayList<String> nodeDepartment;
+
+    private ArrayList<TreeTaskAddAddressListBean.TreeTaskAddAddressListDao> humenList;
+    private TaskAddAddressListAdapter adapter;
 
     private AdapterView.OnItemClickListener itemClickListener;
     private View.OnTouchListener onTouchListener;
@@ -150,10 +156,21 @@ public class TopAddTaskFragment extends BaseFragment {
         back.setVisibility(View.VISIBLE);
 
         //联系人相关开始
+
+        if (humenList == null) {
+            humenList = new ArrayList<>();
+        }
+        humenList.clear();
+
         if (nodeId == null) {
             nodeId = new ArrayList<>();
         }
         nodeId.clear();
+
+        if (nodeAvatar == null) {
+            nodeAvatar = new ArrayList<>();
+        }
+        nodeAvatar.clear();
 
         if (nodeName == null) {
             nodeName = new ArrayList<>();
@@ -164,6 +181,11 @@ public class TopAddTaskFragment extends BaseFragment {
             nodeDepartment = new ArrayList<>();
         }
         nodeDepartment.clear();
+
+        if (adapter==null) {
+            adapter = new TaskAddAddressListAdapter(mActivity,humenList);
+        }
+        new_humens.setAdapter(adapter);
         //联系人相关结束
         /**
          * 分类---性质侧拉狂相关
@@ -250,10 +272,26 @@ public class TopAddTaskFragment extends BaseFragment {
             //获取到选择的联系人
             Bundle bundle = data.getExtras();
             nodeId.addAll(bundle.getStringArrayList("nodeId"));
+            nodeAvatar.addAll(bundle.getStringArrayList("nodeAvatar"));
             nodeName.addAll(bundle.getStringArrayList("nodeName"));
             nodeDepartment.addAll(bundle.getStringArrayList("nodeDepartment"));
+            TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
+            for (int i = 0; i < nodeId.size(); i++) {
+                TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
+                dao.id = nodeId.get(i);
+                dao.avatar = nodeAvatar.get(i);
+                dao.name = nodeName.get(i);
+                dao.department = nodeDepartment.get(i);
+                humenList.add(dao);
+            }
+            nodeId.clear();
+            nodeAvatar.clear();
+            nodeName.clear();
+            nodeDepartment.clear();
+            adapter.notifyDataSetChanged();
+            Utility.setListViewHeightBasedOnChildren(new_humens);
 
-            LogUtil.e("返回结果==========="+nodeId.size()+nodeName.size()+nodeDepartment.size());
+            LogUtil.e("返回结果===========" + nodeId.size() + nodeName.size() + nodeDepartment.size());
 
         } else {
 

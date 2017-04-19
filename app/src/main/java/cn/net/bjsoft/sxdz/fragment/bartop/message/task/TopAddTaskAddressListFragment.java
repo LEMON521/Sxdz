@@ -2,6 +2,8 @@ package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -10,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.xutils.common.Callback;
+import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.dialog.ListPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
@@ -50,6 +54,9 @@ public class TopAddTaskAddressListFragment extends BaseFragment {
     @ViewInject(R.id.fragmen_task_add_address_list_view)
     private ListView humens;
 
+    private ArrayList<String> departmentList;
+    private ListPopupWindow window;
+
     private TreeTaskAddAddressListBean bean;
     private FileTreeTaskAddAddressListBean dao;
     private List<FileTreeTaskAddAddressListBean> mDatas;
@@ -58,6 +65,7 @@ public class TopAddTaskAddressListFragment extends BaseFragment {
     private HashMap<Integer, NodeTaskAddAddressList> nodes;//用来存放选中人的信息
 
     private ArrayList<String> nodeId;
+    private ArrayList<String> nodeAvatar;
     private ArrayList<String> nodeName;
     private ArrayList<String> nodeDepartment;
 
@@ -75,6 +83,11 @@ public class TopAddTaskAddressListFragment extends BaseFragment {
                 break;
 
             case R.id.fragmen_task_add_address_department://选择分公司
+                int[] location = new int[2];//窗口位置
+                department.getLocationOnScreen(location);
+                location[1] = location[1] + department.getHeight();
+
+                window.showWindow(departmentList, location);
 
                 break;
             case R.id.fragmen_task_add_address_list_submin://确定
@@ -83,14 +96,19 @@ public class TopAddTaskAddressListFragment extends BaseFragment {
                 while (iter.hasNext()) {
                     Map.Entry entry = (Map.Entry) iter.next();
                     nodeId.add(((NodeTaskAddAddressList) entry.getValue()).getId() + "");
+                    nodeAvatar.add(((NodeTaskAddAddressList) entry.getValue()).getAvatar());
                     nodeName.add(((NodeTaskAddAddressList) entry.getValue()).getName());
                     nodeDepartment.add(((NodeTaskAddAddressList) entry.getValue()).getDepartment());
+                    LogUtil.e(nodes.size() + ((NodeTaskAddAddressList) entry.getValue()).getAvatar() + "数量--------+++++++++++++--------");
                 }
+
+                LogUtil.e(nodes.size() + "数量--------+++++++++++++--------");
 
 
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList("nodeId", nodeId);
+                bundle.putStringArrayList("nodeAvatar", nodeAvatar);
                 bundle.putStringArrayList("nodeName", nodeName);
                 bundle.putStringArrayList("nodeDepartment", nodeDepartment);
                 intent.putExtras(bundle);
@@ -108,11 +126,38 @@ public class TopAddTaskAddressListFragment extends BaseFragment {
         title.setText("");
         back.setVisibility(View.VISIBLE);
 
+
         initList();
+        listeners();
 
-        getFormData();
+
+    }
+
+    private void listeners() {
 
 
+        department.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                childrenDao.clear();
+                mDatas.clear();
+                getFormData();//请求数据
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        if (departmentList.size() > 0) {
+            department.setText(departmentList.get(0));//第一次自动设置数据
+        }
     }
 
 
@@ -174,6 +219,28 @@ public class TopAddTaskAddressListFragment extends BaseFragment {
 
     private void initList() {
 
+
+        window = new ListPopupWindow(mActivity, department);
+        //popupWindw 的回调接口
+        window.setOnData(new ListPopupWindow.OnGetData() {
+            @Override
+            public void onDataCallBack(String result) {
+                LogUtil.e("获取到的结果为====");
+                department.setText(result);
+            }
+        });
+
+        if (departmentList == null) {
+            departmentList = new ArrayList<>();
+        }
+        departmentList.clear();
+        departmentList.add("总公司");
+        departmentList.add("山东分公司");
+        departmentList.add("北京分公司");
+        departmentList.add("河北分公司");
+        departmentList.add("广州分公司");
+
+
         if (nodes == null) {
             nodes = new HashMap<>();
         }
@@ -183,6 +250,11 @@ public class TopAddTaskAddressListFragment extends BaseFragment {
             nodeId = new ArrayList<>();
         }
         nodeId.clear();
+
+        if (nodeAvatar == null) {
+            nodeAvatar = new ArrayList<>();
+        }
+        nodeAvatar.clear();
 
         if (nodeName == null) {
             nodeName = new ArrayList<>();

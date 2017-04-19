@@ -104,7 +104,12 @@
             android:exported="false"
             android:screenOrientation="behind"></activity>
 
+        <!--各类页面的集合显示-->
         <activity android:name=".activity.EmptyActivity"/>
+
+        <activity android:name=".activity.home.bartop.message.TaskNewActivity"/>
+        <activity android:name=".activity.home.bartop.message.TaskDetailActivity"/>
+        <activity android:name=".activity.home.bartop.message.KnowledgeNewZDLFActivity"/>
 
         <activity android:name=".test.PullableListViewActivity"/>
 

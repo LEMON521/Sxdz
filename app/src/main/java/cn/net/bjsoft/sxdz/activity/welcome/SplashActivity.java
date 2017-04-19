@@ -32,6 +32,7 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
 import cn.net.bjsoft.sxdz.activity.home.MainActivity;
 import cn.net.bjsoft.sxdz.activity.login.LoginActivity;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.bean.UpdateBean;
 import cn.net.bjsoft.sxdz.service.JPushService;
@@ -121,7 +122,36 @@ public class SplashActivity extends BaseActivity {
 
     };
 
+    private void get(){
 
+        HttpPostUtils postUtils = new HttpPostUtils();
+        RequestParams params = new RequestParams("http://api.shuxinyun.com/apps/4895081593118139245/mobile.json");
+        postUtils.get(params);
+        postUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("==========================数据==========================");
+                LogUtil.e(strJson);
+                LogUtil.e("==========================数据==========================");
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("==========================失败==========================\n"+ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+                LogUtil.e("==========================取消==========================");
+            }
+
+            @Override
+            public void onFinished() {
+                LogUtil.e("==========================完毕==========================");
+            }
+        });
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +162,9 @@ public class SplashActivity extends BaseActivity {
         startService(new Intent(this, JPushService.class));
         checkVersion();
         //getData();
+        //get();
+
+        //MyToast.showShort(this,"加载....");
     }
 
     /**
@@ -253,6 +286,7 @@ public class SplashActivity extends BaseActivity {
         builder.show();
 
     }
+
 
 
     /**
