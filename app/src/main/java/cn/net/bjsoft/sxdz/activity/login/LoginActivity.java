@@ -8,7 +8,7 @@ import org.xutils.x;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
-import cn.net.bjsoft.sxdz.bean.DatasBean;
+import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.fragment.WebViewFragment;
 import cn.net.bjsoft.sxdz.fragment.wlecome.LoginFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
@@ -27,7 +27,8 @@ public class LoginActivity extends BaseActivity {
     private static LoginActivity activity;
     private String json = "";
     private Fragment fragment;
-    private DatasBean datasBean;
+    //private DatasBean datasBean;
+    private AppBean appBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,23 +37,23 @@ public class LoginActivity extends BaseActivity {
         x.view().inject(this);
         activity = this;
         json = getIntent().getExtras().getString("json");
-        datasBean = GsonUtil.getDatasBean(json);
+        appBean = GsonUtil.getAppBean(json);
 
         Bundle bundle = new Bundle();
         bundle.putString("json", json);
         bundle.putString("setBack", "false");
 
-        if (datasBean.data.login == null) {
+        if (appBean.login == null) {
             fragment = new LoginFragment();
-        } else if (datasBean.data.login.loginurl == null) {
+        } else if (appBean.login.loginurl == null) {
             fragment = new LoginFragment();
 
-        } else if (datasBean.data.login.loginurl.equals("")) {
+        } else if (appBean.login.loginurl.equals("")) {
             fragment = new LoginFragment();
 
         } else {
-            bundle.putString("text", datasBean.data.login.btntext);
-            bundle.putString("url", datasBean.data.login.loginurl);
+            bundle.putString("text", appBean.login.btntext);
+            bundle.putString("url", appBean.login.loginurl);
             bundle.putString("tag", "login");
             fragment = new WebViewFragment();
         }

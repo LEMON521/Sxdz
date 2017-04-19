@@ -25,17 +25,16 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
-import cn.net.bjsoft.sxdz.activity.home.MainActivity;
 import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
-import cn.net.bjsoft.sxdz.bean.DatasBean;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
+import cn.net.bjsoft.sxdz.bean.app.AppBean;
+import cn.net.bjsoft.sxdz.bean.app.LoginBean;
 import cn.net.bjsoft.sxdz.dialog.PickerScrollViewPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
-import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.Constants;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MD5;
 import cn.net.bjsoft.sxdz.utils.MyBase64;
-import cn.net.bjsoft.sxdz.utils.MyBitmapUtils;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.UrlUtil;
@@ -76,8 +75,10 @@ public class MineZDLFFragment extends BaseFragment {
     private String old_password = "";
 
 
-    private DatasBean mDatasBean = null;
-    private DatasBean.UserDao mUserDao;
+//    private DatasBean mDatasBean = null;
+//    private DatasBean.UserDao mUserDao;
+    private AppBean appBean;
+    private LoginBean loginBean;
 
     private BitmapUtils bitmapUtils;
 
@@ -85,17 +86,7 @@ public class MineZDLFFragment extends BaseFragment {
     public void initData() {
         title.setText("我的");
 
-        LogUtil.e("json" + mJson);
-        mDatasBean = GsonUtil.getDatasBean(mJson);
-        mUserDao = mDatasBean.data.user;
 
-        bitmapUtils = new BitmapUtils(getActivity(), AddressUtils.img_cache_url);
-        bitmapUtils.configDefaultLoadingImage(R.mipmap.application_zdlf_loding);
-        bitmapUtils.configDefaultLoadFailedImage(R.mipmap.application_zdlf_loding);
-        bitmapUtils.display(avatar, mUserDao.avatar);
-
-        name.setText(mUserDao.name);
-        company.setText("北京中电联发科技有限公司");
 
 
         if (pickersCacheList == null) {
@@ -118,6 +109,52 @@ public class MineZDLFFragment extends BaseFragment {
                 department.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
             }
         });
+
+        getData();
+    }
+
+
+    private void getData(){
+        LogUtil.e("json" + mJson);
+        appBean= GsonUtil.getAppBean(mJson);
+
+
+        HttpPostUtils httpPostUtil = new HttpPostUtils();
+        String url = "";
+        url = appBean.api_user+"/"+SPUtil.getUserId(mActivity)+"/"+"my.json";
+        RequestParams params = new RequestParams(url);
+        httpPostUtil.get(mActivity,params);
+
+        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("我的页面json");
+                LogUtil.e(strJson);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("我的页面json-----错误"+ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+//        bitmapUtils = new BitmapUtils(getActivity(), AddressUtils.img_cache_url);
+//        bitmapUtils.configDefaultLoadingImage(R.mipmap.application_zdlf_loding);
+//        bitmapUtils.configDefaultLoadFailedImage(R.mipmap.application_zdlf_loding);
+//        bitmapUtils.display(avatar, mUserDao.avatar);
+//
+//        name.setText(mUserDao.name);
+//        company.setText("北京中电联发科技有限公司");
     }
 
     /**
@@ -361,12 +398,12 @@ public class MineZDLFFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
-                MyBitmapUtils.getInstance(getActivity()).clearCache(mUserDao.avatar);
-                bitmapUtils.display(avatar, mUserDao.avatar);
-                if (getActivity() instanceof MainActivity) {
-                    MainActivity a = (MainActivity) getActivity();
-                    a.setUserIcon();
-                }
+//                MyBitmapUtils.getInstance(getActivity()).clearCache(mUserDao.avatar);
+//                bitmapUtils.display(avatar, mUserDao.avatar);
+//                if (getActivity() instanceof MainActivity) {
+//                    MainActivity a = (MainActivity) getActivity();
+//                    a.setUserIcon();
+//                }
                 dialog.dismiss();
             }
         });

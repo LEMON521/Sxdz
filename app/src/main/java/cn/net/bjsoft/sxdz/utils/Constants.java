@@ -38,8 +38,23 @@ public class Constants {
     /**用户 id*/
     public static final String USER_KEY_ID="id";
 
+    /**用户 token*/
+    public static final String USER_KEY_TOKEN="token";
+
+    /**应用 secret*/
+    public static final String USER_KEY_SECRET="secret";
+
+    /**应用 appid*/
+    public static final String USER_KEY_APPID="appid";
+
+    /**应用 appid*/
+    public static final String USER_KEY_USERID="userid";
+
     /**用户姓名*/
     public static final String USER_KEY_NAME="name";
+
+    /**用户是否是会员*/
+    public static final String USER_KEY_ISMEMBER="ismember";
 
     /**用户昵称*/
     public static final String USER_KEY_NICK_NAME="nickname";

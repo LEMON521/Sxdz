@@ -49,8 +49,10 @@ import cn.net.bjsoft.sxdz.activity.home.bartop.MessageActivity;
 import cn.net.bjsoft.sxdz.activity.home.bartop.UserActivity;
 import cn.net.bjsoft.sxdz.activity.home.bartop.search.SearchResultActivity;
 import cn.net.bjsoft.sxdz.activity.home.bartop.search.SpeechSearchActivity;
-import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.bean.PushBean;
+import cn.net.bjsoft.sxdz.bean.app.AppBean;
+import cn.net.bjsoft.sxdz.bean.app.HomepageBean;
+import cn.net.bjsoft.sxdz.bean.app.ToolbarBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.Constants;
@@ -164,9 +166,13 @@ public class MainActivity extends BaseActivity {
     private static MainActivity mainActivity;
 
     private String mJson = "";
-    private DatasBean mDatasBean = null;
-    private DatasBean.ToolbarDao mToolbarDao = null;
-    private ArrayList<DatasBean.HomepageDao> mHomePageList = null;
+    //private DatasBean mDatasBean = null;
+    private AppBean appBean;
+    private ToolbarBean toolbarBean;
+    private ArrayList<HomepageBean> homepageBean;
+
+    //private DatasBean.ToolbarDao toolbarBean = null;
+    //private ArrayList<DatasBean.HomepageDao> homepageBean = null;
     private ArrayList<ImageView> mImgeView;
 
     private BitmapUtils bitmapUtils;
@@ -206,9 +212,13 @@ public class MainActivity extends BaseActivity {
         mainActivity = this;
         mJson = getIntent().getStringExtra("json");
         LogUtil.e("=====mJson=====" + mJson);
-        mDatasBean = GsonUtil.getDatasBean(mJson);
-        mToolbarDao = mDatasBean.data.toolbar;
-        mHomePageList = mDatasBean.data.homepage;
+        //mDatasBean = GsonUtil.getDatasBean(mJson);
+
+
+        appBean = GsonUtil.getAppBean(mJson);
+        toolbarBean = appBean.toolbar;
+        homepageBean = appBean.homepage;
+
         mImgeView = new ArrayList<>();
         mImageOptions = new ImageOptions.Builder()
                /*.setSize(0, 0)*/
@@ -264,7 +274,7 @@ public class MainActivity extends BaseActivity {
     private void initTopBar() {
 
 
-        DatasBean.ToolbarDao toolBar = mDatasBean.data.toolbar;
+        ToolbarBean toolBar = appBean.toolbar;
 
         if (toolBar == null) {
             return;
@@ -390,7 +400,7 @@ public class MainActivity extends BaseActivity {
          * TODO 向底部栏添加关联的Fragment
          */
 //        mBottonFragmentList = new ArrayList<>();
-//        for (int homepageNum = 0;homepageNum<mHomePageList.size();homepageNum++){
+//        for (int homepageNum = 0;homepageNum<homepageBean.size();homepageNum++){
         mBottonFragmentList = new ArrayList<>();
         mBottonFragmentList = InitFragmentUtil.getBottonFragments(mJson);
         for (int i = 0; i < mBottonFragmentList.size(); i++) {
@@ -407,7 +417,7 @@ public class MainActivity extends BaseActivity {
          *
          * 根据fragment 的tag对ImageView进行控制
          */
-//        mHomePageList = mDatasBean.data.homepage;
+//        homepageBean = appBean.homepage;
 //        mBottonIVList = new ArrayList<>();
         mBottomIconViewList = new ArrayList<>();
         for (int homepageNum = 0; homepageNum < mBottonFragmentList.size(); homepageNum++) {
@@ -425,7 +435,7 @@ public class MainActivity extends BaseActivity {
             params.setMargins(0, 2, 0, 2);
             //给View绑定Tag的时候用创建Fragment时指定的Tag，这样就避免点击图标而导致找不到与Fragment相同的tag了
             bottomView = new BottomIconView_1(this, mBottonFragmentList.get(homepageNum).getArguments().getString("tag"));
-            bottomView.setModeView(mHomePageList.get(homepageNum).icon_position, mHomePageList.get(homepageNum).text, mHomePageList.get(homepageNum).icon_selected, mHomePageList.get(homepageNum).icon_default);
+            bottomView.setModeView(homepageBean.get(homepageNum).icon_position, homepageBean.get(homepageNum).text, homepageBean.get(homepageNum).icon_selected, homepageBean.get(homepageNum).icon_default);
             LogUtil.e("添加了新图标" + bottomView.toString());
             bottomView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -453,12 +463,12 @@ public class MainActivity extends BaseActivity {
 
         //********************************添加ImageView结束*********************************************
         //设置默认显示页面
-        //int seclect = mHomePageList.size() / 2 + mHomePageList.size() % 2 - 1;
-//        x.image().bind(mBottonIVList.get(seclect), mHomePageList.get(seclect).icon_selected,mImageOptions);
+        //int seclect = homepageBean.size() / 2 + homepageBean.size() % 2 - 1;
+//        x.image().bind(mBottonIVList.get(seclect), homepageBean.get(seclect).icon_selected,mImageOptions);
 
-        for (int seclect = 0; seclect < mHomePageList.size(); seclect++) {
+        for (int seclect = 0; seclect < homepageBean.size(); seclect++) {
             //根据每个页面中selected的状态来判断
-            if (mHomePageList.get(seclect).selected.equals("1")) {
+            if (homepageBean.get(seclect).selected == 1) {
 
                 //极端情况，如果默认选择的是打开摄像机的页面，那么就进行判断
                 if (mBottonFragmentList.size() > 0 && ((mBottonFragmentList.get(seclect).getArguments().get("tag").toString()).equals("scaning"))) {
@@ -467,7 +477,7 @@ public class MainActivity extends BaseActivity {
                             pm.checkPermission("android.permission.CAMERA", "cn.net.bjsoft.sxdz"));
                     //如果权限没打开
                     if (!permission) {
-                        if (mHomePageList.size() > 1) {//如果程序后台配置了两个及其两个以上的页面，则默认打开第二个页面
+                        if (homepageBean.size() > 1) {//如果程序后台配置了两个及其两个以上的页面，则默认打开第二个页面
                             MyToast.showLong(this, "没有拍摄权限,请在移动设备设置中添加拍摄权限再重新启动程序！");
                             //onBottomIconClick(mBottomIconViewList.get(1));
                             continue;//TODO 结束当前循环，进行下一次循环
@@ -484,7 +494,7 @@ public class MainActivity extends BaseActivity {
                 return;
             }
             //如果没有指定显示默认的状态，则默认选择第一个
-            if (((seclect + "").equals((mHomePageList.size() - 1) + "")) && (mHomePageList.get(seclect).selected.equals("0"))) {
+            if (((seclect + "").equals((homepageBean.size() - 1) + "")) && (homepageBean.get(seclect).selected == 0)) {
 
                 if (mBottonFragmentList.size() > 0 && ((mBottonFragmentList.get(0).getArguments().get("tag").toString()).equals("scaning"))) {
                     //LogUtil.e("没有默认页面");
@@ -492,7 +502,7 @@ public class MainActivity extends BaseActivity {
                     boolean permission = (PackageManager.PERMISSION_GRANTED ==
                             pm.checkPermission("android.permission.CAMERA", "cn.net.bjsoft.sxdz"));
                     if (!permission) {
-                        if (mHomePageList.size() > 1) {
+                        if (homepageBean.size() > 1) {
                             MyToast.showLong(this, "没有拍摄权限,请在移动设备设置中添加拍摄权限再重新启动程序！");
                             onBottomIconClick(mBottomIconViewList.get(1));
                         } else {
@@ -969,11 +979,11 @@ public class MainActivity extends BaseActivity {
      * 暴露方法，方便其他的页面设置头像
      */
     public void setUserIcon() {
-        if (mDatasBean.data.user.logined) {
-//            MyBitmapUtils.getInstance(this).clearCache(mDatasBean.data.user.avatar);
-//            MyBitmapUtils.getInstance(this).display(user_icon, mDatasBean.data.user.avatar);
-            bitmapUtils.display(user_icon, mDatasBean.data.user.avatar);
-        }
+//        if (appBean.user.logined) {
+////            MyBitmapUtils.getInstance(this).clearCache(appBean.user.avatar);
+////            MyBitmapUtils.getInstance(this).display(user_icon, appBean.user.avatar);
+//            bitmapUtils.display(user_icon, appBean.user.avatar);
+//        }
     }
 
 
@@ -1013,15 +1023,15 @@ public class MainActivity extends BaseActivity {
             LogUtil.e("主页面设置的communityTag为：：：" + communityTag);
         } else {
             //community_img.setImageResource(R.drawable.tab_help_s);
-            if (mToolbarDao.train) {
+            if (toolbarBean.train) {
                 community_img.setImageResource(R.drawable.nav_live);
-            } else if (mToolbarDao.knowledge) {
+            } else if (toolbarBean.knowledge) {
                 community_img.setImageResource(R.drawable.nav_help);
-            } else if (mToolbarDao.proposal) {
+            } else if (toolbarBean.proposal) {
                 community_img.setImageResource(R.drawable.nav_advise);
-            } else if (mToolbarDao.bug) {//
+            } else if (toolbarBean.bug) {//
                 community_img.setImageResource(R.drawable.nav_bug);
-            } else if (mToolbarDao.community) {//社区图标未找到
+            } else if (toolbarBean.community) {//社区图标未找到
                 community_img.setImageResource(R.drawable.nav_live);
             }
             community_num.setVisibility(View.INVISIBLE);
@@ -1049,14 +1059,14 @@ public class MainActivity extends BaseActivity {
             }
             LogUtil.e("主页面设置的functionTag为：：：" + functionTag);
         } else {
-            if (mToolbarDao.scan) {
+            if (toolbarBean.scan) {
                 function_img.setImageResource(R.drawable.nav_sao);
-            } else if (mToolbarDao.shoot) {
+            } else if (toolbarBean.shoot) {
                 function_img.setImageResource(R.drawable.nav_photo);
-            } else if (mToolbarDao.signin) {
+            } else if (toolbarBean.signin) {
                 function_img.setImageResource(R.drawable.nav_arrive);
             }
-//            else if (mToolbarDao.payment.size() > 0) {
+//            else if (toolbarBean.payment.size() > 0) {
 //                function_img.setImageResource(R.drawable.nav_pay);
 //            }
             function_num.setVisibility(View.INVISIBLE);
@@ -1085,13 +1095,13 @@ public class MainActivity extends BaseActivity {
             }
             LogUtil.e("主页面设置的messageTag为：：：" + messageTag);
         } else {
-            if (mToolbarDao.message) {
+            if (toolbarBean.message) {
                 message_img.setImageResource(R.drawable.nav_mag);
-            } else if (mToolbarDao.task) {
+            } else if (toolbarBean.task) {
                 message_img.setImageResource(R.drawable.nav_renwu);
-            } else if (mToolbarDao.crm) {
+            } else if (toolbarBean.crm) {
                 message_img.setImageResource(R.drawable.clientele_s);
-            } else if (mToolbarDao.approve) {
+            } else if (toolbarBean.approve) {
                 message_img.setImageResource(R.drawable.nav_shenpi);
             }
 
@@ -1162,7 +1172,7 @@ public class MainActivity extends BaseActivity {
 //            app.reFreshPushNumList("Message", mess);
 //            app.reFreshPushNumList("User", user);
 
-            DatasBean.ToolbarDao toolbarDao = mDatasBean.data.toolbar;
+            ToolbarBean toolbarDao = appBean.toolbar;
 
             if (toolbarDao.train) {
                 app.reFreshCommunityPushNumList("train", train);

@@ -1,8 +1,12 @@
 package cn.net.bjsoft.sxdz.app_utils;
 
+import android.content.Context;
+
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
+
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 /**
  * Created by Zrzc on 2017/4/19.
@@ -21,7 +25,7 @@ public class HttpPostUtils {
 
         @Override
         public void onError(Throwable ex, boolean isOnCallback) {
-            mOnCallBack.onError(ex,isOnCallback);
+            mOnCallBack.onError(ex, isOnCallback);
         }
 
         @Override
@@ -55,21 +59,22 @@ public class HttpPostUtils {
     }
 
 
-    public void post(RequestParams params) {
+    public void post(Context context, RequestParams params) {
 
-        params.addBodyParameter("token", "");
-        params.addBodyParameter("appid", "");
-        params.addBodyParameter("secret", "");
+        params.addBodyParameter("token", SPUtil.getToken(context));
+        params.addBodyParameter("appid", SPUtil.getAppid(context));
+        params.addBodyParameter("secret", SPUtil.getSecret(context));
 
         x.http().post(params, callBack);
 
     }
 
-    public void get(RequestParams params) {
+    public void get(Context context,RequestParams params) {
 
-//        params.addBodyParameter("token", "");
-//        params.addBodyParameter("appid", "");
-//        params.addBodyParameter("secret", "");
+//        params.addBodyParameter("token", SPUtil.getToken(context));
+//        params.addBodyParameter("appid", SPUtil.getAppid(context));
+//        params.addBodyParameter("secret", SPUtil.getSecret(context));
+
 
         x.http().get(params, callBack);
 
