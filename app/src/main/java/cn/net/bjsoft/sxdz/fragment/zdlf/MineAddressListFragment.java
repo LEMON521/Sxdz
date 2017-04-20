@@ -99,7 +99,7 @@ public class MineAddressListFragment extends BaseFragment {
             childNumList = new ArrayList<>();
         }
         childNumList.clear();
-
+        initList();
         addressChange(address_parent);
     }
 
@@ -110,7 +110,7 @@ public class MineAddressListFragment extends BaseFragment {
      * @param view
      */
     @Event(value = {R.id.title_back
-            ,R.id.address_search
+            , R.id.address_search
             /*, R.id.search_text
             , R.id.search_delete*/})
     private void addressOnClick(View view) {
@@ -155,7 +155,7 @@ public class MineAddressListFragment extends BaseFragment {
 //        return;
 //    }
 
-}
+    }
 
     /**
      * 切换
@@ -165,6 +165,15 @@ public class MineAddressListFragment extends BaseFragment {
     @Event(value = {R.id.address_parent
             , R.id.address_filiale})
     private void addressChange(View view) {
+
+
+        tree_list.clear();
+        mDatas.clear();
+        //搜索相关
+        childAvatarList.clear();
+        childNameList.clear();
+        childNumList.clear();
+
 
         switch (view.getId()) {
             case R.id.address_parent://
@@ -176,7 +185,6 @@ public class MineAddressListFragment extends BaseFragment {
                 address_filiale.setBackgroundResource(R.drawable.approve_right_kongxin);
                 address_filiale.setTextColor(Color.parseColor("#000000"));
 
-                initList();
                 getFormData();
 
                 break;
@@ -189,7 +197,6 @@ public class MineAddressListFragment extends BaseFragment {
                 address_filiale.setBackgroundResource(R.drawable.approve_right_shixin);
                 address_filiale.setTextColor(Color.parseColor("#FFFFFF"));
 
-                initList();
                 getFormData();
 
                 break;

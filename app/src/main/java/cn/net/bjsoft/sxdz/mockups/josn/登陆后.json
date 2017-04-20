@@ -1,0 +1,19 @@
+﻿{
+    "code": 0,
+    "data": {
+        "addtime": "2017-04-04 23:32:28",
+        "avatar": "user/avatar/default.jpg",
+        "editcount": "0",
+        "expires": "/Date(1492640411346)/",
+        "id": "10000",
+        "im": "903634",
+        "ismember": "0",
+        "loginname": "demo",
+        "newuser": false,
+        "nickname": "测试员",
+        "signstr": "",
+        "source_id": 2,
+        "token": "be683ee2a0531796",
+        "userid": "10000"
+    }
+}

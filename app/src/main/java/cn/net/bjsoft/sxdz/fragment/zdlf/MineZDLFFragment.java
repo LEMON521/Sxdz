@@ -29,12 +29,16 @@ import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.LoginBean;
+import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
+import cn.net.bjsoft.sxdz.bean.app.user.UserOrganizationBean;
 import cn.net.bjsoft.sxdz.dialog.PickerScrollViewPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.Constants;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MD5;
 import cn.net.bjsoft.sxdz.utils.MyBase64;
+import cn.net.bjsoft.sxdz.utils.MyBitmapUtils;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.UrlUtil;
@@ -42,6 +46,8 @@ import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
 import cn.net.bjsoft.sxdz.view.WindowRecettingPasswordView;
 import cn.net.bjsoft.sxdz.view.picker_scroll_view.Pickers;
+
+import static cn.net.bjsoft.sxdz.utils.AddressUtils.http_shuxinyun_url;
 
 
 /**
@@ -75,18 +81,18 @@ public class MineZDLFFragment extends BaseFragment {
     private String old_password = "";
 
 
-//    private DatasBean mDatasBean = null;
+    //    private DatasBean mDatasBean = null;
 //    private DatasBean.UserDao mUserDao;
     private AppBean appBean;
     private LoginBean loginBean;
+    private UserBean userBean;
+    private UserOrganizationBean userOrganizationBean;
 
     private BitmapUtils bitmapUtils;
 
     @Override
     public void initData() {
         title.setText("我的");
-
-
 
 
         if (pickersCacheList == null) {
@@ -110,31 +116,43 @@ public class MineZDLFFragment extends BaseFragment {
             }
         });
 
-        getData();
+        bitmapUtils = new BitmapUtils(getActivity(), AddressUtils.img_cache_url);
+        bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);
+        bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);
+
+        getUserData();
     }
 
 
-    private void getData(){
+    private void getUserData() {
+        showProgressDialog();
         LogUtil.e("json" + mJson);
-        appBean= GsonUtil.getAppBean(mJson);
+        appBean = GsonUtil.getAppBean(mJson);
 
 
         HttpPostUtils httpPostUtil = new HttpPostUtils();
         String url = "";
-        url = appBean.api_user+"/"+SPUtil.getUserId(mActivity)+"/"+"my.json";
+        url = appBean.api_user + "/" + SPUtil.getUserId(mActivity) + "/" + "my.json";
         RequestParams params = new RequestParams(url);
-        httpPostUtil.get(mActivity,params);
+        httpPostUtil.get(mActivity, params);
 
         httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
-                LogUtil.e("我的页面json");
-                LogUtil.e(strJson);
+                SPUtil.setUserJson(mActivity, strJson);//缓存用户信息
+
+                userBean = GsonUtil.getUserBeanBean(strJson);
+                userOrganizationBean = userBean.organization;
+
+
+//                LogUtil.e("我的页面json");
+//                LogUtil.e(SPUtil.getUserJson(mActivity));
+                setUserData();
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("我的页面json-----错误"+ex);
+                LogUtil.e("我的页面json-----错误" + ex);
             }
 
             @Override
@@ -144,18 +162,68 @@ public class MineZDLFFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
-
+                dismissProgressDialog();
             }
         });
 
-//        bitmapUtils = new BitmapUtils(getActivity(), AddressUtils.img_cache_url);
-//        bitmapUtils.configDefaultLoadingImage(R.mipmap.application_zdlf_loding);
-//        bitmapUtils.configDefaultLoadFailedImage(R.mipmap.application_zdlf_loding);
-//        bitmapUtils.display(avatar, mUserDao.avatar);
 //
-//        name.setText(mUserDao.name);
-//        company.setText("北京中电联发科技有限公司");
+
     }
+
+    /**
+     * 设置用户数据
+     */
+    private void setUserData() {
+
+        bitmapUtils.display(avatar, userBean.avatar);
+
+        name.setText(userBean.name);
+
+        if (userOrganizationBean!=null) {
+            company.setText(userOrganizationBean.root_company_name + "");//+""是为了防止userOrganizationBean为空
+            getOrganizationData();
+        }
+
+
+    }
+
+    private void getOrganizationData() {
+
+        showProgressDialog();
+        HttpPostUtils httpPostUtil = new HttpPostUtils();
+        String url = "";
+        url = http_shuxinyun_url +  userOrganizationBean.url;
+        RequestParams params = new RequestParams(url);
+        httpPostUtil.get(mActivity, params);
+
+        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+
+                SPUtil.setUserOrganizationJson(mActivity, strJson);//缓存公司架构信息
+
+                LogUtil.e("我的页面json");
+                LogUtil.e(SPUtil.getUserOrganizationJson(mActivity));
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("我的页面json-----错误" + ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
+    }
+
 
     /**
      * 设置切换岗位数据源
@@ -398,8 +466,8 @@ public class MineZDLFFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
-//                MyBitmapUtils.getInstance(getActivity()).clearCache(mUserDao.avatar);
-//                bitmapUtils.display(avatar, mUserDao.avatar);
+                MyBitmapUtils.getInstance(getActivity()).clearCache(userBean.avatar);
+                bitmapUtils.display(avatar, userBean.avatar);
 //                if (getActivity() instanceof MainActivity) {
 //                    MainActivity a = (MainActivity) getActivity();
 //                    a.setUserIcon();

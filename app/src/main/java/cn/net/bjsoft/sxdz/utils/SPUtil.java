@@ -11,6 +11,46 @@ public class SPUtil {
 
 
     /**
+     * 获取  --  USER_KEY_JSON = "user_json"缓存
+     */
+    public static String getUserJson(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_JSON, Context.MODE_PRIVATE);
+        return preferences.getString(Constants.USER_KEY_USER_JSON, "");
+    }
+
+    /**
+     * 设置   --   USER_KEY_JSON = "user_json"缓存
+     */
+    public static void setUserJson(Context context, String user_json) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_JSON, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.USER_KEY_USER_JSON, user_json);
+        editor.commit();
+    }
+
+
+    /**
+     * 获取  --  USER_KEY_JSON = "user_json"缓存
+     */
+    public static String getUserOrganizationJson(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ORGANIZATION_JSON, Context.MODE_PRIVATE);
+        return preferences.getString(Constants.USER_KEY_USER_ORGANIZATION_JSON, "");
+    }
+
+    /**
+     * 设置   --   USER_KEY_JSON = "user_json"缓存
+     */
+    public static void setUserOrganizationJson(Context context, String user_organization_json) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ORGANIZATION_JSON, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.USER_KEY_USER_ORGANIZATION_JSON, user_organization_json);
+        editor.commit();
+    }
+
+
+
+
+    /**
      * 获取  --  ismember值,
      */
     public static boolean getIsMember(Context context) {
@@ -27,6 +67,7 @@ public class SPUtil {
         editor.putBoolean(Constants.USER_KEY_ISMEMBER, ismember);
         editor.commit();
     }
+
     /**
      * 获取  --  userid值,
      */
@@ -99,8 +140,6 @@ public class SPUtil {
         editor.putString(Constants.USER_KEY_SECRET, secret);
         editor.commit();
     }
-
-
 
 
     /**

@@ -397,7 +397,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void getDataFromService() {
-        showProgressDialog();
+
         HttpPostUtils postUtils = new HttpPostUtils();
         RequestParams params = new RequestParams(init_url);
         postUtils.get(this, params);
@@ -426,7 +426,7 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-                dismissProgressDialog();
+
             }
         });
     }

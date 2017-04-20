@@ -122,9 +122,13 @@ public class BottomIconView_1 extends LinearLayout {
         rightText.setVisibility(GONE);
         rightIv.setVisibility(GONE);
 
- //       x.image().clearCacheFiles();
- //       x.image().clearMemCache();
-        mImageOptions = new ImageOptions.Builder().setUseMemCache(true).build();
+        //       x.image().clearCacheFiles();
+        //       x.image().clearMemCache();
+        mImageOptions = new ImageOptions.Builder()
+                .setFailureDrawableId(R.mipmap.application_zdlf_loding) //以资源id设置加载失败的动画
+                .setLoadingDrawableId(R.mipmap.application_zdlf_loding)
+                .setUseMemCache(true)
+                .build();
 
     }
 
@@ -161,7 +165,7 @@ public class BottomIconView_1 extends LinearLayout {
         this.mode = mode;
 
         //没有指定排列方式
-        if (mode.equals("")){
+        if (mode.equals("")) {
             vertical_2.setVisibility(VISIBLE);
             vertical_1.setVisibility(GONE);
             horizontal_1.setVisibility(GONE);
@@ -178,76 +182,76 @@ public class BottomIconView_1 extends LinearLayout {
         }
 
         //上下排列
-            //图片在上
-            if (mode.equals("top")) {
-                vertical_2.setVisibility(VISIBLE);
-                vertical_1.setVisibility(GONE);
-                horizontal_1.setVisibility(GONE);
-                horizontal_2.setVisibility(GONE);
-                if (defaultIcon.equals("")) {
-                    topIv.setVisibility(GONE);
-                } else {
-                    topIv.setVisibility(VISIBLE);
-                    x.image().bind(topIv, selectIcon, mImageOptions);
-                    x.image().bind(topIv, defaultIcon, mImageOptions);
-                }
-                bottomText.setVisibility(VISIBLE);
-                bottomText.setText(text);
+        //图片在上
+        if (mode.equals("top")) {
+            vertical_2.setVisibility(VISIBLE);
+            vertical_1.setVisibility(GONE);
+            horizontal_1.setVisibility(GONE);
+            horizontal_2.setVisibility(GONE);
+            if (defaultIcon.equals("")) {
+                topIv.setVisibility(GONE);
+            } else {
+                topIv.setVisibility(VISIBLE);
+                x.image().bind(topIv, selectIcon, mImageOptions);
+                x.image().bind(topIv, defaultIcon, mImageOptions);
             }
+            bottomText.setVisibility(VISIBLE);
+            bottomText.setText(text);
+        }
 
-            //图片在下
-            if (mode.equals("bottom")) {
-                vertical_1.setVisibility(VISIBLE);
-                vertical_2.setVisibility(GONE);
-                horizontal_1.setVisibility(GONE);
-                horizontal_2.setVisibility(GONE);
-                if (defaultIcon.equals("")) {
-                    bottomIv.setVisibility(GONE);
-                } else {
-                    bottomIv.setVisibility(VISIBLE);
-                    x.image().bind(bottomIv, selectIcon, mImageOptions);
-                    x.image().bind(bottomIv, defaultIcon, mImageOptions);
-                }
-                topText.setVisibility(VISIBLE);
-                topText.setText(text);
+        //图片在下
+        if (mode.equals("bottom")) {
+            vertical_1.setVisibility(VISIBLE);
+            vertical_2.setVisibility(GONE);
+            horizontal_1.setVisibility(GONE);
+            horizontal_2.setVisibility(GONE);
+            if (defaultIcon.equals("")) {
+                bottomIv.setVisibility(GONE);
+            } else {
+                bottomIv.setVisibility(VISIBLE);
+                x.image().bind(bottomIv, selectIcon, mImageOptions);
+                x.image().bind(bottomIv, defaultIcon, mImageOptions);
             }
+            topText.setVisibility(VISIBLE);
+            topText.setText(text);
+        }
 
 
         //左右排列
 
-            //图片在左
-            if (mode.equals("left")) {
-                vertical_1.setVisibility(GONE);
-                vertical_2.setVisibility(GONE);
-                horizontal_1.setVisibility(GONE);
-                horizontal_2.setVisibility(VISIBLE);
-                if (defaultIcon.equals("")) {
-                    leftIv.setVisibility(GONE);
-                } else {
-                    leftIv.setVisibility(VISIBLE);
-                    x.image().bind(leftIv, selectIcon, mImageOptions);
-                    x.image().bind(leftIv, defaultIcon, mImageOptions);
-                }
-                rightText.setVisibility(VISIBLE);
-                rightText.setText(text);
+        //图片在左
+        if (mode.equals("left")) {
+            vertical_1.setVisibility(GONE);
+            vertical_2.setVisibility(GONE);
+            horizontal_1.setVisibility(GONE);
+            horizontal_2.setVisibility(VISIBLE);
+            if (defaultIcon.equals("")) {
+                leftIv.setVisibility(GONE);
+            } else {
+                leftIv.setVisibility(VISIBLE);
+                x.image().bind(leftIv, selectIcon, mImageOptions);
+                x.image().bind(leftIv, defaultIcon, mImageOptions);
             }
+            rightText.setVisibility(VISIBLE);
+            rightText.setText(text);
+        }
 
-            //图片在右
-            if (mode.equals("right")) {
-                vertical_1.setVisibility(GONE);
-                vertical_2.setVisibility(GONE);
-                horizontal_2.setVisibility(GONE);
-                horizontal_1.setVisibility(VISIBLE);
-                if (defaultIcon.equals("")) {
-                    rightIv.setVisibility(GONE);
-                } else {
-                    rightIv.setVisibility(VISIBLE);
-                    x.image().bind(rightIv, selectIcon, mImageOptions);
-                    x.image().bind(rightIv, defaultIcon, mImageOptions);
-                }
-                leftText.setVisibility(VISIBLE);
-                leftText.setText(text);
+        //图片在右
+        if (mode.equals("right")) {
+            vertical_1.setVisibility(GONE);
+            vertical_2.setVisibility(GONE);
+            horizontal_2.setVisibility(GONE);
+            horizontal_1.setVisibility(VISIBLE);
+            if (defaultIcon.equals("")) {
+                rightIv.setVisibility(GONE);
+            } else {
+                rightIv.setVisibility(VISIBLE);
+                x.image().bind(rightIv, selectIcon, mImageOptions);
+                x.image().bind(rightIv, defaultIcon, mImageOptions);
             }
+            leftText.setVisibility(VISIBLE);
+            leftText.setText(text);
+        }
 
     }
 
@@ -262,9 +266,10 @@ public class BottomIconView_1 extends LinearLayout {
 
     /**
      * 设置图片，此方法在setModeView方法之后调用
+     *
      * @param url 网络图片地址
      */
-    public void setImage(String url){
+    public void setImage(String url) {
         if (mode.equals("")) {
             mode = "top";
         }

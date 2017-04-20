@@ -1,0 +1,215 @@
+﻿{
+    "positions": {
+        "children": {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "children": [
+                                {
+                                    "children": [
+                                        {
+                                            "children": [],
+                                            "dept_id": "28",
+                                            "employee_id": "5070318826019440872",
+                                            "id": "181",
+                                            "name": "系统架构师"
+                                        },
+                                        {
+                                            "children": [],
+                                            "dept_id": "28",
+                                            "employee_id": "5070318826019440872",
+                                            "id": "182",
+                                            "name": "测试工程师"
+                                        },
+                                        {
+                                            "children": [],
+                                            "dept_id": "28",
+                                            "employee_id": "5349159412301185179",
+                                            "id": "183",
+                                            "name": "系统工程师"
+                                        },
+                                        {
+                                            "children": [],
+                                            "dept_id": "28",
+                                            "employee_id": "5063622524471051352",
+                                            "id": "193",
+                                            "name": "创意工程师"
+                                        },
+                                        {
+                                            "children": [],
+                                            "dept_id": "28",
+                                            "employee_id": "5278251016933487419",
+                                            "id": "522",
+                                            "name": "Android工程师"
+                                        },
+                                        {
+                                            "children": [],
+                                            "dept_id": "28",
+                                            "employee_id": "4881967381429802551",
+                                            "id": "523",
+                                            "name": "iOS工程师"
+                                        }
+                                    ],
+                                    "dept_id": "28",
+                                    "employee_id": "4830306247521683018",
+                                    "id": "180",
+                                    "name": "技术经理"
+                                }
+                            ],
+                            "dept_id": "28",
+                            "employee_id": "5305321975361554865",
+                            "id": "179",
+                            "name": "技术总监"
+                        }
+                    ],
+                    "dept_id": "28",
+                    "employee_id": "5305321975361554865",
+                    "id": "174",
+                    "name": "技术副总"
+                },
+                {
+                    "children": [
+                        {
+                            "children": [
+                                {
+                                    "children": [],
+                                    "dept_id": "30",
+                                    "employee_id": "5037479354782713736",
+                                    "id": "170",
+                                    "name": "高级销售工程师B"
+                                },
+                                {
+                                    "children": [
+                                        {
+                                            "children": [],
+                                            "dept_id": "30",
+                                            "employee_id": "5627953237476396534",
+                                            "id": "171",
+                                            "name": "销售代表A"
+                                        },
+                                        {
+                                            "children": [],
+                                            "dept_id": "30",
+                                            "employee_id": "5483194184889816557",
+                                            "id": "172",
+                                            "name": "推广专员"
+                                        },
+                                        {
+                                            "children": [],
+                                            "dept_id": "30",
+                                            "employee_id": "5323972815387218246",
+                                            "id": "351",
+                                            "name": "销售代表B"
+                                        }
+                                    ],
+                                    "dept_id": "30",
+                                    "employee_id": "5305321975361554865",
+                                    "id": "178",
+                                    "name": "销售部经理"
+                                },
+                                {
+                                    "children": [],
+                                    "dept_id": "30",
+                                    "employee_id": "5493492297464680375",
+                                    "id": "352",
+                                    "name": "高级销售工程师A"
+                                }
+                            ],
+                            "dept_id": "30",
+                            "employee_id": "5305321975361554865",
+                            "id": "177",
+                            "name": "营销总监"
+                        }
+                    ],
+                    "dept_id": "30",
+                    "employee_id": "5305321975361554865",
+                    "id": "175",
+                    "name": "营销副总"
+                },
+                {
+                    "children": [
+                        {
+                            "children": [
+                                {
+                                    "children": [
+                                        {
+                                            "children": [],
+                                            "dept_id": "29",
+                                            "employee_id": "4964278781195377949",
+                                            "id": "189",
+                                            "name": "行政专员"
+                                        }
+                                    ],
+                                    "dept_id": "29",
+                                    "employee_id": "5505698851440892020",
+                                    "id": "185",
+                                    "name": "行政经理"
+                                }
+                            ],
+                            "dept_id": "29",
+                            "employee_id": "5505698851440892020",
+                            "id": "184",
+                            "name": "行政总监"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "children": [
+                                        {
+                                            "children": [],
+                                            "dept_id": "29",
+                                            "employee_id": "4964278781195377949",
+                                            "id": "188",
+                                            "name": "人事专员"
+                                        }
+                                    ],
+                                    "dept_id": "29",
+                                    "employee_id": "5505698851440892020",
+                                    "id": "187",
+                                    "name": "人事经理"
+                                }
+                            ],
+                            "dept_id": "29",
+                            "employee_id": "5505698851440892020",
+                            "id": "186",
+                            "name": "人事总监"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "children": [
+                                        {
+                                            "children": [],
+                                            "dept_id": "29",
+                                            "employee_id": "4964278781195377949",
+                                            "id": "192",
+                                            "name": "出纳"
+                                        }
+                                    ],
+                                    "dept_id": "29",
+                                    "employee_id": "5505698851440892020",
+                                    "id": "191",
+                                    "name": "财务经理"
+                                }
+                            ],
+                            "dept_id": "29",
+                            "employee_id": "5505698851440892020",
+                            "id": "190",
+                            "name": "财务总监"
+                        }
+                    ],
+                    "dept_id": "29",
+                    "employee_id": "5505698851440892020",
+                    "id": "176",
+                    "name": "行政副总"
+                }
+            ],
+            "count": 3
+        },
+        "dept_id": "27",
+        "employee_id": "5305321975361554865",
+        "id": "173",
+        "name": "总经理"
+    }
+}

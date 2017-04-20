@@ -168,6 +168,7 @@ public class LoginFragment extends BaseFragment {
                         SPUtil.setUserId(getContext(), loginedDataBean.userid);
                         SPUtil.setToken(getContext(), loginedDataBean.token);
                         //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
+                        SPUtil.setAvatar(getContext(), loginedDataBean.avatar);
 
 
                         Intent i3 = new Intent(getActivity(), MainActivity.class);

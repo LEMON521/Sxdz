@@ -208,13 +208,14 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         //GPSUtils.getAddress(this);
         // x.view().inject(this);
+
         mActivity = this;
         mainActivity = this;
         mJson = getIntent().getStringExtra("json");
         LogUtil.e("=====mJson=====" + mJson);
         //mDatasBean = GsonUtil.getDatasBean(mJson);
 
-
+        showProgressDialog();
         appBean = GsonUtil.getAppBean(mJson);
         toolbarBean = appBean.toolbar;
         homepageBean = appBean.homepage;
@@ -238,7 +239,7 @@ public class MainActivity extends BaseActivity {
 
 //        mImageOptions = new ImageOptions.Builder().setCircular(true).setUseMemCache(true).build();
 
-        showProgressDialog();
+
         //初始化顶部栏动画
         initAnimation();
         initTopBar();
@@ -653,37 +654,37 @@ public class MainActivity extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.community:
-                showProgressDialog();
+
                 intent.setClass(context, CommunityActivity.class);
                 intent.putExtra("opentag", communityTag);
                 //pushNum.replace("",0);
                 //app.reFreshPushNumList("Community", 0);
                 break;
             case R.id.function:
-                showProgressDialog();
+
                 intent.setClass(context, FunctionActivity.class);
                 intent.putExtra("opentag", functionTag);
                 //app.reFreshPushNumList("Function", 0);
                 break;
             case R.id.message:
-                showProgressDialog();
+
                 intent.setClass(context, MessageActivity.class);
                 intent.putExtra("opentag", messageTag);
                 //app.reFreshPushNumList("Message", 0);
                 break;
             case R.id.user:
-                showProgressDialog();
+
                 intent.setClass(context, UserActivity.class);
                 //app.reFreshPushNumList("User", 0);
                 break;
             case R.id.search_edittext:
-                showProgressDialog();
+
                 //MyToast.showShort(MainActivity.this, "文字搜索");
                 intent.putExtra("searchType", "text");
                 intent.setClass(context, SearchResultActivity.class);
                 break;
             case R.id.search_speech:
-                showProgressDialog();
+
                 //MyToast.showShort(MainActivity.this, "语音搜索");
                 intent.putExtra("searchType", "speech");
                 intent.setClass(context, SpeechSearchActivity.class);
@@ -691,7 +692,6 @@ public class MainActivity extends BaseActivity {
         }
         intent.putExtra("json", mJson);
         startActivity(intent);
-        dismissProgressDialog();
     }
 
     @Event(value = {R.id.main_botton_scan, R.id.main_botton_upload, R.id.main_botton_article, R.id.main_botton_form, R.id.main_botton_mine,})
