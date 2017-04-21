@@ -8,6 +8,7 @@ import cn.net.bjsoft.sxdz.bean.UpdateBean;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
 import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressBean;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveShowDao;
 import cn.net.bjsoft.sxdz.bean.function.sign.FunctionSignHistoryBean;
@@ -61,7 +62,7 @@ public class GsonUtil {
      * @param json
      * @return
      */
-    public static UserBean getUserBeanBean(String json){
+    public static UserBean getUserBean(String json){
         return getGson().fromJson(json , UserBean.class);
 //        return datasBean;
     }
@@ -228,6 +229,15 @@ public class GsonUtil {
      */
     public static TreeTaskAddAddressListBean getTreeTaskAddAddressListBean(String json){
         return getGson().fromJson(json , TreeTaskAddAddressListBean.class);
+    }
+
+    /**
+     * 联系人组织架构json
+     * @param json
+     * @return
+     */
+    public static AddressBean getAddressBean(String json){
+        return getGson().fromJson(json , AddressBean.class);
     }
 
 

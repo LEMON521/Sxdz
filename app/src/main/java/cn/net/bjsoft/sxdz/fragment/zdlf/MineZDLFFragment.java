@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -141,12 +142,12 @@ public class MineZDLFFragment extends BaseFragment {
             public void onSuccess(String strJson) {
                 SPUtil.setUserJson(mActivity, strJson);//缓存用户信息
 
-                userBean = GsonUtil.getUserBeanBean(strJson);
+                userBean = GsonUtil.getUserBean(strJson);
                 userOrganizationBean = userBean.organization;
 
 
-//                LogUtil.e("我的页面json");
-//                LogUtil.e(SPUtil.getUserJson(mActivity));
+                LogUtil.e("我的页面json");
+                LogUtil.e(SPUtil.getUserJson(mActivity));
                 setUserData();
             }
 
@@ -179,7 +180,7 @@ public class MineZDLFFragment extends BaseFragment {
 
         name.setText(userBean.name);
 
-        if (userOrganizationBean!=null) {
+        if (userOrganizationBean != null) {
             company.setText(userOrganizationBean.root_company_name + "");//+""是为了防止userOrganizationBean为空
             getOrganizationData();
         }
@@ -192,7 +193,7 @@ public class MineZDLFFragment extends BaseFragment {
         showProgressDialog();
         HttpPostUtils httpPostUtil = new HttpPostUtils();
         String url = "";
-        url = http_shuxinyun_url +  userOrganizationBean.url;
+        url = http_shuxinyun_url + userOrganizationBean.url;
         RequestParams params = new RequestParams(url);
         httpPostUtil.get(mActivity, params);
 
@@ -259,6 +260,10 @@ public class MineZDLFFragment extends BaseFragment {
 
             case R.id.mine_zdlf_address_list://通讯录
                 intent.putExtra("fragment_name", "addressList");
+
+                Bundle bundle = new Bundle();
+                bundle.putString("organization_url", http_shuxinyun_url + userOrganizationBean.url);
+                intent.putExtra("organization_url",bundle);
                 startActivity(intent);
                 break;
 
