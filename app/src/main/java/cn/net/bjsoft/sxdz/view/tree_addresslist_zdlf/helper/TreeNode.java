@@ -3,18 +3,19 @@ package cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.net.bjsoft.sxdz.bean.app.user.address.AddressEmployeesBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
 
 public class TreeNode {
 
-    private int id;
+    private Long id;
     /**
      * 根节点pId为0
      */
-    private int pId = 0;
+    private Long pId = 0l;
+
 
     //显示样式
-    private String style;
+    private String name;
 
     /**
      * 当前的级别
@@ -39,15 +40,16 @@ public class TreeNode {
     private TreeNode parent;
 
 
-    private AddressEmployeesBean employeesBean;
+
+    private AddressDeptsBean addressDeptsBean;
 
 
-    public TreeNode(int id, int pId, String style, AddressEmployeesBean employeesBean) {
+    public TreeNode(Long id, Long pId, String name,AddressDeptsBean addressDeptsBean) {
         super();
         this.id = id;
         this.pId = pId;
-        this.style = style;
-        this.employeesBean = employeesBean;
+        this.name = name;
+        this.addressDeptsBean = addressDeptsBean;
 
     }
 
@@ -60,19 +62,19 @@ public class TreeNode {
         this.icon = icon;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getpId() {
+    public Long getpId() {
         return pId;
     }
 
-    public void setpId(int pId) {
+    public void setpId(Long pId) {
         this.pId = pId;
     }
 
@@ -100,21 +102,20 @@ public class TreeNode {
         this.parent = parent;
     }
 
-
-    public String getStyle() {
-        return style;
+    public String getName() {
+        return name;
     }
 
-    public void setStyle(String style) {
-        this.style = style;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public AddressEmployeesBean getEmployeesBean() {
-        return employeesBean;
+    public AddressDeptsBean getAddressDeptsBean() {
+        return addressDeptsBean;
     }
 
-    public void setEmployeesBean(AddressEmployeesBean employeesBean) {
-        this.employeesBean = employeesBean;
+    public void setAddressDeptsBean(AddressDeptsBean addressDeptsBean) {
+        this.addressDeptsBean = addressDeptsBean;
     }
 
     /**

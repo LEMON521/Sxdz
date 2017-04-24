@@ -142,39 +142,6 @@
 
 
                 <LinearLayout
-                    android:id="@+id/mine_zdlf_personnel_file"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dm030"
-                    android:background="@color/white"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dm020">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/mine_zdlf_personnel_management" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dm020"
-                        android:layout_weight="3"
-                        android:text="人事管理"
-                        android:textColor="#333333"
-                        android:textSize="@dimen/dm028" />
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:src="@mipmap/mine_zdlf_more" />
-
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/mine_zdlf_reset_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -207,15 +174,22 @@
 
                 </LinearLayout>
 
+                <ListView
+                    android:layout_marginBottom="@dimen/dm030"
+                    android:id="@+id/mine_zdlf_function"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="#00000000"
+                    android:dividerHeight="0dp"></ListView>
 
             </LinearLayout>
 
             <RelativeLayout
-                android:layout_marginTop="@dimen/dm080"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/dm040">
+                android:layout_marginBottom="@dimen/dm040"
+                android:layout_marginTop="@dimen/dm080">
 
                 <!--android:background="@drawable/exit_login"-->
 

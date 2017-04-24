@@ -14,6 +14,8 @@ public class AddressEmployeesBean implements Serializable {
     public String root_company_id="";
     public String source_id="";
     public String work_no="";
+    public String avatar="";
+    public AddressEmployeesUserBean user = new AddressEmployeesUserBean();
 
 
 }

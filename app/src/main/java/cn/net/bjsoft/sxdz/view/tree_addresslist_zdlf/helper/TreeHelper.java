@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.app.user.address.AddressEmployeesBean;
-import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeEmployee;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
+import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeAddressDeptsBean;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeId;
+import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeName;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodePid;
-import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeStyle;
 
 
 /**
@@ -81,36 +81,37 @@ public class TreeHelper {
         TreeNode node = null;
 
         for (T t : datas) {
-            int id = -1;
-            int pId = -1;
-            String style = null;
-            AddressEmployeesBean employeesBean = null;
+            Long id = -1l;
+            Long pId = -1l;
+            String name = null;
+            AddressDeptsBean addressDeptsBean = null;
 
             Class<? extends Object> clazz = t.getClass();
             Field[] declaredFields = clazz.getDeclaredFields();
             for (Field f : declaredFields) {
                 if (f.getAnnotation(TreeNodeId.class) != null) {
                     f.setAccessible(true);
-                    id = f.getInt(t);
+                    id = (Long) f.get(t);
                 }
                 if (f.getAnnotation(TreeNodePid.class) != null) {
                     f.setAccessible(true);
-                    pId = f.getInt(t);
+                    pId = (Long) f.get(t);
                 }
-                if (f.getAnnotation(TreeNodeStyle.class) != null) {
+                if (f.getAnnotation(TreeNodeName.class) != null) {
                     f.setAccessible(true);
-                    style = (String) f.get(t);
+                    name = (String) f.get(t);
                 }
-                if (f.getAnnotation(TreeNodeEmployee.class) != null) {
+                if (f.getAnnotation(TreeNodeAddressDeptsBean.class) != null) {
                     f.setAccessible(true);
-                    employeesBean = (AddressEmployeesBean) f.get(t);
+                    addressDeptsBean = (AddressDeptsBean) f.get(t);
                 }
 
-                if (id != -1 && pId != -1 && style != null) {
+
+                if (id != -1 && pId != -1 && name != null) {
                     break;
                 }
             }
-            node = new TreeNode(id, pId, style,employeesBean);
+            node = new TreeNode(id, pId, name,addressDeptsBean);
             nodes.add(node);
         }
 

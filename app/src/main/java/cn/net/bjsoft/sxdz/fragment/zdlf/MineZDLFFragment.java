@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
@@ -23,13 +25,17 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
+import cn.net.bjsoft.sxdz.adapter.zdlf.MineZDLFFunctionAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.LoginBean;
+import cn.net.bjsoft.sxdz.bean.app.user.UserAddinsBean;
 import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
 import cn.net.bjsoft.sxdz.bean.app.user.UserOrganizationBean;
 import cn.net.bjsoft.sxdz.dialog.PickerScrollViewPopupWindow;
@@ -44,6 +50,7 @@ import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.UrlUtil;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
+import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
 import cn.net.bjsoft.sxdz.view.WindowRecettingPasswordView;
 import cn.net.bjsoft.sxdz.view.picker_scroll_view.Pickers;
@@ -70,11 +77,15 @@ public class MineZDLFFragment extends BaseFragment {
     private TextView company;
     @ViewInject(R.id.mine_zdlf_department)
     private TextView department;
+    @ViewInject(R.id.mine_zdlf_function)
+    private ListView function;
 
+    //选择岗位相关
     private PickerScrollViewPopupWindow pickerPopupWindow;
     private ArrayList<Pickers> pickersCacheList;
     private ArrayList<Pickers> pickersItemList;
     private int pickerSelecect = 0;
+
 
     private WindowRecettingPasswordView passwordView;
     private Dialog dialog;
@@ -89,7 +100,13 @@ public class MineZDLFFragment extends BaseFragment {
     private UserBean userBean;
     private UserOrganizationBean userOrganizationBean;
 
+    private ArrayList<UserAddinsBean> addinsBeen;
+    private MineZDLFFunctionAdapter addinsAdapter;
+
     private BitmapUtils bitmapUtils;
+
+    private int y_down = -1;
+    private int y_up = -1;
 
     @Override
     public void initData() {
@@ -105,15 +122,44 @@ public class MineZDLFFragment extends BaseFragment {
         }
         pickersItemList.clear();
 
-        setPickers();
-        department.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
+
+        //功能
+        if (addinsBeen == null) {
+            addinsBeen = new ArrayList<>();
+        }
+        addinsBeen.clear();
+
+        if (addinsAdapter == null) {
+            addinsAdapter = new MineZDLFFunctionAdapter(mActivity, addinsBeen);
+        }
+        function.setAdapter(addinsAdapter);
+
+        function.setOnTouchListener(new View.OnTouchListener() {
+
+            //屏蔽掉滑动事件
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                    default:
+                        return false;
+                }
+
+            }
+
+        });
+
+        //----------------------------
+
+
         pickerPopupWindow = new PickerScrollViewPopupWindow();
         pickerPopupWindow.setOnData(new PickerScrollViewPopupWindow.OnGetData() {
             @Override
             public void onDataCallBack(int select) {
                 //pickerSelecect = Integer.parseInt(pickers.getShowId());
-                pickerSelecect = select;
-                department.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
+                changePosition(select);
             }
         });
 
@@ -124,6 +170,60 @@ public class MineZDLFFragment extends BaseFragment {
         getUserData();
     }
 
+    /**
+     * 切换岗位
+     *
+     * @param selecect
+     */
+    private void changePosition(final int selecect) {
+        String position = "";
+        String value = "";
+        value = pickersItemList.get(selecect).getShowConetnt();
+        for(String getKey: userOrganizationBean.positions.keySet()){
+             if(userOrganizationBean.positions.get(getKey).equals(value)){
+                 position = getKey;
+             }
+        }
+
+
+        RequestParams params = new RequestParams(appBean.api_auth + "/position");
+
+        params.addBodyParameter("position",position);
+
+        HttpPostUtils httpPostUtil = new HttpPostUtils();
+
+        httpPostUtil.post(mActivity,params);
+
+        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+
+                LogUtil.e("切换岗位"+strJson);
+
+//                pickerSelecect = selecect;
+//                department.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("切换岗位错误" +
+                        ""+ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+
+
+    }
 
     private void getUserData() {
         showProgressDialog();
@@ -146,8 +246,10 @@ public class MineZDLFFragment extends BaseFragment {
                 userOrganizationBean = userBean.organization;
 
 
-                LogUtil.e("我的页面json");
-                LogUtil.e(SPUtil.getUserJson(mActivity));
+                //LogUtil.e("我的页面json==========");
+//                LogUtil.e(SPUtil.getUserJson(mActivity));
+//                LogUtil.e("我的页面json==========" + userOrganizationBean.positions.size());
+
                 setUserData();
             }
 
@@ -185,7 +287,12 @@ public class MineZDLFFragment extends BaseFragment {
             getOrganizationData();
         }
 
+        setPickers();
+        department.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
 
+        addinsBeen.addAll(userBean.addins);
+        addinsAdapter.notifyDataSetChanged();
+        Utility.setListViewHeightBasedOnChildren(function);
     }
 
     private void getOrganizationData() {
@@ -203,7 +310,7 @@ public class MineZDLFFragment extends BaseFragment {
 
                 SPUtil.setUserOrganizationJson(mActivity, strJson);//缓存公司架构信息
 
-                LogUtil.e("我的页面json");
+                //LogUtil.e("我的页面json");
                 LogUtil.e(SPUtil.getUserOrganizationJson(mActivity));
             }
 
@@ -231,10 +338,25 @@ public class MineZDLFFragment extends BaseFragment {
      */
     private void setPickers() {
         //这里先静态设置
-        for (int i = 0; i < 5; i++) {
-            pickersCacheList.add(new Pickers("职位" + i, (i + 0) + ""));
-            pickersItemList.add(new Pickers("职位" + i, (i + 0) + ""));
+//        for (int i = 0; i < 5; i++) {
+//            pickersCacheList.add(new Pickers("职位" + i, (i + 0) + ""));
+//            pickersItemList.add(new Pickers("职位" + i, (i + 0) + ""));
+//        }
+
+        Iterator iter = userOrganizationBean.positions.entrySet().iterator();
+        int i = 0;
+        while (iter.hasNext()) {
+
+            Map.Entry entry = (Map.Entry) iter.next();
+            String key = (String) entry.getKey();
+            String value = (String) entry.getValue();
+//            pickersCacheList.add(new Pickers(value, key));
+//            pickersItemList.add(new Pickers(value, key));
+            pickersCacheList.add(new Pickers(value, i + ""));
+            pickersItemList.add(new Pickers(value, i + ""));
+            i++;
         }
+
 
     }
 
@@ -246,7 +368,7 @@ public class MineZDLFFragment extends BaseFragment {
      */
     @Event(value = {R.id.title_back
             , R.id.mine_zdlf_address_list
-            , R.id.mine_zdlf_personnel_file
+            /*, R.id.mine_zdlf_personnel_file*/
             , R.id.mine_zdlf_reset_password
             , R.id.mine_zdlf_logout
             , R.id.mine_zdlf_icon
@@ -263,17 +385,17 @@ public class MineZDLFFragment extends BaseFragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("organization_url", http_shuxinyun_url + userOrganizationBean.url);
-                intent.putExtra("organization_url",bundle);
+                intent.putExtra("organization_url", bundle);
                 startActivity(intent);
                 break;
 
-
+/*
             case R.id.mine_zdlf_personnel_file://人事管理
 
                 intent.putExtra("fragment_name", "TestFragment_1");
                 mActivity.startActivity(intent);
                 break;
-
+*/
 
             case R.id.mine_zdlf_reset_password://重置密码
 //                passwordView = new WindowRecettingPasswordView(mActivity);
@@ -284,6 +406,10 @@ public class MineZDLFFragment extends BaseFragment {
 
             case R.id.mine_zdlf_logout://退出登录
                 SPUtil.setUserUUID(getActivity(), "");
+                SPUtil.setUserId(getContext(), "");
+                SPUtil.setToken(getContext(), "");
+                //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
+                SPUtil.setAvatar(getContext(), "");
                 Intent i = new Intent(getActivity(), SplashActivity.class);
                 startActivity(i);
                 getActivity().finish();

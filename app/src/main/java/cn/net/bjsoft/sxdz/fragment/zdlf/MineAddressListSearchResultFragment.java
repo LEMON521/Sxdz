@@ -96,7 +96,7 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
         searchStr = bundle.getString("address_list_search_str").toString();
 
         //addressList
-        for (int i = 0; i < childAvatarList.size(); i++) {
+        for (int i = 0; i < childNameList.size(); i++) {
             AddressListBean bean = null;
             bean = new AddressListBean();
             AddressListBean.AddressListDao dao = null;

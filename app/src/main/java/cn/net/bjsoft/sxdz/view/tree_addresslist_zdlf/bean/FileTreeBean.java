@@ -1,59 +1,58 @@
 package cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean;
 
-import cn.net.bjsoft.sxdz.bean.app.user.address.AddressEmployeesBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
 
 public class FileTreeBean {
     @TreeNodeId
-    private int _id;
+    private Long _id;
     @TreeNodePid
-    private int parentId;
-    @TreeNodeStyle
-    private String style;
-    @TreeNodeEmployee
-    private AddressEmployeesBean employeesBean;
+    private Long parentId;
+    @TreeNodeName
+    private String name;
+    @TreeNodeAddressDeptsBean
+    private AddressDeptsBean addressDeptsBean;
 
 
-
-    public FileTreeBean(int _id, int parentId, String style, AddressEmployeesBean employeesBean) {
+    public FileTreeBean(Long _id, Long parentId, String name,AddressDeptsBean addressDeptsBean) {
         super();
         this._id = _id;
         this.parentId = parentId;
-        this.style = style;
-        this.employeesBean = employeesBean;
+        this.name = name;
+        this.addressDeptsBean = addressDeptsBean;
     }
 
 
-
-    public int get_id() {
+    public Long get_id() {
         return _id;
     }
 
-    public void set_id(int _id) {
+    public void set_id(Long _id) {
         this._id = _id;
     }
 
-    public int getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
-    public String getStyle() {
-        return style;
+    public String getName() {
+        return name;
     }
 
-    public void setStyle(String style) {
-        this.style = style;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public AddressEmployeesBean getEmployeesBean() {
-        return employeesBean;
+    public AddressDeptsBean getAddressDeptsBean() {
+        return addressDeptsBean;
     }
 
-    public void setEmployeesBean(AddressEmployeesBean employeesBean) {
-        this.employeesBean = employeesBean;
+    public void setAddressDeptsBean(AddressDeptsBean addressDeptsBean) {
+        this.addressDeptsBean = addressDeptsBean;
     }
+
 
 }

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
@@ -28,6 +27,9 @@ public class AddressListSearchResultAdapter extends BaseAdapter {
             , ArrayList<AddressListBean.AddressListDao> resultList) {
         this.context = context;
         this.resultList = resultList;
+        bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
+        bitmapUtils.configDefaultLoadingImage(R.mipmap.application_zdlf_loding);//初始化头像
+        bitmapUtils.configDefaultLoadFailedImage(R.mipmap.application_zdlf_loding);//初始化头像
     }
 
 
@@ -56,7 +58,7 @@ public class AddressListSearchResultAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.parent_ll = (LinearLayout) convertView
                     .findViewById(R.id.item_address_list_parent);
-            viewHolder.child_ll = (RelativeLayout) convertView
+            viewHolder.child_ll = (LinearLayout) convertView
                     .findViewById(R.id.item_address_list_child);
 
             viewHolder.child_icon = (CircleImageView) convertView
@@ -73,9 +75,6 @@ public class AddressListSearchResultAdapter extends BaseAdapter {
         viewHolder.parent_ll.setVisibility(View.GONE);
         viewHolder.child_ll.setVisibility(View.VISIBLE);
 
-        bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
-        bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
-        bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
 
         bitmapUtils.display(viewHolder.child_icon, resultList.get(position).avatar_url);
         //x.image().bind(viewHolder.child_icon, node.getAvatar_url());
@@ -87,7 +86,7 @@ public class AddressListSearchResultAdapter extends BaseAdapter {
 
     private final class ViewHolder {
         public LinearLayout parent_ll;
-        public RelativeLayout child_ll;
+        public LinearLayout child_ll;
         public CircleImageView child_icon;
         public TextView child_name, child_num;
 
