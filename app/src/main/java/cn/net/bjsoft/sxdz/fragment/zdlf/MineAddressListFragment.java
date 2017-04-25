@@ -9,13 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
-import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,12 +28,11 @@ import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressEmployeesBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressEmployeesUserBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressPositionsBean;
-import cn.net.bjsoft.sxdz.bean.zdlf.address_list.AddressListBean;
 import cn.net.bjsoft.sxdz.dialog.DialingPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
-import cn.net.bjsoft.sxdz.utils.AssetsUtil;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.FileTreeBean;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper.TreeAddressZDLFAdapter;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper.TreeNode;
@@ -67,13 +63,15 @@ public class MineAddressListFragment extends BaseFragment {
     private LinearLayout address_change;
 
 
-    private ArrayList<AddressListBean.AddressListDao> tree_list;
     private ArrayList<String> childAvatarList;
     private ArrayList<String> childNameList;
     private ArrayList<String> childNumList;
 
     private FileTreeBean treeBean;
     private List<FileTreeBean> fileBeanDatas;
+    private List<FileTreeBean> fileBeanDatas_head;
+    private List<FileTreeBean> fileBeanDatas_branch;
+
     private TreeAddressZDLFAdapter mAdapter;
 
     private String organization_url = "";
@@ -81,13 +79,21 @@ public class MineAddressListFragment extends BaseFragment {
 
     private AddressBean addressBean;
     private AddressCompanysBean companysBean;
-    private ArrayList<AddressDeptsBean> deptsBean;
-    private ArrayList<AddressDeptsBean> format_deptsBean;//格式化岗位集合
-    private ArrayList<AddressEmployeesBean> employeesBean;
-    private ArrayList<AddressPositionsBean> positionsBean;
-    private ArrayList<AddressPositionsBean> format_positionsBean;
+    private ArrayList<AddressCompanysBean> list_companysBean;
+    private ArrayList<AddressCompanysBean> format_companysBean;
 
-    private HashMap<String, AddressDeptsBean> map;
+    private ArrayList<AddressDeptsBean> list_deptsBean;
+    private ArrayList<AddressDeptsBean> format_deptsBean;//格式化岗位集合
+    private ArrayList<AddressDeptsBean> list_head_deptsBean;//总公司
+    private ArrayList<AddressDeptsBean> list_branch_deptsBean;//分公司
+    private ArrayList<AddressDeptsBean> list_change_deptsBean;
+
+
+    private ArrayList<AddressEmployeesBean> list_employeesBean;
+    private ArrayList<AddressPositionsBean> list_positionsBean;
+    private ArrayList<AddressPositionsBean> format_positionsBean;//格式化职位
+
+    private HashMap<String, AddressDeptsBean> map;//过滤重复联系人的中间集合
 
 
     @Override
@@ -95,35 +101,56 @@ public class MineAddressListFragment extends BaseFragment {
         title_back.setVisibility(View.VISIBLE);
         title.setText("通讯录");
         //setTreeView();
-
-        organization_url = getArguments().getBundle("organization_url").getString("organization_url");
-
-        LogUtil.e("通讯录地址=====" + organization_url);
-
-
+        //organization_url = getArguments().getBundle("organization_url").getString("organization_url");
         initList();
-
+        getOrganizationData();
         addressChange(address_parent);
     }
 
     private void initList() {
 
 
-        if (deptsBean == null) {
-            deptsBean = new ArrayList<>();
+        if (list_head_deptsBean == null) {
+            list_head_deptsBean = new ArrayList<>();
         }
-        deptsBean.clear();
+        list_head_deptsBean.clear();
 
-        if (employeesBean == null) {
-            employeesBean = new ArrayList<>();
+        if (list_branch_deptsBean == null) {
+            list_branch_deptsBean = new ArrayList<>();
         }
-        employeesBean.clear();
+        list_branch_deptsBean.clear();
 
-        if (positionsBean == null) {
-            positionsBean = new ArrayList<>();
+
+        if (list_change_deptsBean == null) {
+            list_change_deptsBean = new ArrayList<>();
         }
-        positionsBean.clear();
+        list_change_deptsBean.clear();
 
+
+        if (list_companysBean == null) {
+            list_companysBean = new ArrayList<>();
+        }
+        list_companysBean.clear();
+
+        if (list_deptsBean == null) {
+            list_deptsBean = new ArrayList<>();
+        }
+        list_deptsBean.clear();
+
+        if (list_employeesBean == null) {
+            list_employeesBean = new ArrayList<>();
+        }
+        list_employeesBean.clear();
+
+        if (list_positionsBean == null) {
+            list_positionsBean = new ArrayList<>();
+        }
+        list_positionsBean.clear();
+
+        if (format_companysBean == null) {
+            format_companysBean = new ArrayList<>();
+        }
+        format_companysBean.clear();
 
         if (format_deptsBean == null) {
             format_deptsBean = new ArrayList<>();
@@ -154,6 +181,15 @@ public class MineAddressListFragment extends BaseFragment {
 
         //------------------------
 
+        if (fileBeanDatas_head == null) {
+            fileBeanDatas_head = new ArrayList<>();
+        }
+        fileBeanDatas_head.clear();
+
+        if (fileBeanDatas_branch == null) {
+            fileBeanDatas_branch = new ArrayList<>();
+        }
+        fileBeanDatas_branch.clear();
 
         if (fileBeanDatas == null) {
             fileBeanDatas = new ArrayList<>();
@@ -161,14 +197,6 @@ public class MineAddressListFragment extends BaseFragment {
         fileBeanDatas.clear();
 
 
-        if (tree_list == null) {
-            tree_list = new ArrayList<>();
-        }
-        tree_list.clear();
-//        if (mDatas == null) {
-//            mDatas = new ArrayList<>();
-//        }
-//        mDatas.clear();
     }
 
 
@@ -210,11 +238,11 @@ public class MineAddressListFragment extends BaseFragment {
         childAvatarList.clear();
         childNameList.clear();
         childNumList.clear();
-        LogUtil.e("获取到联系人数据-----------" + employeesBean.size());
-        for (AddressEmployeesBean bean : employeesBean) {//以防后台给的数据是残疾的
+//        LogUtil.e("获取到联系人数据-----------" + list_employeesBean.size());
+        for (AddressEmployeesBean bean : list_employeesBean) {//以防后台给的数据是残疾的
             if (bean.user != null) {
                 childAvatarList.add(bean.user.avatar);
-            }else {
+            } else {
                 AddressEmployeesUserBean userBean = new AddressEmployeesUserBean();
                 childAvatarList.add(userBean.avatar);
             }
@@ -250,10 +278,6 @@ public class MineAddressListFragment extends BaseFragment {
     @Event(value = {R.id.address_parent
             , R.id.address_filiale})
     private void addressChange(View view) {
-
-
-        tree_list.clear();
-//        mDatas.clear();
         fileBeanDatas.clear();
         //搜索相关
         childAvatarList.clear();
@@ -263,109 +287,146 @@ public class MineAddressListFragment extends BaseFragment {
 
         switch (view.getId()) {
             case R.id.address_parent://
-
-
-                //MyToast.showShort(mActivity, "总公司");
                 address_parent.setBackgroundResource(R.drawable.approve_left_shixin);
                 address_parent.setTextColor(Color.parseColor("#FFFFFF"));
                 address_filiale.setBackgroundResource(R.drawable.approve_right_kongxin);
                 address_filiale.setTextColor(Color.parseColor("#000000"));
-
                 //getFormData();
-                getOrganizationData();
+                //getOrganizationData();
                 //showMDatas();
+                changeTreeData(1);
                 break;
 
             case R.id.address_filiale:
-
-                MyToast.showShort(mActivity, "分公司");
                 address_parent.setBackgroundResource(R.drawable.approve_left_kongxin);
                 address_parent.setTextColor(Color.parseColor("#000000"));
                 address_filiale.setBackgroundResource(R.drawable.approve_right_shixin);
                 address_filiale.setTextColor(Color.parseColor("#FFFFFF"));
-
+                changeTreeData(2);
                 //getFormData();
+                //getOrganizationData();
 
-                getOrganizationData();
                 break;
         }
 
     }
 
-    private void getOrganizationData() {
-        showProgressDialog();
-
-       // RequestParams params = new RequestParams("http://api.shuxinyun.com/cache/users/10001/organization.json");
-        RequestParams params = new RequestParams(organization_url);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                //LogUtil.e("获取到联系人数据-----------" + result);
-                if (addressBean != null) {
-                    addressBean = null;
-                }
-                deptsBean.clear();
-                employeesBean.clear();
-                positionsBean.clear();
-                fileBeanDatas.clear();
-
-                addressBean = GsonUtil.getAddressBean(result);
-
-                companysBean = addressBean.companys;
-                deptsBean.addAll(addressBean.depts);
-                employeesBean.addAll(addressBean.employees);
-                positionsBean.add(addressBean.positions);
-
+    private void getCompanys(ArrayList<AddressCompanysBean> companys, String id) {
+        String pid = id;
+        for (AddressCompanysBean company : companys) {
+            company.pId = pid;
+            if (company.children != null && company.children.size() > 0) {
+                getCompanys(company.children, company.id);
+            } else {
             }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-                LogUtil.e("===========开始递归22222222222==========" + ex);
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-                getPositions(positionsBean, "0");
-                fileBeanDatas.clear();
-                getDepts(deptsBean, "0");
-                setTreeView();
-                dismissProgressDialog();
-            }
-        });
-
+            format_companysBean.add(company);
+        }
     }
 
 
     /**
-     * 测试,运用本地数据
+     * 切换岗位切换数据
+     *
+     * @param change
      */
-    private void showMDatas() {
-        String result = "";
-
-        result = AssetsUtil.getStringFromAssets(mActivity, "positions.json");
-
-        addressBean = GsonUtil.getAddressBean(result);
-
-        companysBean = addressBean.companys;
-        deptsBean.addAll(addressBean.depts);
-        employeesBean.addAll(addressBean.employees);
-        positionsBean.add(addressBean.positions);
-
-
-        getPositions(positionsBean, "0");
+    private void changeTreeData(int change) {
         fileBeanDatas.clear();
-        getDepts(deptsBean, "0");
+        switch (change) {
+            case 1:
+                fileBeanDatas.addAll(fileBeanDatas_head);
+                break;
+
+            case 2:
+                fileBeanDatas.addAll(fileBeanDatas_branch);
+                break;
+        }
+
         setTreeView();
+    }
+
+
+    private void getOrganizationData() {
+
+        showProgressDialog();
+        if (addressBean != null) {
+            addressBean = null;
+        }
+
+        list_companysBean.clear();
+        list_deptsBean.clear();
+        list_employeesBean.clear();
+        list_positionsBean.clear();
+
+        fileBeanDatas.clear();
+
+        addressBean = GsonUtil.getAddressBean(SPUtil.getUserOrganizationJson(mActivity));
+
+        LogUtil.e("SPUtil.getUserOrganizationJson(mActivity)"+SPUtil.getUserOrganizationJson(mActivity));
+
+        if (addressBean==null){//如果为空,就return
+            MyToast.showShort(mActivity,"获取通讯录信息失败!");
+            return;
+        }
+
+        list_companysBean.add(addressBean.companys);
+        list_deptsBean.addAll(addressBean.depts);
+        list_employeesBean.addAll(addressBean.employees);
+        list_positionsBean.add(addressBean.positions);
+
+
+        getCompanys(list_companysBean, "0");
+
+        //添加总公司数据
+        list_head_deptsBean.clear();
+        AddressDeptsBean deptsBean_head = new AddressDeptsBean();
+        deptsBean_head.id = format_companysBean.get(format_companysBean.size() - 1).id;
+        deptsBean_head.pId = format_companysBean.get(format_companysBean.size() - 1).pId;
+        deptsBean_head.name = format_companysBean.get(format_companysBean.size() - 1).name;
+
+        for (AddressDeptsBean bean_head : list_deptsBean) {
+            if (bean_head.company_id.equals(deptsBean_head.id)) {
+                if (deptsBean_head.children == null) {
+                    deptsBean_head.children = new ArrayList<>();
+                }
+                deptsBean_head.children.add(bean_head);
+            }
+        }
+        list_head_deptsBean.add(deptsBean_head);
+
+
+        //添加子公司数据
+        list_branch_deptsBean.clear();
+
+        if (format_companysBean.size() > 1) {
+            for (int i = 0; i < format_companysBean.size() - 1; i++) {
+                AddressDeptsBean deptsBean_branch = new AddressDeptsBean();
+                deptsBean_branch.id = format_companysBean.get(i).id;
+                deptsBean_branch.pId = format_companysBean.get(i).pId;
+                deptsBean_branch.name = format_companysBean.get(i).name;
+                for (AddressDeptsBean bean_branch : list_deptsBean) {
+                    if (bean_branch.company_id.equals(deptsBean_branch.id)) {
+                        if (deptsBean_branch.children == null) {
+                            deptsBean_branch.children = new ArrayList<>();
+                        }
+                        deptsBean_branch.children.add(bean_branch);
+                    }
+                }
+                list_branch_deptsBean.add(deptsBean_branch);
+            }
+        }
+
+
+        format_positionsBean.clear();
+        getPositions(list_positionsBean, "0");
+        getDepts(list_head_deptsBean, "0", 1);//总部
+        LogUtil.e("添加子节点=======总部=====");
+        getDepts(list_branch_deptsBean, "0", 2);//分公司
+
+
         dismissProgressDialog();
 
     }
+
 
     /**
      * 部门树形结构格式化
@@ -373,7 +434,7 @@ public class MineAddressListFragment extends BaseFragment {
      * @param deptsBean
      * @param pid
      */
-    private void getDepts(ArrayList<AddressDeptsBean> deptsBean, String pid) {
+    private void getDepts(ArrayList<AddressDeptsBean> deptsBean, String pid, int change) {
 
 
         for (AddressDeptsBean addressDeptsBean : deptsBean) {
@@ -415,7 +476,7 @@ public class MineAddressListFragment extends BaseFragment {
 
             if (addressDeptsBean.children != null && addressDeptsBean.children.size() > 0) {
 
-                getDepts(addressDeptsBean.children, addressDeptsBean.id);
+                getDepts(addressDeptsBean.children, addressDeptsBean.id, change);
             } else {
 
             }
@@ -423,7 +484,24 @@ public class MineAddressListFragment extends BaseFragment {
                     , Long.parseLong(addressDeptsBean.pId)
                     , addressDeptsBean.name
                     , addressDeptsBean);
-            fileBeanDatas.add(treeBean);
+
+            if (change==1){
+                fileBeanDatas_head.add(treeBean);
+                LogUtil.e("添加子节点=======总公司=====" + fileBeanDatas_head.size());
+            }else if (change ==2){
+                fileBeanDatas_branch.add(treeBean);
+                LogUtil.e("添加子节点=======分公司=====" + fileBeanDatas_branch.size());
+            }
+//
+//            switch (change) {
+//                case 1:
+//
+//                    break;
+//
+//                case 2:
+//
+//                    break;
+//            }
 
         }
 
@@ -441,7 +519,7 @@ public class MineAddressListFragment extends BaseFragment {
             children.pId = pId;
             treeBean = null;
             //添加职工信息
-            for (AddressEmployeesBean employee : employeesBean) {
+            for (AddressEmployeesBean employee : list_employeesBean) {
                 if (children.employee_id.equals(employee.id)) {
                     children.employee = employee;
                 }

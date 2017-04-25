@@ -29,7 +29,7 @@ public class AddressListSearchResultAdapter extends BaseAdapter {
         this.resultList = resultList;
         bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
         bitmapUtils.configDefaultLoadingImage(R.mipmap.application_zdlf_loding);//初始化头像
-        bitmapUtils.configDefaultLoadFailedImage(R.mipmap.application_zdlf_loding);//初始化头像
+        bitmapUtils.configDefaultLoadFailedImage(R.drawable.tab_me_n);//初始化头像
     }
 
 

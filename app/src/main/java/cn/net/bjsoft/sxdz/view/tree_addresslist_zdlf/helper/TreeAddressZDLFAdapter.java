@@ -30,8 +30,8 @@ public class TreeAddressZDLFAdapter<T> extends TreeListViewAdapter<T> {
         super(mTree, context, datas, defaultExpandLevel);
         this.context = context;
         bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
-        bitmapUtils.configDefaultLoadingImage(R.mipmap.application_zdlf_loding);//初始化头像
-        bitmapUtils.configDefaultLoadFailedImage(R.mipmap.application_zdlf_loding);//初始化头像
+        bitmapUtils.configDefaultLoadingImage(R.drawable.tab_me_n);//初始化头像
+        bitmapUtils.configDefaultLoadFailedImage(R.drawable.tab_me_n);//初始化头像
     }
 
     @Override

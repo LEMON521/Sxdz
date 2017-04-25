@@ -91,6 +91,7 @@ public class LoginFragment extends BaseFragment {
         json = getActivity().getIntent().getStringExtra("json");
         appBean = GsonUtil.getAppBean(json);
         loginBean = appBean.login;
+
         context = getContext();
         title.setText(loginBean.btntext);
         //SPUtil.setUserUUID(getActivity(),"");
@@ -147,7 +148,7 @@ public class LoginFragment extends BaseFragment {
      */
 
     public void login() {
-
+        showProgressDialog();
         //showProgressDialog();
         HttpPostUtils postUtils = new HttpPostUtils();
         RequestParams params = new RequestParams(loginBean.loginapi);
@@ -159,39 +160,43 @@ public class LoginFragment extends BaseFragment {
         postUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
-
+                LogUtil.e("登录结果"+strJson);
                 loginedBean = GsonUtil.getLoginedBean(strJson);
 
-                switch (loginedBean.code) {
-                    case 0:
-                        loginedDataBean = loginedBean.data;
+                if (Integer.parseInt(loginedBean.data.userid)>0) {//如果登录成功,那么user_id是>0的
+                    loginedDataBean = loginedBean.data;
 
-                        SPUtil.setUserId(getContext(), loginedDataBean.userid);
-                        SPUtil.setToken(getContext(), loginedDataBean.token);
-                        //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
-                        SPUtil.setAvatar(getContext(), loginedDataBean.avatar);
+                    SPUtil.setUserId(getContext(), loginedDataBean.userid);
+                    SPUtil.setToken(getContext(), loginedDataBean.token);
+                    //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
+                    SPUtil.setAvatar(getContext(), loginedDataBean.avatar);
 
 
-                        Intent i3 = new Intent(getActivity(), MainActivity.class);
-                        LogUtil.e("数据请求=json=" + json);
-                        i3.putExtra("json", json);
-                        startActivity(i3);
-                        LogUtil.e("mActivity=&&&&&&&&&&=" + mActivity);
-                        LogUtil.e("getActivity=&&&&&&&&&&=" + getActivity());
-                        LogUtil.e("getContext=&&&&&&&&&&=" + getContext());
-                        if (getActivity() instanceof MainActivity) {
-                            getActivity().finish();
-                        }
-                        if (getActivity() instanceof UserActivity) {
-                            MainActivity.getMainActivity().finish();//不这样做的话，登录之后，点击返回按钮会返回到未登录状态的主页
-                            getActivity().finish();
-                        }
-                        if (getActivity() instanceof LoginActivity) {
-                            LoginActivity.getLoginActivity().finish();//不这样做的话，登录之后，点击返回按钮会返回到未登录状态的主页
-                            getActivity().finish();
-                        }
+                    LogUtil.e("登录结果");
 
-                        break;
+                    Intent i3 = new Intent(getActivity(), MainActivity.class);
+                    LogUtil.e("数据请求=json=" + json);
+                    i3.putExtra("json", json);
+                    startActivity(i3);
+                    LogUtil.e("mActivity=&&&&&&&&&&=" + mActivity);
+                    LogUtil.e("getActivity=&&&&&&&&&&=" + getActivity());
+                    LogUtil.e("getContext=&&&&&&&&&&=" + getContext());
+                    if (getActivity() instanceof MainActivity) {
+                        getActivity().finish();
+                    }
+                    if (getActivity() instanceof UserActivity) {
+                        MainActivity.getMainActivity().finish();//不这样做的话，登录之后，点击返回按钮会返回到未登录状态的主页
+                        getActivity().finish();
+                    }
+                    if (getActivity() instanceof LoginActivity) {
+                        LoginActivity.getLoginActivity().finish();//不这样做的话，登录之后，点击返回按钮会返回到未登录状态的主页
+                        getActivity().finish();
+                    }
+                }else {
+
+                    MyToast.showLong(getActivity(),"登录失败,用户名或密码错误");
+                    passEdit.setText("");
+
                 }
             }
 
@@ -209,7 +214,7 @@ public class LoginFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
-                //dismissProgressDialog();
+                dismissProgressDialog();
             }
         });
     }

@@ -68,7 +68,7 @@ public abstract class BaseFragment extends Fragment {
         if (progressDialog == null) {
             progressDialog = new AppProgressDialog();
         }
-        progressDialog.show(mActivity);
+        progressDialog.show(getActivity());
     }
 
     public void dismissProgressDialog() {

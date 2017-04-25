@@ -396,6 +396,10 @@ public class SplashActivity extends BaseActivity {
         jump(result);
     }
 
+
+    /**
+     * 开发的时候用网络地址,发布版本后用本地文件
+     */
     private void getDataFromService() {
 
         HttpPostUtils postUtils = new HttpPostUtils();
@@ -408,7 +412,7 @@ public class SplashActivity extends BaseActivity {
 
                 SPUtil.setAppid(SplashActivity.this, appBean.appid);
                 SPUtil.setSecret(SplashActivity.this, appBean.secret);
-
+                SPUtil.setApiUpload(SplashActivity.this, appBean.api_upload);
                 jump(strJson);
             }
 

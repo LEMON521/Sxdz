@@ -2,10 +2,8 @@ package cn.net.bjsoft.sxdz.fragment.zdlf;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,7 +41,6 @@ import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.Constants;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
-import cn.net.bjsoft.sxdz.utils.MD5;
 import cn.net.bjsoft.sxdz.utils.MyBase64;
 import cn.net.bjsoft.sxdz.utils.MyBitmapUtils;
 import cn.net.bjsoft.sxdz.utils.MyToast;
@@ -75,8 +72,11 @@ public class MineZDLFFragment extends BaseFragment {
     private CircleImageView avatar;
     @ViewInject(R.id.mine_zdlf_company)
     private TextView company;
+
     @ViewInject(R.id.mine_zdlf_department)
     private TextView department;
+    @ViewInject(R.id.mine_zdlf_positions)
+    private TextView positions;
     @ViewInject(R.id.mine_zdlf_function)
     private ListView function;
 
@@ -84,6 +84,7 @@ public class MineZDLFFragment extends BaseFragment {
     private PickerScrollViewPopupWindow pickerPopupWindow;
     private ArrayList<Pickers> pickersCacheList;
     private ArrayList<Pickers> pickersItemList;
+    private ArrayList<String> pikersKey;
     private int pickerSelecect = 0;
 
 
@@ -105,12 +106,15 @@ public class MineZDLFFragment extends BaseFragment {
 
     private BitmapUtils bitmapUtils;
 
-    private int y_down = -1;
-    private int y_up = -1;
-
     @Override
     public void initData() {
         title.setText("我的");
+
+
+        if (pikersKey == null) {
+            pikersKey = new ArrayList<>();
+        }
+        pikersKey.clear();
 
 
         if (pickersCacheList == null) {
@@ -164,8 +168,8 @@ public class MineZDLFFragment extends BaseFragment {
         });
 
         bitmapUtils = new BitmapUtils(getActivity(), AddressUtils.img_cache_url);
-        bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);
-        bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);
+        bitmapUtils.configDefaultLoadingImage(R.drawable.tab_me_n);
+        bitmapUtils.configDefaultLoadFailedImage(R.drawable.tab_me_n);
 
         getUserData();
     }
@@ -175,65 +179,67 @@ public class MineZDLFFragment extends BaseFragment {
      *
      * @param selecect
      */
-    private void changePosition(final int selecect) {
+    private void changePosition(int selecect) {
         String position = "";
         String value = "";
         value = pickersItemList.get(selecect).getShowConetnt();
-        for(String getKey: userOrganizationBean.positions.keySet()){
-             if(userOrganizationBean.positions.get(getKey).equals(value)){
-                 position = getKey;
-             }
+        for (String getKey : userOrganizationBean.positions.keySet()) {
+            if (userOrganizationBean.positions.get(getKey).equals(value)) {
+                position = getKey;
+            }
         }
-
 
         RequestParams params = new RequestParams(appBean.api_auth + "/position");
 
-        params.addBodyParameter("position",position);
+        params.addBodyParameter("position_id", position);
+        LogUtil.e("position================" + appBean.api_auth + "/position" + "::::" + position);
 
         HttpPostUtils httpPostUtil = new HttpPostUtils();
 
-        httpPostUtil.post(mActivity,params);
+        httpPostUtil.post(mActivity, params);
 
         httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
+                //code = 0 时,表示切换成功
+                LogUtil.e("切换岗位" + strJson);
+                try {
+                    JSONObject obj = new JSONObject(strJson);
+                    int code = obj.optInt("code");
+                    if (code == 0) {
+                        getUserData();
+//                        pickerSelecect = selecect;
+//                        positions.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
+                    }
 
-                LogUtil.e("切换岗位"+strJson);
-
-//                pickerSelecect = selecect;
-//                department.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("切换岗位错误" +
-                        ""+ex);
+                LogUtil.e("切换岗位错误" + ex);
             }
 
             @Override
             public void onCancelled(Callback.CancelledException cex) {
-
             }
 
             @Override
             public void onFinished() {
-
             }
         });
-
-
-
     }
 
     private void getUserData() {
         showProgressDialog();
-        LogUtil.e("json" + mJson);
+        //LogUtil.e("json" + mJson);
         appBean = GsonUtil.getAppBean(mJson);
-
-
         HttpPostUtils httpPostUtil = new HttpPostUtils();
         String url = "";
         url = appBean.api_user + "/" + SPUtil.getUserId(mActivity) + "/" + "my.json";
+        LogUtil.e("url--------------------" + url);
         RequestParams params = new RequestParams(url);
         httpPostUtil.get(mActivity, params);
 
@@ -241,14 +247,10 @@ public class MineZDLFFragment extends BaseFragment {
             @Override
             public void onSuccess(String strJson) {
                 SPUtil.setUserJson(mActivity, strJson);//缓存用户信息
-
-                userBean = GsonUtil.getUserBean(strJson);
+                LogUtil.e("getUserJson--------------------" + SPUtil.getUserJson(mActivity));
+                userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
                 userOrganizationBean = userBean.organization;
 
-
-                //LogUtil.e("我的页面json==========");
-//                LogUtil.e(SPUtil.getUserJson(mActivity));
-//                LogUtil.e("我的页面json==========" + userOrganizationBean.positions.size());
 
                 setUserData();
             }
@@ -288,9 +290,13 @@ public class MineZDLFFragment extends BaseFragment {
         }
 
         setPickers();
-        department.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
 
+        positions.setText(userBean.organization.positions.get(userBean.organization.position_id));
+        department.setText(userBean.organization.dept_name);
+
+        addinsBeen.clear();
         addinsBeen.addAll(userBean.addins);
+        LogUtil.e("gangwei 功能=========" + addinsBeen.size() + "");
         addinsAdapter.notifyDataSetChanged();
         Utility.setListViewHeightBasedOnChildren(function);
     }
@@ -307,15 +313,14 @@ public class MineZDLFFragment extends BaseFragment {
         httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
-
                 SPUtil.setUserOrganizationJson(mActivity, strJson);//缓存公司架构信息
-
                 //LogUtil.e("我的页面json");
-                LogUtil.e(SPUtil.getUserOrganizationJson(mActivity));
+//                LogUtil.e("公司架构==========="+SPUtil.getUserOrganizationJson(mActivity));
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                SPUtil.setUserOrganizationJson(mActivity, "");
                 LogUtil.e("我的页面json-----错误" + ex);
             }
 
@@ -342,21 +347,22 @@ public class MineZDLFFragment extends BaseFragment {
 //            pickersCacheList.add(new Pickers("职位" + i, (i + 0) + ""));
 //            pickersItemList.add(new Pickers("职位" + i, (i + 0) + ""));
 //        }
-
+        pickersCacheList.clear();
+        pickersItemList.clear();
         Iterator iter = userOrganizationBean.positions.entrySet().iterator();
         int i = 0;
         while (iter.hasNext()) {
-
             Map.Entry entry = (Map.Entry) iter.next();
             String key = (String) entry.getKey();
             String value = (String) entry.getValue();
 //            pickersCacheList.add(new Pickers(value, key));
 //            pickersItemList.add(new Pickers(value, key));
+            pikersKey.add(key);
             pickersCacheList.add(new Pickers(value, i + ""));
             pickersItemList.add(new Pickers(value, i + ""));
             i++;
         }
-
+        iter = null;
 
     }
 
@@ -372,7 +378,7 @@ public class MineZDLFFragment extends BaseFragment {
             , R.id.mine_zdlf_reset_password
             , R.id.mine_zdlf_logout
             , R.id.mine_zdlf_icon
-            , R.id.mine_zdlf_department})
+            , R.id.mine_zdlf_positions})
     private void approveChangeOnClick(View view) {
         Intent intent = new Intent(mActivity, EmptyActivity.class);
         switch (view.getId()) {
@@ -382,24 +388,10 @@ public class MineZDLFFragment extends BaseFragment {
 
             case R.id.mine_zdlf_address_list://通讯录
                 intent.putExtra("fragment_name", "addressList");
-
-                Bundle bundle = new Bundle();
-                bundle.putString("organization_url", http_shuxinyun_url + userOrganizationBean.url);
-                intent.putExtra("organization_url", bundle);
                 startActivity(intent);
                 break;
 
-/*
-            case R.id.mine_zdlf_personnel_file://人事管理
-
-                intent.putExtra("fragment_name", "TestFragment_1");
-                mActivity.startActivity(intent);
-                break;
-*/
-
             case R.id.mine_zdlf_reset_password://重置密码
-//                passwordView = new WindowRecettingPasswordView(mActivity);
-//                showRecettingPassword(mActivity,passwordView);
                 intent.putExtra("fragment_name", "resetting_password");
                 startActivity(intent);
                 break;
@@ -408,7 +400,6 @@ public class MineZDLFFragment extends BaseFragment {
                 SPUtil.setUserUUID(getActivity(), "");
                 SPUtil.setUserId(getContext(), "");
                 SPUtil.setToken(getContext(), "");
-                //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
                 SPUtil.setAvatar(getContext(), "");
                 Intent i = new Intent(getActivity(), SplashActivity.class);
                 startActivity(i);
@@ -419,12 +410,12 @@ public class MineZDLFFragment extends BaseFragment {
                 PhotoOrVideoUtils.doPhoto(mActivity, this, view);
                 break;
 
-            case R.id.mine_zdlf_department://切换岗位
+            case R.id.mine_zdlf_positions://切换岗位
                 //LogUtil.e("点击select¥¥¥"+pickerSelecect+"::getShowConetnt:"+pickersList.get(pickerSelecect).getShowConetnt());
                 LogUtil.e("点击select¥¥¥" + pickerSelecect + "::getShowConetnt:" + pickerSelecect);
                 pickersCacheList.clear();
                 pickersCacheList.addAll(pickersItemList);
-                pickerPopupWindow.setPickerScrollViewPopupWindow(mActivity, pickersCacheList, pickerSelecect, department);
+                pickerPopupWindow.setPickerScrollViewPopupWindow(mActivity, pickersCacheList, pickerSelecect, positions);
                 break;
 
         }
@@ -432,109 +423,49 @@ public class MineZDLFFragment extends BaseFragment {
     }
 
 
-    /**
-     * 弹出修改密码窗口
-     *
-     * @param context
-     * @param view
-     */
-    public void showRecettingPassword(Context context, final WindowRecettingPasswordView view) {
-        if (dialog == null) {
-            dialog = new Dialog(context, R.style.MIDialog);
-
-            view.getConfirm().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    view.submit();//获取到的数据
-                    if (!view.getPassword().equals("")) {
-                        password = view.getPassword();
-                        old_password = view.getOldPassword();
-                        LogUtil.e("获取到的密码为====" + password);
-                        LogUtil.e("获取到的原始密码为====" + old_password);
-                        setPassword();//设置密码
-                        dialog.dismiss();
-                    }
-                }
-            });
-
-            view.getCancle().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    dialog.dismiss();
-                }
-            });
-            dialog.setContentView(view);
-            dialog.setCancelable(false);
-        }
-        if (!dialog.isShowing()) {
-            dialog.show();
-        }
-    }
-
-    /**
-     * 访问网络进行修改密码
-     */
-    private void setPassword() {
-        final RequestParams params = new RequestParams(UrlUtil.baseUrl);
-        params.addBodyParameter("client_name", Constants.app_name);
-        params.addBodyParameter("phone_uuid", SPUtil.getUserPUUID(getActivity()));
-        params.addBodyParameter("randcode", SPUtil.getUserRandCode(getActivity()));
-        params.addBodyParameter("uuid", SPUtil.getUserUUID(getActivity()));
-        params.addBodyParameter("user_id", SPUtil.getUserId(getActivity()));
-        params.addBodyParameter("action", "submit");
-
-
-        params.addBodyParameter("method", "edit_password");
-        params.addBodyParameter("old_password", MD5.getMessageDigest(old_password.getBytes()));
-        params.addBodyParameter("password", MD5.getMessageDigest(password.getBytes()));
-
-        //LogUtil.e("params"+params);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                LogUtil.e("修改密码结果为！！！！======" + result);
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    boolean success = jsonObject.optBoolean("success", false);
-                    if (!success) {
-                        MyToast.showShort(getActivity(), jsonObject.optString("feedback", "密码修改失败"));
-                    } else {
-                        SPUtil.setUserUUID(mActivity, jsonObject.optString("uuid", ""));
-                        MyToast.showShort(getActivity(), "修改密码成功！");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("失败原因为！！！！======" + ex);
-                MyToast.showShort(getActivity(), "上传失败，网络超时");
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                dialog.dismiss();
-            }
-        });
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
         if (uri != null) {
             String imagePath = PhotoOrVideoUtils.getPath(mActivity, uri);
-            upLoadFile(imagePath, "", "");
+            //upLoadFile(imagePath, "", "");
+            upDateAvatar(imagePath);
+
         }
+
+    }
+
+
+    private void upDateAvatar(String imagePath){
+
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+        String url = http_shuxinyun_url;
+        RequestParams params = new RequestParams(url);
+        String io = MyBase64.file2String(imagePath);
+        httpPostUtils.post(mActivity,params);
+
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
 
     }
 

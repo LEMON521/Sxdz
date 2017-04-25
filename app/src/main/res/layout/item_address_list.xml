@@ -47,7 +47,7 @@
                 android:id="@+id/item_address_list_child_icon"
                 android:layout_width="@dimen/dm044"
                 android:layout_height="@dimen/dm044"
-                android:src="@drawable/wlh" />
+                android:src="@drawable/tab_me_n" />
 
             <TextView
                 android:id="@+id/item_address_list_child_name"

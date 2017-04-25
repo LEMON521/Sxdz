@@ -78,6 +78,10 @@ public class Constants {
     public static final String USER_KEY_USERID = "userid";
 
     /**
+     * 用户 id
+     */
+    public static final String USER_KEY_API_UPLOAD = "api_upload";
+    /**
      * 用户姓名
      */
     public static final String USER_KEY_NAME = "name";

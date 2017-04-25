@@ -8,7 +8,23 @@ import android.content.SharedPreferences;
  * Created by zkagang on 2016/5/10.
  */
 public class SPUtil {
+    /**
+     * 获取  --  USER_KEY_JSON = "user_json"缓存
+     */
+    public static String getApiUpload(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_API_UPLOAD, Context.MODE_PRIVATE);
+        return preferences.getString(Constants.USER_KEY_API_UPLOAD, "");
+    }
 
+    /**
+     * 设置   --   USER_KEY_JSON = "user_json"缓存
+     */
+    public static void setApiUpload(Context context, String api_upload) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_API_UPLOAD, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.USER_KEY_API_UPLOAD, api_upload);
+        editor.commit();
+    }
 
     /**
      * 获取  --  USER_KEY_JSON = "user_json"缓存

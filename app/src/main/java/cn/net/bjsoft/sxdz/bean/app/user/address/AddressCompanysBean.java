@@ -10,8 +10,9 @@ import java.util.ArrayList;
 public class AddressCompanysBean implements Serializable {
 
     public ArrayList<AddressCompanysBean> children;
-    String id = "";
-    String name = "";
+    public String id = "";
+    public String name = "";
+    public String pId = "";
 
 
 }

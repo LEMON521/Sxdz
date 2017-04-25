@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class AppBean implements Serializable {
     public String api_auth = "";
     public String api_open = "";
+    public String api_upload = "";//上传文件的绝对url
     public String api_user = "";
     public String appid = "";
     public boolean authentication = true;
