@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressCompanysBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
-import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeAddressDeptsBean;
+import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeAddressCompanysBean;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeId;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeName;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodePid;
@@ -84,7 +85,7 @@ public class TreeHelper {
             Long id = -1l;
             Long pId = -1l;
             String name = null;
-            AddressDeptsBean addressDeptsBean = null;
+            AddressCompanysBean companysBean = null;
 
             Class<? extends Object> clazz = t.getClass();
             Field[] declaredFields = clazz.getDeclaredFields();
@@ -101,9 +102,9 @@ public class TreeHelper {
                     f.setAccessible(true);
                     name = (String) f.get(t);
                 }
-                if (f.getAnnotation(TreeNodeAddressDeptsBean.class) != null) {
+                if (f.getAnnotation(TreeNodeAddressCompanysBean.class) != null) {
                     f.setAccessible(true);
-                    addressDeptsBean = (AddressDeptsBean) f.get(t);
+                    companysBean = (AddressCompanysBean) f.get(t);
                 }
 
 
@@ -111,7 +112,7 @@ public class TreeHelper {
                     break;
                 }
             }
-            node = new TreeNode(id, pId, name,addressDeptsBean);
+            node = new TreeNode(id, pId, name,companysBean);
             nodes.add(node);
         }
 

@@ -3,7 +3,7 @@ package cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressCompanysBean;
 
 public class TreeNode {
 
@@ -41,15 +41,16 @@ public class TreeNode {
 
 
 
-    private AddressDeptsBean addressDeptsBean;
+
+    private AddressCompanysBean companysBean;
 
 
-    public TreeNode(Long id, Long pId, String name,AddressDeptsBean addressDeptsBean) {
+    public TreeNode(Long id, Long pId, String name,AddressCompanysBean companysBean) {
         super();
         this.id = id;
         this.pId = pId;
         this.name = name;
-        this.addressDeptsBean = addressDeptsBean;
+        this.companysBean = companysBean;
 
     }
 
@@ -110,12 +111,12 @@ public class TreeNode {
         this.name = name;
     }
 
-    public AddressDeptsBean getAddressDeptsBean() {
-        return addressDeptsBean;
+    public AddressCompanysBean getCompanysBean() {
+        return companysBean;
     }
 
-    public void setAddressDeptsBean(AddressDeptsBean addressDeptsBean) {
-        this.addressDeptsBean = addressDeptsBean;
+    public void setCompanysBean(AddressCompanysBean companysBean) {
+        this.companysBean = companysBean;
     }
 
     /**

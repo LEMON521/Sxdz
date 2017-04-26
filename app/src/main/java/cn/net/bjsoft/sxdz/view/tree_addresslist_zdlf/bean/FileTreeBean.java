@@ -1,6 +1,6 @@
 package cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean;
 
-import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressCompanysBean;
 
 public class FileTreeBean {
     @TreeNodeId
@@ -9,16 +9,17 @@ public class FileTreeBean {
     private Long parentId;
     @TreeNodeName
     private String name;
-    @TreeNodeAddressDeptsBean
-    private AddressDeptsBean addressDeptsBean;
+    @TreeNodeAddressCompanysBean
+    private AddressCompanysBean companysBean;
 
 
-    public FileTreeBean(Long _id, Long parentId, String name,AddressDeptsBean addressDeptsBean) {
+
+    public FileTreeBean(Long _id, Long parentId, String name, AddressCompanysBean companysBean) {
         super();
         this._id = _id;
         this.parentId = parentId;
         this.name = name;
-        this.addressDeptsBean = addressDeptsBean;
+        this.companysBean = companysBean;
     }
 
 
@@ -46,12 +47,12 @@ public class FileTreeBean {
         this.name = name;
     }
 
-    public AddressDeptsBean getAddressDeptsBean() {
-        return addressDeptsBean;
+    public AddressCompanysBean getAddressDeptsBean() {
+        return companysBean;
     }
 
-    public void setAddressDeptsBean(AddressDeptsBean addressDeptsBean) {
-        this.addressDeptsBean = addressDeptsBean;
+    public void setAddressDeptsBean(AddressCompanysBean addressDeptsBean) {
+        this.companysBean = addressDeptsBean;
     }
 
 

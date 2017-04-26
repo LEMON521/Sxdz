@@ -24,6 +24,6 @@ public class AddressPositionsBean implements Serializable {
 
     public AddressEmployeesBean employee;
 
-    public AddressDeptsBean depts;
+    //public AddressDeptsBean depts;
 
 }

@@ -62,28 +62,57 @@ public class TreeAddressZDLFAdapter<T> extends TreeListViewAdapter<T> {
         }
 
 
-        if (node.getAddressDeptsBean().employee_id.equals("")) {//空的话就是部门
+        if (node.getCompanysBean().deptsBean != null) {//空的话为公司
 
+            if (node.getCompanysBean().deptsBean.positionsBean != null) {//空的话为部门
+                viewHolder.parent_ll.setVisibility(View.GONE);
+                viewHolder.child_ll.setVisibility(View.VISIBLE);
+                String avatar_url = "";
+                if (node.getCompanysBean().deptsBean.positionsBean.employee.user != null) {
+                    //防止后端给的数据是残疾的--要判空
+                    avatar_url = node.getCompanysBean().deptsBean.positionsBean.employee.user.avatar;
+                }
+                bitmapUtils.display(viewHolder.child_icon, avatar_url);
+                //x.image().bind(viewHolder.child_icon, node.getAvatar_url());
+                viewHolder.child_name.setText(node.getName());
+                viewHolder.child_num.setText(node.getCompanysBean().deptsBean.positionsBean.employee.phone);
+
+            }
+            else {
+                viewHolder.parent_ll.setVisibility(View.VISIBLE);
+                viewHolder.child_ll.setVisibility(View.GONE);
+                viewHolder.parent_label.setText(node.getName());
+            }
+        } else {
             viewHolder.parent_ll.setVisibility(View.VISIBLE);
             viewHolder.child_ll.setVisibility(View.GONE);
             viewHolder.parent_label.setText(node.getName());
-
-        } else {//员工
-            viewHolder.parent_ll.setVisibility(View.GONE);
-            viewHolder.child_ll.setVisibility(View.VISIBLE);
-
-            String avatar_url = "";
-            if (node.getAddressDeptsBean().positionsBean.employee.user != null) {
-                //防止后端给的数据是残疾的--要判空
-                avatar_url = node.getAddressDeptsBean().positionsBean.employee.user.avatar;
-            }
-
-            bitmapUtils.display(viewHolder.child_icon, avatar_url);
-            //x.image().bind(viewHolder.child_icon, node.getAvatar_url());
-            viewHolder.child_name.setText(node.getName());
-            viewHolder.child_num.setText(node.getAddressDeptsBean().positionsBean.employee.phone);
         }
 
+
+//
+//        if (node.getCompanysBean().deptsBean == null) {//空的话就是部门
+//
+//            viewHolder.parent_ll.setVisibility(View.VISIBLE);
+//            viewHolder.child_ll.setVisibility(View.GONE);
+//            viewHolder.parent_label.setText(node.getName());
+//
+//        } else {//员工
+//            viewHolder.parent_ll.setVisibility(View.GONE);
+//            viewHolder.child_ll.setVisibility(View.VISIBLE);
+//
+//            String avatar_url = "";
+//            if (node.getCompanysBean().deptsBean.positionsBean.employee.user != null) {
+//                //防止后端给的数据是残疾的--要判空
+//                avatar_url = node.getCompanysBean().deptsBean.positionsBean.employee.user.avatar;
+//            }
+//
+//            bitmapUtils.display(viewHolder.child_icon, avatar_url);
+//            //x.image().bind(viewHolder.child_icon, node.getAvatar_url());
+//            viewHolder.child_name.setText(node.getName());
+//            viewHolder.child_num.setText(node.getCompanysBean().deptsBean.positionsBean.employee.phone);
+//        }
+//
 
         if (node.getIcon() == -1) {
             viewHolder.parent_icon.setVisibility(View.INVISIBLE);

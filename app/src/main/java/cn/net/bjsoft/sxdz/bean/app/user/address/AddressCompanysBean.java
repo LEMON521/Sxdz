@@ -13,6 +13,8 @@ public class AddressCompanysBean implements Serializable {
     public String id = "";
     public String name = "";
     public String pId = "";
+    public String conpany_id = "";
+    public AddressDeptsBean deptsBean;
 
 
 }
