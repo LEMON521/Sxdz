@@ -14,5 +14,6 @@ public class LoginBean implements Serializable {
     public String loginapi = "";
     public String loginurl = "";
     public String logoutapi = "";
+    public String passreset = "";
     public boolean resetpassword = false;
 }

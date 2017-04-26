@@ -57,7 +57,7 @@ public class EmptyActivity extends BaseActivity {
                 } else if (fragment_name.equals("TopAddTaskFragment")) {
                     fragment = new TopAddTaskFragment();
                 } else if (fragment_name.equals("resetting_password")) {
-                    fragment = new ResettingPasswordZDLFFragment();
+                    fragment = new ResettingPasswordZDLFFragment();//重置密码
                 }
                 else if (fragment_name.equals("KnowledgeNewZDLFFragment")) {
                     fragment = new KnowledgeNewZDLFFragment();

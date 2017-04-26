@@ -312,7 +312,7 @@ public class MineZDLFFragment extends BaseFragment {
         HttpPostUtils httpPostUtil = new HttpPostUtils();
         String url = "";
         url = http_shuxinyun_url + userOrganizationBean.url;
-        LogUtil.e("公司架构d url----===========" + url);
+        LogUtil.e("公司架构userOrganizationBean url----===========" + url);
         RequestParams params = new RequestParams(url);
         httpPostUtil.get(mActivity, params);
 
@@ -374,8 +374,6 @@ public class MineZDLFFragment extends BaseFragment {
 
 
     /**
-     *
-     *
      * @param view
      */
     @Event(value = {R.id.title_back
@@ -398,8 +396,14 @@ public class MineZDLFFragment extends BaseFragment {
                 break;
 
             case R.id.mine_zdlf_reset_password://重置密码
-                intent.putExtra("fragment_name", "resetting_password");
-                startActivity(intent);
+
+                if (!SPUtil.getResetPasswordUrl(mActivity).equals("")) {
+                    intent.putExtra("fragment_name", "resetting_password");
+                    startActivity(intent);
+                } else {
+                    MyToast.showLong(mActivity, "该用户没有重置密码权限!");
+                }
+
                 break;
 
             case R.id.mine_zdlf_logout://退出登录
@@ -410,13 +414,7 @@ public class MineZDLFFragment extends BaseFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // 点击“确认”后的操作
-                                SPUtil.setUserUUID(getActivity(), "");
-                                SPUtil.setUserId(getContext(), "");
-                                SPUtil.setToken(getContext(), "");
-                                SPUtil.setAvatar(getContext(), "");
-                                Intent i = new Intent(getActivity(), SplashActivity.class);
-                                startActivity(i);
-                                getActivity().finish();
+                                logoutOnservice();//从服务器注销
 
                             }
                         })
@@ -445,6 +443,75 @@ public class MineZDLFFragment extends BaseFragment {
 
     }
 
+    /**
+     * 告诉服务器__注销登录
+     */
+    private void logoutOnservice() {
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+        RequestParams params = new RequestParams(SPUtil.getLogoutApi(mActivity));
+        //params.setMultipart(true);
+        httpPostUtils.post(mActivity, params);
+
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("logoutOnservice---注销onSuccess" + strJson);
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(strJson);
+                    int code = jsonObject.optInt("code");
+                    if (code == 0){
+                        SPUtil.setUserUUID(getActivity(), "");
+                        SPUtil.setUserId(getContext(), "");
+                        SPUtil.setToken(getContext(), "");
+                        SPUtil.setAvatar(getContext(), "");
+                        Intent i = new Intent(getActivity(), SplashActivity.class);
+                        startActivity(i);
+                        getActivity().finish();
+                    }else {
+                        MyToast.showLong(mActivity,"注销失败!");
+                        MyToast.showLong(mActivity,jsonObject.optString("msg"));
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+//                try {
+//                    JSONObject jsonObject = new JSONObject(strJson);
+//                    if (jsonObject.optBoolean("data")) {
+//                        bitmapUtils.display(avatar, SPUtil.getAvatar(mActivity));
+//                        MyToast.showLong(mActivity, "头像更新成功");
+//                    } else {
+//                        MyToast.showLong(mActivity, "更新头像失败,请联系管理员");
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                MyToast.showLong(mActivity, "更新头像失败,请联系管理员");
+                LogUtil.e("上传失败onError========UpDateAvatar" + ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -459,24 +526,24 @@ public class MineZDLFFragment extends BaseFragment {
 
     }
 
-
+    /**
+     * 上传图片到服务器
+     *
+     * @param imagePath
+     */
     private void upLoadAvatar(String imagePath) {
         showProgressDialog();
-        HttpPostUtils httpPostUtils = new HttpPostUtils();
-        String url = http_shuxinyun_url;
         RequestParams params = new RequestParams(SPUtil.getApiUpload(mActivity));
         params.setMultipart(true);
         File file = new File(imagePath);
 
         params.addBodyParameter("avatar", file);
-        httpPostUtils.post(mActivity, params);
-
-        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+        x.http().post(params, new Callback.ProgressCallback<String>() {
             @Override
-            public void onSuccess(String strJson) {
-                LogUtil.e("上传成功onSuccess" + strJson);
+            public void onSuccess(String result) {
+                LogUtil.e("上传成功onSuccess" + result);
                 try {
-                    JSONObject jsonObject = new JSONObject(strJson);
+                    JSONObject jsonObject = new JSONObject(result);
                     if (jsonObject.optInt("code") == 0) {
                         SPUtil.setAvatar(mActivity, jsonObject.optJSONObject("data").optString("src"));
                         UpDateAvatar();
@@ -495,19 +562,81 @@ public class MineZDLFFragment extends BaseFragment {
             }
 
             @Override
-            public void onCancelled(Callback.CancelledException cex) {
+            public void onCancelled(CancelledException cex) {
 
             }
 
             @Override
             public void onFinished() {
+                dismissProgressDialog();
+            }
 
+            @Override
+            public void onWaiting() {
+
+            }
+
+            @Override
+            public void onStarted() {
+
+            }
+
+            @Override
+            public void onLoading(long total, long current, boolean isDownloading) {
+                LogUtil.e("上传onLoading--" + isDownloading + ":total:==" + total + ":current:==" + current);
             }
         });
 
+//        HttpPostUtils httpPostUtils = new HttpPostUtils();
+//        String url = http_shuxinyun_url;
+//        RequestParams params = new RequestParams(SPUtil.getApiUpload(mActivity));
+//        params.setMultipart(true);
+//        File file = new File(imagePath);
+//
+//        params.addBodyParameter("avatar", file);
+//        httpPostUtils.post(mActivity, params);
+//
+//        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+//            @Override
+//            public void onSuccess(String strJson) {
+//                LogUtil.e("上传成功onSuccess" + strJson);
+//                try {
+//                    JSONObject jsonObject = new JSONObject(strJson);
+//                    if (jsonObject.optInt("code") == 0) {
+//                        SPUtil.setAvatar(mActivity, jsonObject.optJSONObject("data").optString("src"));
+//                        UpDateAvatar();
+//                    } else {
+//                        MyToast.showLong(mActivity, "上传头像失败,请联系管理员");
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                LogUtil.e("上传失败onError" + ex);
+//                MyToast.showLong(mActivity, "上传头像失败,请联系管理员");
+//            }
+//
+//            @Override
+//            public void onCancelled(Callback.CancelledException cex) {
+//
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//
+//            }
+//        });
+
     }
 
+    /**
+     * 将返回的头像地址更新到服务器
+     */
     private void UpDateAvatar() {
+        showProgressDialog();
         HttpPostUtils httpPostUtils = new HttpPostUtils();
         RequestParams params = new RequestParams(SPUtil.getApiAuth(mActivity) + "/avatar");
         //params.setMultipart(true);

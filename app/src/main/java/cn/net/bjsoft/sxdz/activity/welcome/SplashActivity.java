@@ -391,9 +391,12 @@ public class SplashActivity extends BaseActivity {
         String result = "";
         result = ReadFile.getFromAssets(this, "json/mobile.json");
         appBean = GsonUtil.getAppBean(result);
-        SPUtil.setAppid(this, appBean.appid);
-        SPUtil.setSecret(this, appBean.secret);
-        SPUtil.setApiAuth(this,appBean.api_auth);
+        SPUtil.setAppid(SplashActivity.this, appBean.appid);
+        SPUtil.setSecret(SplashActivity.this, appBean.secret);
+        SPUtil.setApiUpload(SplashActivity.this, appBean.api_upload);
+        SPUtil.setApiAuth(SplashActivity.this,appBean.api_auth);
+        SPUtil.setResetPasswordUrl(SplashActivity.this,appBean.login.passreset);
+        SPUtil.setLogoutApi(SplashActivity.this,appBean.login.logoutapi);
         jump(result);
     }
 
@@ -410,11 +413,13 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onSuccess(String strJson) {
                 appBean = GsonUtil.getAppBean(strJson);
-
                 SPUtil.setAppid(SplashActivity.this, appBean.appid);
                 SPUtil.setSecret(SplashActivity.this, appBean.secret);
                 SPUtil.setApiUpload(SplashActivity.this, appBean.api_upload);
                 SPUtil.setApiAuth(SplashActivity.this,appBean.api_auth);
+                SPUtil.setResetPasswordUrl(SplashActivity.this,appBean.login.passreset);
+                SPUtil.setLogoutApi(SplashActivity.this,appBean.login.logoutapi);
+
                 jump(strJson);
             }
 

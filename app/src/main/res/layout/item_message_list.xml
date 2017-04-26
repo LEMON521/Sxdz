@@ -41,7 +41,7 @@
             android:id="@+id/message_item_avatar"
             android:layout_width="@dimen/dm070"
             android:layout_height="@dimen/dm070"
-            android:src="@drawable/wlh" />
+            android:src="@drawable/tab_me_n" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -8,8 +8,51 @@ import android.content.SharedPreferences;
  * Created by zkagang on 2016/5/10.
  */
 public class SPUtil {
+
     /**
-     * 获取  --  USER_KEY_JSON = "user_json"缓存
+     * 重置密码url--获取
+     * 获取  --  USER_KEY_API_RESET_PASSWORD = "reset_password"缓存
+     */
+    public static String getLogoutApi(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_API_LOGOUT, Context.MODE_PRIVATE);
+        return preferences.getString(Constants.USER_KEY_API_LOGOUT, "");
+    }
+
+    /**
+     * 重置密码url
+     * 设置   --   USER_KEY_API_RESET_PASSWORD = "reset_password"缓存
+     */
+    public static void setLogoutApi(Context context, String logoutapi) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_API_LOGOUT, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.USER_KEY_API_LOGOUT, logoutapi);
+        editor.commit();
+    }
+
+    /**
+     * 重置密码url--获取
+     * 获取  --  USER_KEY_API_RESET_PASSWORD = "reset_password"缓存
+     */
+    public static String getResetPasswordUrl(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_API_RESET_PASSWORD, Context.MODE_PRIVATE);
+        return preferences.getString(Constants.USER_KEY_API_RESET_PASSWORD, "");
+    }
+
+    /**
+     * 重置密码url
+     * 设置   --   USER_KEY_API_RESET_PASSWORD = "reset_password"缓存
+     */
+    public static void setResetPasswordUrl(Context context, String reset_password) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_API_RESET_PASSWORD, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.USER_KEY_API_RESET_PASSWORD, reset_password);
+        editor.commit();
+    }
+
+
+
+    /**
+     * 获取  --  USER_KEY_API_AUTH = "api_auth"缓存
      */
     public static String getApiAuth(Context context) {
         SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_API_AUTH, Context.MODE_PRIVATE);
@@ -17,7 +60,7 @@ public class SPUtil {
     }
 
     /**
-     * 设置   --   USER_KEY_JSON = "user_json"缓存
+     * 设置   --   USER_KEY_API_AUTH = "api_auth"缓存
      */
     public static void setApiAuth(Context context, String api_auth) {
         SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_API_AUTH, Context.MODE_PRIVATE);

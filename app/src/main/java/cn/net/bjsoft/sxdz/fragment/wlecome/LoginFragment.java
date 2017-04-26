@@ -129,7 +129,7 @@ public class LoginFragment extends BaseFragment {
         } else {
             forget.setVisibility(View.GONE);
         }
-        if (loginBean.resetpassword && loginBean.canregister) {
+        if (!loginBean.passreset.equals("") && loginBean.canregister) {
             line.setVisibility(View.VISIBLE);
         } else {
             line.setVisibility(View.GONE);
@@ -176,6 +176,7 @@ public class LoginFragment extends BaseFragment {
                     SPUtil.setToken(getContext(), loginedDataBean.token);
                     //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
                     SPUtil.setAvatar(getContext(), loginedDataBean.avatar);
+                    SPUtil.setLoginUserName(getContext(),loginedDataBean.loginname);
 
 
                     LogUtil.e("登录结果");
@@ -208,7 +209,7 @@ public class LoginFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                MyToast.showShort(mActivity, "登录失败");
+                MyToast.showShort(getContext(), "登录失败");
                 LogUtil.e("登录返回值=onError=" + ex);
                 LogUtil.e("登录返回值=isOnCallback=" + isOnCallback);
             }

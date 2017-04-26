@@ -85,7 +85,16 @@ public class Constants {
     /**
      * 用户 api_auth
      */
+    public static final String USER_KEY_API_RESET_PASSWORD = "reset_password";
+
+    /**
+     * 用户 api_auth
+     */
     public static final String USER_KEY_API_AUTH = "api_auth";
+    /**
+     * 用户 logout_api
+     */
+    public static final String USER_KEY_API_LOGOUT = "logoutapi";
     /**
      * 用户姓名
      */

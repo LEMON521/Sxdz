@@ -40,7 +40,7 @@ import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper.TreeNode;
  * Created by Zrzc on 2017/3/24.
  */
 @ContentView(R.layout.fragment_address_list)
-public class MineAddressListFragment extends BaseFragment {
+public class MineAddressListFragment_1 extends BaseFragment {
     @ViewInject(R.id.title_back)
     private ImageView title_back;
     @ViewInject(R.id.title_title)
