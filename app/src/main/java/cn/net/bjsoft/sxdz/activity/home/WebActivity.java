@@ -16,6 +16,7 @@ import org.xutils.view.annotation.ViewInject;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 /**
  * 专门显示Web页面的activity
@@ -46,7 +47,10 @@ public class WebActivity extends BaseActivity {
         url = getIntent().getStringExtra("url");
         LogUtil.e("底部栏url为=====" + url);
         titleStr = getIntent().getStringExtra("title");
-
+        url = url + "?"
+                + "&token=" + SPUtil.getToken(this)
+                + "&appid=" + SPUtil.getAppid(this)
+                + "&secret=" + SPUtil.getSecret(this);
         if (titleStr != null && !titleStr.equals("")) {
             title.setText(titleStr);
         }

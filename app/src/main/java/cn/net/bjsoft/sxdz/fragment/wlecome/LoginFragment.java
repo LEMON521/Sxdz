@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -148,6 +149,11 @@ public class LoginFragment extends BaseFragment {
      */
 
     public void login() {
+        if (userEdit.getText().toString().isEmpty() || passEdit.getText().toString().isEmpty()) {
+            MyToast.showShort(getActivity(), "用户名和密码不能为空");
+            return;
+        }
+
         showProgressDialog();
         //showProgressDialog();
         HttpPostUtils postUtils = new HttpPostUtils();
@@ -160,10 +166,10 @@ public class LoginFragment extends BaseFragment {
         postUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
-                LogUtil.e("登录结果"+strJson);
+                LogUtil.e("登录结果" + strJson);
                 loginedBean = GsonUtil.getLoginedBean(strJson);
 
-                if (Integer.parseInt(loginedBean.data.userid)>0) {//如果登录成功,那么user_id是>0的
+                if (Integer.parseInt(loginedBean.data.userid) > 0) {//如果登录成功,那么user_id是>0的
                     loginedDataBean = loginedBean.data;
 
                     SPUtil.setUserId(getContext(), loginedDataBean.userid);
@@ -192,9 +198,9 @@ public class LoginFragment extends BaseFragment {
                         LoginActivity.getLoginActivity().finish();//不这样做的话，登录之后，点击返回按钮会返回到未登录状态的主页
                         getActivity().finish();
                     }
-                }else {
+                } else {
 
-                    MyToast.showLong(getActivity(),"登录失败,用户名或密码错误");
+                    MyToast.showLong(getActivity(), "登录失败,用户名或密码错误");
                     passEdit.setText("");
 
                 }
@@ -230,11 +236,7 @@ public class LoginFragment extends BaseFragment {
                 break;
 
             case R.id.fm_btn_login_login://登录
-                if (userEdit.getText().toString().isEmpty() || passEdit.getText().toString().isEmpty()) {
-                    MyToast.showShort(getActivity(), "用户名和密码不能为空");
-                } else {
-                    login();
-                }
+                login();
                 break;
 
             case R.id.regiest://注册
@@ -249,7 +251,25 @@ public class LoginFragment extends BaseFragment {
                 Intent i2 = new Intent(getActivity(), ForgetPasswordActivity.class);
                 startActivity(i2);
                 break;
+
+            case EditorInfo.IME_FLAG_NO_ENTER_ACTION:
+                login();
+                break;
+
         }
     }
+
+//    @Override
+//    public boolean dispatchKeyEvent(KeyEvent event) {
+//        if(event.getKeyCode() == KeyEvent.KEYCODE_ENTER){
+//            /*隐藏软键盘*/
+//            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//            if(inputMethodManager.isActive()){
+//                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+//            }
+//            return true;
+//        }
+//        return super.dispatchKeyEvent(event);
+//    }
 
 }

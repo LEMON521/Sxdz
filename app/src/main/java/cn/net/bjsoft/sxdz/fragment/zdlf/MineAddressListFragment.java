@@ -3,6 +3,7 @@ package cn.net.bjsoft.sxdz.fragment.zdlf;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,9 +17,7 @@ import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
@@ -442,7 +441,7 @@ public class MineAddressListFragment extends BaseFragment {
             treeBean = null;
             //LogUtil.e("遍历子节点------addressDeptsBean.id" + addressDeptsBean.id);
             //向部门添加联系人
-            map = new HashMap<>();
+//            map = new HashMap<>();
             for (AddressPositionsBean addressPositionsBean : format_positionsBean) {
 
                 if (addressPositionsBean.dept_id.equals(addressDeptsBean.id)) {
@@ -454,28 +453,32 @@ public class MineAddressListFragment extends BaseFragment {
                         if (addressPositionsBean.employee != null) {
                             AddressDeptsBean bean = new AddressDeptsBean();
                             bean.id = addressPositionsBean.employee.id;
-                            LogUtil.e("添加子节点=======bean.id=====" + bean.id);
+
                             bean.positionsBean = addressPositionsBean;
                             bean.name = addressPositionsBean.employee.name;
                             bean.employee_id = addressPositionsBean.employee_id;
-                            map.put(bean.id, bean);//用map是为了去除重复元素
+                            LogUtil.e("添加子节点=======bean.id=====" + bean.name);
+                            if (addressPositionsBean.type.equals("1")){
+                                addressDeptsBean.children.add(bean);
+                            }
+
+                            //map.put(bean.id, bean);//用map是为了去除重复元素
                         }
                     }
                 }
             }
-            Iterator iter = map.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry entry = (Map.Entry) iter.next();
-                Object key = entry.getKey();
-                AddressDeptsBean bean = (AddressDeptsBean) entry.getValue();
-                addressDeptsBean.children.add(bean);
-            }
-
-            map = null;
+//            Iterator iter = map.entrySet().iterator();
+//            while (iter.hasNext()) {
+//                Map.Entry entry = (Map.Entry) iter.next();
+//                Object key = entry.getKey();
+//                AddressDeptsBean bean = (AddressDeptsBean) entry.getValue();
+//                addressDeptsBean.children.add(bean);
+//            }
+//
+//            map = null;
 
 
             if (addressDeptsBean.children != null && addressDeptsBean.children.size() > 0) {
-
                 getDepts(addressDeptsBean.children, addressDeptsBean.id, change);
             } else {
 
@@ -525,13 +528,11 @@ public class MineAddressListFragment extends BaseFragment {
                 }
             }
             //如果有就添加,没有就 不添加
-
-            if (children.children != null && children.children.size() > 0) {
-
-                getPositions(children.children, children.id);
-
-            }
             format_positionsBean.add(children);
+            if (children.children != null && children.children.size() > 0) {
+                getPositions(children.children, children.id);
+            }
+
         }
     }
 
@@ -549,7 +550,12 @@ public class MineAddressListFragment extends BaseFragment {
                 @Override
                 public void onClick(TreeNode node, int position) {
                     if (!node.getAddressDeptsBean().employee_id.equals("")) {
-                        DialingPopupWindow window = new DialingPopupWindow(mActivity, address_change, node.getAddressDeptsBean().positionsBean.employee.phone);
+
+                        if (TextUtils.isEmpty(node.getAddressDeptsBean().positionsBean.employee.phone)) {
+                            MyToast.showShort(mActivity, "该联系人没有设置电话号码!");
+                        } else {
+                            DialingPopupWindow window = new DialingPopupWindow(mActivity, address_change, node.getAddressDeptsBean().positionsBean.employee.phone);
+                        }
                     }
                 }
             });

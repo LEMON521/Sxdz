@@ -100,6 +100,7 @@
                     android:src="@drawable/get_back_passwoed" />
 
                 <EditText
+                    android:singleLine="true"
                     android:id="@+id/user_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

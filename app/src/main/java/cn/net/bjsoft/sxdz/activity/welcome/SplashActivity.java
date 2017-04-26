@@ -393,6 +393,7 @@ public class SplashActivity extends BaseActivity {
         appBean = GsonUtil.getAppBean(result);
         SPUtil.setAppid(this, appBean.appid);
         SPUtil.setSecret(this, appBean.secret);
+        SPUtil.setApiAuth(this,appBean.api_auth);
         jump(result);
     }
 
@@ -413,6 +414,7 @@ public class SplashActivity extends BaseActivity {
                 SPUtil.setAppid(SplashActivity.this, appBean.appid);
                 SPUtil.setSecret(SplashActivity.this, appBean.secret);
                 SPUtil.setApiUpload(SplashActivity.this, appBean.api_upload);
+                SPUtil.setApiAuth(SplashActivity.this,appBean.api_auth);
                 jump(strJson);
             }
 

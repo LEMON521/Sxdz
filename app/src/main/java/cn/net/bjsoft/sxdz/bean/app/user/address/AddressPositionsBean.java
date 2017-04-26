@@ -20,6 +20,7 @@ public class AddressPositionsBean implements Serializable {
     public String id ="";
     public String name = "";
     public String pId = "";
+    public String type = "";
 
     public AddressEmployeesBean employee;
 
