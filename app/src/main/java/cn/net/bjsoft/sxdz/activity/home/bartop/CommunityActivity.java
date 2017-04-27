@@ -3,7 +3,6 @@ package cn.net.bjsoft.sxdz.activity.home.bartop;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -113,7 +112,7 @@ public class CommunityActivity extends BaseActivity {
     /**
      * 广播
      */
-    private MyReceiver receiver = new MyReceiver();
+    //private MyReceiver receiver = new MyReceiver();
 
 
     private ArrayList<RelativeLayout> mBarList;
@@ -138,7 +137,7 @@ public class CommunityActivity extends BaseActivity {
         /**
          * 注册广播
          */
-        registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.community"));
+        //registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.community"));
 
         initData();
         setView();
@@ -453,6 +452,6 @@ public class CommunityActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(receiver);
+        //unregisterReceiver(receiver);
     }
 }

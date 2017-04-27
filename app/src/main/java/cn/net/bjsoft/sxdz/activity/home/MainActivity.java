@@ -209,6 +209,8 @@ public class MainActivity extends BaseActivity {
         //GPSUtils.getAddress(this);
         // x.view().inject(this);
 
+
+
         mActivity = this;
         mainActivity = this;
         mJson = getIntent().getStringExtra("json");
