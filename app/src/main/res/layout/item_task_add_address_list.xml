@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dm010"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <cn.net.bjsoft.sxdz.view.CircleImageView
+            android:id="@+id/item_task_add_address_avatar"
+            android:layout_width="@dimen/dm070"
+            android:layout_height="@dimen/dm070"
+            android:layout_marginLeft="@dimen/dm020"
+            android:src="@drawable/wlh" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dm010"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_task_add_address_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="李欣雨"
+                android:textColor="#333333"
+                android:textSize="@dimen/dm026" />
+
+            <TextView
+                android:id="@+id/item_task_add_address_department"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm010"
+                android:text="创意设计师"
+                android:textColor="#999999"
+                android:textSize="@dimen/dm024" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/item_task_add_address_remove"
+            android:src="@mipmap/new_task_zdlf_cut"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+</LinearLayout>

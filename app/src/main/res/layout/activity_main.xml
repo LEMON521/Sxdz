@@ -135,14 +135,13 @@
                 android:id="@+id/community"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
+                android:layout_marginLeft="@dimen/dm010"
                 android:layout_weight="1.2">
 
                 <ImageView
                     android:id="@+id/community_img"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
                     android:src="@drawable/tab_help_s" />
 
                 <TextView
@@ -163,7 +162,7 @@
                 android:id="@+id/function"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
+                android:layout_marginLeft="@dimen/dm010"
                 android:layout_weight="1.2">
 
                 <ImageView
@@ -186,6 +185,7 @@
             </FrameLayout>
             <!--搜索-->
             <RelativeLayout
+                android:layout_marginLeft="@dimen/dm010"
                 android:id="@+id/search"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
@@ -236,7 +236,7 @@
                 android:id="@+id/message"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
+                android:layout_marginLeft="@dimen/dm010"
                 android:layout_weight="1.2">
 
                 <ImageView
@@ -260,10 +260,11 @@
 
             <!--用户-->
             <FrameLayout
+                android:layout_marginRight="@dimen/dm010"
                 android:id="@+id/user"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
+                android:layout_marginLeft="@dimen/dm010"
                 android:layout_weight="1.2">
 
                 <!--<cn.net.bjsoft.sxdz.view.RoundImageView-->

@@ -1,6 +1,7 @@
 package cn.net.bjsoft.sxdz.fragment.zdlf;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -18,12 +19,11 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
-import cn.net.bjsoft.sxdz.utils.Constants;
 import cn.net.bjsoft.sxdz.utils.MD5;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
-import cn.net.bjsoft.sxdz.utils.UrlUtil;
 
 /**
  * Created by Zrzc on 2017/4/11.
@@ -105,18 +105,10 @@ public class ResettingPasswordZDLFFragment extends BaseFragment {
     }
 
     public void setUpdatePWD() {
-        final RequestParams params = new RequestParams(UrlUtil.baseUrl);
-        params.addBodyParameter("client_name", Constants.app_name);
-        params.addBodyParameter("phone_uuid", SPUtil.getUserPUUID(getActivity()));
-        params.addBodyParameter("randcode", SPUtil.getUserRandCode(getActivity()));
-        params.addBodyParameter("uuid", SPUtil.getUserUUID(getActivity()));
-        params.addBodyParameter("user_id", SPUtil.getUserId(getActivity()));
-        params.addBodyParameter("action", "submit");
-
-
-        params.addBodyParameter("method", "edit_password");
-        params.addBodyParameter("old_password", MD5.getMessageDigest(oldStr.getBytes()));
-        params.addBodyParameter("password", MD5.getMessageDigest(newStr.getBytes()));
+        final RequestParams params = new RequestParams(SPUtil.getResetPasswordUrl(mActivity));
+        params.addBodyParameter("username", SPUtil.getLoginUserName(mActivity));
+        params.addBodyParameter("password", MD5.getMessageDigest(oldStr.getBytes()));
+        params.addBodyParameter("new_password", MD5.getMessageDigest(newStr.getBytes()));
 
         //LogUtil.e("params"+params);
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -125,13 +117,16 @@ public class ResettingPasswordZDLFFragment extends BaseFragment {
                 LogUtil.e("修改密码结果为！！！！======" + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
-                    boolean success = jsonObject.optBoolean("success", false);
-                    if (!success) {
-                        MyToast.showShort(getActivity(), jsonObject.optString("feedback", "密码修改失败"));
+                    int code = jsonObject.optInt("code");
+                    if (code == 0) {
+                        //SPUtil.setUserUUID(mActivity, jsonObject.optString("uuid", ""));
+                        MyToast.showShort(getActivity(), "修改密码成功！请重新登录!");
+                        SPUtil.setToken(mActivity, "");
+                        Intent i = new Intent(getActivity(), SplashActivity.class);
+                        startActivity(i);
+                        getActivity().finish();
                     } else {
-                        SPUtil.setUserUUID(mActivity, jsonObject.optString("uuid", ""));
-                        MyToast.showShort(getActivity(), "修改密码成功！");
-                        mActivity.finish();
+                        MyToast.showShort(getActivity(), jsonObject.optString("msg", "密码修改失败"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

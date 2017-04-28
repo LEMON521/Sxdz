@@ -1,0 +1,65 @@
+﻿{
+    "addins": [
+        {
+            "id": "1",
+            "link": {
+                "link_from": "",
+                "link_id": "form_app",
+                "link_params": "userid={userid}",
+                "url": "http://api.shuxinyun.com/apps/preview.html"
+            },
+            "logo": "http://biip.shuxinyun.com/api/data/biip/files/users/demo/tab_upload_n.png",
+            "title": "人事考勤"
+        }
+    ],
+    "avatar": "user/avatar/default.jpg",
+    "calendar": true,
+    "check": true,
+    "email": true,
+    "files": false,
+    "functional": {
+        "auth_link_ids": {
+            "all": {
+                "admin": "true",
+                "auth_access": "true",
+                "auth_add": "true",
+                "auth_delete": "true",
+                "auth_edit": "true",
+                "auth_export": "true",
+                "auth_import": "true",
+                "auth_print": "true",
+                "auth_read": "true"
+            }
+        },
+        "auth_menu_ids": [
+            "all"
+        ]
+    },
+    "id": 10000,
+    "lang": "zh_CN",
+    "link_from": "",
+    "link_id": "",
+    "lock": true,
+    "loginname": "demo",
+    "menu_id": "",
+    "message": true,
+    "module": "",
+    "name": "测试员",
+    "notepad": true,
+    "organization": {
+        "employee_id": "0",
+        "root_company_id": "1",
+        "root_company_name": "北京中软卓成科技有限公司",
+        "root_dept_id": "-1",
+        "root_position_id": "-1",
+        "url": "cache/users/10000/organization.json"
+    },
+    "reset": true,
+    "settings": false,
+    "source_id": "2",
+    "stars": [
+        ""
+    ],
+    "task": true,
+    "update": true
+}

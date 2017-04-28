@@ -85,7 +85,7 @@ public class PhotoOrVideoUtils {
         setFragment(fragment);
         Intent intent = new Intent();
         //intent.setType("*/*");
-        intent.setType("file/*");
+        intent.setType("*/*");
         //intent.setType("text/plain;application/msword;application/vnd.ms-powerpoint;image/*;video/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setAction(Intent.ACTION_GET_CONTENT);

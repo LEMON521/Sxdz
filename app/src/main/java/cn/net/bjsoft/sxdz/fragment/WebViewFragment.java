@@ -18,6 +18,7 @@ import org.xutils.view.annotation.Event;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.DatasBean;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 
 /**
@@ -43,6 +44,10 @@ public class WebViewFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         text = getArguments().getString("text");
         url = getArguments().getString("url");
+        url = url + "?"
+                + "&token=" + SPUtil.getToken(getContext())
+                + "&appid=" + SPUtil.getAppid(getContext())
+                + "&secret=" + SPUtil.getSecret(getContext());
         tag = getArguments().getString("tag");
         LogUtil.e("WebViewFragment==" + text);
         if (getArguments().getString("getBack") != null) {

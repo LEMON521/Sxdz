@@ -9,6 +9,8 @@ import android.content.Context;
  */
 public class UrlUtil {
 
+    public final static String init_url = "http://api.shuxinyun.com/apps/4895081593118139245/mobile.json";
+
     public final static String baseUrl = "http://api.shuxin.net/service/jsondata.aspx?";
     public final static String scanUrl = "http://www.shuxin.net/wap/app/modules/rcjg/view/form/proving.html?";
     public final static String getUrl(String url, Context context){

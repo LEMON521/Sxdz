@@ -1,6 +1,7 @@
 package cn.net.bjsoft.sxdz.adapter.function.sign;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class FunctionSignHistoryAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        LogUtil.e("-----"+list.size());
+        LogUtil.e("-----" + list.size());
         return list.size();
     }
 
@@ -56,33 +57,16 @@ public class FunctionSignHistoryAdapter extends BaseAdapter {
                     R.layout.item_function_sign_history, null);
             tag = new Holder();
             tag.name = (TextView) convertView.findViewById(R.id.sign_history_name);
-
-            final Holder finalTag = tag;
-//            tag.name.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (list.get(position).isCheck) {
-//                        finalTag.name.setBackgroundResource(R.drawable.biankuang_blue);
-//                        list.get(position).isCheck = false;
-//                    }else {
-//                        finalTag.name.setBackgroundResource(R.drawable.biankuang_gray);
-//                        list.get(position).isCheck = true;
-//                    }
-//                }
-//            });
-
             convertView.setTag(tag);
+        } else {
+            tag = (Holder) convertView.getTag();
         }
         //设置数据
-        Holder holder = (Holder) convertView.getTag();
-        holder.name.setText(list.get(position).name);
-        if (list.get(position).isCheck) {
-            holder.name.setBackgroundResource(R.drawable.biankuang_blue);
-        }else {
-            holder.name.setBackgroundResource(R.drawable.biankuang_gray);
-        }
-        LogUtil.e("设置的图片为第===" + position);
-        LogUtil.e("设置的图片为第===" + list.get(position).name);
+        tag.name.setText(list.get(position).name);
+
+        //每次绘制就设置背景和字体的颜色
+        tag.name.setTextColor(Color.parseColor("#666666"));
+        tag.name.setBackgroundColor(Color.parseColor("#FFFFFF"));
         return convertView;
     }
 

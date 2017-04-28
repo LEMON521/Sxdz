@@ -1,0 +1,173 @@
+﻿{
+  "companys": {
+    "children": [
+      {
+        "children": [],
+        "id": "15",
+        "name": "北京舒心软件有限公司"
+      }
+    ],
+    "id": "1",
+    "name": "北京中软卓成科技有限公司"
+  },
+  "depts": [],
+  "employees": [
+    {
+      "email": "wangxinxin",
+      "id": "5493492297464680375",
+      "name": "宗矿辉",
+      "phone": "",
+      "source_id": "681",
+      "work_no": "ZRZC-0019"
+    },
+    {
+      "email": "sulili@bjsoft.net.cn",
+      "id": "5349159412301185179",
+      "name": "苏丽丽",
+      "phone": "",
+      "source_id": "196",
+      "user": {
+        "avatar": "user/avatar/default.jpg",
+        "id": 11006.0,
+        "nickname": "苏丽丽",
+        "source_id": 196.0
+      },
+      "work_no": "ZRZC-0017"
+    },
+    {
+      "email": "kehuchi",
+      "id": "5323972815387218246",
+      "name": "客户池",
+      "phone": "",
+      "source_id": "593",
+      "work_no": "ZRZC-0018"
+    },
+    {
+      "email": "",
+      "id": "4881967381429802551",
+      "name": "彭德强",
+      "phone": "",
+      "source_id": "19",
+      "work_no": "ZRZC-0020"
+    },
+    {
+      "email": "",
+      "id": "4830306247521683018",
+      "name": "许慧玲",
+      "phone": "",
+      "source_id": "16",
+      "work_no": "ZRZC-0006"
+    },
+    {
+      "email": "",
+      "id": "5070318826019440872",
+      "name": "徐小丰",
+      "phone": "",
+      "source_id": "15",
+      "work_no": "ZRZC-0007"
+    },
+    {
+      "email": "shuxd@bjsoft.net.cn",
+      "id": "5305321975361554865",
+      "name": "舒新东",
+      "phone": "",
+      "source_id": "3",
+      "user": {
+        "avatar": "user/avatar/default.jpg",
+        "id": 10001.0,
+        "nickname": "舒新东",
+        "source_id": 3.0
+      },
+      "work_no": "ZRZC-0001"
+    },
+    {
+      "email": "zhangjing@bjsoft.net.cn",
+      "id": "4964278781195377949",
+      "name": "张静",
+      "phone": "",
+      "source_id": "98",
+      "work_no": "ZRZC-0011"
+    },
+    {
+      "email": "jiashenxue@bjsoft.net.cn",
+      "id": "5627953237476396534",
+      "name": "贾盛雪",
+      "phone": "",
+      "source_id": "29",
+      "work_no": "ZRZC-0009"
+    },
+    {
+      "email": "",
+      "id": "5483194184889816557",
+      "name": "诸鸽",
+      "phone": "",
+      "source_id": "17",
+      "work_no": "ZRZC-0005"
+    },
+    {
+      "email": "",
+      "id": "5505698851440892020",
+      "name": "于丽丽",
+      "phone": "",
+      "source_id": "20",
+      "work_no": "ZRZC-0002"
+    },
+    {
+      "email": "",
+      "id": "5037479354782713736",
+      "name": "滕雨君",
+      "phone": "",
+      "source_id": "39",
+      "work_no": "ZRZC-0010"
+    },
+    {
+      "email": "guotiegang@bjsoft.net.cn",
+      "id": "5063622524471051352",
+      "name": "郭铁刚",
+      "phone": "",
+      "source_id": "99",
+      "work_no": "ZRZC-0013"
+    },
+    {
+      "email": "cuiguanjun@bjsoft.net.cn",
+      "id": "5261173482297972136",
+      "name": "崔冠军",
+      "phone": "",
+      "source_id": "139",
+      "work_no": "ZRZC-0015"
+    },
+    {
+      "email": "liguijuan@bjsoft.net.cn",
+      "id": "4879648457366718007",
+      "name": "李桂娟",
+      "phone": "",
+      "source_id": "143",
+      "work_no": "ZRZC-0016"
+    },
+    {
+      "email": "jinningning@bjsoft.net.cn",
+      "id": "5278251016933487419",
+      "name": "靳宁宁",
+      "phone": "13937260956",
+      "source_id": "803",
+      "work_no": "ZRZC-0021"
+    },
+    {
+      "email": "wangshuai@bjsoft.net.cn",
+      "id": "4695450093983115428",
+      "name": "王帅",
+      "phone": "",
+      "source_id": "",
+      "work_no": "ZRZC-0012"
+    },
+    {
+      "email": "1222@163.com",
+      "id": "5458140609136655043",
+      "name": "投简历人2",
+      "phone": "",
+      "source_id": "",
+      "work_no": "20170187"
+    }
+  ],
+  "positions": {}
+}

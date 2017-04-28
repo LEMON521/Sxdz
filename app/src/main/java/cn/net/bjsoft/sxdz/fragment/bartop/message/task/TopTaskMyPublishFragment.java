@@ -18,7 +18,8 @@ import org.xutils.x;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.EmptyActivity;
+import cn.net.bjsoft.sxdz.activity.home.bartop.message.TaskDetailActivity;
+import cn.net.bjsoft.sxdz.activity.home.bartop.message.TaskNewActivity;
 import cn.net.bjsoft.sxdz.adapter.message.task.TaskAllZDLFAdapter;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
 import cn.net.bjsoft.sxdz.dialog.TaskSearchPopupWindow;
@@ -69,7 +70,7 @@ public class TopTaskMyPublishFragment extends BaseFragment {
         task_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mActivity, EmptyActivity.class);
+                Intent intent = new Intent(mActivity, TaskDetailActivity.class);
                 intent.putExtra("fragment_name", "task_detail");
                 mActivity.startActivity(intent);
             }
@@ -187,7 +188,7 @@ public class TopTaskMyPublishFragment extends BaseFragment {
 
             case R.id.fragment_task_list_all_add:
 
-                Intent intent = new Intent(mActivity, EmptyActivity.class);
+                Intent intent = new Intent(mActivity, TaskNewActivity.class);
                 intent.putExtra("fragment_name", "TopAddTaskFragment");
                 mActivity.startActivity(intent);
 

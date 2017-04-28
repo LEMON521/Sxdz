@@ -2,6 +2,7 @@ package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.xutils.common.util.LogUtil;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -18,6 +20,8 @@ import org.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.EmptyActivity;
+import cn.net.bjsoft.sxdz.adapter.message.task.TaskAddAddressListAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemHeadFilesListAdapter;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.dialog.PickerDialog;
@@ -26,6 +30,7 @@ import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
+import cn.net.bjsoft.sxdz.view.tree_task_add_addresslist.bean.TreeTaskAddAddressListBean;
 
 /**
  * Created by Zrzc on 2017/4/6.
@@ -74,8 +79,18 @@ public class TopAddTaskFragment extends BaseFragment {
     private ArrayList<KnowLedgeItemBean.FilesKnowledgeItemDao> filesAddList;
     private KnowledgeItemHeadFilesListAdapter filesAddAdapter;
 
+    private ArrayList<String> nodeId;
+    private ArrayList<String> nodeAvatar;
+    private ArrayList<String> nodeName;
+    private ArrayList<String> nodeDepartment;
+
+    private ArrayList<TreeTaskAddAddressListBean.TreeTaskAddAddressListDao> humenList;
+    private TaskAddAddressListAdapter adapter;
+
     private AdapterView.OnItemClickListener itemClickListener;
     private View.OnTouchListener onTouchListener;
+
+    private static final int ADD_ADDRESS_LIST = 1000;
 
 
     @Event(value = {R.id.title_back
@@ -121,6 +136,11 @@ public class TopAddTaskFragment extends BaseFragment {
                 levelPopupWindow.showWindow(levelStrList);
                 break;
             case R.id.fragment_task_new_add_humen://添加执行者
+                Intent intent = new Intent(mActivity, EmptyActivity.class);
+                intent.putExtra("fragment_name", "TopAddTaskAddressListFragment");
+                startActivityForResult(intent, ADD_ADDRESS_LIST);
+
+
                 break;
             case R.id.fragment_task_new_submit://提交
                 MyToast.showShort(mActivity, "提交任务到服务器");
@@ -135,6 +155,38 @@ public class TopAddTaskFragment extends BaseFragment {
         title.setText("新建任务");
         back.setVisibility(View.VISIBLE);
 
+        //联系人相关开始
+
+        if (humenList == null) {
+            humenList = new ArrayList<>();
+        }
+        humenList.clear();
+
+        if (nodeId == null) {
+            nodeId = new ArrayList<>();
+        }
+        nodeId.clear();
+
+        if (nodeAvatar == null) {
+            nodeAvatar = new ArrayList<>();
+        }
+        nodeAvatar.clear();
+
+        if (nodeName == null) {
+            nodeName = new ArrayList<>();
+        }
+        nodeName.clear();
+
+        if (nodeDepartment == null) {
+            nodeDepartment = new ArrayList<>();
+        }
+        nodeDepartment.clear();
+
+        if (adapter==null) {
+            adapter = new TaskAddAddressListAdapter(mActivity,humenList);
+        }
+        new_humens.setAdapter(adapter);
+        //联系人相关结束
         /**
          * 分类---性质侧拉狂相关
          */
@@ -215,18 +267,47 @@ public class TopAddTaskFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
-        if (uri != null) {
-            String path = PhotoOrVideoUtils.getPath(mActivity, uri);
-            filesAddDao = bean.new FilesKnowledgeItemDao();
-            filesAddDao.isEditing = true;
-            filesAddDao.file_path = path;
-            filesAddDao.file_name = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
-            filesAddList.add(filesAddList.size() - 1, filesAddDao);
-            filesAddAdapter.notifyDataSetChanged();
-            Utility.setListViewHeightBasedOnChildren(new_files);
-
-        }
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_ADDRESS_LIST) {
+            //获取到选择的联系人
+            Bundle bundle = data.getExtras();
+            nodeId.addAll(bundle.getStringArrayList("nodeId"));
+            nodeAvatar.addAll(bundle.getStringArrayList("nodeAvatar"));
+            nodeName.addAll(bundle.getStringArrayList("nodeName"));
+            nodeDepartment.addAll(bundle.getStringArrayList("nodeDepartment"));
+            TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
+            for (int i = 0; i < nodeId.size(); i++) {
+                TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
+                dao.id = nodeId.get(i);
+                dao.avatar = nodeAvatar.get(i);
+                dao.name = nodeName.get(i);
+                dao.department = nodeDepartment.get(i);
+                humenList.add(dao);
+            }
+            nodeId.clear();
+            nodeAvatar.clear();
+            nodeName.clear();
+            nodeDepartment.clear();
+            adapter.notifyDataSetChanged();
+            Utility.setListViewHeightBasedOnChildren(new_humens);
+
+            LogUtil.e("返回结果===========" + nodeId.size() + nodeName.size() + nodeDepartment.size());
+
+        } else {
+
+            Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
+            if (uri != null) {
+                String path = PhotoOrVideoUtils.getPath(mActivity, uri);
+                filesAddDao = bean.new FilesKnowledgeItemDao();
+                filesAddDao.isEditing = true;
+                filesAddDao.file_path = path;
+                filesAddDao.file_name = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
+                filesAddList.add(filesAddList.size() - 1, filesAddDao);
+                filesAddAdapter.notifyDataSetChanged();
+                Utility.setListViewHeightBasedOnChildren(new_files);
+
+            }
+        }
+
     }
 }

@@ -32,16 +32,18 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
 import cn.net.bjsoft.sxdz.activity.home.MainActivity;
 import cn.net.bjsoft.sxdz.activity.login.LoginActivity;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.bean.UpdateBean;
+import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.service.JPushService;
-import cn.net.bjsoft.sxdz.utils.Constants;
-import cn.net.bjsoft.sxdz.utils.DeviceIdUtils;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
-import cn.net.bjsoft.sxdz.utils.UrlUtil;
+import cn.net.bjsoft.sxdz.utils.function.ReadFile;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
+
+import static cn.net.bjsoft.sxdz.utils.UrlUtil.init_url;
 
 /**
  * Created by 靳宁宁 on 2017/1/3.
@@ -52,6 +54,9 @@ public class SplashActivity extends BaseActivity {
     private TextView progressText;
     @ViewInject(R.id.splash_version)
     private TextView versionText;
+
+
+    private AppBean appBean;//最新数据结构
 
     private UpdateBean updateBean;
     private DatasBean datasBean;
@@ -132,6 +137,9 @@ public class SplashActivity extends BaseActivity {
         startService(new Intent(this, JPushService.class));
         checkVersion();
         //getData();
+        //get();
+
+        //MyToast.showShort(this,"加载....");
     }
 
     /**
@@ -369,58 +377,123 @@ public class SplashActivity extends BaseActivity {
 
     }
 
+
     private void getData() {
-        RequestParams params = new RequestParams(UrlUtil.baseUrl);
-        params.addBodyParameter("action", "init");
-        params.addBodyParameter("app_id", Constants.app_id);
-        params.addBodyParameter("client_name", Constants.app_name);
-//        params.addBodyParameter("client_name", "0.0");//测试用
-        params.addBodyParameter("phone_uuid", DeviceIdUtils.getDeviceId(this));
-        params.addBodyParameter("uuid", SPUtil.getUserUUID(this));
-        params.addBodyParameter("ostype", "android");
-        //params.setConnectTimeout(5000);//设置超时时间
-        x.http().get(params, new Callback.CommonCallback<String>() {
+
+
+        getDataFromService();
+        //getDataFromFile();
+
+
+    }
+
+    private void getDataFromFile() {
+        String result = "";
+        result = ReadFile.getFromAssets(this, "json/mobile.json");
+        appBean = GsonUtil.getAppBean(result);
+        SPUtil.setAppid(SplashActivity.this, appBean.appid);
+        SPUtil.setSecret(SplashActivity.this, appBean.secret);
+        SPUtil.setApiUpload(SplashActivity.this, appBean.api_upload);
+        SPUtil.setApiAuth(SplashActivity.this,appBean.api_auth);
+        SPUtil.setResetPasswordUrl(SplashActivity.this,appBean.login.passreset);
+        SPUtil.setLogoutApi(SplashActivity.this,appBean.login.logoutapi);
+        jump(result);
+    }
+
+
+    /**
+     * 开发的时候用网络地址,发布版本后用本地文件
+     */
+    private void getDataFromService() {
+
+        HttpPostUtils postUtils = new HttpPostUtils();
+        RequestParams params = new RequestParams(init_url);
+        postUtils.get(this, params);
+        postUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
-            public void onSuccess(String result) {
-                //LogUtil.e("请求网络onSuccess--" + result);
-                datasBean = GsonUtil.getDatasBean(result);
-                if (datasBean.success) {
-                    SPUtil.setUserRandCode(SplashActivity.this, datasBean.data.user.randcode);
-                    mJson = result;
-                    LogUtil.e("获取到的返回参数为：：：" + mJson);
-                    jump(result);
-                }
+            public void onSuccess(String strJson) {
+                appBean = GsonUtil.getAppBean(strJson);
+                SPUtil.setAppid(SplashActivity.this, appBean.appid);
+                SPUtil.setSecret(SplashActivity.this, appBean.secret);
+                SPUtil.setApiUpload(SplashActivity.this, appBean.api_upload);
+                SPUtil.setApiAuth(SplashActivity.this,appBean.api_auth);
+                SPUtil.setResetPasswordUrl(SplashActivity.this,appBean.login.passreset);
+                SPUtil.setLogoutApi(SplashActivity.this,appBean.login.logoutapi);
+
+                jump(strJson);
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("请求网络onError--" + ex);
-
                 MyToast.showLong(context, "请打开网络后重新启动程序！");
                 SystemClock.sleep(2000);
                 finish();
-
-
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-                LogUtil.e("请求网络onCancelled==" + cex);
-                try {
-                    Thread.sleep(2000);
-                    finish();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            public void onCancelled(Callback.CancelledException cex) {
+
             }
 
             @Override
             public void onFinished() {
-                LogUtil.e("请求网络onFinished");
-                //jump(mJson);
+
             }
         });
     }
+
+//    private void getData() {
+//        RequestParams params = new RequestParams(UrlUtil.baseUrl);
+//        params.addBodyParameter("action", "init");
+//        params.addBodyParameter("app_id", Constants.app_id);
+//        params.addBodyParameter("client_name", Constants.app_name);
+////        params.addBodyParameter("client_name", "0.0");//测试用
+//        params.addBodyParameter("phone_uuid", DeviceIdUtils.getDeviceId(this));
+//        params.addBodyParameter("uuid", SPUtil.getUserUUID(this));
+//        params.addBodyParameter("ostype", "android");
+//        //params.setConnectTimeout(5000);//设置超时时间
+//        x.http().get(params, new Callback.CommonCallback<String>() {
+//            @Override
+//            public void onSuccess(String result) {
+//                //LogUtil.e("请求网络onSuccess--" + result);
+//                datasBean = GsonUtil.getDatasBean(result);
+//                if (datasBean.success) {
+//                    SPUtil.setUserRandCode(SplashActivity.this, datasBean.data.user.randcode);
+//                    mJson = result;
+//                    LogUtil.e("获取到的返回参数为：：：" + mJson);
+//                    jump(result);
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                LogUtil.e("请求网络onError--" + ex);
+//
+//                MyToast.showLong(context, "请打开网络后重新启动程序！");
+//                SystemClock.sleep(2000);
+//                finish();
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(CancelledException cex) {
+//                LogUtil.e("请求网络onCancelled==" + cex);
+//                try {
+//                    Thread.sleep(2000);
+//                    finish();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//                LogUtil.e("请求网络onFinished");
+//                //jump(mJson);
+//            }
+//        });
+//    }
 
 
     /**
@@ -429,11 +502,10 @@ public class SplashActivity extends BaseActivity {
     private void jump(String json) {
 
 
-        if (datasBean.data.loaders.size() == 0) {
-            if (datasBean.data.authentication) {//需要验证
-
-                if (datasBean.data.user.logined) {//登录状态
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        if (appBean.loaders.size() == 0) {
+            if (appBean.authentication) {//需要验证
+                if (SPUtil.getToken(this).equals("")) {//登录状态
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     //将返回的json传递过去，在下一个页面将必要的参数本地化
                     intent.putExtra("json", json);
                     // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
@@ -441,12 +513,15 @@ public class SplashActivity extends BaseActivity {
                     startActivity(intent);
 
                 } else {//未登录状态
-                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     //将返回的json传递过去，在下一个页面将必要的参数本地化
                     intent.putExtra("json", json);
                     // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
                     finish();
                     startActivity(intent);
+
+
                 }
 
             } else {//不需要验证
@@ -460,14 +535,14 @@ public class SplashActivity extends BaseActivity {
 
             }
         }
-        if (datasBean.data.loaders.size() == 1) {
+        if (appBean.loaders.size() == 1) {
             Intent intentJumpOver = new Intent(SplashActivity.this, JumpOverActivity.class);
             //Intent intentJumpOver = new Intent(SplashActivity.this, MainActivity.class);
             intentJumpOver.putExtra("json", json);
             finish();
             startActivity(intentJumpOver);
 
-        } else if (datasBean.data.loaders.size() > 1) {//跳到轮播图
+        } else if (appBean.loaders.size() > 1) {//跳到轮播图
             Intent intent = new Intent(SplashActivity.this, CarouselFigureActivity.class);
             //将返回的json传递过去，在下一个页面将必要的参数本地化
             intent.putExtra("json", json);

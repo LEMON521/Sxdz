@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 //    private ArrayList<String> typeList;
 //    private ArrayList<String> levelList;
 
+    private LinearLayout left;
     private ImageView exit;
     private TextView type, level, /*start, end,*/
             submit, reset;
@@ -143,6 +145,7 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
     }
 
     private void InitUI() {
+        left =(LinearLayout) mRootView.findViewById(R.id.pop_task_search_zdlf_lsft);
         exit = (ImageView) mRootView.findViewById(R.id.pop_task_search_zdlf_exit);
         type = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_type);
         level = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_level);
@@ -233,6 +236,10 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
                 level.setText("");
                 start.setText("");
                 end.setText("");
+                break;
+
+            case R.id.pop_task_search_zdlf_lsft:
+                mSearchPopupWindow.dismiss();
                 break;
 
         }

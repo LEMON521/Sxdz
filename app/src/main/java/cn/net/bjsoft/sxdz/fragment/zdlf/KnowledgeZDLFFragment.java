@@ -24,6 +24,7 @@ import java.util.HashMap;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
+import cn.net.bjsoft.sxdz.activity.home.bartop.message.KnowledgeNewZDLFActivity;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeGroupAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemsAdapter;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
@@ -466,7 +467,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 
             case R.id.knowledge_add:
                 //MyToast.showShort(mActivity, "走,去发帖!");
-                Intent intent = new Intent(mActivity, EmptyActivity.class);
+                Intent intent = new Intent(mActivity, KnowledgeNewZDLFActivity.class);
                 intent.putExtra("fragment_name","KnowledgeNewZDLFFragment");
                 startActivity(intent);
 

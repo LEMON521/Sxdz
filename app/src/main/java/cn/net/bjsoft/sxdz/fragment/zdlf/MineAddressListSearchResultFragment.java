@@ -2,6 +2,7 @@ package cn.net.bjsoft.sxdz.fragment.zdlf;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -96,7 +97,7 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
         searchStr = bundle.getString("address_list_search_str").toString();
 
         //addressList
-        for (int i = 0; i < childAvatarList.size(); i++) {
+        for (int i = 0; i < childNameList.size(); i++) {
             AddressListBean bean = null;
             bean = new AddressListBean();
             AddressListBean.AddressListDao dao = null;
@@ -131,7 +132,13 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
         resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DialingPopupWindow window = new DialingPopupWindow(mActivity, view, resultList.get(position).phone_number);
+
+                if (TextUtils.isEmpty(resultList.get(position).phone_number)) {
+                    MyToast.showShort(mActivity, "该联系人没有设置电话号码!");
+                } else {
+                    DialingPopupWindow window = new DialingPopupWindow(mActivity, view, resultList.get(position).phone_number);
+                }
+
             }
         });
 
@@ -151,7 +158,7 @@ public class MineAddressListSearchResultFragment extends BaseFragment {
 
                 if (name.contains(searchStr)) {
                     resultList.add(addressList.get(i));
-                    break;
+                    //break;
                 } else if (number.contains(searchStr)) {
                     resultList.add(addressList.get(i));
                 }

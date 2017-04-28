@@ -27,10 +27,14 @@ public class MessageMessageAdapter extends BaseAdapter {
     private ArrayList<MessageMessageBean.MessageDataDao> list;
     private BitmapUtils bitmapUtils;
 
-    public MessageMessageAdapter(Context context, ArrayList<MessageMessageBean.MessageDataDao> list){
-        this.context=context;
-        this.list=list;
+    public MessageMessageAdapter(Context context, ArrayList<MessageMessageBean.MessageDataDao> list) {
+        this.context = context;
+        this.list = list;
+        bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
+        bitmapUtils.configDefaultLoadingImage(R.drawable.tab_me_n);//初始化头像
+        bitmapUtils.configDefaultLoadFailedImage(R.drawable.tab_me_n);//初始化头像
     }
+
     @Override
     public int getCount() {
         return list.size();
@@ -53,15 +57,11 @@ public class MessageMessageAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(
                     R.layout.item_message_list, null);
             tag = new Holder();
-            tag.avatar= (CircleImageView) convertView.findViewById(R.id.message_item_avatar);
-            tag.name= (TextView) convertView.findViewById(R.id.message_item_name);
-            tag.title= (TextView) convertView.findViewById(R.id.message_item_title);
-            tag.time= (TextView) convertView.findViewById(R.id.message_item_time);
-            tag.dis= (TextView) convertView.findViewById(R.id.message_item_dis);
-
-            bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
-            bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
-            bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
+            tag.avatar = (CircleImageView) convertView.findViewById(R.id.message_item_avatar);
+            tag.name = (TextView) convertView.findViewById(R.id.message_item_name);
+            tag.title = (TextView) convertView.findViewById(R.id.message_item_title);
+            tag.time = (TextView) convertView.findViewById(R.id.message_item_time);
+            tag.dis = (TextView) convertView.findViewById(R.id.message_item_dis);
             convertView.setTag(tag);
         }
         //Log.e("tag",videoTaskArrayList.get(position).getMediaurl());
@@ -69,7 +69,7 @@ public class MessageMessageAdapter extends BaseAdapter {
         Holder holder = (Holder) convertView.getTag();
         holder.name.setText(list.get(position).name);
         holder.title.setText(list.get(position).title);
-        holder.time.setText(TimeUtils.getFormateTime(list.get(position).time,"-",":"));
+        holder.time.setText(TimeUtils.getFormateTime(list.get(position).time, "-", ":"));
         holder.dis.setText(list.get(position).detail);
 
 
@@ -79,13 +79,13 @@ public class MessageMessageAdapter extends BaseAdapter {
     }
 
     public static class Holder {
-        
+
         public CircleImageView avatar;//proposal_item_avatar
         public TextView name;//proposal_item_name
         public TextView title;//proposal_item_count
         public TextView time;//proposal_item_time
         public TextView dis;//proposal_item_dis
-        
+
     }
 
 

@@ -5,6 +5,10 @@ import com.google.gson.Gson;
 import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.bean.PushBean;
 import cn.net.bjsoft.sxdz.bean.UpdateBean;
+import cn.net.bjsoft.sxdz.bean.app.AppBean;
+import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
+import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressBean;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveShowDao;
 import cn.net.bjsoft.sxdz.bean.function.sign.FunctionSignHistoryBean;
@@ -16,6 +20,7 @@ import cn.net.bjsoft.sxdz.bean.zdlf.address_list.AddressListBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.work.WorkBean;
+import cn.net.bjsoft.sxdz.view.tree_task_add_addresslist.bean.TreeTaskAddAddressListBean;
 import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.ListTaskBean;
 
 /**
@@ -30,6 +35,40 @@ public class GsonUtil {
         }
         return gson;
     }
+
+
+    /**
+     * 总数据json
+     * @param json
+     * @return
+     */
+    public static AppBean getAppBean(String json){
+        return getGson().fromJson(json , AppBean.class);
+//        return datasBean;
+    }
+
+    /**
+     * 已登录json
+     * @param json
+     * @return
+     */
+    public static LoginedBean getLoginedBean(String json){
+        return getGson().fromJson(json , LoginedBean.class);
+//        return datasBean;
+    }
+
+    /**
+     * 已登录user json
+     * @param json
+     * @return
+     */
+    public static UserBean getUserBean(String json){
+        return getGson().fromJson(json , UserBean.class);
+//        return datasBean;
+    }
+
+
+
 
     /**
      * 总数据json
@@ -181,6 +220,24 @@ public class GsonUtil {
      */
     public static ListTaskBean getListTaskBean(String json){
         return getGson().fromJson(json , ListTaskBean.class);
+    }
+
+    /**
+     * 中电联发信息模块-下属任务-模块json
+     * @param json
+     * @return
+     */
+    public static TreeTaskAddAddressListBean getTreeTaskAddAddressListBean(String json){
+        return getGson().fromJson(json , TreeTaskAddAddressListBean.class);
+    }
+
+    /**
+     * 联系人组织架构json
+     * @param json
+     * @return
+     */
+    public static AddressBean getAddressBean(String json){
+        return getGson().fromJson(json , AddressBean.class);
     }
 
 

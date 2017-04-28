@@ -17,6 +17,7 @@ import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
+import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
 import cn.net.bjsoft.sxdz.view.treeview.helper.Node;
 import cn.net.bjsoft.sxdz.view.treeview.helper.TreeListViewAdapter;
@@ -33,10 +34,13 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
             IllegalAccessException {
         super(mTree, context, datas, defaultExpandLevel);
         this.context = context;
+        bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
+        bitmapUtils.configDefaultLoadingImage(R.mipmap.application_zdlf_loding);//初始化头像
+        bitmapUtils.configDefaultLoadFailedImage(R.mipmap.application_zdlf_loding);//初始化头像
     }
 
     @Override
-    public View getConvertView(Node node, int position, View convertView, ViewGroup parent) {
+    public View getConvertView(final Node node, int position, View convertView, ViewGroup parent) {
 
         ViewHolder viewHolder = null;
         if (convertView == null) {
@@ -65,13 +69,7 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
 
         LogUtil.e("department@@@@@@@@@@@@" + node.getType() + "::V" + position);
         if (node.getType().toString().equals("department")) {//如果是部门
-            if (node.getIcon() == -1) {
-                viewHolder.parent_icon.setVisibility(View.INVISIBLE);
-                //x.image().bind(viewHolder.icon, "http://192.168.1.119:8080/android/form/form_1.jpg");
-            } else {
-                viewHolder.parent_icon.setVisibility(View.VISIBLE);
-                viewHolder.parent_icon.setImageResource(node.getIcon());
-            }
+
 
             viewHolder.parent_ll.setVisibility(View.VISIBLE);
             viewHolder.child_ll.setVisibility(View.GONE);
@@ -80,15 +78,29 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
         } else if (node.getType().toString().equals("employee")) {//员工
             viewHolder.parent_ll.setVisibility(View.GONE);
             viewHolder.child_ll.setVisibility(View.VISIBLE);
-            bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
-            bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
-            bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
+
+            viewHolder.child_ll.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    MyToast.showShort(context,"长按点击"+node.getName());
+                    return true;
+                }
+            });
+
             bitmapUtils.display(viewHolder.child_icon, node.getAvatar_url());
             //x.image().bind(viewHolder.child_icon, node.getAvatar_url());
             viewHolder.child_name.setText(node.getName());
             viewHolder.child_num.setText(node.getPhone_number());
         }
 
+
+        if (node.getIcon() == -1) {
+            viewHolder.parent_icon.setVisibility(View.INVISIBLE);
+            //x.image().bind(viewHolder.icon, "http://192.168.1.119:8080/android/form/form_1.jpg");
+        } else {
+            viewHolder.parent_icon.setVisibility(View.VISIBLE);
+            viewHolder.parent_icon.setImageResource(node.getIcon());
+        }
 
         return convertView;
     }

@@ -9,6 +9,7 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.fragment.TestFragment_1;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TaskDetailFragment;
+import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TopAddTaskAddressListFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TopAddTaskFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TopTaskUnderlingDetailFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.KnowledgeItemZDLFFragment;
@@ -43,6 +44,7 @@ public class EmptyActivity extends BaseActivity {
                     LogUtil.e("Fragment 的值为" + fragment_name);
                 } else if (fragment_name.equals("addressList")) {
                     fragment = new MineAddressListFragment();//中电联发联系人条目
+                    bundle.putBundle("organization_url", getIntent().getBundleExtra("organization_url"));
                     LogUtil.e("Fragment 的值为" + fragment_name);
                 } else if (fragment_name.equals("mine_zdlf_address_search")) {//中电联发搜索联系人结果
                     fragment = new MineAddressListSearchResultFragment();
@@ -55,7 +57,7 @@ public class EmptyActivity extends BaseActivity {
                 } else if (fragment_name.equals("TopAddTaskFragment")) {
                     fragment = new TopAddTaskFragment();
                 } else if (fragment_name.equals("resetting_password")) {
-                    fragment = new ResettingPasswordZDLFFragment();
+                    fragment = new ResettingPasswordZDLFFragment();//重置密码
                 }
                 else if (fragment_name.equals("KnowledgeNewZDLFFragment")) {
                     fragment = new KnowledgeNewZDLFFragment();
@@ -65,6 +67,9 @@ public class EmptyActivity extends BaseActivity {
                 }
                 else if (fragment_name.equals("TestFragment_1")) {
                     fragment = new TestFragment_1();
+                }
+                else if (fragment_name.equals("TopAddTaskAddressListFragment")) {
+                    fragment = new TopAddTaskAddressListFragment();
                 }
                 bundle.putString("json", "");
                 fragment.setArguments(bundle);

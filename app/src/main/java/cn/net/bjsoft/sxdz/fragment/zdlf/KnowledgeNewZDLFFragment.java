@@ -1,6 +1,5 @@
 package cn.net.bjsoft.sxdz.fragment.zdlf;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.MotionEvent;
@@ -13,7 +12,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.xutils.common.util.LogUtil;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -123,7 +121,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
     public void initData() {
         title.setText("发布");
         back.setVisibility(View.VISIBLE);
-        LogUtil.e("KnowledgeNewZDLFFragment==initData");
+
         fragment = this;
 
         //图片相关
@@ -167,7 +165,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
                     case R.id.knowledge_new_picture:
                         if ((picList.size() - 1) == position) {//如果是最后一个条目,就是添加图片的动作
                             selectType = REQUEST_CODE_PICTURE;
-                            PhotoOrVideoUtils.doPhoto(mActivity, fragment, parent);
+                            PhotoOrVideoUtils.doPhoto(mActivity, fragment, new_submit);
                         }
                         break;
                     case R.id.knowledge_new_files:
@@ -215,77 +213,36 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        LogUtil.e("!!!!!!!!!!!!requestCode"+requestCode+"==::=="+resultCode+"resultCode::==");
-        if (resultCode == Activity.RESULT_OK) {
+        Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
+        if (uri != null) {
+            if (selectType != -1) {
+                String path = PhotoOrVideoUtils.getPath(mActivity, uri);
+                switch (selectType) {
+                    case REQUEST_CODE_PICTURE://添加图片后返回
+                        picBean = new KnowledgeNewPictureBean();
+                        picBean.pic_path = path;
+                        picBean.pic_uri = uri;
+                        picList.add(picList.size() - 1, picBean);
+                        picAdapter.notifyDataSetChanged();
+                        Utility.setGridViewHeightBasedOnChildren(new_picture, 4);
 
-            Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
-            if (uri != null) {
-                if (selectType != -1) {
-                    String path = PhotoOrVideoUtils.getPath(mActivity, uri);
-                    switch (selectType) {
-                        case REQUEST_CODE_PICTURE://添加图片后返回
-                            picBean = new KnowledgeNewPictureBean();
-                            picBean.pic_path = path;
-                            picBean.pic_uri = uri;
-                            picList.add(picList.size() - 1, picBean);
-                            picAdapter.notifyDataSetChanged();
-                            Utility.setGridViewHeightBasedOnChildren(new_picture, 4);
+                        break;
+                    case REQUEST_CODE_FILES://添加文件后返回
+                        filesAddDao = bean.new FilesKnowledgeItemDao();
+                        filesAddDao.isEditing = true;
+                        filesAddDao.file_path = path;
+                        filesAddDao.file_name = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
+                        filesAddList.add(filesAddList.size() - 1, filesAddDao);
+                        filesAddAdapter.notifyDataSetChanged();
+                        Utility.setListViewHeightBasedOnChildren(new_files);
 
-                            break;
-                        case REQUEST_CODE_FILES://添加文件后返回
-                            filesAddDao = bean.new FilesKnowledgeItemDao();
-                            filesAddDao.isEditing = true;
-                            filesAddDao.file_path = path;
-                            filesAddDao.file_name = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
-                            filesAddList.add(filesAddList.size() - 1, filesAddDao);
-                            filesAddAdapter.notifyDataSetChanged();
-                            Utility.setListViewHeightBasedOnChildren(new_files);
-
-                            break;
-                    }
-                    selectType = -1;
-
-
+                        break;
                 }
+                selectType = -1;
+
+
             }
-        }else if (resultCode == Activity.RESULT_CANCELED){
-            return;
         }
-        //super.onActivityResult(requestCode, resultCode, data);
-
+        super.onActivityResult(requestCode, resultCode, data);
     }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        LogUtil.e("KnowledgeNewZDLFFragment==onDestroy");
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        LogUtil.e("KnowledgeNewZDLFFragment==onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        LogUtil.e("KnowledgeNewZDLFFragment==onPause");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        LogUtil.e("KnowledgeNewZDLFFragment==onStart");
-    }
-    @Override
-    public void onStop() {
-        super.onStop();
-        LogUtil.e("KnowledgeNewZDLFFragment==onStop");
-    }
-
-
 }

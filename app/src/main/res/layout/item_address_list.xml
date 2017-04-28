@@ -34,7 +34,7 @@
 
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/item_address_list_child"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                 android:id="@+id/item_address_list_child_icon"
                 android:layout_width="@dimen/dm044"
                 android:layout_height="@dimen/dm044"
-                android:src="@drawable/wlh" />
+                android:src="@drawable/tab_me_n" />
 
             <TextView
                 android:id="@+id/item_address_list_child_name"
@@ -61,19 +61,26 @@
                 android:textColor="#333333"
                 android:textSize="@dimen/dm024" />
 
-            <TextView
-                android:id="@+id/item_address_list_child_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dm020"
-                android:layout_marginRight="@dimen/dm020"
-                android:text="13900000000"
-                android:textColor="#333333"
-                android:textSize="@dimen/dm024" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/item_address_list_child_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_marginRight="@dimen/dm020"
+                    android:text="13000000000"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/dm024" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
 
     </RelativeLayout>
 

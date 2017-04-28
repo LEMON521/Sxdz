@@ -9,6 +9,11 @@ import android.os.Environment;
 public class AddressUtils {
 
     /*
+   * 网络地址
+   */
+    public static String http_shuxinyun_url="http://api.shuxinyun.com/";
+
+    /*
      * 网络地址
      */
     public static String httpurl="http://api.shuxin.net/service/jsondata.aspx?";

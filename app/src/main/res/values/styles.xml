@@ -1,5 +1,9 @@
 <resources>
 
+    <style name="TaskAddAddressListCheckboxStyle" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/task_add_address_list_checkbox_style</item>
+    </style>
+
     <style name="CheckboxStyle_Knowledge_reply_item" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/styl_checkbox_knowledge_item</item>
     </style>

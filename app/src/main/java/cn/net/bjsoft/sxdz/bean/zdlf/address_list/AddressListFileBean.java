@@ -4,9 +4,9 @@ package cn.net.bjsoft.sxdz.bean.zdlf.address_list;
 
 public class AddressListFileBean {
     @TreeNodeId
-    private int _id;
+    private Long _id;
     @TreeNodePid
-    private int parentId;
+    private Long parentId;
     @TreeNodeLabel
     private String name;
     @TreeNodeUrl
@@ -25,7 +25,7 @@ public class AddressListFileBean {
     private String desc;
 
 
-    public AddressListFileBean(int _id, int parentId, String name, String station, String phone_number, String type, String avatar_url) {
+    public AddressListFileBean(Long _id, Long parentId, String name, String station, String phone_number, String type, String avatar_url) {
         super();
 //        set_id(_id);
         this._id = _id;
@@ -76,19 +76,19 @@ public class AddressListFileBean {
         this.type = type;
     }
 
-    public int get_id() {
+    public Long get_id() {
         return _id;
     }
 
-    public void set_id(int _id) {
+    public void set_id(Long _id) {
         this._id = _id;
     }
 
-    public int getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 

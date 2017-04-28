@@ -99,6 +99,15 @@ public class TaskAllZDLFAdapter extends BaseAdapter {
         viewHolder.title.setText(tasksDaos.get(position).title);
         viewHolder.classify.setText(tasksDaos.get(position).classify);
         StringBuffer name = new StringBuffer();
+        switch (tasksDaos.get(position).type){
+            case 0:
+                name.append("发起人：");
+                break;
+
+            case 1:
+                name.append("执行人：");
+                break;
+        }
         for (int i = 0; i < tasksDaos.get(position).name.size(); i++) {
             name.append(tasksDaos.get(position).name.get(i).name);
             if (i + 1 != tasksDaos.get(position).name.size()) {
