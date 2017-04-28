@@ -14,10 +14,15 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
@@ -394,9 +399,27 @@ public class SplashActivity extends BaseActivity {
         SPUtil.setAppid(SplashActivity.this, appBean.appid);
         SPUtil.setSecret(SplashActivity.this, appBean.secret);
         SPUtil.setApiUpload(SplashActivity.this, appBean.api_upload);
-        SPUtil.setApiAuth(SplashActivity.this,appBean.api_auth);
-        SPUtil.setResetPasswordUrl(SplashActivity.this,appBean.login.passreset);
-        SPUtil.setLogoutApi(SplashActivity.this,appBean.login.logoutapi);
+        SPUtil.setApiAuth(SplashActivity.this, appBean.api_auth);
+        SPUtil.setResetPasswordUrl(SplashActivity.this, appBean.login.passreset);
+        SPUtil.setLogoutApi(SplashActivity.this, appBean.login.logoutapi);
+
+        //----------------------按用户id绑定推送-------------------------
+        String user_id = SPUtil.getUserId(this);
+        if (!TextUtils.isEmpty(user_id)) {
+            CloudPushService pushService = PushServiceFactory.getCloudPushService();
+            pushService.bindAccount(user_id, new CommonCallback() {
+                @Override
+                public void onSuccess(String s) {
+                    LogUtil.e("==============初始化绑定成功!!!===============" + s);
+                }
+
+                @Override
+                public void onFailed(String s, String s1) {
+                    LogUtil.e("==============初始化绑定失败!!!===============" + s + "---原因---" + s1);
+                }
+            });
+        }
+
         jump(result);
     }
 
@@ -416,9 +439,26 @@ public class SplashActivity extends BaseActivity {
                 SPUtil.setAppid(SplashActivity.this, appBean.appid);
                 SPUtil.setSecret(SplashActivity.this, appBean.secret);
                 SPUtil.setApiUpload(SplashActivity.this, appBean.api_upload);
-                SPUtil.setApiAuth(SplashActivity.this,appBean.api_auth);
-                SPUtil.setResetPasswordUrl(SplashActivity.this,appBean.login.passreset);
-                SPUtil.setLogoutApi(SplashActivity.this,appBean.login.logoutapi);
+                SPUtil.setApiAuth(SplashActivity.this, appBean.api_auth);
+                SPUtil.setResetPasswordUrl(SplashActivity.this, appBean.login.passreset);
+                SPUtil.setLogoutApi(SplashActivity.this, appBean.login.logoutapi);
+
+                //----------------------按用户id绑定推送-------------------------
+                String user_id = SPUtil.getUserId(SplashActivity.this);
+                if (!TextUtils.isEmpty(user_id)) {
+                    CloudPushService pushService = PushServiceFactory.getCloudPushService();
+                    pushService.bindAccount(user_id, new CommonCallback() {
+                        @Override
+                        public void onSuccess(String s) {
+                            LogUtil.e("==============初始化绑定成功!!!===============" + s);
+                        }
+
+                        @Override
+                        public void onFailed(String s, String s1) {
+                            LogUtil.e("==============初始化绑定失败!!!===============" + s + "---原因---" + s1);
+                        }
+                    });
+                }
 
                 jump(strJson);
             }

@@ -10,20 +10,82 @@ import java.io.Serializable;
 
 public class PushBean implements Serializable {
 
-    public int approve;
-    public int bug;
-    public int community;
-    public int crm;
-    public int knowledge;
-    public int message;
-    public int myself;
-    public int payment;
-    public int proposal;
-    public int scan;
-    public int shoot;
-    public int signin;
-    public int task;
+    //---------------社区--------------
+
+    /**
+     * 直播
+     */
     public int train;
+    /**
+     * 帮助
+     */
+    public int knowledge;
+    /**
+     * 建议
+     */
+    public int proposal;
+    /**
+     * 解惑报错
+     */
+    public int bug;
+    /**
+     * 社区
+     */
+    public int community;//社区
+
+    //--------------------功能------------------
+    /**
+     * 扫一扫
+     */
+    public int scan;
+    /**
+     * 拍照/拍摄任务
+     */
+    public int shoot;
+    /**
+     * 签到
+     */
+    public int signin;
+    /**
+     * 支付
+     */
+    public int payment;
+
+    //---------------------信息--------------
+    /**
+     * 信息
+     */
+    public int message;
+    /**
+     * 任务
+     */
+    public int task;
+    /**
+     * 客户
+     */
+    public int crm;
+    /**
+     * 审批
+     */
+    public int workflow;//审批
+
+    //-------------------我的----------------
+    /**
+     * 我的
+     */
+    public int myself;
+
+///////////////////////////////////////////////
+    public int calendar;
+    //public int crm;
+    public int email;
+    //public int message;
+    public int notice;
+    public int order;
+    public int sign;
+    //public int task;
+    //public int workflow;
+
 
 
 //    public ArrayList<CommBean> comm;//社区

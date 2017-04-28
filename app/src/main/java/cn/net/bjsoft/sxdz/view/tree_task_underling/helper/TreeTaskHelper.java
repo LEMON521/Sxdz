@@ -86,10 +86,10 @@ public class TreeTaskHelper {
         for (T t : datas) {
             int id = -1;
             int pId = -1;
-            String label = null;
-            String url = null;
-            String department = null;
-            String task_num = null;
+            String label = "";
+            String url = "";
+            String department = "";
+            String task_num = "";
 
 
             Class<? extends Object> clazz = t.getClass();

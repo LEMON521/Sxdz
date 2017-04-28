@@ -548,6 +548,7 @@ public class MineAddressListFragment extends BaseFragment {
             //LogUtil.e("遍历子节点------addressDeptsBean.id" + addressDeptsBean.id);
             //向部门添加联系人
 //            map = new HashMap<>();
+
             for (AddressPositionsBean addressPositionsBean : format_positionsBean) {
 
                 if (addressPositionsBean.dept_id.equals(addressDeptsBean.id)) {
@@ -563,16 +564,15 @@ public class MineAddressListFragment extends BaseFragment {
                             bean.name = addressPositionsBean.employee.name;
 //                            bean.employee_id = addressPositionsBean.employee_id;
                             bean.company_id = addressDeptsBean.company_id;
-                            LogUtil.e("添加子节点=======bean.id=====" + bean.name);
+                            LogUtil.e("添加子节点=======bean.id=====" + bean.name+"::"+addressPositionsBean.type);
                             if (addressPositionsBean.type.equals("1")) {
                                 addressDeptsBean.children.add(bean);
                             }
-
                         }
                     }
                 }
             }
-
+            LogUtil.e("添加子jinqu节点=======addressDeptsBean.name=====" + addressDeptsBean.name);
             format_deptsBean.add(addressDeptsBean);
             if (addressDeptsBean.children != null && addressDeptsBean.children.size() > 0) {
                 getDepts(addressDeptsBean.children, addressDeptsBean.id);

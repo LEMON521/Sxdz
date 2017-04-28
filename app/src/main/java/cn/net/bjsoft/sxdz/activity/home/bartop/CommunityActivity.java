@@ -3,6 +3,7 @@ package cn.net.bjsoft.sxdz.activity.home.bartop;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -112,7 +113,7 @@ public class CommunityActivity extends BaseActivity {
     /**
      * 广播
      */
-    //private MyReceiver receiver = new MyReceiver();
+    private MyReceiver receiver = new MyReceiver();
 
 
     private ArrayList<RelativeLayout> mBarList;
@@ -137,7 +138,7 @@ public class CommunityActivity extends BaseActivity {
         /**
          * 注册广播
          */
-        //registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.community"));
+        registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.community"));
 
         initData();
         setView();
@@ -378,7 +379,7 @@ public class CommunityActivity extends BaseActivity {
             //LogUtil.e("社区接收到了广播@@@@@,数据为===" + pushJson);
 
 
-            int approve = bean.approve;
+            int approve = bean.workflow;
             int bug = bean.bug;
             int community = bean.community;
             int crm = bean.crm;

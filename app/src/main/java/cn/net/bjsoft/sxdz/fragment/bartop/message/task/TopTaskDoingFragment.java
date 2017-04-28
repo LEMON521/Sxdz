@@ -47,7 +47,7 @@ public class TopTaskDoingFragment extends BaseFragment {
 
     private MessageTaskBean taskBean;
     private ArrayList<MessageTaskBean.TasksAllDao> tasksAllDao;
-    private ArrayList<MessageTaskBean.TasksAllDao> tasksDoneDao;
+    private ArrayList<MessageTaskBean.TasksAllDao> tasksDoingDao;
     private TaskAllZDLFAdapter taskAdapter;
 
     private MessageTaskBean.TaskQueryDao taskQueryDao;
@@ -63,14 +63,14 @@ public class TopTaskDoingFragment extends BaseFragment {
         } else {
             tasksAllDao.clear();
         }
-        if (tasksDoneDao == null) {
-            tasksDoneDao = new ArrayList<>();
+        if (tasksDoingDao == null) {
+            tasksDoingDao = new ArrayList<>();
         } else {
-            tasksDoneDao.clear();
+            tasksDoingDao.clear();
         }
 
         if (taskAdapter == null) {
-            taskAdapter = new TaskAllZDLFAdapter(mActivity, tasksDoneDao);
+            taskAdapter = new TaskAllZDLFAdapter(mActivity, tasksDoingDao);
         }
         task_list.setAdapter(taskAdapter);
 
@@ -101,6 +101,7 @@ public class TopTaskDoingFragment extends BaseFragment {
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
 
                         tasksAllDao.clear();
+                        tasksDoingDao.clear();
                         LogUtil.e("setOnRefreshListener-----------");
                         getData();
 
@@ -188,7 +189,7 @@ public class TopTaskDoingFragment extends BaseFragment {
             //
             if (dao.state == 2) {
                 dao.state = -1;
-                tasksDoneDao.add(dao);
+                tasksDoingDao.add(dao);
             }
         }
         taskAdapter.notifyDataSetChanged();

@@ -1149,7 +1149,7 @@ public class MainActivity extends BaseActivity {
             PushBean bean = GsonUtil.getPushBean(pushJson);
             LogUtil.e("接收到了广播$$$$$$$,数据为===" + pushJson);
 
-            int approve = bean.approve;
+            int approve = bean.workflow;
             int bug = bean.bug;
             int community = bean.community;
             int crm = bean.crm;

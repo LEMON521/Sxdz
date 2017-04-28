@@ -97,6 +97,7 @@ public class TopTaskDoneFragment extends BaseFragment {
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
 
                         tasksAllDao.clear();
+                        tasksDoneDao.clear();
                         LogUtil.e("setOnRefreshListener-----------");
                         getData();
 
