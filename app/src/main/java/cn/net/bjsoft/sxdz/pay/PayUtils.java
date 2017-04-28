@@ -96,7 +96,7 @@ public class PayUtils
                 // 构造PayTask 对象
                 PayTask alipay = new PayTask((Activity) context);
                 // 调用支付接口
-                String result = alipay.pay(payInfo);
+                String result = alipay.pay(payInfo,true);
 
                 Message msg = new Message();
                 msg.what = SDK_PAY_FLAG;

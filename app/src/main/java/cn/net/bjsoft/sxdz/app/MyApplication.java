@@ -1,22 +1,30 @@
 package cn.net.bjsoft.sxdz.app;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
+
+import org.xutils.common.util.LogUtil;
 import org.xutils.x;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cn.jpush.android.api.JPushInterface;
 import cn.net.bjsoft.sxdz.utils.SPJpushUtil;
+
+//import com.alibaba.sdk.android.push.CloudPushService;
+//import com.alibaba.sdk.android.push.CommonCallback;
+//import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 
 /**
  * Created by jnn on 2017/1/3.
  */
-public class MyApplication extends Application implements Serializable {
+public class MyApplication extends MultiDexApplication implements Serializable {
 
     //顶部栏每个按钮的推送数量
     private int mCommunityNum = 5;
@@ -54,23 +62,52 @@ public class MyApplication extends Application implements Serializable {
     public void onCreate() {
         super.onCreate();
 
+
         //xutils3.0初始化
         x.Ext.init(this);
         x.Ext.setDebug(true); //输出debug日志，开启会影响性能
 
         //极光推送初始化
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(this);
+//        JPushInterface.setDebugMode(true);
+//        JPushInterface.init(this);
+
+        //阿里推送初始化
+        initCloudChannel(this);
+
 
         //初始化语音搜索
-       // SpeechUtility.createUtility(context, SpeechConstant.APPID +"=58845eeb");
+        // SpeechUtility.createUtility(context, SpeechConstant.APPID +"=58845eeb");
 
-
+        LogUtil.e("==============开始初始化===============");
         context = getApplicationContext();
-
+        LogUtil.e("==============初始化完毕===============");
         mActivityList = new ArrayList<>();
         mOsVersion = getAndroidOSVersion();
         mCount++;
+    }
+
+    /**
+     * 初始化云推送通道
+     *
+     * @param applicationContext
+     */
+    private void initCloudChannel(Context applicationContext) {
+        PushServiceFactory.init(applicationContext);
+        CloudPushService pushService = PushServiceFactory.getCloudPushService();
+
+
+        pushService.register(applicationContext, new CommonCallback() {
+            @Override
+            public void onSuccess(String response) {
+                LogUtil.e("==============初始化推送成功init cloudchannel success===============");
+                //cloudPushService.getDeviceId();
+            }
+
+            @Override
+            public void onFailed(String errorCode, String errorMessage) {
+                LogUtil.e("===========初始化推送失败init cloudchannel failed -- errorcode:========" + errorCode + " -- errorMessage:" + errorMessage);
+            }
+        });
     }
 
     /**
@@ -193,27 +230,27 @@ public class MyApplication extends Application implements Serializable {
         if (key.equals("train")) {
             int old = mPushNum.get("train");
             mPushNum.remove("train");
-            mPushNum.put("train", value+old);
+            mPushNum.put("train", value + old);
             reFreshPushNumList("Community", community + value);
         } else if (key.equals("knowledge")) {
             int old = mPushNum.get("knowledge");
             mPushNum.remove("knowledge");
-            mPushNum.put("knowledge", value+old);
+            mPushNum.put("knowledge", value + old);
             reFreshPushNumList("Community", community + value);
         } else if (key.equals("proposal")) {
             int old = mPushNum.get("proposal");
             mPushNum.remove("proposal");
-            mPushNum.put("proposal", value+old);
+            mPushNum.put("proposal", value + old);
             reFreshPushNumList("Community", community + value);
         } else if (key.equals("bug")) {
             int old = mPushNum.get("bug");
             mPushNum.remove("bug");
-            mPushNum.put("bug", value+old);
+            mPushNum.put("bug", value + old);
             reFreshPushNumList("Community", community + value);
         } else if (key.equals("community")) {
             int old = mPushNum.get("community");
             mPushNum.remove("community");
-            mPushNum.put("community", value+old);
+            mPushNum.put("community", value + old);
             reFreshPushNumList("Community", community + value);
         }
     }
@@ -233,23 +270,23 @@ public class MyApplication extends Application implements Serializable {
         if (key.equals("scan")) {
             int old = mPushNum.get("scan");
             mPushNum.remove("scan");
-            mPushNum.put("scan", value+old);
+            mPushNum.put("scan", value + old);
             reFreshPushNumList("Function", function + value);
         } else if (key.equals("shoot")) {
             int old = mPushNum.get("shoot");
             mPushNum.remove("shoot");
-            mPushNum.put("shoot", value+old);
+            mPushNum.put("shoot", value + old);
             reFreshPushNumList("Function", function + value);
         } else if (key.equals("signin")) {
             int old = mPushNum.get("signin");
             mPushNum.remove("signin");
-            mPushNum.put("signin", value+old);
+            mPushNum.put("signin", value + old);
             reFreshPushNumList("Function", function + value);
         } else if (key.equals("payment")) {
             int old = mPushNum.get("payment");
             mPushNum.remove("payment");
-            mPushNum.put("payment", value+old);
-            reFreshPushNumList("Function", function  + value);
+            mPushNum.put("payment", value + old);
+            reFreshPushNumList("Function", function + value);
         }
 
     }
@@ -269,23 +306,23 @@ public class MyApplication extends Application implements Serializable {
         if (key.equals("message")) {
             int old = mPushNum.get("message");
             mPushNum.remove("message");
-            mPushNum.put("message", value+old);
-            reFreshPushNumList("Message", message  + value);
+            mPushNum.put("message", value + old);
+            reFreshPushNumList("Message", message + value);
         } else if (key.equals("task")) {
             int old = mPushNum.get("task");
             mPushNum.remove("task");
-            mPushNum.put("task", value+old);
+            mPushNum.put("task", value + old);
             reFreshPushNumList("Message", message + value);
         } else if (key.equals("crm")) {
             int old = mPushNum.get("crm");
             mPushNum.remove("crm");
-            mPushNum.put("crm", value+old);
-            reFreshPushNumList("Message", message  + value);
+            mPushNum.put("crm", value + old);
+            reFreshPushNumList("Message", message + value);
         } else if (key.equals("approve")) {
             int old = mPushNum.get("approve");
             mPushNum.remove("approve");
-            mPushNum.put("approve", value+old);
-            reFreshPushNumList("Message", message  + value);
+            mPushNum.put("approve", value + old);
+            reFreshPushNumList("Message", message + value);
         }
 
     }
@@ -302,7 +339,7 @@ public class MyApplication extends Application implements Serializable {
         if (key.equals("myself")) {
             int old = mPushNum.get("myself");
             mPushNum.remove("myself");
-            mPushNum.put("myself", value+old);
+            mPushNum.put("myself", value + old);
             reFreshPushNumList("Uesr", user + value);
         }
     }

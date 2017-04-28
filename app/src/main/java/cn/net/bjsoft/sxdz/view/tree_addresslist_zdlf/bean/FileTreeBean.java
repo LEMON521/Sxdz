@@ -9,6 +9,9 @@ public class FileTreeBean {
     private Long parentId;
     @TreeNodeName
     private String name;
+
+
+
     @TreeNodeAddressCompanysBean
     private AddressCompanysBean companysBean;
 
@@ -46,14 +49,12 @@ public class FileTreeBean {
     public void setName(String name) {
         this.name = name;
     }
-
-    public AddressCompanysBean getAddressDeptsBean() {
+    public AddressCompanysBean getCompanysBean() {
         return companysBean;
     }
 
-    public void setAddressDeptsBean(AddressCompanysBean addressDeptsBean) {
-        this.companysBean = addressDeptsBean;
+    public void setCompanysBean(AddressCompanysBean companysBean) {
+        this.companysBean = companysBean;
     }
-
 
 }

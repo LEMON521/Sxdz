@@ -17,6 +17,7 @@ public class AddressDeptsBean implements Serializable {
     public String position_id = "";
     public String pId = "";
     public String employee_id="";
+    public String company = "";
     //public String type = "";
 
 

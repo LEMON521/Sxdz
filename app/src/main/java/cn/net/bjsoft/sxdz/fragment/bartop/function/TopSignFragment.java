@@ -169,41 +169,49 @@ public class TopSignFragment extends BaseFragment {
         bitmapUtils = new BitmapUtils(getActivity(), AddressUtils.img_cache_url);
         bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);
-        bitmapUtils.display(userIcon, mDatasBean.data.user.avatar);
-        name.setText(mDatasBean.data.user.name);
-        bumen.setText(mDatasBean.data.user.name);//这里接收的参数现在未定
+
+
+//        bitmapUtils.display(userIcon, mDatasBean.data.user.avatar);
+//        name.setText(mDatasBean.data.user.name);
+//        bumen.setText(mDatasBean.data.user.name);//这里接收的参数现在未定
+
+
         time.setText(new SimpleDateFormat("HH:mm").format(new Date()));
 //      oldaddress.setText(InitModel.getInstance(getActivity()).getUserData().getAddress());
 //      oletime.setText(InitModel.getInstance(getActivity()).getUserData().getSigntime());
         //----------------------注意
-        if (mDatasBean.data.pushdata.sign_last != null) {
-            if (mDatasBean.data.pushdata.sign_last.address != null) {
-                if (!mDatasBean.data.pushdata.sign_last.address.equals("")) {
-                    oldaddress.setText(mDatasBean.data.pushdata.sign_last.address);
-                }
-            } else {
-                oldaddress.setText("未获取到信息");
-            }
-            if (mDatasBean.data.pushdata.sign_last.signtime != null) {
-                if (!mDatasBean.data.pushdata.sign_last.signtime.equals("")) {
-                    oletime.setText(mDatasBean.data.pushdata.sign_last.signtime);
-                }
-            } else {
-                oletime.setText("未获取到信息");
-            }
-            if (SPUtil.getAddress(getActivity()) != null) {
-                if (!SPUtil.getAddress(getActivity()).equals("")) {
-                    address.setText(SPUtil.getAddress(getActivity()));
-                }
-            } else {
-                address.setText("未获取到信息");
-            }
-        } else {
-            oldaddress.setText("未获取到信息");
-            oletime.setText("未获取到信息");
-            address.setText("未获取到信息");
 
-        }
+
+//        if (mDatasBean.data.pushdata.sign_last != null) {
+//            if (mDatasBean.data.pushdata.sign_last.address != null) {
+//                if (!mDatasBean.data.pushdata.sign_last.address.equals("")) {
+//                    oldaddress.setText(mDatasBean.data.pushdata.sign_last.address);
+//                }
+//            } else {
+//                oldaddress.setText("未获取到信息");
+//            }
+//            if (mDatasBean.data.pushdata.sign_last.signtime != null) {
+//                if (!mDatasBean.data.pushdata.sign_last.signtime.equals("")) {
+//                    oletime.setText(mDatasBean.data.pushdata.sign_last.signtime);
+//                }
+//            } else {
+//                oletime.setText("未获取到信息");
+//            }
+//            if (SPUtil.getAddress(getActivity()) != null) {
+//                if (!SPUtil.getAddress(getActivity()).equals("")) {
+//                    address.setText(SPUtil.getAddress(getActivity()));
+//                }
+//            } else {
+//                address.setText("未获取到信息");
+//            }
+//        } else {
+//            oldaddress.setText("未获取到信息");
+//            oletime.setText("未获取到信息");
+//            address.setText("未获取到信息");
+//
+//        }
+
+
     }
 
     @Event(type = View.OnClickListener.class, value = {R.id.sign_back, R.id.sign_history, R.id.sign_picture, R.id.sign_btn})

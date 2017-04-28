@@ -145,7 +145,7 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
     }
 
     private void InitUI() {
-        left =(LinearLayout) mRootView.findViewById(R.id.pop_task_search_zdlf_lsft);
+        left = (LinearLayout) mRootView.findViewById(R.id.pop_task_search_zdlf_left);
         exit = (ImageView) mRootView.findViewById(R.id.pop_task_search_zdlf_exit);
         type = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_type);
         level = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_level);
@@ -163,6 +163,7 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 //        start.setText(TimeUtils.getFormateDate(Long.parseLong(startStr), "-"));
 //        end.setText(TimeUtils.getFormateDate(Long.parseLong(endStr), "-"));
 
+        left.setOnClickListener(this);
         exit.setOnClickListener(this);
         type.setOnClickListener(this);
         level.setOnClickListener(this);
@@ -194,13 +195,17 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         int[] location = null;
         location = new int[2];
         switch (v.getId()) {
+
+            case R.id.pop_task_search_zdlf_left:
+                mSearchPopupWindow.dismiss();
+                break;
             case R.id.pop_task_search_zdlf_exit:
                 mSearchPopupWindow.dismiss();
                 break;
 
             case R.id.pop_task_search_zdlf_type:
                 type.getLocationOnScreen(location);
-                location[1] = location[1]+type.getHeight();
+                location[1] = location[1] + type.getHeight();
                 //type.getLocationInWindow(location);
 //                location[0] = type.getLeft();
 //                location[1] = type.getRight();
@@ -208,14 +213,14 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 //                LogUtil.e("type=getRight=="+type.getRight());
 //
 //                LogUtil.e("type=getRight=="+location[0]+"::"+location[1]);
-                typePopupWindow.showWindow(typeStrList,location);
+                typePopupWindow.showWindow(typeStrList, location);
 
                 break;
 
             case R.id.pop_task_search_zdlf_level:
                 level.getLocationOnScreen(location);
-                location[1] = location[1]+type.getHeight();
-                levelPopupWindow.showWindow(levelStrList,location);
+                location[1] = location[1] + type.getHeight();
+                levelPopupWindow.showWindow(levelStrList, location);
 
                 break;
 
@@ -236,10 +241,6 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
                 level.setText("");
                 start.setText("");
                 end.setText("");
-                break;
-
-            case R.id.pop_task_search_zdlf_lsft:
-                mSearchPopupWindow.dismiss();
                 break;
 
         }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
@@ -176,7 +181,24 @@ public class LoginFragment extends BaseFragment {
                     SPUtil.setToken(getContext(), loginedDataBean.token);
                     //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
                     SPUtil.setAvatar(getContext(), loginedDataBean.avatar);
-                    SPUtil.setLoginUserName(getContext(),loginedDataBean.loginname);
+                    SPUtil.setLoginUserName(getContext(), loginedDataBean.loginname);
+
+                    //----------------------按用户id绑定推送-------------------------
+                    String user_id = SPUtil.getUserId(getActivity());
+                    if (!TextUtils.isEmpty(user_id)) {
+                        CloudPushService pushService = PushServiceFactory.getCloudPushService();
+                        pushService.bindAccount(user_id, new CommonCallback() {
+                            @Override
+                            public void onSuccess(String s) {
+                                LogUtil.e("==============初始化绑定成功!!!===============" + s);
+                            }
+
+                            @Override
+                            public void onFailed(String s, String s1) {
+                                LogUtil.e("==============初始化绑定失败!!!===============" + s + "---原因---" + s1);
+                            }
+                        });
+                    }
 
 
                     LogUtil.e("登录结果");

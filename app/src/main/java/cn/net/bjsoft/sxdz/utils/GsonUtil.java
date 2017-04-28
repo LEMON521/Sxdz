@@ -6,6 +6,7 @@ import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.bean.PushBean;
 import cn.net.bjsoft.sxdz.bean.UpdateBean;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
+import cn.net.bjsoft.sxdz.bean.app.ali_push.ALiPushMessageBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
 import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressBean;
@@ -239,6 +240,15 @@ public class GsonUtil {
     public static AddressBean getAddressBean(String json){
         return getGson().fromJson(json , AddressBean.class);
     }
+    /**
+     * 推送消息
+     * @param json
+     * @return
+     */
+    public static ALiPushMessageBean getALiPushMessageBean(String json){
+        return getGson().fromJson(json , ALiPushMessageBean.class);
+    }
+
 
 
 }

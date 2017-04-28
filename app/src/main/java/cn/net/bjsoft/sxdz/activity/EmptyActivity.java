@@ -43,7 +43,7 @@ public class EmptyActivity extends BaseActivity {
                     fragment = new KnowledgeItemZDLFFragment();//中电联发知识详情条目
                     LogUtil.e("Fragment 的值为" + fragment_name);
                 } else if (fragment_name.equals("addressList")) {
-                    fragment = new MineAddressListFragment();//中电联发联系人条目
+                    fragment = new MineAddressListFragment();                   //中电联发联系人条目
                     bundle.putBundle("organization_url", getIntent().getBundleExtra("organization_url"));
                     LogUtil.e("Fragment 的值为" + fragment_name);
                 } else if (fragment_name.equals("mine_zdlf_address_search")) {//中电联发搜索联系人结果

@@ -69,11 +69,13 @@ public class TaskUnderlingTreeAdapter<T> extends TreeTaskListViewAdapter<T> {
         });
         viewHolder.department.setText(node.getDepartment());
         viewHolder.label.setText(node.getName());
-        if (!(Integer.parseInt(node.getTask_num()) < 1)) {
-            viewHolder.background.setVisibility(View.VISIBLE);
-            viewHolder.number.setText(node.getTask_num());
-        } else {
-            viewHolder.background.setVisibility(View.GONE);
+        if (node.getTask_num() != null&&!node.getTask_num().equals("")) {
+            if (!(Integer.parseInt(node.getTask_num()) < 1)) {
+                viewHolder.background.setVisibility(View.VISIBLE);
+                viewHolder.number.setText(node.getTask_num());
+            } else {
+                viewHolder.background.setVisibility(View.GONE);
+            }
         }
 
 

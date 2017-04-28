@@ -28,9 +28,9 @@ public class BroadcastCallUtil {
 //    public int train;
 
     public static void sendMessage2Activity(Context context, String json, PushBean bean) {
-        LogUtil.e("自定义消息的数量：：：：" + bean.approve + bean.community);
+        LogUtil.e("自定义消息的数量：：：：" + bean.workflow + bean.community);
 
-        int approve = bean.approve;
+        int approve = bean.workflow;
         int bug = bean.bug;
         int community = bean.community;
         int crm = bean.crm;
@@ -94,7 +94,7 @@ public class BroadcastCallUtil {
             i.putExtra("pushjson", json);
             context.sendBroadcast(i);
         }
-        if (bean.message > 0 || bean.task > 0 || bean.crm > 0 || bean.approve > 0) {
+        if (bean.message > 0 || bean.task > 0 || bean.crm > 0 || bean.workflow > 0) {
             Intent i = new Intent();
             i.setAction("cn.net.bjsoft.sxdz.message");
             i.putExtra("pushjson", json);
