@@ -10,6 +10,8 @@ import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
@@ -21,14 +23,15 @@ import cn.net.bjsoft.sxdz.utils.SPUtil;
 public class MyMessageReceiver extends MessageReceiver {
     // 消息接收部分的LOG_TAG
     public static final String REC_TAG = "receiver";
+    private ArrayList<String> keys;
+    private ArrayList<String> values;
 
     @Override
     public void onNotification(Context context, String title, String summary, Map<String, String> extraMap) {
         // TODO 处理推送通知
 
         Log.e("--处理推送通知--", "title: " + title + "summary: " + summary + "extraMap: " + extraMap);
-
-
+        doNotification(context, extraMap);
 
     }
 
@@ -95,7 +98,7 @@ public class MyMessageReceiver extends MessageReceiver {
 
         HttpPostUtils httpPostUtils = new HttpPostUtils();
         String url = "http://api.shuxinyun.com/cache/users/" + SPUtil.getUserId(context) + "/notifications.json";
-        LogUtil.e("请求数据-------------url-------------"+url);
+        LogUtil.e("请求数据-------------url-------------" + url);
         RequestParams params = new RequestParams(url);
         httpPostUtils.get(context, params);
 
@@ -127,7 +130,7 @@ public class MyMessageReceiver extends MessageReceiver {
     private void getPushitemcount(final Context context) {
         HttpPostUtils httpPostUtils = new HttpPostUtils();
         String url = "http://api.shuxinyun.com/cache/users/" + SPUtil.getUserId(context) + "/pushitemcount.json";
-        LogUtil.e("请求数据-------------url-------------"+url);
+        LogUtil.e("请求数据-------------url-------------" + url);
         RequestParams params = new RequestParams(url);
         httpPostUtils.get(context, params);
 
@@ -137,7 +140,7 @@ public class MyMessageReceiver extends MessageReceiver {
                 LogUtil.e("getPushitemcount-------------成功-------------");
                 LogUtil.e(strJson);
 
-                BroadcastCallUtil.sendMessage2Activity(context,strJson,GsonUtil.getPushBean(strJson));//发送消息,通知界面改数字
+                BroadcastCallUtil.sendMessage2Activity(context, strJson, GsonUtil.getPushBean(strJson));//发送消息,通知界面改数字
             }
 
             @Override
@@ -161,7 +164,7 @@ public class MyMessageReceiver extends MessageReceiver {
     private void getNotify(Context context) {
         HttpPostUtils httpPostUtils = new HttpPostUtils();
         String url = "http://api.shuxinyun.com/apps/" + SPUtil.getAppid(context) + "/notify.json";
-        LogUtil.e("请求数据-------------url-------------"+url);
+        LogUtil.e("请求数据-------------url-------------" + url);
         RequestParams params = new RequestParams(url);
         httpPostUtils.get(context, params);
 
@@ -188,5 +191,52 @@ public class MyMessageReceiver extends MessageReceiver {
 
             }
         });
+    }
+
+    private void doNotification(Context context, Map<String, String> extraMap) {
+        if (keys==null) {
+            keys  = new ArrayList<>();
+        }
+        keys.clear();
+        if (values==null) {
+            values= new ArrayList<>();
+        }
+        values.clear();
+
+
+        Iterator extraMapIterator = extraMap.entrySet().iterator();
+        while (extraMapIterator.hasNext()) {
+            Map.Entry entry = (Map.Entry) extraMapIterator.next();
+            keys.add((String) entry.getKey());
+            values.add((String) entry.getValue());
+        }
+
+        for (int j = 0; j < keys.size(); j++) {
+            LogUtil.e("key的值为========" + keys.get(j));
+            if (keys.get(j).equals("tell_callback")) {
+                if (!values.get(j).equals("")) {
+                    ALiPushMessageBean bean = GsonUtil.getALiPushMessageBean(values.get(j));
+
+                    if (bean != null) {
+                        for (int i = 0; i < bean.notify_type.length; i++) {
+                            switch (bean.notify_type[i]) {
+                                case 1:
+                                    LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
+                                    getNotifications(context);
+                                    break;
+                                case 2:
+                                    LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
+                                    getPushitemcount(context);
+                                    break;
+                                case 3:
+                                    LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
+                                    getNotify(context);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

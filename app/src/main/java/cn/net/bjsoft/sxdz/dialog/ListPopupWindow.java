@@ -40,7 +40,7 @@ public class ListPopupWindow {
     private ArrayList<String> stringList;
     private PopShowAdapter stringListAdapter;
 
-    int[] location = new int[2];//窗口位置
+
     // 数据接口
     private OnGetData mOnGetData;
 
