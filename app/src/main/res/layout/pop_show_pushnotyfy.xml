@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/pop_show_pushnotify_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#60000000"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:layout_width="@dimen/dm400"
+            android:layout_height="@dimen/dm600"
+            android:background="@color/background"
+            android:orientation="vertical"
+            android:padding="@dimen/dm020">
+
+            <TextView
+                android:id="@+id/pop_show_pushnotify_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="标题"
+                android:textColor="#333333"
+                android:textSize="@dimen/dm026" />
+
+            <TextView
+                android:layout_marginBottom="@dimen/dm020"
+                android:layout_marginTop="@dimen/dm020"
+                android:id="@+id/pop_show_pushnotify_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/pop_show_pushnotify_confirm"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/pop_show_pushnotify_title"
+                android:text="内容内容内容内容内容内容"
+                android:textColor="#666666"
+                android:textSize="@dimen/dm022" />
+
+            <RelativeLayout
+                android:id="@+id/pop_show_pushnotify_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/approve_shixin_blue"
+                android:paddingBottom="@dimen/dm010"
+                android:paddingLeft="@dimen/dm050"
+                android:paddingRight="@dimen/dm050"
+                android:paddingTop="@dimen/dm010">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="确定"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -159,4 +159,11 @@ public class Constants {
      * 详细地址
      */
     public static final String AVATAR = "avatar";
+
+
+//    /**
+//     * 用户推送数据相关
+//     */
+//    public static final String AVATAR = "avatar";
+
 }

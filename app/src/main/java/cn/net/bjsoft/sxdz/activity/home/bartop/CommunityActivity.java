@@ -22,9 +22,12 @@ import java.util.HashMap;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
-import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.bean.PushBean;
+import cn.net.bjsoft.sxdz.bean.app.AppBean;
+import cn.net.bjsoft.sxdz.bean.app.ToolbarBean;
+import cn.net.bjsoft.sxdz.dialog.ALiPushMessageInAppPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.receiver.ALiPushType3Receiver;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.function.InitFragmentUtil;
 
@@ -114,13 +117,18 @@ public class CommunityActivity extends BaseActivity {
      * 广播
      */
     private MyReceiver receiver = new MyReceiver();
+    private ALiPushType3Receiver aLiPushType3Receiver =new ALiPushType3Receiver();
+
+    private ALiPushMessageInAppPopupWindow showPushWindow;
 
 
     private ArrayList<RelativeLayout> mBarList;
     private ArrayList<BaseFragment> mFragmentsList;
     private String mJson = "";
-    private DatasBean mDatasBean;
-    private DatasBean.PushdataDao pushdataDao;
+
+    private AppBean appBean;
+    //private DatasBean mDatasBean;
+    //private DatasBean.PushdataDao pushdataDao;
 
     private String openTag = "";
 
@@ -131,14 +139,28 @@ public class CommunityActivity extends BaseActivity {
         mJson = getIntent().getStringExtra("json");
         openTag = getIntent().getStringExtra("opentag");
         LogUtil.e("community接收到的opentag为====="+openTag);
-        mDatasBean = GsonUtil.getDatasBean(mJson);
-        pushdataDao = mDatasBean.data.pushdata;
+        appBean = GsonUtil.getAppBean(mJson);
         mBarList = new ArrayList<>();
 
         /**
          * 注册广播
          */
         registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.community"));
+
+        registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
+
+        aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
+            @Override
+            public void onDataCallBack(Bundle bundleData) {
+                LogUtil.e("推送通知拿到数据=============="+bundleData);
+                if (bundleData!=null) {
+
+                    showPushWindow = new ALiPushMessageInAppPopupWindow(CommunityActivity.this,bundleData,bar);
+
+                    showPushWindow.showWindow();
+                }
+            }
+        });
 
         initData();
         setView();
@@ -393,53 +415,53 @@ public class CommunityActivity extends BaseActivity {
             int signin = bean.signin;
             int task = bean.task;
             int train = bean.train;
-            DatasBean.ToolbarDao toolbarDao = mDatasBean.data.toolbar;
+            ToolbarBean toolbarBean = appBean.toolbar;
 
-            if (toolbarDao.train){
+            if (toolbarBean.train){
                 app.reFreshCommunityPushNumList("train", train);
             }
-            if (toolbarDao.knowledge){
+            if (toolbarBean.knowledge){
                 app.reFreshCommunityPushNumList("knowledge", knowledge);
             }
-            if (toolbarDao.proposal){
+            if (toolbarBean.proposal){
                 app.reFreshCommunityPushNumList("proposal", proposal);
             }
-            if (toolbarDao.bug){
+            if (toolbarBean.bug){
                 app.reFreshCommunityPushNumList("bug", bug);
             }
             //暂时没有社区
-            if (toolbarDao.community){
+            if (toolbarBean.community){
                 app.reFreshCommunityPushNumList("community", community);
             }
 
 
-            if (toolbarDao.scan){
+            if (toolbarBean.scan){
                 app.reFreshFunctionPushNumList("scan", scan);
             }
-            if (toolbarDao.shoot){
+            if (toolbarBean.shoot){
                 app.reFreshFunctionPushNumList("shoot", shoot);
             }
-            if (toolbarDao.signin){
+            if (toolbarBean.signin){
                 app.reFreshFunctionPushNumList("signin", signin);
             }
-            if (toolbarDao.payment.size()>0){
+            if (toolbarBean.payment.size()>0){
                 app.reFreshFunctionPushNumList("payment", payment);
             }
 
-            if (toolbarDao.message){
+            if (toolbarBean.message){
                 app.reFreshMessagePushNumList("message", message);
             }
-            if (toolbarDao.task){
+            if (toolbarBean.task){
                 app.reFreshMessagePushNumList("task", task);
             }
-            if (toolbarDao.crm){
+            if (toolbarBean.crm){
                 app.reFreshMessagePushNumList("crm", crm);
             }
-            if (toolbarDao.approve){
+            if (toolbarBean.approve){
                 app.reFreshMessagePushNumList("approve", approve);
             }
 
-            if (toolbarDao.myself){
+            if (toolbarBean.myself){
                 app.reFreshUesrPushNumList("myself",myself);
             }
 

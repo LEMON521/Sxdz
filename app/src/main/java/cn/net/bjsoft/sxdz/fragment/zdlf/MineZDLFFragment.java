@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.lidroid.xutils.BitmapUtils;
 
 import org.json.JSONException;
@@ -461,7 +464,21 @@ public class MineZDLFFragment extends BaseFragment {
                 try {
                     jsonObject = new JSONObject(strJson);
                     int code = jsonObject.optInt("code");
-                    if (code == 0){
+                    if (code == 0) {
+
+
+                        CloudPushService pushService = PushServiceFactory.getCloudPushService();
+                        pushService.unbindAccount(new CommonCallback() {
+                            @Override
+                            public void onSuccess(String s) {
+                                LogUtil.e("推送解绑状态-----成功==="+s);
+                            }
+
+                            @Override
+                            public void onFailed(String s, String s1) {
+                                LogUtil.e("推送解绑状态-----失败===" + s + "::::::" + s1);
+                            }
+                        });
                         SPUtil.setUserUUID(getActivity(), "");
                         SPUtil.setUserId(getContext(), "");
                         SPUtil.setToken(getContext(), "");
@@ -469,16 +486,15 @@ public class MineZDLFFragment extends BaseFragment {
                         Intent i = new Intent(getActivity(), SplashActivity.class);
                         startActivity(i);
                         getActivity().finish();
-                    }else {
-                        MyToast.showLong(mActivity,"注销失败!");
-                        MyToast.showLong(mActivity,jsonObject.optString("msg"));
+                    } else {
+                        MyToast.showLong(mActivity, "注销失败!");
+                        MyToast.showLong(mActivity, jsonObject.optString("msg"));
                     }
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
 
 
 //                try {

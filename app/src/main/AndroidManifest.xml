@@ -17,6 +17,8 @@
         <!---->
         <!--android:screenOrientation="portrait"-->
         <!--android:configChanges="orientation|keyboardHidden|screenSize"-->
+        
+        <receiver android:name=".receiver.ALiPushType3Receiver"/>
 
 
         <!--缓冲页面-->

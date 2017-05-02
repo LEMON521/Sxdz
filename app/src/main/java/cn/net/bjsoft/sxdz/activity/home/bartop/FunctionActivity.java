@@ -25,7 +25,9 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
 import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.bean.PushBean;
+import cn.net.bjsoft.sxdz.dialog.ALiPushMessageInAppPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.receiver.ALiPushType3Receiver;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.function.InitFragmentUtil;
@@ -102,6 +104,10 @@ public class FunctionActivity extends BaseActivity {
      */
     private MyReceiver receiver = new MyReceiver();
 
+    private ALiPushType3Receiver aLiPushType3Receiver =new ALiPushType3Receiver();
+
+    private ALiPushMessageInAppPopupWindow showPushWindow;
+
     private String openTag = "";
 
     @Override
@@ -117,6 +123,21 @@ public class FunctionActivity extends BaseActivity {
          * 注册广播
          */
         registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.function"));
+
+        registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
+
+        aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
+            @Override
+            public void onDataCallBack(Bundle bundleData) {
+                LogUtil.e("推送通知拿到数据=============="+bundleData);
+                if (bundleData!=null) {
+
+                    showPushWindow = new ALiPushMessageInAppPopupWindow(FunctionActivity.this,bundleData,bar);
+
+                    showPushWindow.showWindow();
+                }
+            }
+        });
         initData();
         setView();
     }

@@ -53,7 +53,9 @@ import cn.net.bjsoft.sxdz.bean.PushBean;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.HomepageBean;
 import cn.net.bjsoft.sxdz.bean.app.ToolbarBean;
+import cn.net.bjsoft.sxdz.dialog.ALiPushMessageInAppPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.receiver.ALiPushType3Receiver;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.Constants;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
@@ -199,16 +201,15 @@ public class MainActivity extends BaseActivity {
      */
     private MyReceiver receiver = new MyReceiver();
 
-//    private Handler handler = new Handler(){
-//
-//    };
+    private ALiPushType3Receiver aLiPushType3Receiver = new ALiPushType3Receiver();
+
+    private ALiPushMessageInAppPopupWindow showPushWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //GPSUtils.getAddress(this);
         // x.view().inject(this);
-
 
 
         mActivity = this;
@@ -238,6 +239,20 @@ public class MainActivity extends BaseActivity {
          */
         registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.main"));
 
+        registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
+
+        aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
+            @Override
+            public void onDataCallBack(Bundle bundleData) {
+                LogUtil.e("推送通知拿到数据==============" + bundleData);
+                if (bundleData != null) {
+
+                    showPushWindow = new ALiPushMessageInAppPopupWindow(MainActivity.this, bundleData, mBottonBar_ll_ll);
+
+                    showPushWindow.showWindow();
+                }
+            }
+        });
 
 //        mImageOptions = new ImageOptions.Builder().setCircular(true).setUseMemCache(true).build();
 

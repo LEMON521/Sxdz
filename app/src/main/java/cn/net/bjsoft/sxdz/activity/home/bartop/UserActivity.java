@@ -39,6 +39,10 @@ public class UserActivity extends BaseActivity {
      */
     private MyReceiver receiver = new MyReceiver();
 
+//    private ALiPushType3Receiver aLiPushType3Receiver =new ALiPushType3Receiver();
+//
+//    private ALiPushMessageInAppPopupWindow showPushWindow;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,22 @@ public class UserActivity extends BaseActivity {
          * 注册广播
          */
         registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.user"));
+
+//        registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
+//
+//        aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
+//            @Override
+//            public void onDataCallBack(Bundle bundleData) {
+//                LogUtil.e("推送通知拿到数据=============="+bundleData);
+//                if (bundleData!=null) {
+//
+//                    showPushWindow = new ALiPushMessageInAppPopupWindow(UserActivity.this,bundleData,bar);
+//
+//                    showPushWindow.showWindow();
+//                }
+//            }
+//        });
+
         initData();
     }
 
