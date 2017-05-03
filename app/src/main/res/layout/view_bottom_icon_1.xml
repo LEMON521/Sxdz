@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="46dp"
     android:layout_height="46dp"
     android:layout_gravity="center"
     android:layout_weight="1"
@@ -8,6 +8,9 @@
     <!--android:layout_width="46dp"-->
 
         <!--竖直分布 tv在上，iv在下-->
+
+
+
         <LinearLayout
             android:id="@+id/view_bottom_vertical_tv_iv"
             android:layout_width="match_parent"
@@ -109,5 +112,25 @@
                 android:textColor="@color/gray"
                 android:textSize="10sp" />
         </LinearLayout>
+    <RelativeLayout
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp">
+
+        <TextView
+            android:id="@+id/view_bottom_num"
+            android:layout_width="@dimen/dm024"
+            android:layout_height="@dimen/dm024"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/common_red"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dm016" />
+
+    </RelativeLayout>
 
 </FrameLayout>

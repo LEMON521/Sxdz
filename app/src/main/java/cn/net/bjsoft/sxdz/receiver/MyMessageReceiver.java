@@ -25,6 +25,7 @@ import cn.net.bjsoft.sxdz.bean.app.ali_push.ALiPushMessageBean;
 import cn.net.bjsoft.sxdz.utils.BroadcastCallUtil;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
+import cn.net.bjsoft.sxdz.utils.function.ALiPushCountUtils;
 
 public class MyMessageReceiver extends MessageReceiver {
     // 消息接收部分的LOG_TAG
@@ -189,7 +190,14 @@ public class MyMessageReceiver extends MessageReceiver {
             @Override
             public void onSuccess(String strJson) {
                 LogUtil.e("getPushitemcount-------------成功-------------");
+
+
+                //TODO 防止后台给的数据是残疾的
+                strJson = strJson.replace("\"\"","0");
                 LogUtil.e(strJson);
+
+
+                ALiPushCountUtils.setPushCount(mContext,strJson);
 
                 //strJson = "{\"message\":9,\"plan\":8,\"calendar\":7,\"email\":6,\"order\":5,\"crm\":4,\"sign\":3,\"workflow\":2,\"task\":1}";
                 BroadcastCallUtil.sendMessage2Activity(mContext, strJson, GsonUtil.getPushBean(strJson));//发送消息,通知界面改数字
@@ -278,32 +286,65 @@ public class MyMessageReceiver extends MessageReceiver {
             values.add((String) entry.getValue());
         }
 
-        for (int j = 0; j < keys.size(); j++) {
-            LogUtil.e("key的值为========" + keys.get(j));
-            if (keys.get(j).equals("tell_callback")) {
-                if (!values.get(j).equals("")) {
-                    ALiPushMessageBean bean = GsonUtil.getALiPushMessageBean(values.get(j));
+        String tell_callback = "";
+        for (int i = 0;i<keys.size();i++){
+            LogUtil.e("key的值为========" + keys.get(i));
+            LogUtil.e("values的值为========" + values.get(i));
+            if (keys.get(i).equals("notify_type")) {
+                tell_callback = "{\"notify_type\"="+values.get(i)+"}";
+            }
+        }
 
-                    if (bean != null) {
-                        for (int i = 0; i < bean.notify_type.length; i++) {
-                            switch (bean.notify_type[i]) {
-                                case 1:
-                                    LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
-                                    getNotifications();
-                                    break;
-                                case 2:
-                                    LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
-                                    getPushitemcount();
-                                    break;
-                                case 3:
-                                    LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
-                                    getNotify();
-                                    break;
-                            }
-                        }
-                    }
+        ALiPushMessageBean bean = GsonUtil.getALiPushMessageBean(tell_callback);
+
+        if (bean != null) {
+            for (int i = 0; i < bean.notify_type.length; i++) {
+                switch (bean.notify_type[i]) {
+                    case 1:
+                        LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
+                        getNotifications();
+                        break;
+                    case 2:
+                        LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
+                        getPushitemcount();
+                        break;
+                    case 3:
+                        LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
+                        getNotify();
+                        break;
                 }
             }
         }
+
+
+
+
+//        for (int j = 0; j < keys.size(); j++) {
+//            LogUtil.e("key的值为========" + keys.get(j));
+//            if (keys.get(j).equals("tell_callback")) {
+//                if (!values.get(j).equals("")) {
+//                    ALiPushMessageBean bean = GsonUtil.getALiPushMessageBean(values.get(j));
+//
+//                    if (bean != null) {
+//                        for (int i = 0; i < bean.notify_type.length; i++) {
+//                            switch (bean.notify_type[i]) {
+//                                case 1:
+//                                    LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
+//                                    getNotifications();
+//                                    break;
+//                                case 2:
+//                                    LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
+//                                    getPushitemcount();
+//                                    break;
+//                                case 3:
+//                                    LogUtil.e("getContent==========的值为=====" + bean.notify_type[i] + "-----------------");
+//                                    getNotify();
+//                                    break;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }

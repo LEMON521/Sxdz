@@ -32,8 +32,9 @@ public class WorkBean implements Serializable {
         public String url = "";//将要打开的地址
         public String image_url = "";//图片地址
         public String name = "";//名称
-        public String push_count = "";//推送数量
+        public int push_count = 0;//推送数量
         public String type = "";//模块类型
+        public String tag = "";//唯一标识符
 
     }
 

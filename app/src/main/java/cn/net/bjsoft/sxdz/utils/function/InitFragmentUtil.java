@@ -75,7 +75,7 @@ public class InitFragmentUtil {
                     if ((!mBottonList.get(i).tag.equals(""))/*||homepageList.get(i).linkto != null*/) {
                         if (mBottonList.get(i).tag.equals("scaning")) {
                             fragment = new BottonScanFragment();
-                        } else if (mBottonList.get(i).tag.equals("work_zdlf")) {
+                        } else if (mBottonList.get(i).tag.equals("work_items")) {
                             fragment = new WorkFragment();//中电联发的工作界面
                         } else if (mBottonList.get(i).tag.equals("mine_zdlf")) {
                             fragment = new MineZDLFFragment();//中电联发的我界面

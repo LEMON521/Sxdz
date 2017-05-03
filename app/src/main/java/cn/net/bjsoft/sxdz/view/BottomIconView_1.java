@@ -26,6 +26,8 @@ public class BottomIconView_1 extends LinearLayout {
     private View view;
     private String tag = "";
 
+    private TextView num;
+
     private String mode = "";
     private String selectIcon = "";
     private String defaultIcon = "";
@@ -90,6 +92,8 @@ public class BottomIconView_1 extends LinearLayout {
 
     private void findView() {
         view = LayoutInflater.from(context).inflate(R.layout.view_bottom_icon_1, this, true);
+
+        num = (TextView) view.findViewById(R.id.view_bottom_num);
 
         vertical_1 = (LinearLayout) view.findViewById(R.id.view_bottom_vertical_tv_iv);
         topText = (TextView) view.findViewById(R.id.view_bottom_vertical_text_top);
@@ -284,6 +288,16 @@ public class BottomIconView_1 extends LinearLayout {
         }
         if (mode.equals("right")) {
             x.image().bind(rightIv, url, mImageOptions);
+        }
+
+    }
+
+    public void setPushCountNum(String number){
+        if (Integer.parseInt(number)>0) {
+            num.setVisibility(VISIBLE);
+            num.setText(number);
+        }else {
+            num.setVisibility(INVISIBLE);
         }
 
     }

@@ -142,25 +142,7 @@ public class CommunityActivity extends BaseActivity {
         appBean = GsonUtil.getAppBean(mJson);
         mBarList = new ArrayList<>();
 
-        /**
-         * 注册广播
-         */
-        registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.community"));
 
-        registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
-
-        aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
-            @Override
-            public void onDataCallBack(Bundle bundleData) {
-                LogUtil.e("推送通知拿到数据=============="+bundleData);
-                if (bundleData!=null) {
-
-                    showPushWindow = new ALiPushMessageInAppPopupWindow(CommunityActivity.this,bundleData,bar);
-
-                    showPushWindow.showWindow();
-                }
-            }
-        });
 
         initData();
         setView();
@@ -182,6 +164,26 @@ public class CommunityActivity extends BaseActivity {
         setPushNumber(mTrain+"", mKnowledge+"", mProposal+"", mBug+"", mCommunity+"");
         LogUtil.e("社区页面===="+pushNum.get("proposal").toString());
         LogUtil.e("main==onStart");
+
+        /**
+         * 注册广播
+         */
+        registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.community"));
+
+        registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
+
+        aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
+            @Override
+            public void onDataCallBack(Bundle bundleData) {
+                LogUtil.e("推送通知拿到数据=============="+bundleData);
+                if (bundleData!=null) {
+
+                    showPushWindow = new ALiPushMessageInAppPopupWindow(CommunityActivity.this,bundleData,bar);
+
+                    showPushWindow.showWindow();
+                }
+            }
+        });
     }
 
     public void setPushNumber(String trainNum,String knowledgeNum,String proposalNum,String bugNum,String communityNum){
@@ -475,6 +477,10 @@ public class CommunityActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        //在后台时，不让他接收广播
+        unregisterReceiver(receiver);
+        unregisterReceiver(aLiPushType3Receiver);
         //unregisterReceiver(receiver);
     }
 }

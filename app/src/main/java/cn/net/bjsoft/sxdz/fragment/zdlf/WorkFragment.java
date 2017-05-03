@@ -1,6 +1,9 @@
 package cn.net.bjsoft.sxdz.fragment.zdlf;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.xutils.common.Callback;
+import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -26,9 +30,12 @@ import cn.net.bjsoft.sxdz.adapter.zdlf.WorkAdapter;
 import cn.net.bjsoft.sxdz.bean.zdlf.work.WorkBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
-import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
+import cn.net.bjsoft.sxdz.utils.SPJpushUtil;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.RollViewPager;
+
+import static cn.net.bjsoft.sxdz.utils.UrlUtil.apps_url;
 
 /**
  * Created by Zrzc on 2017/3/16.
@@ -55,18 +62,29 @@ public class WorkFragment extends BaseFragment {
     //==================应用==================
     @ViewInject(R.id.ll_application_main)
     private LinearLayout ll_main;//主要应用
+    @ViewInject(R.id.tv_application_main)
+    private TextView tv_main;//主要应用
     @ViewInject(R.id.gv_application_main)
     private GridView gv_main;
+
     @ViewInject(R.id.ll_application_project)
     private LinearLayout ll_project;//项目应用
+    @ViewInject(R.id.tv_application_project)
+    private TextView tv_project;//项目应用
     @ViewInject(R.id.gv_application_project)
     private GridView gv_project;
+
     @ViewInject(R.id.ll_application_work)
     private LinearLayout ll_work;//工程应用
+    @ViewInject(R.id.tv_application_work)
+    private TextView tv_work;//工程应用
     @ViewInject(R.id.gv_application_work)
     private GridView gv_work;
+
     @ViewInject(R.id.ll_application_other)
     private LinearLayout ll_other;//其他应用
+    @ViewInject(R.id.tv_application_other)
+    private TextView tv_other;//其他应用
     @ViewInject(R.id.gv_application_other)
     private GridView gv_other;
 
@@ -97,6 +115,7 @@ public class WorkFragment extends BaseFragment {
     private AdapterView.OnItemClickListener itemClickListener;
     private Intent intent;
 
+    private PushCountReceiver pushCountReceiver;
 
     protected static final int SUCCESS = 1;
     protected static final int ERROR = -1;
@@ -129,6 +148,7 @@ public class WorkFragment extends BaseFragment {
 
     };
 
+
     @Override
     public void initData() {
         if (message != null) {
@@ -148,7 +168,13 @@ public class WorkFragment extends BaseFragment {
         if (workDatas != null) {
             workDatas = null;
         }
-        RequestParams params = new RequestParams(TestAddressUtils.test_get_work_url);
+
+        /**
+         * 工作模块的数据,跟mobile.josn在一个文件夹下面
+         */
+        String url = apps_url + SPUtil.getAppid(mActivity) + "/work_items.json";
+        //String url = TestAddressUtils.test_get_work_url;
+        RequestParams params = new RequestParams(url);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -280,19 +306,21 @@ public class WorkFragment extends BaseFragment {
         functionListDaos.addAll(workDatas.function_list);
         //开始分类
         for (WorkBean.FunctionListDao function : functionListDaos) {
-            if (function.type.equals("main")) {
+            if (function.type.equals("主要应用")) {
                 mainDaos.add(function);
-            } else if (function.type.equals("project")) {
+            } else if (function.type.equals("项目管理")) {
                 projectDaos.add(function);
-            } else if (function.type.equals("work")) {
+            } else if (function.type.equals("日常工作")) {
                 workDaos.add(function);
-            } else if (function.type.equals("other")) {
+            } else if (function.type.equals("其他应用")) {
                 otherDaos.add(function);
             } else {
 
             }
 
         }
+
+
         //功能数据分类完毕
 
         //向轮播图添加数据
@@ -309,7 +337,7 @@ public class WorkFragment extends BaseFragment {
 
         if (mainDaos.size() > 0) {
             ll_main.setVisibility(View.VISIBLE);
-
+            tv_main.setText(mainDaos.get(0).type);
             Utility.setGridViewHeightBasedOnChildren(gv_main, 4);
         } else {
             ll_main.setVisibility(View.GONE);
@@ -318,7 +346,7 @@ public class WorkFragment extends BaseFragment {
 
         if (projectDaos.size() > 0) {
             ll_project.setVisibility(View.VISIBLE);
-
+            tv_project.setText(projectDaos.get(0).type);
             Utility.setGridViewHeightBasedOnChildren(gv_project, 4);
         } else {
             ll_project.setVisibility(View.GONE);
@@ -327,7 +355,7 @@ public class WorkFragment extends BaseFragment {
 
         if (workDaos.size() > 0) {
             ll_work.setVisibility(View.VISIBLE);
-
+            tv_work.setText(workDaos.get(0).type);
             Utility.setGridViewHeightBasedOnChildren(gv_work, 4);
         } else {
             ll_work.setVisibility(View.GONE);
@@ -336,11 +364,13 @@ public class WorkFragment extends BaseFragment {
 
         if (otherDaos.size() > 0) {
             ll_other.setVisibility(View.VISIBLE);
-
+            tv_other.setText(otherDaos.get(0).type);
             Utility.setGridViewHeightBasedOnChildren(gv_other, 4);
         } else {
             ll_other.setVisibility(View.GONE);
         }
+
+        setPushNum(getContext());
     }
 
     //初始化轮播图-----------------------------开始--------------------------
@@ -420,4 +450,109 @@ public class WorkFragment extends BaseFragment {
     }
 
     //初始化轮播图结束-------------------------------------------------------
+
+    /**
+     * 注销广播
+     */
+    @Override
+    public void onDestroyView() {
+        LogUtil.e("工作模块取消---了广播------------------");
+        getActivity().unregisterReceiver(pushCountReceiver);
+        super.onDestroyView();
+    }
+
+    /**
+     * 注册广播
+     *
+     * @param context
+     */
+    @Override
+    protected void onAttachToContext(Context context) {
+        super.onAttachToContext(context);
+        LogUtil.e("工作模块注册了广播------------------");
+        /** 注册广播 */
+        pushCountReceiver = new PushCountReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("cn.net.bjsoft.sxdz.fragment_work");    //只有持有相同的action的接受者才能接收此广播
+        context.registerReceiver(pushCountReceiver, filter);
+
+
+    }
+
+    private class PushCountReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            /**
+             * 只需要改数据适配器的   集合的内容(刷新)---便可刷新GridView
+             */
+            LogUtil.e("工作模块获取到了推送数据==============");
+//            private ArrayList<WorkBean.FunctionListDao> mainDaos;
+//            private ArrayList<WorkBean.FunctionListDao> projectDaos;
+//            private ArrayList<WorkBean.FunctionListDao> workDaos;
+//            private ArrayList<WorkBean.FunctionListDao> otherDaos;
+//            private WorkAdapter mainWorkAdapter;
+//            private WorkAdapter projectWorkAdapter;
+//            private WorkAdapter workWorkAdapter;
+//            private WorkAdapter otherWorkAdapter;
+            setPushNum(context);
+
+        }
+    }
+
+    private void setPushNum(Context context){
+        for (int i = 0; i < mainDaos.size(); i++) {
+            if (mainDaos.get(i).tag.equals("project")) {
+                mainDaos.get(i).push_count = SPJpushUtil.getProject(context);
+            } else if (mainDaos.get(i).tag.equals("engineering")) {
+                mainDaos.get(i).push_count = SPJpushUtil.getEngineering(context);
+            } else if (mainDaos.get(i).tag.equals("contract")) {
+                mainDaos.get(i).push_count = SPJpushUtil.getContract(context);
+            } else if (mainDaos.get(i).tag.equals("marketchannel")) {
+                mainDaos.get(i).push_count = SPJpushUtil.getMarketchannel(context);
+            }
+        }
+        mainWorkAdapter.notifyDataSetChanged();
+
+
+        for (int i = 0; i < projectDaos.size(); i++) {
+            if (projectDaos.get(i).tag.equals("salereport")) {
+                projectDaos.get(i).push_count = SPJpushUtil.getSalereport(context) ;
+            } else if (projectDaos.get(i).tag.equals("projectstat")) {
+                projectDaos.get(i).push_count = SPJpushUtil.getProjectstat(context);
+            }
+        }
+        projectWorkAdapter.notifyDataSetChanged();
+
+
+        for (int i = 0; i < workDaos.size(); i++) {
+            if (workDaos.get(i).tag.equals("engineeringlog")) {
+                workDaos.get(i).push_count = SPJpushUtil.getEngineeringlog(context) ;
+            } else if (workDaos.get(i).tag.equals("emergency")) {
+                workDaos.get(i).push_count = SPJpushUtil.getEmergency(context);
+            } else if (workDaos.get(i).tag.equals("engineeringeval")) {
+                workDaos.get(i).push_count = SPJpushUtil.getEngineeringeval(context);
+            } else if (workDaos.get(i).tag.equals("construction")) {
+                workDaos.get(i).push_count = SPJpushUtil.getConstruction(context) ;
+            } else if (workDaos.get(i).tag.equals("constructionteam")) {
+                workDaos.get(i).push_count = SPJpushUtil.getConstructionteam(context);
+            }
+        }
+        workWorkAdapter.notifyDataSetChanged();
+
+
+        for (int i = 0; i < otherDaos.size(); i++) {
+            if (otherDaos.get(i).tag.equals("weekplan")) {
+                otherDaos.get(i).push_count = SPJpushUtil.getWeekplan(context) ;
+            } else if (otherDaos.get(i).tag.equals("companyrun")) {
+                otherDaos.get(i).push_count = SPJpushUtil.getCompanyrun(context);
+            } else if (otherDaos.get(i).tag.equals("sitemsg")) {
+                otherDaos.get(i).push_count = SPJpushUtil.getSitemsg(context) ;
+            }
+        }
+        otherWorkAdapter.notifyDataSetChanged();
+
+    }
+
+
 }

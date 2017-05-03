@@ -73,6 +73,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/tv_application_main"
                     android:textColor="#333333"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -128,6 +129,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/tv_application_project"
                     android:textColor="#333333"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -179,6 +181,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/tv_application_work"
                     android:textColor="#333333"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -231,6 +234,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/tv_application_other"
                     android:textColor="#333333"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

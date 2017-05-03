@@ -23,8 +23,9 @@ import java.util.HashMap;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
-import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.bean.PushBean;
+import cn.net.bjsoft.sxdz.bean.app.AppBean;
+import cn.net.bjsoft.sxdz.bean.app.ToolbarBean;
 import cn.net.bjsoft.sxdz.dialog.ALiPushMessageInAppPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.receiver.ALiPushType3Receiver;
@@ -94,7 +95,7 @@ public class FunctionActivity extends BaseActivity {
     private ArrayList<BaseFragment> mFragmentsList;
     private ArrayList<RelativeLayout> mBarList;
     private String mJson = "";
-    private DatasBean mDatasBean;
+    private AppBean appBean;
 
 
     private HashMap<String, Integer> pushNum;
@@ -118,7 +119,27 @@ public class FunctionActivity extends BaseActivity {
         mJson = getIntent().getStringExtra("json");
         openTag = getIntent().getStringExtra("opentag");
         LogUtil.e("function接收到的opentag为====="+openTag);
-        mDatasBean = GsonUtil.getDatasBean(mJson);
+        appBean = GsonUtil.getAppBean(mJson);
+
+        initData();
+        setView();
+    }
+
+    //TODO 因为Activity每次执行，不管是在前台后台，可见不可见，onStart是必经之路，所以将推送的数据在这里显示最合理
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+        pushNum = app.getmPushNum();
+
+        mScan = pushNum.get("scan");
+        mShoot = pushNum.get("shoot");
+        mSignin = pushNum.get("signin");
+        mPayment = pushNum.get("payment");
+
+        setPushNumber(mScan + "", mShoot + "", mSignin + "", mPayment + "");
+        LogUtil.e("main==onStart");
+
         /**
          * 注册广播
          */
@@ -138,24 +159,6 @@ public class FunctionActivity extends BaseActivity {
                 }
             }
         });
-        initData();
-        setView();
-    }
-
-    //TODO 因为Activity每次执行，不管是在前台后台，可见不可见，onStart是必经之路，所以将推送的数据在这里显示最合理
-    @Override
-    protected void onStart() {
-
-        super.onStart();
-        pushNum = app.getmPushNum();
-
-        mScan = pushNum.get("scan");
-        mShoot = pushNum.get("shoot");
-        mSignin = pushNum.get("signin");
-        mPayment = pushNum.get("payment");
-
-        setPushNumber(mScan + "", mShoot + "", mSignin + "", mPayment + "");
-        LogUtil.e("main==onStart");
     }
 
     public void setPushNumber(String scanNum, String shootNum, String signinNum, String paymentNum) {
@@ -369,7 +372,7 @@ public class FunctionActivity extends BaseActivity {
             int signin = bean.signin;
             int task = bean.task;
             int train = bean.train;
-            DatasBean.ToolbarDao toolbarDao = mDatasBean.data.toolbar;
+            ToolbarBean toolbarDao = appBean.toolbar;
 
             if (toolbarDao.train){
                 app.reFreshCommunityPushNumList("train", train);
@@ -431,5 +434,6 @@ public class FunctionActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(receiver);
+        unregisterReceiver(aLiPushType3Receiver);
     }
 }

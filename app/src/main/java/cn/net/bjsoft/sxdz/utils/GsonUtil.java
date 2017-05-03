@@ -6,6 +6,7 @@ import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.bean.PushBean;
 import cn.net.bjsoft.sxdz.bean.UpdateBean;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
+import cn.net.bjsoft.sxdz.bean.app.AppPushBean;
 import cn.net.bjsoft.sxdz.bean.app.ali_push.ALiPushMessageBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
 import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
@@ -90,6 +91,8 @@ public class GsonUtil {
         return getGson().fromJson(json , PushBean.class);
 //        return datasBean;
     }
+
+
 
     /**
      * 获取升级json
@@ -249,6 +252,16 @@ public class GsonUtil {
         return getGson().fromJson(json , ALiPushMessageBean.class);
     }
 
+
+    /**
+     * 获取推送json
+     * @param json
+     * @return
+     */
+    public static AppPushBean getAppPushBean(String json){
+        return getGson().fromJson(json , AppPushBean.class);
+//        return datasBean;
+    }
 
 
 }

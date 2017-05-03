@@ -22,8 +22,9 @@ import java.util.HashMap;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
-import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.bean.PushBean;
+import cn.net.bjsoft.sxdz.bean.app.AppBean;
+import cn.net.bjsoft.sxdz.bean.app.ToolbarBean;
 import cn.net.bjsoft.sxdz.dialog.ALiPushMessageInAppPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.receiver.ALiPushType3Receiver;
@@ -95,7 +96,7 @@ public class MessageActivity extends BaseActivity {
     private ArrayList<BaseFragment> mFragmentsList;
     private ArrayList<RelativeLayout> mBarList;
     private String mJson = "";
-    private DatasBean mDatasBean;
+    private AppBean appBean;
 
     private HashMap<String, Integer> pushNum;
     private int mMessage, mTask, mCrm, mApprove;
@@ -119,27 +120,7 @@ public class MessageActivity extends BaseActivity {
         mJson = getIntent().getStringExtra("json");
         openTag = getIntent().getStringExtra("opentag");
         LogUtil.e("message接收到的opentag为=====" + openTag);
-        mDatasBean = GsonUtil.getDatasBean(mJson);
-
-        /**
-         * 注册广播
-         */
-        registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.message"));
-
-        registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
-
-        aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
-            @Override
-            public void onDataCallBack(Bundle bundleData) {
-                LogUtil.e("推送通知拿到数据=============="+bundleData);
-                if (bundleData!=null) {
-
-                    showPushWindow = new ALiPushMessageInAppPopupWindow(MessageActivity.this,bundleData,bar);
-
-                    showPushWindow.showWindow();
-                }
-            }
-        });
+        appBean = GsonUtil.getAppBean(mJson);
 
 
 
@@ -162,6 +143,28 @@ public class MessageActivity extends BaseActivity {
         setPushNumber(mMessage + "", mTask + "", mCrm + "", mApprove + "");
         LogUtil.e("社区页面====" + pushNum.get("proposal").toString());
         LogUtil.e("main==onStart");
+
+        /**
+         * 注册广播
+         */
+        registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.message"));
+
+        registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
+
+        aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
+            @Override
+            public void onDataCallBack(Bundle bundleData) {
+                LogUtil.e("推送通知拿到数据=============="+bundleData);
+                if (bundleData!=null) {
+
+                    showPushWindow = new ALiPushMessageInAppPopupWindow(MessageActivity.this,bundleData,bar);
+
+                    showPushWindow.showWindow();
+                }
+            }
+        });
+
+
     }
 
     public void setPushNumber(String messageNum, String taskNum, String crmNum, String approveNum) {
@@ -299,30 +302,30 @@ public class MessageActivity extends BaseActivity {
             case R.id.message_message:
                 message_icon.setImageResource(R.drawable.xinxi_s);
                 message_text.setTextColor(getResources().getColor(R.color.blue));
-                message_num.setText("");
-                message_num.setVisibility(View.INVISIBLE);
-                app.reFreshMessagePushNumList("message", 0 - mMessage);
+//                message_num.setText("");
+//                message_num.setVisibility(View.INVISIBLE);
+                //app.reFreshMessagePushNumList("message", 0 - mMessage);
                 break;
             case R.id.message_task:
                 task_icon.setImageResource(R.drawable.renwu_s);
                 task_text.setTextColor(getResources().getColor(R.color.blue));
-                task_num.setText("");
-                task_num.setVisibility(View.INVISIBLE);
-                app.reFreshMessagePushNumList("task", 0 - mTask);
+//                task_num.setText("");
+//                task_num.setVisibility(View.INVISIBLE);
+                //app.reFreshMessagePushNumList("task", 0 - mTask);
                 break;
             case R.id.message_client:
                 client_icon.setImageResource(R.drawable.clientele_s);
                 client_text.setTextColor(getResources().getColor(R.color.blue));
-                client_num.setText("");
-                client_num.setVisibility(View.INVISIBLE);
-                app.reFreshMessagePushNumList("crm", 0 - mCrm);
+//                client_num.setText("");
+//                client_num.setVisibility(View.INVISIBLE);
+                //app.reFreshMessagePushNumList("crm", 0 - mCrm);
                 break;
             case R.id.message_approve:
                 approve_icon.setImageResource(R.drawable.shenpi_s);
                 approve_text.setTextColor(getResources().getColor(R.color.blue));
-                approve_num.setText("");
-                approve_num.setVisibility(View.INVISIBLE);
-                app.reFreshMessagePushNumList("approve", 0 - mApprove);
+                //approve_num.setText("");
+                //approve_num.setVisibility(View.INVISIBLE);
+                //app.reFreshMessagePushNumList("approve", 0 - mApprove);
                 break;
         }
     }
@@ -373,7 +376,7 @@ public class MessageActivity extends BaseActivity {
             int signin = bean.signin;
             int task = bean.task;
             int train = bean.train;
-            DatasBean.ToolbarDao toolbarDao = mDatasBean.data.toolbar;
+            ToolbarBean toolbarDao = appBean.toolbar;
 
             if (toolbarDao.train) {
                 app.reFreshCommunityPushNumList("train", train);
@@ -435,5 +438,6 @@ public class MessageActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(receiver);
+        unregisterReceiver(aLiPushType3Receiver);
     }
 }

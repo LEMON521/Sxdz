@@ -44,6 +44,7 @@ import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.service.JPushService;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.SPJpushUtil;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.ReadFile;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
@@ -384,6 +385,25 @@ public class SplashActivity extends BaseActivity {
 
 
     private void getData() {
+
+        //清空推送数据
+
+        SPJpushUtil.setApprove(this, 0);
+        SPJpushUtil.setBug(this, 0);
+        SPJpushUtil.setCommunity(this, 0);
+        SPJpushUtil.setCrm(this, 0);
+        SPJpushUtil.setKnowledge(this, 0);
+        SPJpushUtil.setMessage(this, 0);
+        SPJpushUtil.setMyself(this, 0);
+        SPJpushUtil.setPayment(this, 0);
+        SPJpushUtil.setProposal(this, 0);
+        SPJpushUtil.setScan(this, 0);
+        SPJpushUtil.setShoot(this, 0);
+        SPJpushUtil.setSignin(this, 0);
+        SPJpushUtil.setTask(this, 0);
+        SPJpushUtil.setTrain(this, 0);
+
+        LogUtil.e("初始化数据了================="+SPJpushUtil.getSignin(this));
 
 
         getDataFromService();

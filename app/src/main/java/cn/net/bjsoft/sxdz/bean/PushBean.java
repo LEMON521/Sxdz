@@ -15,76 +15,78 @@ public class PushBean implements Serializable {
     /**
      * 直播
      */
-    public int train;
+    public int train = 0;
     /**
      * 帮助
      */
-    public int knowledge;
+    public int knowledge= 0;
     /**
      * 建议
      */
-    public int proposal;
+    public int proposal= 0;
     /**
      * 解惑报错
      */
-    public int bug;
+    public int bug= 0;
     /**
      * 社区
      */
-    public int community;//社区
+    public int community= 0;//社区
 
     //--------------------功能------------------
     /**
      * 扫一扫
      */
-    public int scan;
+    public int scan= 0;
     /**
      * 拍照/拍摄任务
      */
-    public int shoot;
+    public int shoot= 0;
     /**
      * 签到
      */
-    public int signin;
+    public int signin= 0;
     /**
      * 支付
      */
-    public int payment;
+    public int payment= 0;
 
     //---------------------信息--------------
     /**
      * 信息
      */
-    public int message;
+    public int message= 0;
     /**
      * 任务
      */
-    public int task;
+    public int task= 0;
     /**
      * 客户
      */
-    public int crm;
+    public int crm= 0;
     /**
      * 审批
      */
-    public int workflow;//审批
+    public int workflow= 0;//审批
 
     //-------------------我的----------------
     /**
      * 我的
      */
-    public int myself;
+    public int myself= 0;
 
 ///////////////////////////////////////////////
-    public int calendar;
+    public int calendar= 0;
     //public int crm;
-    public int email;
+    public int email= 0;
     //public int message;
     public int notice;
     public int order;
-    public int sign;
+    public int sign= 0;
     //public int task;
     //public int workflow;
+
+    public int 测试数据 = 0;
 
 
 

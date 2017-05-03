@@ -21,7 +21,7 @@ public class AppBean implements Serializable {
     public LoginBean login;
     public String logo = "";
     public String position = "";
-    public PushBean push;
+    public AppPushBean push;
     public PushdataBean pushdata;
     public PushkeysBean pushkeys;
     public String secret = "";

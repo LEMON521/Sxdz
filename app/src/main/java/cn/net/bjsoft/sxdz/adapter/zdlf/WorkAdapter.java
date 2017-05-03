@@ -71,7 +71,14 @@ public class WorkAdapter extends BaseAdapter {
         //LogUtil.e("适配器中===" + list.get(position).type + "::" + list.get(position).name + "::" + position);
         Holder holder = (Holder) convertView.getTag();
         holder.work_name.setText(list.get(position).name);
-        holder.work_num.setText(Integer.parseInt(list.get(position).push_count) + "");//注意,这里要讲int类型转换为String的!!!!!!!
+
+        int count = list.get(position).push_count;
+        if (count < 1) {
+            holder.work_num.setVisibility(View.INVISIBLE);
+        } else {
+            holder.work_num.setVisibility(View.VISIBLE);
+            holder.work_num.setText(count + "");//注意,这里要讲int类型转换为String的!!!!!!!
+        }
         x.image().bind(holder.work_icon, list.get(position).image_url, imageOptions);
         return convertView;
     }

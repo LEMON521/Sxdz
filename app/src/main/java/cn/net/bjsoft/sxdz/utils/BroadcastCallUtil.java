@@ -28,7 +28,7 @@ public class BroadcastCallUtil {
 //    public int train;
 
     public static void sendMessage2Activity(Context context, String json, PushBean bean) {
-        LogUtil.e("自定义消息的数量：：：：" + bean.workflow + bean.community);
+        LogUtil.e("自定义消息的数量：：----------------------：：" + bean.workflow + bean.community);
 
         int approve = bean.workflow;
         int bug = bean.bug;
@@ -50,20 +50,22 @@ public class BroadcastCallUtil {
         int mess = message + task + crm + approve;
         int user = myself;
 
-        approve = approve + SPJpushUtil.getApprove(context);
-        bug = bug + SPJpushUtil.getBug(context);
-        community = community + SPJpushUtil.getCommunity(context);
-        crm = crm + SPJpushUtil.getCrm(context);
-        knowledge = knowledge + SPJpushUtil.getKnowledge(context);
-        message = message + SPJpushUtil.getMessage(context);
-        myself = myself + SPJpushUtil.getMyself(context);
-        payment = payment + SPJpushUtil.getPayment(context);
-        proposal = proposal + SPJpushUtil.getProposal(context);
-        scan = scan + SPJpushUtil.getScan(context);
-        shoot = shoot + SPJpushUtil.getShoot(context);
-        signin = signin + SPJpushUtil.getSignin(context);
-        task = task + SPJpushUtil.getTask(context);
-        train = train + SPJpushUtil.getTrain(context);
+
+
+//        approve = approve + SPJpushUtil.getApprove(context);
+//        bug = bug + SPJpushUtil.getBug(context);
+//        community = community + SPJpushUtil.getCommunity(context);
+//        crm = crm + SPJpushUtil.getCrm(context);
+//        knowledge = knowledge + SPJpushUtil.getKnowledge(context);
+//        message = message + SPJpushUtil.getMessage(context);
+//        myself = myself + SPJpushUtil.getMyself(context);
+//        payment = payment + SPJpushUtil.getPayment(context);
+//        proposal = proposal + SPJpushUtil.getProposal(context);
+//        scan = scan + SPJpushUtil.getScan(context);
+//        shoot = shoot + SPJpushUtil.getShoot(context);
+//        signin = signin + SPJpushUtil.getSignin(context);
+//        task = task + SPJpushUtil.getTask(context);
+//        train = train + SPJpushUtil.getTrain(context);
 
         SPJpushUtil.setApprove(context, approve);
         SPJpushUtil.setBug(context, bug);
@@ -111,6 +113,15 @@ public class BroadcastCallUtil {
         main.setAction("cn.net.bjsoft.sxdz.main");
         main.putExtra("pushjson", json);
         context.sendBroadcast(main);
+
+
+        /**
+         * 中电联发工作模块
+         */
+        Intent work_items = new Intent();
+        work_items.setAction("cn.net.bjsoft.sxdz.fragment_work");
+        work_items.putExtra("pushjson", json);
+        context.sendBroadcast(work_items);
 //        if (bean.comm.get(bean.comm.indexOf("bug")).bug.size() > 0 ||
 //                bean.comm.get(bean.comm.indexOf("community")).community.size() > 0 ||
 //                bean.comm.get(bean.comm.indexOf("knowledge")).knowledge.size() > 0 ||

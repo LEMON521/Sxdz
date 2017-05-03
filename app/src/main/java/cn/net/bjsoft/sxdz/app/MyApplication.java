@@ -27,9 +27,9 @@ import cn.net.bjsoft.sxdz.utils.SPJpushUtil;
 public class MyApplication extends MultiDexApplication implements Serializable {
 
     //顶部栏每个按钮的推送数量
-    private int mCommunityNum = 5;
-    private int mFunctionNum = 1;
-    private int mMessageNum = 2;
+    private int mCommunityNum = 0;
+    private int mFunctionNum = 0;
+    private int mMessageNum = 0;
     private int mUserNum = 0;
 
     private int train;
@@ -230,27 +230,27 @@ public class MyApplication extends MultiDexApplication implements Serializable {
         if (key.equals("train")) {
             int old = mPushNum.get("train");
             mPushNum.remove("train");
-            mPushNum.put("train", value + old);
+            mPushNum.put("train", value /*+ old*/);
             reFreshPushNumList("Community", community + value);
         } else if (key.equals("knowledge")) {
             int old = mPushNum.get("knowledge");
             mPushNum.remove("knowledge");
-            mPushNum.put("knowledge", value + old);
+            mPushNum.put("knowledge", value /*+ old*/);
             reFreshPushNumList("Community", community + value);
         } else if (key.equals("proposal")) {
             int old = mPushNum.get("proposal");
             mPushNum.remove("proposal");
-            mPushNum.put("proposal", value + old);
+            mPushNum.put("proposal", value/*+ old*/);
             reFreshPushNumList("Community", community + value);
         } else if (key.equals("bug")) {
             int old = mPushNum.get("bug");
             mPushNum.remove("bug");
-            mPushNum.put("bug", value + old);
+            mPushNum.put("bug", value /*+ old*/);
             reFreshPushNumList("Community", community + value);
         } else if (key.equals("community")) {
             int old = mPushNum.get("community");
             mPushNum.remove("community");
-            mPushNum.put("community", value + old);
+            mPushNum.put("community", value /*+ old*/);
             reFreshPushNumList("Community", community + value);
         }
     }
@@ -270,22 +270,22 @@ public class MyApplication extends MultiDexApplication implements Serializable {
         if (key.equals("scan")) {
             int old = mPushNum.get("scan");
             mPushNum.remove("scan");
-            mPushNum.put("scan", value + old);
+            mPushNum.put("scan", value /*+ old*/);
             reFreshPushNumList("Function", function + value);
         } else if (key.equals("shoot")) {
             int old = mPushNum.get("shoot");
             mPushNum.remove("shoot");
-            mPushNum.put("shoot", value + old);
+            mPushNum.put("shoot", value /*+ old*/);
             reFreshPushNumList("Function", function + value);
         } else if (key.equals("signin")) {
             int old = mPushNum.get("signin");
             mPushNum.remove("signin");
-            mPushNum.put("signin", value + old);
+            mPushNum.put("signin", value /*+ old*/);
             reFreshPushNumList("Function", function + value);
         } else if (key.equals("payment")) {
             int old = mPushNum.get("payment");
             mPushNum.remove("payment");
-            mPushNum.put("payment", value + old);
+            mPushNum.put("payment", value /*+ old*/);
             reFreshPushNumList("Function", function + value);
         }
 
@@ -306,22 +306,22 @@ public class MyApplication extends MultiDexApplication implements Serializable {
         if (key.equals("message")) {
             int old = mPushNum.get("message");
             mPushNum.remove("message");
-            mPushNum.put("message", value + old);
+            mPushNum.put("message", value/*+ old*/);
             reFreshPushNumList("Message", message + value);
         } else if (key.equals("task")) {
             int old = mPushNum.get("task");
             mPushNum.remove("task");
-            mPushNum.put("task", value + old);
+            mPushNum.put("task", value /*+ old*/);
             reFreshPushNumList("Message", message + value);
         } else if (key.equals("crm")) {
             int old = mPushNum.get("crm");
             mPushNum.remove("crm");
-            mPushNum.put("crm", value + old);
+            mPushNum.put("crm", value /*+ old*/);
             reFreshPushNumList("Message", message + value);
         } else if (key.equals("approve")) {
             int old = mPushNum.get("approve");
             mPushNum.remove("approve");
-            mPushNum.put("approve", value + old);
+            mPushNum.put("approve", value /*+ old*/);
             reFreshPushNumList("Message", message + value);
         }
 
@@ -339,7 +339,7 @@ public class MyApplication extends MultiDexApplication implements Serializable {
         if (key.equals("myself")) {
             int old = mPushNum.get("myself");
             mPushNum.remove("myself");
-            mPushNum.put("myself", value + old);
+            mPushNum.put("myself", value /*+ old*/);
             reFreshPushNumList("Uesr", user + value);
         }
     }

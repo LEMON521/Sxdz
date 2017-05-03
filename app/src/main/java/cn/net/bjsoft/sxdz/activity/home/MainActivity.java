@@ -24,15 +24,10 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.lidroid.xutils.BitmapUtils;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.lidroid.xutils.http.client.HttpRequest;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
+import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -49,6 +44,7 @@ import cn.net.bjsoft.sxdz.activity.home.bartop.MessageActivity;
 import cn.net.bjsoft.sxdz.activity.home.bartop.UserActivity;
 import cn.net.bjsoft.sxdz.activity.home.bartop.search.SearchResultActivity;
 import cn.net.bjsoft.sxdz.activity.home.bartop.search.SpeechSearchActivity;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.PushBean;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.HomepageBean;
@@ -57,9 +53,8 @@ import cn.net.bjsoft.sxdz.dialog.ALiPushMessageInAppPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.receiver.ALiPushType3Receiver;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
-import cn.net.bjsoft.sxdz.utils.Constants;
+import cn.net.bjsoft.sxdz.utils.BroadcastCallUtil;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
-import cn.net.bjsoft.sxdz.utils.HttpPostUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPJpushUtil;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
@@ -234,10 +229,32 @@ public class MainActivity extends BaseActivity {
         bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);
 
+
+
+//        mImageOptions = new ImageOptions.Builder().setCircular(true).setUseMemCache(true).build();
+
+
+        //初始化顶部栏动画
+        initAnimation();
+        initTopBar();
+        initBottomBar();
+        //initMapLocation(time);
+
+        dismissProgressDialog();
+    }
+
+    //TODO 因为Activity每次执行，不管是在前台后台，可见不可见，onStart是必经之路，所以将推送的数据在这里显示最合理
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         /**
          * 注册广播
          */
         registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.main"));
+        /**
+         * 注册广播
+         */
 
         registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
 
@@ -254,27 +271,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-//        mImageOptions = new ImageOptions.Builder().setCircular(true).setUseMemCache(true).build();
-
-
-        //初始化顶部栏动画
-        initAnimation();
-        initTopBar();
-        initBottomBar();
-        //initMapLocation(time);
-        dismissProgressDialog();
-    }
-
-    //TODO 因为Activity每次执行，不管是在前台后台，可见不可见，onStart是必经之路，所以将推送的数据在这里显示最合理
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        /**
-         * 注册广播
-         */
-        registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.main"));
-
         pushNum = app.getmPushNum();
         LogUtil.e("MainActivity---mMyself::" + pushNum.get("myself"));
 
@@ -282,6 +278,7 @@ public class MainActivity extends BaseActivity {
         setPushNumber(pushNum.get("Community"), pushNum.get("Function"), pushNum.get("Message"), pushNum.get("myself"));
         LogUtil.e("main==onStart");
         setUserIcon();
+        getPushCount(this);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -798,6 +795,8 @@ public class MainActivity extends BaseActivity {
         super.onStop();
         //在后台时，不让他接收广播
         unregisterReceiver(receiver);
+        unregisterReceiver(aLiPushType3Receiver);
+
         LogUtil.e("main==onStop");
     }
 
@@ -1239,6 +1238,9 @@ public class MainActivity extends BaseActivity {
                 app.reFreshUesrPushNumList("myself", myself);
             }
 
+            if (pushNum==null) {
+                pushNum = new HashMap<>();
+            }
             pushNum = app.getmPushNum();
             setPushNumber(pushNum.get("Community"), pushNum.get("Function"), pushNum.get("Message"), pushNum.get("User"));
 
@@ -1340,47 +1342,48 @@ public class MainActivity extends BaseActivity {
      * 自动定位，发送位置信息
      */
     public void sendLocation(AMapLocation amapLocation) {
-        if (submitLock) {
-            return;
-        }
-        submitLock = true;
-        RequestParams params = new RequestParams();
-        params.addBodyParameter("client_name", Constants.app_name);
-        params.addBodyParameter("phone_uuid", SPUtil.getUserPUUID(this));
-        params.addBodyParameter("single_code", SPUtil.getUserRandCode(this));
-        params.addBodyParameter("uuid", SPUtil.getUserUUID(this));
-        params.addBodyParameter("action", "submit");
-        params.addBodyParameter("method", "auto_position");
-        params.addBodyParameter("user_id", SPUtil.getUserId(this));
-        params.addBodyParameter("abs_x", amapLocation.getLongitude() + "");
-        params.addBodyParameter("abs_y", amapLocation.getLatitude() + "");
-        params.addBodyParameter("abs_z", "");
-        params.addBodyParameter("address", amapLocation.getAddress());
-        HttpPostUtil.getInstance().send(HttpRequest.HttpMethod.POST, AddressUtils.httpurl, params, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                submitLock = false;
-                try {
-                    JSONObject jsonObject = new JSONObject(responseInfo.result);
-                    if (jsonObject != null) {
-                        boolean success = jsonObject.optBoolean("success");
-                        if (success) {
-                            LogUtil.e("发送位置成功");
-                        } else {
-                            LogUtil.e("11" + jsonObject.optString("feedback"));
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException e, String s) {
-                submitLock = false;
-            }
-
-        });
+//        if (submitLock) {
+//            return;
+//        }
+//        submitLock = true;
+//        RequestParams params = new RequestParams();
+//        params.addBodyParameter("client_name", Constants.app_name);
+//        params.addBodyParameter("phone_uuid", SPUtil.getUserPUUID(this));
+//        params.addBodyParameter("single_code", SPUtil.getUserRandCode(this));
+//        params.addBodyParameter("uuid", SPUtil.getUserUUID(this));
+//        params.addBodyParameter("action", "submit");
+//        params.addBodyParameter("method", "auto_position");
+//        params.addBodyParameter("user_id", SPUtil.getUserId(this));
+//        params.addBodyParameter("abs_x", amapLocation.getLongitude() + "");
+//        params.addBodyParameter("abs_y", amapLocation.getLatitude() + "");
+//        params.addBodyParameter("abs_z", "");
+//        params.addBodyParameter("address", amapLocation.getAddress());
+//
+//        HttpPostUtil.getInstance().send(HttpRequest.HttpMethod.POST, AddressUtils.httpurl, params, new RequestCallBack<String>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                submitLock = false;
+//                try {
+//                    JSONObject jsonObject = new JSONObject(responseInfo.result);
+//                    if (jsonObject != null) {
+//                        boolean success = jsonObject.optBoolean("success");
+//                        if (success) {
+//                            LogUtil.e("发送位置成功");
+//                        } else {
+//                            LogUtil.e("11" + jsonObject.optString("feedback"));
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException e, String s) {
+//                submitLock = false;
+//            }
+//
+//        });
     }
 
 
@@ -1391,5 +1394,55 @@ public class MainActivity extends BaseActivity {
      */
     public static MainActivity getMainActivity() {
         return mainActivity;
+    }
+
+
+    /**
+     * 获取推送数量
+     *
+     * @param context
+     */
+    public void getPushCount(Context context) {
+
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = "http://api.shuxinyun.com/cache/users/" + SPUtil.getUserId(context) + "/pushitemcount.json";
+
+        LogUtil.e("推送数据url----------------" + url);
+
+        RequestParams params = new RequestParams(url);
+
+        httpPostUtils.get(context, params);
+
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+
+                //TODO 防止后台给的数据是残疾的
+                strJson = strJson.replace("\"\"","0");
+                LogUtil.e(strJson);
+
+                LogUtil.e("==========开始发送数据============" + strJson);
+                BroadcastCallUtil.sendMessage2Activity(MainActivity.this, strJson, GsonUtil.getPushBean(strJson));//发送消息,通知界面改数字
+                LogUtil.e("==============结束发送数据=========");
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("==========开始发送数据======错误======" + ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+
     }
 }

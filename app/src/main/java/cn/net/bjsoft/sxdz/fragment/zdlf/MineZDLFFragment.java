@@ -3,6 +3,7 @@ package cn.net.bjsoft.sxdz.fragment.zdlf;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -45,11 +46,13 @@ import cn.net.bjsoft.sxdz.bean.app.user.UserOrganizationBean;
 import cn.net.bjsoft.sxdz.dialog.PickerScrollViewPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
+import cn.net.bjsoft.sxdz.utils.BroadcastCallUtil;
 import cn.net.bjsoft.sxdz.utils.Constants;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyBase64;
 import cn.net.bjsoft.sxdz.utils.MyBitmapUtils;
 import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.SPJpushUtil;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.UrlUtil;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
@@ -203,7 +206,7 @@ public class MineZDLFFragment extends BaseFragment {
 
         HttpPostUtils httpPostUtil = new HttpPostUtils();
 
-        httpPostUtil.post(mActivity, params);
+        httpPostUtil.get(mActivity, params);
 
         httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
@@ -215,6 +218,24 @@ public class MineZDLFFragment extends BaseFragment {
                     int code = obj.optInt("code");
                     if (code == 0) {
                         getUserData();
+
+                        //切换成功,清空推送数据
+                        SPJpushUtil.setApprove(getContext(), 0);
+                        SPJpushUtil.setBug(getContext(), 0);
+                        SPJpushUtil.setCommunity(getContext(), 0);
+                        SPJpushUtil.setCrm(getContext(), 0);
+                        SPJpushUtil.setKnowledge(getContext(), 0);
+                        SPJpushUtil.setMessage(getContext(), 0);
+                        SPJpushUtil.setMyself(getContext(), 0);
+                        SPJpushUtil.setPayment(getContext(), 0);
+                        SPJpushUtil.setProposal(getContext(), 0);
+                        SPJpushUtil.setScan(getContext(), 0);
+                        SPJpushUtil.setShoot(getContext(), 0);
+                        SPJpushUtil.setSignin(getContext(), 0);
+                        SPJpushUtil.setTask(getContext(), 0);
+                        SPJpushUtil.setTrain(getContext(), 0);
+
+                        getPushCount(getContext());
 //                        pickerSelecect = selecect;
 //                        positions.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
                     }
@@ -227,6 +248,7 @@ public class MineZDLFFragment extends BaseFragment {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 LogUtil.e("切换岗位错误" + ex);
+                MyToast.showLong(getContext(), "切换岗位错误!");
             }
 
             @Override
@@ -471,7 +493,7 @@ public class MineZDLFFragment extends BaseFragment {
                         pushService.unbindAccount(new CommonCallback() {
                             @Override
                             public void onSuccess(String s) {
-                                LogUtil.e("推送解绑状态-----成功==="+s);
+                                LogUtil.e("推送解绑状态-----成功===" + s);
                             }
 
                             @Override
@@ -483,6 +505,24 @@ public class MineZDLFFragment extends BaseFragment {
                         SPUtil.setUserId(getContext(), "");
                         SPUtil.setToken(getContext(), "");
                         SPUtil.setAvatar(getContext(), "");
+
+
+                        app.reFreshCommunityPushNumList("train", 0);
+                        app.reFreshCommunityPushNumList("knowledge", 0);
+                        app.reFreshCommunityPushNumList("proposal", 0);
+                        app.reFreshCommunityPushNumList("bug", 0);
+                        app.reFreshCommunityPushNumList("community", 0);
+                        app.reFreshFunctionPushNumList("scan", 0);
+                        app.reFreshFunctionPushNumList("shoot", 0);
+                        app.reFreshFunctionPushNumList("signin", 0);
+                        app.reFreshFunctionPushNumList("payment", 0);
+                        app.reFreshMessagePushNumList("message", 0);
+                        app.reFreshMessagePushNumList("task", 0);
+                        app.reFreshMessagePushNumList("crm", 0);
+                        app.reFreshMessagePushNumList("approve", 0);
+                        app.reFreshUesrPushNumList("myself", 0);
+
+
                         Intent i = new Intent(getActivity(), SplashActivity.class);
                         startActivity(i);
                         getActivity().finish();
@@ -765,6 +805,51 @@ public class MineZDLFFragment extends BaseFragment {
                 dialog.dismiss();
             }
         });
+
+    }
+
+    /**
+     * 获取推送数量
+     *
+     * @param context
+     */
+    public void getPushCount(Context context) {
+
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = "http://api.shuxinyun.com/cache/users/" + SPUtil.getUserId(context) + "/pushitemcount.json";
+
+
+        RequestParams params = new RequestParams(url);
+
+        httpPostUtils.post(context, params);
+
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                //TODO 防止后台给的数据是残疾的
+                strJson = strJson.replace("\"\"", "0");
+                LogUtil.e(strJson);
+                BroadcastCallUtil.sendMessage2Activity(getContext(), strJson, GsonUtil.getPushBean(strJson));//发送消息,通知界面改数字
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("更新数据失败======" + ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
 
     }
 }
