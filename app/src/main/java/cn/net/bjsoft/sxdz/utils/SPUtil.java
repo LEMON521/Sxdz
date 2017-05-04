@@ -9,6 +9,49 @@ import android.content.SharedPreferences;
  */
 public class SPUtil {
 
+
+    /**
+     * users_all ----url--获取
+     * 获取  --  USER_KEY_API_USER = "api_user"缓存
+     */
+    public static String getUsersAll(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ALL, Context.MODE_PRIVATE);
+        return preferences.getString(Constants.USER_KEY_USER_ALL, "");
+    }
+
+    /**
+     * users_all----
+     * 设置   --   USER_KEY_USER_ALL = "users_all"缓存
+     */
+    public static void setUsersAll(Context context, String users_all) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ALL, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.USER_KEY_USER_ALL, users_all);
+        editor.commit();
+    }
+
+
+    /**
+     * api_user ----url--获取
+     * 获取  --  USER_KEY_API_USER = "api_user"缓存
+     */
+    public static String getApiUser(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_API_USER, Context.MODE_PRIVATE);
+        return preferences.getString(Constants.USER_KEY_API_USER, "");
+    }
+
+    /**
+     * api_user----url
+     * 设置   --   USER_KEY_API_RESET_PASSWORD = "reset_password"缓存
+     */
+    public static void setApiUser(Context context, String api_user) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_API_USER, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.USER_KEY_API_USER, api_user);
+        editor.commit();
+    }
+
+
     /**
      * 重置密码url--获取
      * 获取  --  USER_KEY_API_RESET_PASSWORD = "reset_password"缓存
@@ -48,7 +91,6 @@ public class SPUtil {
         editor.putString(Constants.USER_KEY_API_RESET_PASSWORD, reset_password);
         editor.commit();
     }
-
 
 
     /**
@@ -124,8 +166,6 @@ public class SPUtil {
         editor.putString(Constants.USER_KEY_USER_ORGANIZATION_JSON, user_organization_json);
         editor.commit();
     }
-
-
 
 
     /**

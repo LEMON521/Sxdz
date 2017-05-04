@@ -507,22 +507,6 @@ public class MineZDLFFragment extends BaseFragment {
                         SPUtil.setAvatar(getContext(), "");
 
 
-                        app.reFreshCommunityPushNumList("train", 0);
-                        app.reFreshCommunityPushNumList("knowledge", 0);
-                        app.reFreshCommunityPushNumList("proposal", 0);
-                        app.reFreshCommunityPushNumList("bug", 0);
-                        app.reFreshCommunityPushNumList("community", 0);
-                        app.reFreshFunctionPushNumList("scan", 0);
-                        app.reFreshFunctionPushNumList("shoot", 0);
-                        app.reFreshFunctionPushNumList("signin", 0);
-                        app.reFreshFunctionPushNumList("payment", 0);
-                        app.reFreshMessagePushNumList("message", 0);
-                        app.reFreshMessagePushNumList("task", 0);
-                        app.reFreshMessagePushNumList("crm", 0);
-                        app.reFreshMessagePushNumList("approve", 0);
-                        app.reFreshUesrPushNumList("myself", 0);
-
-
                         Intent i = new Intent(getActivity(), SplashActivity.class);
                         startActivity(i);
                         getActivity().finish();
@@ -536,18 +520,6 @@ public class MineZDLFFragment extends BaseFragment {
                     e.printStackTrace();
                 }
 
-
-//                try {
-//                    JSONObject jsonObject = new JSONObject(strJson);
-//                    if (jsonObject.optBoolean("data")) {
-//                        bitmapUtils.display(avatar, SPUtil.getAvatar(mActivity));
-//                        MyToast.showLong(mActivity, "头像更新成功");
-//                    } else {
-//                        MyToast.showLong(mActivity, "更新头像失败,请联系管理员");
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
             }
 
             @Override

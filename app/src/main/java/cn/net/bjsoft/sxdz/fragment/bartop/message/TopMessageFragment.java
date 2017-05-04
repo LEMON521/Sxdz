@@ -14,18 +14,17 @@ import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.home.WebActivity;
 import cn.net.bjsoft.sxdz.adapter.MessageMessageAdapter;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.message.MessageMessageBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
-import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
-import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
 
@@ -134,36 +133,75 @@ public class TopMessageFragment extends BaseFragment {
     private void getData() {
 
         showProgressDialog();
-        RequestParams params = new RequestParams(TestAddressUtils.test_get_message_message_list_url);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                //LogUtil.e("获取到的条目-----------" + result);
-                messageBean = GsonUtil.getMessageMessageBean(result);
-                if (messageBean.result) {
-                    //LogUtil.e("获取到的条目-----------" + result);
-                    dataDaos.addAll(messageBean.data.message_list);
-                    messageAdapter.notifyDataSetChanged();
-                    messageBean = null;
-                } else {
-                }
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
 
+        String url = SPUtil.getApiAuth(mActivity)+"/load";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("source_id","shuxin_alert");
+        params.addBodyParameter("data","{" +
+                "\"start\":0," +
+                "\"limit\":0," +
+                "\"condition\":[]," +
+                "\"data\":{" +
+                "\"task_id\":\"5278735015174018824\"}" +
+                "}");
+
+
+        httpPostUtils.post(mActivity,params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取消息----------------"+strJson);
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("获取到的条目--------失败!!!---" + ex);
+                LogUtil.e("-----------------获取消息----------------"+ex);
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
+            public void onCancelled(Callback.CancelledException cex) {
+
             }
 
             @Override
             public void onFinished() {
-                dismissProgressDialog();
+
             }
         });
+
+
+        //String url  = SPUtil.getApiUser(mActivity)+"/"+SPUtil.getUserId(mActivity)+"/notifications.json";
+//        x.http().post(params, new Callback.CommonCallback<String>() {
+//            @Override
+//            public void onSuccess(String result) {
+//                //LogUtil.e("获取到的条目-----------" + result);
+//                messageBean = GsonUtil.getMessageMessageBean(result);
+//                if (messageBean.result) {
+//                    //LogUtil.e("获取到的条目-----------" + result);
+//                    dataDaos.addAll(messageBean.data.message_list);
+//                    messageAdapter.notifyDataSetChanged();
+//                    messageBean = null;
+//                } else {
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                LogUtil.e("获取到的条目--------失败!!!---" + ex);
+//            }
+//
+//            @Override
+//            public void onCancelled(CancelledException cex) {
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//                dismissProgressDialog();
+//            }
+//        });
 
 
     }

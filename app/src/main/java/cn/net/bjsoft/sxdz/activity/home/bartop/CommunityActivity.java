@@ -22,13 +22,12 @@ import java.util.HashMap;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
-import cn.net.bjsoft.sxdz.bean.PushBean;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
-import cn.net.bjsoft.sxdz.bean.app.ToolbarBean;
 import cn.net.bjsoft.sxdz.dialog.ALiPushMessageInAppPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.receiver.ALiPushType3Receiver;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.SPJpushUtil;
 import cn.net.bjsoft.sxdz.utils.function.InitFragmentUtil;
 
 /**
@@ -112,12 +111,12 @@ public class CommunityActivity extends BaseActivity {
     private ImageView community_img;
 
     private HashMap<String, Integer> pushNum;
-    private int mTrain,mKnowledge,mProposal,mBug,mCommunity;
+    private int mTrain, mKnowledge, mProposal, mBug, mCommunity;
     /**
      * 广播
      */
     private MyReceiver receiver = new MyReceiver();
-    private ALiPushType3Receiver aLiPushType3Receiver =new ALiPushType3Receiver();
+    private ALiPushType3Receiver aLiPushType3Receiver = new ALiPushType3Receiver();
 
     private ALiPushMessageInAppPopupWindow showPushWindow;
 
@@ -138,10 +137,9 @@ public class CommunityActivity extends BaseActivity {
         //mFragmentsList = new ArrayList<BaseFragment>();
         mJson = getIntent().getStringExtra("json");
         openTag = getIntent().getStringExtra("opentag");
-        LogUtil.e("community接收到的opentag为====="+openTag);
+        LogUtil.e("community接收到的opentag为=====" + openTag);
         appBean = GsonUtil.getAppBean(mJson);
         mBarList = new ArrayList<>();
-
 
 
         initData();
@@ -153,16 +151,8 @@ public class CommunityActivity extends BaseActivity {
     protected void onStart() {
 
         super.onStart();
-        pushNum = app.getmPushNum();
 
-        mTrain = pushNum.get("train");
-        mKnowledge = pushNum.get("knowledge");
-        mProposal = pushNum.get("proposal");
-        mBug = pushNum.get("bug");
-        mCommunity = pushNum.get("community");
-
-        setPushNumber(mTrain+"", mKnowledge+"", mProposal+"", mBug+"", mCommunity+"");
-        LogUtil.e("社区页面===="+pushNum.get("proposal").toString());
+        LogUtil.e("社区页面====" + pushNum.get("proposal").toString());
         LogUtil.e("main==onStart");
 
         /**
@@ -175,51 +165,56 @@ public class CommunityActivity extends BaseActivity {
         aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
             @Override
             public void onDataCallBack(Bundle bundleData) {
-                LogUtil.e("推送通知拿到数据=============="+bundleData);
-                if (bundleData!=null) {
+                LogUtil.e("推送通知拿到数据==============" + bundleData);
+                if (bundleData != null) {
 
-                    showPushWindow = new ALiPushMessageInAppPopupWindow(CommunityActivity.this,bundleData,bar);
+                    showPushWindow = new ALiPushMessageInAppPopupWindow(CommunityActivity.this, bundleData, bar);
 
                     showPushWindow.showWindow();
                 }
             }
         });
+        setPushNumber();
     }
 
-    public void setPushNumber(String trainNum,String knowledgeNum,String proposalNum,String bugNum,String communityNum){
-       //直播
-        if (Integer.parseInt(trainNum)>0) {
-            live_num.setText(trainNum);
+    public void setPushNumber() {
+        int trainNum = SPJpushUtil.getTrain(this);
+        int knowledgeNum = SPJpushUtil.getKnowledge(this);
+        int proposalNum = SPJpushUtil.getProposal(this);
+        int bugNum = SPJpushUtil.getBug(this);
+        int communityNum = SPJpushUtil.getCommunity(this);
+
+        //直播
+        if (trainNum > 0) {
+            live_num.setText(trainNum + "");
             live_num.setVisibility(View.VISIBLE);
         } else {
             live_num.setVisibility(View.INVISIBLE);
         }
-        LogUtil.e("社区页面===="+pushNum.get("proposal").toString());
         //帮助
-        if (Integer.parseInt(knowledgeNum)>0) {
-            help_num.setText(knowledgeNum);
+        if (knowledgeNum > 0) {
+            help_num.setText(knowledgeNum + "");
             help_num.setVisibility(View.VISIBLE);
         } else {
             help_num.setVisibility(View.INVISIBLE);
         }
         //建议
-        if (Integer.parseInt(proposalNum)>0) {
-            LogUtil.e("设置消息===" +  pushNum.get("proposal").toString());
-            proposal_num.setText(proposalNum);
+        if (proposalNum > 0) {
+            proposal_num.setText(proposalNum + "");
             proposal_num.setVisibility(View.VISIBLE);
         } else {
             proposal_num.setVisibility(View.INVISIBLE);
         }
         //解惑报错
-        if (Integer.parseInt(bugNum)>0) {
-            disabuse_num.setText(bugNum);
+        if (bugNum > 0) {
+            disabuse_num.setText(bugNum + "");
             disabuse_num.setVisibility(View.VISIBLE);
         } else {
             disabuse_num.setVisibility(View.INVISIBLE);
         }
         //社区
-        if (Integer.parseInt(bugNum)>0) {
-            community_num.setText(communityNum);
+        if (bugNum > 0) {
+            community_num.setText(communityNum + "");
             community_num.setVisibility(View.VISIBLE);
         } else {
             community_num.setVisibility(View.INVISIBLE);
@@ -302,7 +297,7 @@ public class CommunityActivity extends BaseActivity {
         }
 
         //如果只有一个页面，那么让底部栏隐藏掉
-        if (mFragmentsList.size()==1) {
+        if (mFragmentsList.size() == 1) {
             bar.setVisibility(View.GONE);
         }
     }
@@ -335,35 +330,30 @@ public class CommunityActivity extends BaseActivity {
             case R.id.community_live:
                 live_icon.setImageResource(R.drawable.aid_tab_btn_live_s);
                 live_text.setTextColor(getResources().getColor(R.color.blue));
-                app.reFreshCommunityPushNumList("train",0-mTrain);
                 break;
             case R.id.community_help:
                 help_icon.setImageResource(R.drawable.aid_tab_btn_help_s);
                 help_text.setTextColor(getResources().getColor(R.color.blue));
                 help_num.setText("");
                 help_num.setVisibility(View.INVISIBLE);
-                app.reFreshCommunityPushNumList("knowledge",0-mKnowledge);
                 break;
             case R.id.community_proposal:
                 proposal_icon.setImageResource(R.drawable.aid_tab_btn_adcise_s);
                 proposal_text.setTextColor(getResources().getColor(R.color.blue));
                 proposal_num.setText("");
                 proposal_num.setVisibility(View.INVISIBLE);
-                app.reFreshCommunityPushNumList("proposal",0-mProposal);
                 break;
             case R.id.community_disabuse:
                 disabuse_icon.setImageResource(R.drawable.aid_tab_btn_bug_s);
                 disabuse_text.setTextColor(getResources().getColor(R.color.blue));
                 disabuse_num.setText("");
                 disabuse_num.setVisibility(View.INVISIBLE);
-                app.reFreshCommunityPushNumList("bug",0-mBug);
                 break;
             case R.id.community_community:
                 community_icon.setImageResource(R.drawable.aid_tab_btn_live_s);
                 community_text.setTextColor(getResources().getColor(R.color.blue));
                 community_num.setText("");
                 community_num.setVisibility(View.INVISIBLE);
-                app.reFreshCommunityPushNumList("community",0-mCommunity);
                 break;
         }
     }
@@ -398,79 +388,7 @@ public class CommunityActivity extends BaseActivity {
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            String pushJson = intent.getStringExtra("pushjson");
-            PushBean bean = GsonUtil.getPushBean(pushJson);
-            //LogUtil.e("社区接收到了广播@@@@@,数据为===" + pushJson);
-
-
-            int approve = bean.workflow;
-            int bug = bean.bug;
-            int community = bean.community;
-            int crm = bean.crm;
-            int knowledge = bean.knowledge;
-            int message = bean.message;
-            int myself = bean.myself;
-            int payment = bean.payment;
-            int proposal = bean.proposal;
-            int scan = bean.scan;
-            int shoot = bean.shoot;
-            int signin = bean.signin;
-            int task = bean.task;
-            int train = bean.train;
-            ToolbarBean toolbarBean = appBean.toolbar;
-
-            if (toolbarBean.train){
-                app.reFreshCommunityPushNumList("train", train);
-            }
-            if (toolbarBean.knowledge){
-                app.reFreshCommunityPushNumList("knowledge", knowledge);
-            }
-            if (toolbarBean.proposal){
-                app.reFreshCommunityPushNumList("proposal", proposal);
-            }
-            if (toolbarBean.bug){
-                app.reFreshCommunityPushNumList("bug", bug);
-            }
-            //暂时没有社区
-            if (toolbarBean.community){
-                app.reFreshCommunityPushNumList("community", community);
-            }
-
-
-            if (toolbarBean.scan){
-                app.reFreshFunctionPushNumList("scan", scan);
-            }
-            if (toolbarBean.shoot){
-                app.reFreshFunctionPushNumList("shoot", shoot);
-            }
-            if (toolbarBean.signin){
-                app.reFreshFunctionPushNumList("signin", signin);
-            }
-            if (toolbarBean.payment.size()>0){
-                app.reFreshFunctionPushNumList("payment", payment);
-            }
-
-            if (toolbarBean.message){
-                app.reFreshMessagePushNumList("message", message);
-            }
-            if (toolbarBean.task){
-                app.reFreshMessagePushNumList("task", task);
-            }
-            if (toolbarBean.crm){
-                app.reFreshMessagePushNumList("crm", crm);
-            }
-            if (toolbarBean.approve){
-                app.reFreshMessagePushNumList("approve", approve);
-            }
-
-            if (toolbarBean.myself){
-                app.reFreshUesrPushNumList("myself",myself);
-            }
-
-            pushNum = app.getmPushNum();
-            setPushNumber(pushNum.get("train").toString(), pushNum.get("knowledge").toString(), pushNum.get("proposal").toString(), pushNum.get("bug").toString(),pushNum.get("community").toString());
-            LogUtil.e("设置社区页面消息===" +  pushNum.get("proposal").toString());
-            //setPushNumber(comm+"", fun+"", mess+"", user+"");
+            setPushNumber();
         }
     }
 

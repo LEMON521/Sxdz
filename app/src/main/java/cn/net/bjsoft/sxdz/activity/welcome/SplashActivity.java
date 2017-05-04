@@ -50,6 +50,7 @@ import cn.net.bjsoft.sxdz.utils.function.ReadFile;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 
 import static cn.net.bjsoft.sxdz.utils.UrlUtil.init_url;
+import static cn.net.bjsoft.sxdz.utils.UrlUtil.users_all;
 
 /**
  * Created by 靳宁宁 on 2017/1/3.
@@ -403,13 +404,72 @@ public class SplashActivity extends BaseActivity {
         SPJpushUtil.setTask(this, 0);
         SPJpushUtil.setTrain(this, 0);
 
-        LogUtil.e("初始化数据了================="+SPJpushUtil.getSignin(this));
+
+        /////////////////////////工作模块/////////////////////////
+        SPJpushUtil.setProject(context, 0);
+        SPJpushUtil.setEngineering(context, 0);
+        SPJpushUtil.setContract(context, 0);
+        SPJpushUtil.setMarketchannel(context, 0);
+        SPJpushUtil.setSalereport(context, 0);
+        SPJpushUtil.setProjectstat(context, 0);
+        SPJpushUtil.setEngineeringlog(context, 0);
+        SPJpushUtil.setEmergency(context, 0);
+        SPJpushUtil.setEngineeringeval(context, 0);
+        SPJpushUtil.setConstruction(context, 0);
+        SPJpushUtil.setConstructionteam(context, 0);
+        SPJpushUtil.setWeekplan(context, 0);
+        SPJpushUtil.setCompanyrun(context, 0);
+        SPJpushUtil.setSitemsg(context, 0);
+
+
+        /////////////////////////底部栏/////////////////////////
+        SPJpushUtil.setHome_zdlf(context, 0);
+        SPJpushUtil.setWork_items(context, 0);
+        SPJpushUtil.setKnowledge_zdlf(context, 0);
+        SPJpushUtil.setCommunication_zdlf(context, 0);
+        SPJpushUtil.setMine_zdlf(context, 0);
+
+
+        LogUtil.e("初始化数据了=================" + SPJpushUtil.getSignin(this));
 
 
         getDataFromService();
         //getDataFromFile();
+        getUsersInfo();
 
 
+    }
+
+    private void getUsersInfo() {
+        HttpPostUtils postUtils = new HttpPostUtils();
+        RequestParams params = new RequestParams(users_all);
+        postUtils.get(this, params);
+        postUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+
+                strJson = "{\"users_all\":" + strJson + "}";
+
+                SPUtil.setUsersAll(SplashActivity.this, strJson);
+
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                MyToast.showLong(context, "获取联系人信息失败!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void getDataFromFile() {
@@ -462,7 +522,7 @@ public class SplashActivity extends BaseActivity {
                 SPUtil.setApiAuth(SplashActivity.this, appBean.api_auth);
                 SPUtil.setResetPasswordUrl(SplashActivity.this, appBean.login.passreset);
                 SPUtil.setLogoutApi(SplashActivity.this, appBean.login.logoutapi);
-
+                SPUtil.setApiUser(SplashActivity.this, appBean.api_user);
                 //----------------------按用户id绑定推送-------------------------
                 String user_id = SPUtil.getUserId(SplashActivity.this);
                 if (!TextUtils.isEmpty(user_id)) {
@@ -479,6 +539,7 @@ public class SplashActivity extends BaseActivity {
                         }
                     });
                 }
+
 
                 jump(strJson);
             }

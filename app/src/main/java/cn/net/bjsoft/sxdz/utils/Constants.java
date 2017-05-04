@@ -91,6 +91,16 @@ public class Constants {
      * 用户 api_auth
      */
     public static final String USER_KEY_API_AUTH = "api_auth";
+
+    /**
+     * 用户 users_all
+     */
+    public static final String USER_KEY_USER_ALL = "users_all";
+
+    /**
+     * 用户 api_user
+     */
+    public static final String USER_KEY_API_USER = "api_user";
     /**
      * 用户 logout_api
      */
@@ -156,7 +166,7 @@ public class Constants {
     public static final String ADDRESS = "address";
 
     /**
-     * 详细地址
+     * 头像
      */
     public static final String AVATAR = "avatar";
 

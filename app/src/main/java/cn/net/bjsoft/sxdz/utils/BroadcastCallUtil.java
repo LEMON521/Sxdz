@@ -115,13 +115,8 @@ public class BroadcastCallUtil {
         context.sendBroadcast(main);
 
 
-        /**
-         * 中电联发工作模块
-         */
-        Intent work_items = new Intent();
-        work_items.setAction("cn.net.bjsoft.sxdz.fragment_work");
-        work_items.putExtra("pushjson", json);
-        context.sendBroadcast(work_items);
+
+
 //        if (bean.comm.get(bean.comm.indexOf("bug")).bug.size() > 0 ||
 //                bean.comm.get(bean.comm.indexOf("community")).community.size() > 0 ||
 //                bean.comm.get(bean.comm.indexOf("knowledge")).knowledge.size() > 0 ||

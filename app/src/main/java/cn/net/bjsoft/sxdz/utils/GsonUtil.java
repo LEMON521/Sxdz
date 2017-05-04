@@ -11,6 +11,7 @@ import cn.net.bjsoft.sxdz.bean.app.ali_push.ALiPushMessageBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
 import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressBean;
+import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersAllBean;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveShowDao;
 import cn.net.bjsoft.sxdz.bean.function.sign.FunctionSignHistoryBean;
@@ -260,6 +261,16 @@ public class GsonUtil {
      */
     public static AppPushBean getAppPushBean(String json){
         return getGson().fromJson(json , AppPushBean.class);
+//        return datasBean;
+    }
+
+    /**
+     * 获取推送json
+     * @param json
+     * @return
+     */
+    public static UsersAllBean getUsersAllBean(String json){
+        return getGson().fromJson(json , UsersAllBean.class);
 //        return datasBean;
     }
 

@@ -34,7 +34,6 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
@@ -45,20 +44,21 @@ import cn.net.bjsoft.sxdz.activity.home.bartop.UserActivity;
 import cn.net.bjsoft.sxdz.activity.home.bartop.search.SearchResultActivity;
 import cn.net.bjsoft.sxdz.activity.home.bartop.search.SpeechSearchActivity;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
-import cn.net.bjsoft.sxdz.bean.PushBean;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.HomepageBean;
 import cn.net.bjsoft.sxdz.bean.app.ToolbarBean;
+import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersSingleBean;
 import cn.net.bjsoft.sxdz.dialog.ALiPushMessageInAppPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.receiver.ALiPushType3Receiver;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
-import cn.net.bjsoft.sxdz.utils.BroadcastCallUtil;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPJpushUtil;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
+import cn.net.bjsoft.sxdz.utils.function.ALiPushCountUtils;
 import cn.net.bjsoft.sxdz.utils.function.InitFragmentUtil;
+import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.utils.function.WidgetUtils;
 import cn.net.bjsoft.sxdz.view.BottomIconView;
 import cn.net.bjsoft.sxdz.view.BottomIconView_1;
@@ -189,7 +189,6 @@ public class MainActivity extends BaseActivity {
     private String functionTag = "";
     private String messageTag = "";
 
-    private HashMap<String, Integer> pushNum;
 
     /**
      * 广播
@@ -199,6 +198,8 @@ public class MainActivity extends BaseActivity {
     private ALiPushType3Receiver aLiPushType3Receiver = new ALiPushType3Receiver();
 
     private ALiPushMessageInAppPopupWindow showPushWindow;
+
+    private ALiPushBottomBarReceiver bottomBarReceiver = new ALiPushBottomBarReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,7 +231,6 @@ public class MainActivity extends BaseActivity {
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);
 
 
-
 //        mImageOptions = new ImageOptions.Builder().setCircular(true).setUseMemCache(true).build();
 
 
@@ -240,6 +240,10 @@ public class MainActivity extends BaseActivity {
         initBottomBar();
         //initMapLocation(time);
 
+        UsersInforUtils inforUtils = UsersInforUtils.getInstance(this);
+        UsersSingleBean bean = inforUtils.getUserInfo("10001");
+        LogUtil.e("联系人信息--------------------"+bean.nickname+"::"+bean.avatar);
+
         dismissProgressDialog();
     }
 
@@ -247,6 +251,12 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+
+        LogUtil.e("main==onStart");
+        setUserIcon();
+        getPushCount(this);
+
 
         /**
          * 注册广播
@@ -271,14 +281,10 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        pushNum = app.getmPushNum();
-        LogUtil.e("MainActivity---mMyself::" + pushNum.get("myself"));
+        registerReceiver(bottomBarReceiver, new IntentFilter("cn.net.bjsoft.sxdz.main.bottombar"));
 
-        LogUtil.e("MainActivity---User::" + pushNum.get("User"));
-        setPushNumber(pushNum.get("Community"), pushNum.get("Function"), pushNum.get("Message"), pushNum.get("myself"));
-        LogUtil.e("main==onStart");
-        setUserIcon();
-        getPushCount(this);
+        setBottomBarNum(this);
+        setPushNumber();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,7 +321,7 @@ public class MainActivity extends BaseActivity {
         }
         //功能
         {
-            if (!(toolBar.scan || toolBar.shoot || toolBar.signin /*|| toolBar.payment.size() > 0*/)) {
+            if (!(toolBar.scan || toolBar.shoot || toolBar.signin || (toolBar.payment != null && toolBar.payment.size() > 0))) {
                 function.setVisibility(View.GONE);
             } else {
                 function.setVisibility(View.VISIBLE);
@@ -1005,35 +1011,93 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 设置用来显示推送数据TextView的数值
-     *
-     * @param communityNum
-     * @param functionNum
-     * @param messageNum
-     * @param userNum
      */
-    public void setPushNumber(int communityNum, int functionNum, int messageNum, int userNum) {
+    public void setPushNumber() {
+        if (!toolbarBean.train) {
+            SPJpushUtil.setTrain(this, 0);
+        }
+        if (!toolbarBean.knowledge) {
+            SPJpushUtil.setKnowledge(this, 0);
+        }
+        if (!toolbarBean.proposal) {
+            SPJpushUtil.setProposal(this, 0);
+        }
+        if (!toolbarBean.bug) {
+            SPJpushUtil.setBug(this, 0);
+        }
+        if (!toolbarBean.community) {
+            SPJpushUtil.setCommunity(this, 0);
+        }
+        if (!toolbarBean.scan) {
+            SPJpushUtil.setScan(this, 0);
+        }
+        if (!toolbarBean.shoot) {
+            SPJpushUtil.setShoot(this, 0);
+        }
+        if (!toolbarBean.signin) {
+            SPJpushUtil.setSignin(this, 0);
+        }
+
+        LogUtil.e("===================payment======================" + SPJpushUtil.getPayment(this));
+        if (toolbarBean.payment != null) {
+            LogUtil.e("=======里面============payment======================" + SPJpushUtil.getPayment(this));
+            if (!(toolbarBean.payment.size() > 0)) {
+                SPJpushUtil.setPayment(this, 0);
+                LogUtil.e("=======里面============payment======================" + SPJpushUtil.getPayment(this));
+            }
+        }else {
+            SPJpushUtil.setPayment(this, 0);
+        }
+        if (!toolbarBean.message) {
+            SPJpushUtil.setMessage(this, 0);
+        }
+        if (!toolbarBean.task) {
+            SPJpushUtil.setTask(this, 0);
+        }
+        if (!toolbarBean.crm) {
+            SPJpushUtil.setCrm(this, 0);
+        }
+        if (!toolbarBean.approve) {
+            SPJpushUtil.setApprove(this, 0);
+        }
+        if (!toolbarBean.myself) {
+            SPJpushUtil.setMyself(this, 0);
+        }
+
         //社区
+        int communityNum = 0;
+        int functionNum = 0;
+        int messageNum = 0;
+        int userNum = 0;
+
+        communityNum = SPJpushUtil.getTrain(MainActivity.this)
+                + SPJpushUtil.getKnowledge(MainActivity.this)
+                + SPJpushUtil.getProposal(MainActivity.this)
+                + SPJpushUtil.getBug(MainActivity.this)
+                + SPJpushUtil.getCommunity(MainActivity.this);
+
+
         if (communityNum > 0) {
             community_num.setVisibility(View.VISIBLE);
-            if (pushNum.get("community") > 0) {
+            if (SPJpushUtil.getCommunity(MainActivity.this) > 0) {
                 community_img.setImageResource(R.drawable.nav_live);
-                community_num.setText(pushNum.get("community").toString());
+                community_num.setText(SPJpushUtil.getCommunity(MainActivity.this) + "");
                 communityTag = "community";
-            } else if (pushNum.get("bug") > 0) {
+            } else if (SPJpushUtil.getBug(MainActivity.this) > 0) {
                 community_img.setImageResource(R.drawable.nav_bug);
-                community_num.setText(pushNum.get("bug").toString());
+                community_num.setText(SPJpushUtil.getBug(MainActivity.this) + "");
                 communityTag = "disabuse";
-            } else if (pushNum.get("proposal") > 0) {
+            } else if (SPJpushUtil.getProposal(MainActivity.this) > 0) {
                 community_img.setImageResource(R.drawable.nav_advise);
-                community_num.setText(pushNum.get("proposal").toString());
+                community_num.setText(SPJpushUtil.getProposal(MainActivity.this) + "");
                 communityTag = "proposal";
-            } else if (pushNum.get("knowledge") > 0) {
+            } else if (SPJpushUtil.getKnowledge(MainActivity.this) > 0) {
                 community_img.setImageResource(R.drawable.nav_help);
-                community_num.setText(pushNum.get("knowledge").toString());
+                community_num.setText(SPJpushUtil.getKnowledge(MainActivity.this) + "");
                 communityTag = "help";
-            } else if (pushNum.get("train") > 0) {
+            } else if (SPJpushUtil.getTrain(MainActivity.this) > 0) {
                 community_img.setImageResource(R.drawable.nav_live);
-                community_num.setText(pushNum.get("train").toString());
+                community_num.setText(SPJpushUtil.getTrain(MainActivity.this) + "");
                 communityTag = "live";
             }
             LogUtil.e("主页面设置的communityTag为：：：" + communityTag);
@@ -1053,24 +1117,31 @@ public class MainActivity extends BaseActivity {
             community_num.setVisibility(View.INVISIBLE);
             communityTag = "defult";
         }
+
         //功能
+        functionNum = SPJpushUtil.getScan(MainActivity.this)
+                + SPJpushUtil.getShoot(MainActivity.this)
+                + SPJpushUtil.getSignin(MainActivity.this)
+                + SPJpushUtil.getPayment(MainActivity.this);
         if (functionNum > 0) {
             function_num.setVisibility(View.VISIBLE);
-            if (pushNum.get("payment") > 0) {
+            if (SPJpushUtil.getPayment(MainActivity.this) > 0) {
                 function_img.setImageResource(R.drawable.nav_pay);
-                function_num.setText(pushNum.get("payment").toString());
+                function_num.setText(SPJpushUtil.getPayment(MainActivity.this) + "");
                 functionTag = "pay";
-            } else if (pushNum.get("signin") > 0) {
+                LogUtil.e("=========设置==========payment======================" + SPJpushUtil.getPayment(this));
+
+            } else if (SPJpushUtil.getSignin(MainActivity.this) > 0) {
                 function_img.setImageResource(R.drawable.nav_arrive);
-                function_num.setText(pushNum.get("signin").toString());
+                function_num.setText(SPJpushUtil.getSignin(MainActivity.this) + "");
                 functionTag = "sign";
-            } else if (pushNum.get("shoot") > 0) {
+            } else if (SPJpushUtil.getShoot(MainActivity.this) > 0) {
                 function_img.setImageResource(R.drawable.nav_photo);
-                function_num.setText(pushNum.get("shoot").toString());
+                function_num.setText(SPJpushUtil.getShoot(MainActivity.this) + "");
                 functionTag = "photo";
-            } else if (pushNum.get("scan") > 0) {
+            } else if (SPJpushUtil.getScan(MainActivity.this) > 0) {
                 function_img.setImageResource(R.drawable.nav_sao);
-                function_num.setText(pushNum.get("scan").toString());
+                function_num.setText(SPJpushUtil.getScan(MainActivity.this) + "");
                 functionTag = "scaning";
             }
             LogUtil.e("主页面设置的functionTag为：：：" + functionTag);
@@ -1089,24 +1160,29 @@ public class MainActivity extends BaseActivity {
             functionTag = "defult";
         }
         //消息
+        messageNum = SPJpushUtil.getMessage(MainActivity.this)
+                + SPJpushUtil.getTask(MainActivity.this)
+                + SPJpushUtil.getCrm(MainActivity.this)
+                + SPJpushUtil.getApprove(MainActivity.this);
+
 
         if (messageNum > 0) {
             message_num.setVisibility(View.VISIBLE);
-            if (pushNum.get("approve") > 0) {
+            if (SPJpushUtil.getApprove(MainActivity.this) > 0) {
                 message_img.setImageResource(R.drawable.nav_shenpi);
-                message_num.setText(pushNum.get("approve").toString());
+                message_num.setText(SPJpushUtil.getApprove(MainActivity.this) + "");
                 messageTag = "approve";
-            } else if (pushNum.get("crm") > 0) {
+            } else if (SPJpushUtil.getCrm(MainActivity.this) > 0) {
                 message_img.setImageResource(R.drawable.clientele_s);
-                message_num.setText(pushNum.get("crm").toString());
+                message_num.setText(SPJpushUtil.getCrm(MainActivity.this) + "");
                 messageTag = "client";
-            } else if (pushNum.get("task") > 0) {
+            } else if (SPJpushUtil.getTask(MainActivity.this) > 0) {
                 message_img.setImageResource(R.drawable.nav_renwu);
-                message_num.setText(pushNum.get("task").toString());
+                message_num.setText(SPJpushUtil.getTask(MainActivity.this) + "");
                 messageTag = "task";
-            } else if (pushNum.get("message") > 0) {
+            } else if (SPJpushUtil.getMessage(MainActivity.this) > 0) {
                 message_img.setImageResource(R.drawable.nav_mag);
-                message_num.setText(pushNum.get("message").toString());
+                message_num.setText(SPJpushUtil.getMessage(MainActivity.this) + "");
                 messageTag = "message";
             }
             LogUtil.e("主页面设置的messageTag为：：：" + messageTag);
@@ -1126,6 +1202,7 @@ public class MainActivity extends BaseActivity {
         }
 
         //用户
+        userNum = SPJpushUtil.getMyself(MainActivity.this);
         if (userNum > 0) {
             user_num.setText(userNum + "");
             user_num.setVisibility(View.VISIBLE);
@@ -1159,93 +1236,7 @@ public class MainActivity extends BaseActivity {
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            String pushJson = intent.getStringExtra("pushjson");
-            PushBean bean = GsonUtil.getPushBean(pushJson);
-            LogUtil.e("接收到了广播$$$$$$$,数据为===" + pushJson);
-
-            int approve = bean.workflow;
-            int bug = bean.bug;
-            int community = bean.community;
-            int crm = bean.crm;
-            int knowledge = bean.knowledge;
-            int message = bean.message;
-            int myself = bean.myself;
-            int payment = bean.payment;
-            int proposal = bean.proposal;
-            int scan = bean.scan;
-            int shoot = bean.shoot;
-            int signin = bean.signin;
-            int task = bean.task;
-            int train = bean.train;
-
-//            int comm = train + knowledge + proposal + bug + community;
-//            int fun = scan + shoot + signin + payment;
-//            int mess = message + task + crm + approve;
-//            int user = myself;
-
-//            app.reFreshPushNumList("Community", comm);
-//            app.reFreshPushNumList("Function", fun);
-//            app.reFreshPushNumList("Message", mess);
-//            app.reFreshPushNumList("User", user);
-
-            ToolbarBean toolbarDao = appBean.toolbar;
-
-            if (toolbarDao.train) {
-                app.reFreshCommunityPushNumList("train", train);
-            }
-            if (toolbarDao.knowledge) {
-                app.reFreshCommunityPushNumList("knowledge", knowledge);
-            }
-            if (toolbarDao.proposal) {
-                app.reFreshCommunityPushNumList("proposal", proposal);
-            }
-            if (toolbarDao.bug) {
-                app.reFreshCommunityPushNumList("bug", bug);
-            }
-            //暂时没有社区
-            if (toolbarDao.community) {
-                app.reFreshCommunityPushNumList("community", community);
-            }
-
-
-            if (toolbarDao.scan) {
-                app.reFreshFunctionPushNumList("scan", scan);
-            }
-            if (toolbarDao.shoot) {
-                app.reFreshFunctionPushNumList("shoot", shoot);
-            }
-            if (toolbarDao.signin) {
-                app.reFreshFunctionPushNumList("signin", signin);
-            }
-            if (toolbarDao.payment.size() > 0) {
-                app.reFreshFunctionPushNumList("payment", payment);
-            }
-
-            if (toolbarDao.message) {
-                app.reFreshMessagePushNumList("message", message);
-            }
-            if (toolbarDao.task) {
-                app.reFreshMessagePushNumList("task", task);
-            }
-            if (toolbarDao.crm) {
-                app.reFreshMessagePushNumList("crm", crm);
-            }
-            if (toolbarDao.approve) {
-                app.reFreshMessagePushNumList("approve", approve);
-            }
-
-            if (toolbarDao.myself) {
-                app.reFreshUesrPushNumList("myself", myself);
-            }
-
-            if (pushNum==null) {
-                pushNum = new HashMap<>();
-            }
-            pushNum = app.getmPushNum();
-            setPushNumber(pushNum.get("Community"), pushNum.get("Function"), pushNum.get("Message"), pushNum.get("User"));
-
-            //setPushNumber(comm+"", fun+"", mess+"", user+"");
-
+            setPushNumber();
         }
     }
 
@@ -1254,28 +1245,6 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         LogUtil.e("main==onDestroy");
-
-        pushNum = app.getmPushNum();
-
-        //退出程序时，将未点击的任务写入到本地文件中
-        SPJpushUtil.setTrain(this, pushNum.get("train"));
-        SPJpushUtil.setKnowledge(this, pushNum.get("knowledge"));
-        SPJpushUtil.setProposal(this, pushNum.get("proposal"));
-        SPJpushUtil.setBug(this, pushNum.get("bug"));
-        SPJpushUtil.setCommunity(this, pushNum.get("community"));
-
-        SPJpushUtil.setScan(this, pushNum.get("scan"));
-        SPJpushUtil.setShoot(this, pushNum.get("shoot"));
-        SPJpushUtil.setSignin(this, pushNum.get("signin"));
-        SPJpushUtil.setPayment(this, pushNum.get("payment"));
-
-        SPJpushUtil.setMessage(this, pushNum.get("message"));
-        SPJpushUtil.setTask(this, pushNum.get("task"));
-        SPJpushUtil.setCrm(this, pushNum.get("crm"));
-        SPJpushUtil.setApprove(this, pushNum.get("approve"));
-
-        SPJpushUtil.setMyself(this, pushNum.get("myself"));
-
 
         if (null != mLocationClient) {
             /**
@@ -1419,11 +1388,12 @@ public class MainActivity extends BaseActivity {
             public void onSuccess(String strJson) {
 
                 //TODO 防止后台给的数据是残疾的
-                strJson = strJson.replace("\"\"","0");
+                strJson = strJson.replace("\"\"", "0");
                 LogUtil.e(strJson);
 
+                ALiPushCountUtils.setPushCount(MainActivity.this, strJson);
                 LogUtil.e("==========开始发送数据============" + strJson);
-                BroadcastCallUtil.sendMessage2Activity(MainActivity.this, strJson, GsonUtil.getPushBean(strJson));//发送消息,通知界面改数字
+                //BroadcastCallUtil.sendMessage2Activity(MainActivity.this, strJson, GsonUtil.getPushBean(strJson));//发送消息,通知界面改数字
                 LogUtil.e("==============结束发送数据=========");
             }
 
@@ -1442,7 +1412,40 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+    }
 
 
+    /**
+     * 底部栏推送消息接收器
+     */
+    private class ALiPushBottomBarReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setBottomBarNum(context);
+        }
+    }
+
+    /**
+     * 设置底部栏推送数据
+     *
+     * @param context
+     */
+    private void setBottomBarNum(Context context) {
+        if (mBottomIconViewList != null && mBottomIconViewList.size() > 0) {
+            for (int i = 0; i < mBottomIconViewList.size(); i++) {
+                if (mBottomIconViewList.get(i).getTag().equals("home_zdlf")) {
+                    mBottomIconViewList.get(i).setPushCountNum(SPJpushUtil.getHome_zdlf(context));
+                } else if (mBottomIconViewList.get(i).getTag().equals("work_items")) {
+                    mBottomIconViewList.get(i).setPushCountNum(SPJpushUtil.getWork_items(context));
+                } else if (mBottomIconViewList.get(i).getTag().equals("knowledge_zdlf")) {
+                    mBottomIconViewList.get(i).setPushCountNum(SPJpushUtil.getKnowledge_zdlf(context));
+                } else if (mBottomIconViewList.get(i).getTag().equals("communication_zdlf")) {
+                    mBottomIconViewList.get(i).setPushCountNum(SPJpushUtil.getCommunication_zdlf(context));
+                } else if (mBottomIconViewList.get(i).getTag().equals("mine_zdlf")) {
+                    mBottomIconViewList.get(i).setPushCountNum(SPJpushUtil.getMine_zdlf(context));
+                }
+            }
+        }
     }
 }

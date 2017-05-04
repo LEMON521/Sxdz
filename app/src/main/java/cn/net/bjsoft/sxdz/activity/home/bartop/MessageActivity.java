@@ -22,13 +22,12 @@ import java.util.HashMap;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
-import cn.net.bjsoft.sxdz.bean.PushBean;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
-import cn.net.bjsoft.sxdz.bean.app.ToolbarBean;
 import cn.net.bjsoft.sxdz.dialog.ALiPushMessageInAppPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.receiver.ALiPushType3Receiver;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.SPJpushUtil;
 
 import static cn.net.bjsoft.sxdz.utils.function.InitFragmentUtil.getMessageFragments;
 
@@ -105,7 +104,7 @@ public class MessageActivity extends BaseActivity {
      */
     private MyReceiver receiver = new MyReceiver();
 
-    private ALiPushType3Receiver aLiPushType3Receiver =new ALiPushType3Receiver();
+    private ALiPushType3Receiver aLiPushType3Receiver = new ALiPushType3Receiver();
 
     private ALiPushMessageInAppPopupWindow showPushWindow;
 
@@ -123,7 +122,6 @@ public class MessageActivity extends BaseActivity {
         appBean = GsonUtil.getAppBean(mJson);
 
 
-
         initData();
         setView();
     }
@@ -133,16 +131,6 @@ public class MessageActivity extends BaseActivity {
     protected void onStart() {
 
         super.onStart();
-        pushNum = app.getmPushNum();
-
-        mMessage = pushNum.get("message");
-        mTask = pushNum.get("task");
-        mCrm = pushNum.get("crm");
-        mApprove = pushNum.get("approve");
-
-        setPushNumber(mMessage + "", mTask + "", mCrm + "", mApprove + "");
-        LogUtil.e("社区页面====" + pushNum.get("proposal").toString());
-        LogUtil.e("main==onStart");
 
         /**
          * 注册广播
@@ -154,45 +142,49 @@ public class MessageActivity extends BaseActivity {
         aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
             @Override
             public void onDataCallBack(Bundle bundleData) {
-                LogUtil.e("推送通知拿到数据=============="+bundleData);
-                if (bundleData!=null) {
+                LogUtil.e("推送通知拿到数据==============" + bundleData);
+                if (bundleData != null) {
 
-                    showPushWindow = new ALiPushMessageInAppPopupWindow(MessageActivity.this,bundleData,bar);
+                    showPushWindow = new ALiPushMessageInAppPopupWindow(MessageActivity.this, bundleData, bar);
 
                     showPushWindow.showWindow();
                 }
             }
         });
 
+        setPushNumber();
 
     }
 
-    public void setPushNumber(String messageNum, String taskNum, String crmNum, String approveNum) {
-
+    public void setPushNumber() {
+        int messageNum = SPJpushUtil.getMessage(this);
+        int taskNum = SPJpushUtil.getTask(this);
+        int crmNum = SPJpushUtil.getCrm(this);
+        int approveNum = SPJpushUtil.getApprove(this);
         //消息
-        if (Integer.parseInt(messageNum) > 0) {
-            message_num.setText(messageNum);
+        if (messageNum > 0) {
+            message_num.setText(messageNum + "");
             message_num.setVisibility(View.VISIBLE);
         } else {
             message_num.setVisibility(View.INVISIBLE);
         }
         //任务
-        if (Integer.parseInt(taskNum) > 0) {
-            task_num.setText(taskNum);
+        if (taskNum > 0) {
+            task_num.setText(taskNum + "");
             task_num.setVisibility(View.VISIBLE);
         } else {
             task_num.setVisibility(View.INVISIBLE);
         }
         //客户
-        if (Integer.parseInt(crmNum) > 0) {
-            client_num.setText(crmNum);
+        if (crmNum > 0) {
+            client_num.setText(crmNum + "");
             client_num.setVisibility(View.VISIBLE);
         } else {
             client_num.setVisibility(View.INVISIBLE);
         }
         //审批
-        if (Integer.parseInt(approveNum) > 0) {
-            approve_num.setText(approveNum);
+        if (approveNum > 0) {
+            approve_num.setText(approveNum + "");
             approve_num.setVisibility(View.VISIBLE);
         } else {
             approve_num.setVisibility(View.INVISIBLE);
@@ -357,80 +349,7 @@ public class MessageActivity extends BaseActivity {
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            String pushJson = intent.getStringExtra("pushjson");
-            PushBean bean = GsonUtil.getPushBean(pushJson);
-            //LogUtil.e("社区接收到了广播@@@@@,数据为===" + pushJson);
-
-
-            int approve = bean.workflow;
-            int bug = bean.bug;
-            int community = bean.community;
-            int crm = bean.crm;
-            int knowledge = bean.knowledge;
-            int message = bean.message;
-            int myself = bean.myself;
-            int payment = bean.payment;
-            int proposal = bean.proposal;
-            int scan = bean.scan;
-            int shoot = bean.shoot;
-            int signin = bean.signin;
-            int task = bean.task;
-            int train = bean.train;
-            ToolbarBean toolbarDao = appBean.toolbar;
-
-            if (toolbarDao.train) {
-                app.reFreshCommunityPushNumList("train", train);
-            }
-            if (toolbarDao.knowledge) {
-                app.reFreshCommunityPushNumList("knowledge", knowledge);
-            }
-            if (toolbarDao.proposal) {
-                app.reFreshCommunityPushNumList("proposal", proposal);
-            }
-            if (toolbarDao.bug) {
-                app.reFreshCommunityPushNumList("bug", bug);
-            }
-            if (toolbarDao.community){
-                app.reFreshCommunityPushNumList("community", community);
-            }
-
-
-            if (toolbarDao.scan) {
-                app.reFreshFunctionPushNumList("scan", scan);
-            }
-            if (toolbarDao.shoot) {
-                app.reFreshFunctionPushNumList("shoot", shoot);
-            }
-            if (toolbarDao.signin) {
-                app.reFreshFunctionPushNumList("signin", signin);
-            }
-            if (toolbarDao.payment.size() > 0) {
-                app.reFreshFunctionPushNumList("payment", payment);
-            }
-
-            if (toolbarDao.message) {
-                app.reFreshMessagePushNumList("message", message);
-            }
-            if (toolbarDao.task) {
-                app.reFreshMessagePushNumList("task", task);
-            }
-            if (toolbarDao.crm) {
-                app.reFreshMessagePushNumList("crm", crm);
-            }
-            if (toolbarDao.approve) {
-                app.reFreshMessagePushNumList("approve", approve);
-            }
-
-            if (toolbarDao.myself) {
-                app.reFreshUesrPushNumList("myself", myself);
-            }
-
-
-            pushNum = app.getmPushNum();
-            setPushNumber(pushNum.get("message").toString(), pushNum.get("task").toString(), pushNum.get("crm").toString(), pushNum.get("approve").toString());
-            LogUtil.e("设置社区页面消息===" + pushNum.get("proposal").toString());
-            //setPushNumber(comm+"", fun+"", mess+"", user+"");
-
+            setPushNumber();
         }
     }
 

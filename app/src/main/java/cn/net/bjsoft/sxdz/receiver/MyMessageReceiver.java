@@ -22,7 +22,6 @@ import java.util.Map;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.ali_push.ALiPushMessageBean;
-import cn.net.bjsoft.sxdz.utils.BroadcastCallUtil;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.ALiPushCountUtils;
@@ -200,7 +199,7 @@ public class MyMessageReceiver extends MessageReceiver {
                 ALiPushCountUtils.setPushCount(mContext,strJson);
 
                 //strJson = "{\"message\":9,\"plan\":8,\"calendar\":7,\"email\":6,\"order\":5,\"crm\":4,\"sign\":3,\"workflow\":2,\"task\":1}";
-                BroadcastCallUtil.sendMessage2Activity(mContext, strJson, GsonUtil.getPushBean(strJson));//发送消息,通知界面改数字
+                //BroadcastCallUtil.sendMessage2Activity(mContext, strJson, GsonUtil.getPushBean(strJson));//发送消息,通知界面改数字
 
 
             }

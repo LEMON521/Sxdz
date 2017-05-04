@@ -292,10 +292,10 @@ public class BottomIconView_1 extends LinearLayout {
 
     }
 
-    public void setPushCountNum(String number){
-        if (Integer.parseInt(number)>0) {
+    public void setPushCountNum(int number){
+        if (number>0) {
             num.setVisibility(VISIBLE);
-            num.setText(number);
+            num.setText(number+"");
         }else {
             num.setVisibility(INVISIBLE);
         }

@@ -250,21 +250,21 @@ public class TopApproveFragment extends BaseFragment {
                 fragmentTag = "approve_wait";
                 setBackgroundDefult();
                 setBackgroundChack((TextView) view);
-                MyToast.showShort(mActivity, "待我审批");
+                //MyToast.showShort(mActivity, "待我审批");
                 break;
             case R.id.approve_approval:
                 fragment = new TopApproveApprovalFragment();
                 fragmentTag = "approve_approval";
                 setBackgroundDefult();
                 setBackgroundChack((TextView) view);
-                MyToast.showShort(mActivity, "审批中");
+                //MyToast.showShort(mActivity, "审批中");
                 break;
             case R.id.approve_historical:
                 fragment = new TopApproveHistoricalFragment();
                 fragmentTag = "approve_history";
                 setBackgroundDefult();
                 setBackgroundChack((TextView) view);
-                MyToast.showShort(mActivity, "历史审批");
+                //MyToast.showShort(mActivity, "历史审批");
                 break;
         }
         fragment.setArguments(bundle);

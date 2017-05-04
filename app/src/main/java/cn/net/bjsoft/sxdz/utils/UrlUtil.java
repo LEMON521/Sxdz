@@ -13,6 +13,9 @@ public class UrlUtil {
 
     public final static String apps_url = "http://api.shuxinyun.com/apps/";
 
+    public final static String users_all = "http://api.shuxinyun.com/cache/users/all.json";
+
+
     public final static String baseUrl = "http://api.shuxin.net/service/jsondata.aspx?";
     public final static String scanUrl = "http://www.shuxin.net/wap/app/modules/rcjg/view/form/proving.html?";
     public final static String getUrl(String url, Context context){

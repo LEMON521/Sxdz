@@ -27,7 +27,6 @@ import java.util.HashMap;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
 import cn.net.bjsoft.sxdz.bean.DatasBean;
-import cn.net.bjsoft.sxdz.bean.PushBean;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.UrlUtil;
@@ -193,57 +192,6 @@ public class SearchResultActivity extends BaseActivity {
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            String pushJson = intent.getStringExtra("pushjson");
-            PushBean bean = GsonUtil.getPushBean(pushJson);
-            //LogUtil.e("社区接收到了广播@@@@@,数据为===" + pushJson);
-
-            int approve = bean.workflow;
-            int bug = bean.bug;
-            int community = bean.community;
-            int crm = bean.crm;
-            int knowledge = bean.knowledge;
-            int message = bean.message;
-            int myself = bean.myself;
-            int payment = bean.payment;
-            int proposal = bean.proposal;
-            int scan = bean.scan;
-            int shoot = bean.shoot;
-            int signin = bean.signin;
-            int task = bean.task;
-            int train = bean.train;
-
-            int comm = train + knowledge + proposal + bug + community;
-            int fun = scan + shoot + signin + payment;
-            int mess = message + task + crm + approve;
-            int user = myself;
-
-            app.reFreshPushNumList("Community", comm);
-            app.reFreshPushNumList("Function", fun);
-            app.reFreshPushNumList("Message", mess);
-            app.reFreshPushNumList("User", user);
-
-            app.reFreshCommunityPushNumList("train", train);
-            app.reFreshCommunityPushNumList("knowledge", knowledge);
-            app.reFreshCommunityPushNumList("proposal", proposal);
-            app.reFreshCommunityPushNumList("bug", bug);
-            app.reFreshCommunityPushNumList("community", community);
-
-            app.reFreshFunctionPushNumList("scan", scan);
-            app.reFreshFunctionPushNumList("shoot", shoot);
-            app.reFreshFunctionPushNumList("signin", signin);
-            app.reFreshFunctionPushNumList("payment", payment);
-
-            app.reFreshMessagePushNumList("message", message);
-            app.reFreshMessagePushNumList("task", task);
-            app.reFreshMessagePushNumList("crm", crm);
-            app.reFreshMessagePushNumList("approve", approve);
-
-            app.reFreshUesrPushNumList("myself", myself);
-
-            pushNum = app.getmPushNum();
-//            setPushNumber(pushNum.get("scan").toString(), pushNum.get("shoot").toString(), pushNum.get("signin").toString(), pushNum.get("payment").toString());
-            LogUtil.e("设置社区页面消息===" + pushNum.get("proposal").toString());
-            //setPushNumber(comm+"", fun+"", mess+"", user+"");
         }
     }
 
@@ -251,7 +199,6 @@ public class SearchResultActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        pushNum = app.getmPushNum();
     }
 
     @Override

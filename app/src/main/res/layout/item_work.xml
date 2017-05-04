@@ -67,30 +67,34 @@
                 android:textSize="@dimen/dm022" />
 
         </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            
+
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm001"
                 android:layout_alignParentTop="true"
-                android:background="#F0F0F0"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dm001" />
+                android:background="#F0F0F0" />
+
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm001"
                 android:layout_alignParentBottom="true"
-                android:background="#F0F0F0"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dm001" />
+                android:background="#F0F0F0" />
+
             <TextView
+                android:layout_width="@dimen/dm001"
+                android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:background="#F0F0F0"
-                android:layout_width="@dimen/dm001"
-                android:layout_height="match_parent" />
+                android:background="#F0F0F0" />
+
             <TextView
-                android:layout_alignParentRight="true"
-                android:background="#F0F0F0"
                 android:layout_width="@dimen/dm001"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="#F0F0F0" />
         </RelativeLayout>
     </FrameLayout>
 

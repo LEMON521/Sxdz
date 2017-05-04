@@ -666,4 +666,123 @@ public class SPJpushUtil {
         editor.commit();
     }
 
+    ////////////////////////////////bottombar////底部栏///////////////////////
+    //=========================主页===home_zdlf=========================
+
+    /**得到--主页--未读数量*/
+    public static int getHome_zdlf(Context context) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        return sp.getInt("home_zdlf", 0);
+    }
+    /**得到--主页--未读数量状态*/
+    public static boolean getHome_zdlfState(Context context) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        return sp.getBoolean("home_zdlf_statey", false);
+    }
+
+    /**设置--主页--数量*/
+    public static void setHome_zdlf(Context context, int num) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        editor.putInt("home_zdlf", num);
+        //num>0有数据   num<0没有数据
+        editor.putBoolean("home_zdlf_statey", num>0);
+        editor.commit();
+    }
+
+    //=========================工作===work_items=========================
+
+    /**得到--工作--未读数量*/
+    public static int getWork_items(Context context) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        return sp.getInt("work_items", 0);
+    }
+    /**得到--工作--未读数量状态*/
+    public static boolean getWork_itemsState(Context context) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        return sp.getBoolean("work_items_statey", false);
+    }
+
+    /**设置--工作--数量*/
+    public static void setWork_items(Context context, int num) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        editor.putInt("work_items", num);
+        //num>0有数据   num<0没有数据
+        editor.putBoolean("work_items_statey", num>0);
+        editor.commit();
+    }
+
+    //=========================知识===knowledge_zdlf=========================
+
+    /**得到--知识--未读数量*/
+    public static int getKnowledge_zdlf(Context context) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        return sp.getInt("knowledge_zdlf", 0);
+    }
+    /**得到--知识--未读数量状态*/
+    public static boolean getKnowledge_zdlfState(Context context) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        return sp.getBoolean("knowledge_zdlf_statey", false);
+    }
+
+    /**设置--知识--数量*/
+    public static void setKnowledge_zdlf(Context context, int num) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        editor.putInt("knowledge_zdlf", num);
+        //num>0有数据   num<0没有数据
+        editor.putBoolean("knowledge_zdlf_statey", num>0);
+        editor.commit();
+    }
+
+
+    //=========================通讯===communication_zdlf=========================
+
+    /**得到--通讯--未读数量*/
+    public static int getCommunication_zdlf(Context context) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        return sp.getInt("communication_zdlf", 0);
+    }
+    /**得到--通讯--未读数量状态*/
+    public static boolean getCommunication_zdlfState(Context context) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        return sp.getBoolean("communication_zdlf_statey", false);
+    }
+
+    /**设置--通讯--数量*/
+    public static void setCommunication_zdlf(Context context, int num) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        editor.putInt("communication_zdlf", num);
+        //num>0有数据   num<0没有数据
+        editor.putBoolean("communication_zdlf_statey", num>0);
+        editor.commit();
+    }
+
+
+    //=========================我的===mine_zdlf=========================
+
+    /**得到--我的--未读数量*/
+    public static int getMine_zdlf(Context context) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        return sp.getInt("mine_zdlf", 0);
+    }
+    /**得到--我的--未读数量状态*/
+    public static boolean getMine_zdlfState(Context context) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        return sp.getBoolean("mine_zdlf_statey", false);
+    }
+
+    /**设置--我的--数量*/
+    public static void setMine_zdlf(Context context, int num) {
+        sp = context.getApplicationContext().getSharedPreferences(JPUSH_NUM, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        editor.putInt("mine_zdlf", num);
+        //num>0有数据   num<0没有数据
+        editor.putBoolean("mine_zdlf_statey", num>0);
+        editor.commit();
+    }
+
+
 }
