@@ -9,13 +9,13 @@ import java.util.ArrayList;
  */
 
 public class MessageTaskBean implements Serializable {
-    public boolean result = false;
+    public String code = "1";
     public TasksDao data;
 
 
     public class TasksDao implements Serializable {
-
-        public ArrayList<TasksAllDao> task_list;
+        public String count = "0";
+        public ArrayList<TasksAllDao> items;
         public TaskQueryDao query_dao;
         public String query_type;
 
@@ -37,15 +37,38 @@ public class MessageTaskBean implements Serializable {
     }
 
     public class TasksAllDao implements Serializable {
-        public int state = -1;//状态
-        public String title = "";//标题
-        public String classify = "";//分类
-        public ArrayList<AddressListDao> name;//发起人名字
-        public long start = 0;//开始时间--时间戳
-        public long end = 0;//结束时间--时间戳
+        //        public int state = -1;//状态
+//        public String title = "";//标题
+//        public String classify = "";//分类
+//        public ArrayList<AddressListDao> name;//发起人名字
+//        public long start = 0;//开始时间--时间戳
+//        public long end = 0;//结束时间--时间戳
         public int level = -1;//任务等级
-        public boolean isOverdue = false;//是否过期
-        public int type = 0;//0发起人---要执行的任务,1执行人----看任务
+        //        public boolean isOverdue = false;//是否过期
+//        public int type = 0;//0发起人---要执行的任务,1执行人----看任务
+        public int is_executant = 0;//0发起人---要执行的任务,1执行人----看任务
+
+
+        public String ctime = "";
+        public String description = "";
+        public boolean finished = false;
+        public String finishtime = "";
+        public String hours = "";
+        public String id = "";
+        public String limittime = "";
+        public String priority = "";//任务等级
+        public String priority_color = "";//任务等级字体颜色
+        public String progress = "";
+        public String starttime = "";
+        public String title = "";
+        public String type = "";
+        public String userid = "";
+        public ArrayList<TasksAllWorkDao> worker;
+    }
+
+    public class TasksAllWorkDao implements Serializable {
+        public String submited = "";
+        public String userid = "";
     }
 
     public class AddressListDao implements Serializable {

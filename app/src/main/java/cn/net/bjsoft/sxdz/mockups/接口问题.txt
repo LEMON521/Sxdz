@@ -1,0 +1,35 @@
+﻿通用接口地址为：http://api.shuxinyun.com/data/load
+api_auth+“/load”
+
+数据接口传递如下参数：
+source_id:task_look//这里随业务不通变化
+data:{
+	"start":0,//记录数据开始索引
+	"limit":0,//提取记录数量
+	"condition":[],//查询条件，没有可以不指定
+	"data":{
+		"task_id":"5278735015174018824"}//这里参数随业务不同变化
+	}
+appid:4895081593118139245（系统）
+secret:4895081593118139245（系统）
+token:c0797725475475ed（系统）
+
+下面需求接口知识，source_id于data的不同
+
+我发布的任务：source_id=task_apply
+我执行的任务：source_id=task_working
+已经完成的任务：source_id=task_finished
+全部下属任务：source_id=task_children
+指定下属任务：source_id=task_children，data:{data:{source_id:"下属用户编号"}}
+查看任务信息：source_id=task_look，data:{data:{task_id:"任务编号"}}
+
+我发起的审批：source_id=workflow_apply
+我执行的审批：source_id=workflow_working
+已经完成的审批：source_id=workflow_finished
+我参与的审批：source_id=workflow_joined
+查看任务信息：source_id=workflow_look，data:{data:{check_id:"下属用户编号"}}
+这里打开链接地址，地址再定
+
+
+信息数据接口：source_id=shuxin_alert
+

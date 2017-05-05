@@ -9,24 +9,27 @@ import java.util.ArrayList;
 
 public class MessageMessageBean implements Serializable {
 
-    public boolean result = false;
+    public String code = "1";
     public MessageMessageDatasDao data;
+    public String msg ="";
 
     public class MessageMessageDatasDao implements Serializable {
-
-        public ArrayList<MessageDataDao> message_list;
+        public String count = "";//总数
+        public ArrayList<MessageDataDao> items;
     }
 
     public class MessageDataDao implements Serializable {
-        //         "avatar_url": "http://www.shuxin.net/api/app_json/android/form/form_2.jpg",
-//                 "detail": "放假通知已经下发,点击查看详情",
-//                 "name": "Charing",
-//                 "time": "1489031169763",
-//                 "title": "劳动节放假通知"
-        public String avatar_url = "";
+        public String id = "";
+        public String link_from = "";
+        public String link_id = "";
+        public String link_params = "";
+        public String link_url = "";
+        public String message = "";
         public String name = "";
-        public String title = "";
-        public String detail = "";
-        public long time = -1;
+        public String progress = "";
+        public String sendid = "";
+        public String showtime = "";
+        public String type = "";
+        public String userid = "";
     }
 }

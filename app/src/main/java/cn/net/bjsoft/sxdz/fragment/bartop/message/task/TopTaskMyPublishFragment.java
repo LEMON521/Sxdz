@@ -13,7 +13,6 @@ import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
 import java.util.ArrayList;
 
@@ -21,11 +20,14 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.home.bartop.message.TaskDetailActivity;
 import cn.net.bjsoft.sxdz.activity.home.bartop.message.TaskNewActivity;
 import cn.net.bjsoft.sxdz.adapter.message.task.TaskAllZDLFAdapter;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
+import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
 import cn.net.bjsoft.sxdz.dialog.TaskSearchPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
-import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
+import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
 
@@ -44,9 +46,14 @@ public class TopTaskMyPublishFragment extends BaseFragment {
     @ViewInject(R.id.refresh_view)
     private PullToRefreshLayout refresh_view;
 
+
+    private PostJsonBean pushMyPublishBean;
     private MessageTaskBean taskBean;
     private ArrayList<MessageTaskBean.TasksAllDao> tasksAllDao;
     private TaskAllZDLFAdapter taskAdapter;
+
+    private String get_start = "0";
+    private String get_count = "0";
 
 
     private MessageTaskBean.TaskQueryDao taskQueryDao;
@@ -54,7 +61,7 @@ public class TopTaskMyPublishFragment extends BaseFragment {
 
     @Override
     public void initData() {
-
+        pushMyPublishBean = new PostJsonBean();
 
         if (tasksAllDao == null) {
             tasksAllDao = new ArrayList<>();
@@ -90,7 +97,7 @@ public class TopTaskMyPublishFragment extends BaseFragment {
                     public void handleMessage(Message msg) {
                         // 千万别忘了告诉控件刷新完毕了哦！
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
-
+                        get_start = "0";
                         tasksAllDao.clear();
                         LogUtil.e("setOnRefreshListener-----------");
                         getData();
@@ -108,9 +115,14 @@ public class TopTaskMyPublishFragment extends BaseFragment {
                     public void handleMessage(Message msg) {
                         // 千万别忘了告诉控件加载完毕了哦！
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-
+                        if (!get_start.equals(get_count)) {
+                            pushMyPublishBean.start = get_start;//设置开始查询
+                            LogUtil.e("onLoadMore-----------");
+                            getData();
+                        } else {
+                            MyToast.showLong(mActivity, "已经没有更多的消息了!");
+                        }
                         LogUtil.e("onLoadMore-----------");
-                        getData();
                     }
                 }.sendEmptyMessageDelayed(0, 500);
 
@@ -127,9 +139,9 @@ public class TopTaskMyPublishFragment extends BaseFragment {
             @Override
             public void onDataCallBack(String strJson) {
                 taskBean = GsonUtil.getMessageTaskBean(strJson);
-                if (taskBean.result) {
+                if (taskBean.code.equals("0")) {
                     tasksAllDao.clear();
-                    tasksAllDao.addAll(taskBean.data.task_list);
+                    tasksAllDao.addAll(taskBean.data.items);
                     taskAdapter.notifyDataSetChanged();
                 }
             }
@@ -139,32 +151,59 @@ public class TopTaskMyPublishFragment extends BaseFragment {
 
     private void getData() {
         showProgressDialog();
-        RequestParams params = new RequestParams(TestAddressUtils.test_get_message_task_list_url);
-        x.http().get(params, new Callback.CommonCallback<String>() {
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/load";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("source_id", "task_apply");
+
+        pushMyPublishBean.start = get_start;//设置开始查询
+        pushMyPublishBean.limit = "10";
+        params.addBodyParameter("data", pushMyPublishBean.toString());
+        LogUtil.e("-------------------------bean.toString()" + pushMyPublishBean.toString());
+        httpPostUtils.get(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
-            public void onSuccess(String result) {
-                //LogUtil.e("获取到的条目-----------" + result);
-                taskBean = GsonUtil.getMessageTaskBean(result);
-                if (taskBean.result) {
-                    taskQueryDao = taskBean.data.query_dao;
-                    //LogUtil.e("获取到的条目-----------" + result);
-                    //
-                    // tasksAllDao.clear();
-                    tasksAllDao.addAll(taskBean.data.task_list);
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取消息----------------" + strJson);
+                taskBean = GsonUtil.getMessageTaskBean(strJson);
+                if (taskBean.code.equals("0")) {
+                    tasksAllDao.addAll(taskBean.data.items);
+                    get_start = tasksAllDao.size() + "";//设置开始查询
+                    get_count = taskBean.data.count + "";
+
+                    formateDatas();//格式化信息
+
                     taskAdapter.notifyDataSetChanged();
-                    taskBean = null;
+                    if (get_count.equals("0")) {
+                        MyToast.showLong(mActivity, "没有任何消息可查看!");
+                    }
                 } else {
+                    MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
                 }
 
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("获取到的条目--------失败!!!---" + ex);
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
+                }
+
+                MyToast.showShort(mActivity, "获取数据失败!!");
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
+            public void onCancelled(Callback.CancelledException cex) {
+
             }
 
             @Override
@@ -172,9 +211,28 @@ public class TopTaskMyPublishFragment extends BaseFragment {
                 dismissProgressDialog();
             }
         });
-
     }
 
+    /**
+     * 格式化从后台拿过来的数据
+     */
+    private void formateDatas() {
+        for (MessageTaskBean.TasksAllDao dao : tasksAllDao) {
+            if (SPUtil.getUserId(mActivity).equals(dao.userid)) {
+                dao.is_executant = 1;
+
+                String time = dao.starttime;
+                time = time.replace("/Date(", "");
+                time = time.replace(")/", "");
+                dao.starttime = time;
+                time = dao.limittime;
+                time = time.replace("/Date(", "");
+                time = time.replace(")/", "");
+                dao.limittime = time;
+
+            }
+        }
+    }
 
     @Event(value = {R.id.fragment_task_list_all_search
             , R.id.fragment_task_list_all_add})

@@ -15,8 +15,12 @@ import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.adapter.zdlf.TaskUnderlingTreeAdapter;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
+import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.FileTaskBean;
 import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.ListTaskBean;
@@ -35,12 +39,17 @@ public class TopTaskUnderlingFragment extends BaseFragment {
     private ListView list_underling;
 
 
+    private PostJsonBean pushUnderlingBean;
+
     private ListTaskBean bean;
     private FileTaskBean fileTaskBean;
     private List<FileTaskBean> mDatas;
     private ListTaskBean.TaskDataDao treeListDao;
     private ArrayList<ListTaskBean.TreeTaskListDao> tree_list;
     private TaskUnderlingTreeAdapter mAdapter;
+
+    private String get_start = "0";
+    private String get_count = "0";
 
     @Override
     public void initData() {
@@ -56,9 +65,70 @@ public class TopTaskUnderlingFragment extends BaseFragment {
      */
     private void getFormData() {
         showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
 
-        RequestParams params = new RequestParams(TestAddressUtils.test_get_message_task_list_underling_url);
-        x.http().get(params, new Callback.CommonCallback<String>() {
+        String url = SPUtil.getApiAuth(mActivity) + "/load";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("source_id", "task_finished");
+
+        pushUnderlingBean.start = get_start;//设置开始查询
+        pushUnderlingBean.limit = "10";
+        params.addBodyParameter("data", pushUnderlingBean.toString());
+        LogUtil.e("-------------------------bean.toString()"+pushUnderlingBean.toString());
+        httpPostUtils.get(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取消息----------------" + strJson);
+//                taskBean = GsonUtil.getMessageTaskBean(strJson);
+//                if (taskBean.code.equals("0")) {
+//                    tasksDoneDao.addAll(taskBean.data.items);
+//                    get_start = tasksDoneDao.size() + "";//设置开始查询
+//                    get_count = taskBean.data.count + "";
+//
+//                    formateDatas();//格式化信息
+//
+//                    taskAdapter.notifyDataSetChanged();
+//                    if (get_count.equals("0")) {
+//                        MyToast.showLong(mActivity, "没有任何消息可查看!");
+//                    }
+//                } else {
+//                    MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
+//                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
+                }
+
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+        showProgressDialog();
+
+        RequestParams params_1 = new RequestParams(TestAddressUtils.test_get_message_task_list_underling_url);
+        x.http().get(params_1, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 bean = GsonUtil.getListTaskBean(result);
@@ -95,6 +165,8 @@ public class TopTaskUnderlingFragment extends BaseFragment {
     //初始化树形结构---------------------------开始----------------------------
 
     private void initList() {
+        pushUnderlingBean = new PostJsonBean();
+
         if (tree_list == null) {
             tree_list = new ArrayList<>();
         }

@@ -12,9 +12,10 @@ import com.lidroid.xutils.BitmapUtils;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersSingleBean;
 import cn.net.bjsoft.sxdz.bean.message.MessageMessageBean;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
-import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
+import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
 
 /**
@@ -26,6 +27,7 @@ public class MessageMessageAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<MessageMessageBean.MessageDataDao> list;
     private BitmapUtils bitmapUtils;
+    private UsersInforUtils usersInfor;
 
     public MessageMessageAdapter(Context context, ArrayList<MessageMessageBean.MessageDataDao> list) {
         this.context = context;
@@ -33,6 +35,7 @@ public class MessageMessageAdapter extends BaseAdapter {
         bitmapUtils = new BitmapUtils(context, AddressUtils.img_cache_url);//初始化头像
         bitmapUtils.configDefaultLoadingImage(R.drawable.tab_me_n);//初始化头像
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.tab_me_n);//初始化头像
+        usersInfor = UsersInforUtils.getInstance(context);
     }
 
     @Override
@@ -66,14 +69,23 @@ public class MessageMessageAdapter extends BaseAdapter {
         }
         //Log.e("tag",videoTaskArrayList.get(position).getMediaurl());
         //设置数据
+
         Holder holder = (Holder) convertView.getTag();
-        holder.name.setText(list.get(position).name);
-        holder.title.setText(list.get(position).title);
-        holder.time.setText(TimeUtils.getFormateTime(list.get(position).time, "-", ":"));
-        holder.dis.setText(list.get(position).detail);
+
+        UsersSingleBean user = usersInfor.getUserInfo(list.get(position).sendid);
+
+        holder.name.setText(user.nickname);
+        //holder.title.setText(list.get(position).title);
+        if (list.get(position).showtime.equals("")) {
+            holder.time.setText("未知时间");
+        } else {
+            //holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).showtime), "-", ":"));
+            holder.time.setText(list.get(position).showtime);//返回什么用什么---时间
+        }
+        holder.dis.setText(list.get(position).message);
 
 
-        bitmapUtils.display(holder.avatar, list.get(position).avatar_url);
+        bitmapUtils.display(holder.avatar, user.avatar);
 
         return convertView;
     }

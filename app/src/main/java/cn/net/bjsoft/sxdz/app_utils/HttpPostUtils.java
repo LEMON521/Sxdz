@@ -3,9 +3,12 @@ package cn.net.bjsoft.sxdz.app_utils;
 import android.content.Context;
 
 import org.xutils.common.Callback;
+import org.xutils.common.util.KeyValue;
 import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
+
+import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 
@@ -69,6 +72,16 @@ public class HttpPostUtils {
         LogUtil.e("params.token;============"+SPUtil.getToken(context));
         LogUtil.e("params.appid;============"+SPUtil.getAppid(context));
         LogUtil.e("params.secret;============"+SPUtil.getSecret(context));
+
+        LogUtil.e("params============"+params.getUri());
+        ArrayList<KeyValue> body = new ArrayList<>();
+        body.addAll(params.getBodyParams());
+
+        for (KeyValue keyValue:body){
+            LogUtil.e("===========params=========body=======key======="+keyValue.key);
+            LogUtil.e("===========params=========body=======key======="+keyValue.value);
+        }
+
         x.http().post(params, callBack);
 
     }

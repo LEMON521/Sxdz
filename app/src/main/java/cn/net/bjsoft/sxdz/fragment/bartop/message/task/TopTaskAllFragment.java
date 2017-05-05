@@ -133,9 +133,9 @@ public class TopTaskAllFragment extends BaseFragment {
             @Override
             public void onDataCallBack(String strJson) {
                 taskCacheBean = GsonUtil.getMessageTaskBean(strJson);
-                if (taskCacheBean.result) {
+                if (taskCacheBean.code.equals("0")) {
                     tasksAllDao.clear();
-                    tasksAllDao.addAll(taskCacheBean.data.task_list);
+                    tasksAllDao.addAll(taskCacheBean.data.items);
                     taskAdapter.notifyDataSetChanged();
                 }
             }
@@ -151,13 +151,13 @@ public class TopTaskAllFragment extends BaseFragment {
             public void onSuccess(String result) {
                 //LogUtil.e("获取到的条目-----------" + result);
                 taskBean = GsonUtil.getMessageTaskBean(result);
-                if (taskBean.result) {
+                if (taskBean.code.equals("0")) {
                     //LogUtil.e("获取到的条目-----------" + result);
                     taskQueryDao = taskBean.data.query_dao;
 
-                    tasksCacheAllDao.addAll(taskBean.data.task_list);
+                    tasksCacheAllDao.addAll(taskBean.data.items);
                     //tasksAllDao.clear();
-                    tasksAllDao.addAll(taskBean.data.task_list);
+                    tasksAllDao.addAll(taskBean.data.items);
                     taskAdapter.notifyDataSetChanged();
                     taskBean = null;
                 } else {
