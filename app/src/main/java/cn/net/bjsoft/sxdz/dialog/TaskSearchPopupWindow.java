@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
+import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 
 /**
@@ -83,6 +84,10 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 //    }
 
     public void showWindow(MessageTaskBean.TaskQueryDao taskQueryDao) {
+        if (taskQueryDao==null) {
+            MyToast.showLong(mActivity,"请先设置查询分类数据!");
+            return;
+        }
         this.typeList = taskQueryDao.type_list;
         this.levelList = taskQueryDao.level_list;
         this.startStr = taskQueryDao.time_start;
@@ -95,11 +100,17 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
             levelStrList = new ArrayList<>();
         }
         levelStrList.clear();
-        for (MessageTaskBean.TaskQueryTypeDao dao : typeList) {
-            typeStrList.add(dao.type);
+        if (typeList != null) {
+            for (MessageTaskBean.TaskQueryTypeDao dao : typeList) {
+                typeStrList.add(dao.type);
+            }
         }
-        for (MessageTaskBean.TaskQueryLevelDao dao : levelList) {
-            levelStrList.add(dao.level);
+
+        if (levelList != null) {
+
+            for (MessageTaskBean.TaskQueryLevelDao dao : levelList) {
+                levelStrList.add(dao.level);
+            }
         }
 
         InitData();

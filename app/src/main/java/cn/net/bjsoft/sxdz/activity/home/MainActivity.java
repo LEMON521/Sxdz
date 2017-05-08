@@ -258,30 +258,6 @@ public class MainActivity extends BaseActivity {
         getPushCount(this);
 
 
-        /**
-         * 注册广播
-         */
-        registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.main"));
-        /**
-         * 注册广播
-         */
-
-        registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
-
-        aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
-            @Override
-            public void onDataCallBack(Bundle bundleData) {
-                LogUtil.e("推送通知拿到数据==============" + bundleData);
-                if (bundleData != null) {
-
-                    showPushWindow = new ALiPushMessageInAppPopupWindow(MainActivity.this, bundleData, mBottonBar_ll_ll);
-
-                    showPushWindow.showWindow();
-                }
-            }
-        });
-
-        registerReceiver(bottomBarReceiver, new IntentFilter("cn.net.bjsoft.sxdz.main.bottombar"));
 
         setBottomBarNum(this);
         setPushNumber();
@@ -785,13 +761,39 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         LogUtil.e("main==onResume");
+        /**
+         * 注册广播
+         */
+        registerReceiver(receiver, new IntentFilter("cn.net.bjsoft.sxdz.main"));
+        /**
+         * 注册广播
+         */
+
+        registerReceiver(aLiPushType3Receiver, new IntentFilter("cn.net.bjsoft.sxdz.alipush.notify_type_3"));
+
+        aLiPushType3Receiver.setOnData(new ALiPushType3Receiver.OnGetData() {
+            @Override
+            public void onDataCallBack(Bundle bundleData) {
+                LogUtil.e("推送通知拿到数据==============" + bundleData);
+                if (bundleData != null) {
+
+                    showPushWindow = new ALiPushMessageInAppPopupWindow(MainActivity.this, bundleData, mBottonBar_ll_ll);
+
+                    showPushWindow.showWindow();
+                }
+            }
+        });
+
+        registerReceiver(bottomBarReceiver, new IntentFilter("cn.net.bjsoft.sxdz.main.bottombar"));
+
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
+        unregisterReceiver(receiver);
+        unregisterReceiver(aLiPushType3Receiver);
         LogUtil.e("main==onPause");
     }
 
@@ -799,9 +801,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        //在后台时，不让他接收广播
-        unregisterReceiver(receiver);
-        unregisterReceiver(aLiPushType3Receiver);
+//        //在后台时，不让他接收广播
+//        unregisterReceiver(receiver);
+//        unregisterReceiver(aLiPushType3Receiver);
 
         LogUtil.e("main==onStop");
     }
@@ -1245,6 +1247,8 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         LogUtil.e("main==onDestroy");
+
+
 
         if (null != mLocationClient) {
             /**

@@ -20,5 +20,8 @@ public class ApproveDatasDao implements Serializable {
         public String type = "";//审批类型
         public String url = "";
         public String approve_result = "";
+
+
+
     }
 }

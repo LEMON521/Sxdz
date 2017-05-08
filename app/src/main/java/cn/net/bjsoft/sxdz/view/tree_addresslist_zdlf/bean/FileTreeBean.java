@@ -9,9 +9,6 @@ public class FileTreeBean {
     private Long parentId;
     @TreeNodeName
     private String name;
-
-
-
     @TreeNodeAddressCompanysBean
     private AddressCompanysBean companysBean;
 

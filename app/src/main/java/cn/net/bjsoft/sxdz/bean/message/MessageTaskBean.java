@@ -24,8 +24,8 @@ public class MessageTaskBean implements Serializable {
     public class TaskQueryDao implements Serializable {
         public String time_start = "";
         public String time_end = "";
-        public ArrayList<TaskQueryTypeDao> type_list;
-        public ArrayList<TaskQueryLevelDao> level_list;
+        public ArrayList<TaskQueryTypeDao> type_list = new ArrayList<>();
+        public ArrayList<TaskQueryLevelDao> level_list = new ArrayList<>();
     }
 
     public class TaskQueryTypeDao implements Serializable {

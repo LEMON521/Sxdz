@@ -1,4 +1,4 @@
-package cn.net.bjsoft.sxdz.fragment.bartop.message.approve;
+package cn.net.bjsoft.sxdz.fragment.bartop.message.approve.add_approve;
 
 import android.view.MotionEvent;
 import android.view.View;

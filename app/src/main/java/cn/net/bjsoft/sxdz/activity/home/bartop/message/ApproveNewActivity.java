@@ -7,7 +7,7 @@ import org.xutils.x;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
-import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.TopApproveNewFragment;
+import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.add_approve.TopApproveNewFragment;
 
 /**
  * 新建审批页面

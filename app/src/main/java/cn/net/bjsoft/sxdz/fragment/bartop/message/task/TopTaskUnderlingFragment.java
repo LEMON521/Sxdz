@@ -1,6 +1,5 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 
-import android.util.Log;
 import android.widget.ListView;
 
 import org.xutils.common.Callback;
@@ -8,24 +7,23 @@ import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.adapter.zdlf.TaskUnderlingTreeAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressEmployeesBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressPositionsBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
-import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
-import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.FileTaskBean;
-import cn.net.bjsoft.sxdz.view.tree_task_underling.bean.ListTaskBean;
-import cn.net.bjsoft.sxdz.view.tree_task_underling.helper.NodeTaskUnderling;
-import cn.net.bjsoft.sxdz.view.tree_task_underling.helper.TreeTaskUnderlingAdapter;
+import cn.net.bjsoft.sxdz.view.tree_task_underling_show.bean.FileTreeTaskUnderlingBean;
+import cn.net.bjsoft.sxdz.view.tree_task_underling_show.helper.TreeListUnderlingViewAdapter;
+import cn.net.bjsoft.sxdz.view.tree_task_underling_show.helper.TreeTaskAddressUnderlingAdapter;
+import cn.net.bjsoft.sxdz.view.tree_task_underling_show.helper.TreeTaskUnderlingNode;
 
 /**
  * 下属任务列表
@@ -41,12 +39,23 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
     private PostJsonBean pushUnderlingBean;
 
-    private ListTaskBean bean;
-    private FileTaskBean fileTaskBean;
-    private List<FileTaskBean> mDatas;
-    private ListTaskBean.TaskDataDao treeListDao;
-    private ArrayList<ListTaskBean.TreeTaskListDao> tree_list;
-    private TaskUnderlingTreeAdapter mAdapter;
+//    private ListTaskBean bean;
+//    private FileTaskBean fileTaskBean;
+//    private List<FileTaskBean> mDatas;
+//    private ListTaskBean.TaskDataDao treeListDao;
+//    private ArrayList<ListTaskBean.TreeTaskListDao> tree_list;
+
+
+    private AddressBean addressBean;
+    private AddressEmployeesBean employeesBean;
+    private AddressPositionsBean positionsBean;
+    private ArrayList<AddressEmployeesBean> employeesBeanList;
+    private ArrayList<AddressPositionsBean> positionsBeanList;
+    private ArrayList<AddressPositionsBean> formate_positionsBeanList;
+
+    private FileTreeTaskUnderlingBean fileBean;
+    private ArrayList<FileTreeTaskUnderlingBean> fileBeanList;
+    private TreeTaskAddressUnderlingAdapter mAdapter;
 
     private String get_start = "0";
     private String get_count = "0";
@@ -56,63 +65,96 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
 
         initList();
-        getFormData();
+
+        getOrganizationData();
+
+
+        //getFormData();
+    }
+
+    private void initList() {
+        pushUnderlingBean = new PostJsonBean();
+
+        if (employeesBeanList == null) {
+            employeesBeanList = new ArrayList<>();
+        }
+        employeesBeanList.clear();
+
+        if (positionsBeanList == null) {
+            positionsBeanList = new ArrayList<>();
+        }
+        positionsBeanList.clear();
+
+
+        if (formate_positionsBeanList == null) {
+            formate_positionsBeanList = new ArrayList<>();
+        }
+        formate_positionsBeanList.clear();
+
+
+        if (fileBeanList == null) {
+            fileBeanList = new ArrayList<>();
+        }
+        fileBeanList.clear();
+
+
+//        if (treeDatas == null) {
+//            treeDatas = new ArrayList<>();
+//        }
+//        treeDatas.clear();
+//
+//
+//        if (tree_list == null) {
+//            tree_list = new ArrayList<>();
+//        }
+//        tree_list.clear();
+//        if (mDatas == null) {
+//            mDatas = new ArrayList<>();
+//        }
+//        mDatas.clear();
     }
 
 
-    /**
-     * 从服务端获取数据
-     */
-    private void getFormData() {
+    private void getOrganizationData() {
+
         showProgressDialog();
-        HttpPostUtils httpPostUtils = new HttpPostUtils();
-
-        String url = SPUtil.getApiAuth(mActivity) + "/load";
-        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        HttpPostUtils httpPostUtil = new HttpPostUtils();
+        String url = "";
+        url = SPUtil.getApiUser(mActivity) + "/" + SPUtil.getUserId(mActivity) + "/organization.json";
+        LogUtil.e("公司架构userOrganizationBean url----===========" + url);
         RequestParams params = new RequestParams(url);
-        params.addBodyParameter("source_id", "task_finished");
+        httpPostUtil.get(mActivity, params);
 
-        pushUnderlingBean.start = get_start;//设置开始查询
-        pushUnderlingBean.limit = "10";
-        params.addBodyParameter("data", pushUnderlingBean.toString());
-        LogUtil.e("-------------------------bean.toString()"+pushUnderlingBean.toString());
-        httpPostUtils.get(mActivity, params);
-        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
-                LogUtil.e("-----------------获取消息----------------" + strJson);
-//                taskBean = GsonUtil.getMessageTaskBean(strJson);
-//                if (taskBean.code.equals("0")) {
-//                    tasksDoneDao.addAll(taskBean.data.items);
-//                    get_start = tasksDoneDao.size() + "";//设置开始查询
-//                    get_count = taskBean.data.count + "";
-//
-//                    formateDatas();//格式化信息
-//
-//                    taskAdapter.notifyDataSetChanged();
-//                    if (get_count.equals("0")) {
-//                        MyToast.showLong(mActivity, "没有任何消息可查看!");
-//                    }
-//                } else {
-//                    MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
-//                }
+                SPUtil.setUserOrganizationJson(mActivity, strJson);//缓存公司架构信息
+                //LogUtil.e("我的页面json");
+//                LogUtil.e("公司架构==========="+SPUtil.getUserOrganizationJson(mActivity));
 
+                addressBean = GsonUtil.getAddressBean(strJson);
+                if (addressBean != null) {
+                    employeesBeanList.addAll(addressBean.employees);
+                    if (addressBean.positions != null) {
+                        positionsBeanList.add(addressBean.positions);
+
+                        formateEmployees();
+
+                        if (positionsBeanList.size() > 0) {
+                            getPositions(positionsBeanList, "0");
+                        }
+                    } else {
+                        MyToast.showLong(mActivity, "获取组织架构信息失败!");
+                    }
+                } else {
+                    MyToast.showLong(mActivity, "获取组织架构信息失败!");
+                }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
-                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
-                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
-                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
-                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
-                ex.printStackTrace();
-                StackTraceElement[] elements = ex.getStackTrace();
-                for (StackTraceElement element : elements) {
-                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
-                }
-
-                MyToast.showShort(mActivity, "获取数据失败!!");
+                SPUtil.setUserOrganizationJson(mActivity, "");
+                LogUtil.e("我的页面json-----错误" + ex);
             }
 
             @Override
@@ -122,73 +164,97 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
+                getFormatePositions();
+                setTreeView();
                 dismissProgressDialog();
             }
         });
-        showProgressDialog();
 
-        RequestParams params_1 = new RequestParams(TestAddressUtils.test_get_message_task_list_underling_url);
-        x.http().get(params_1, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                bean = GsonUtil.getListTaskBean(result);
-                if (bean.result) {
-                    //LogUtil.e("获取到报表数据-----------" + result);
-                    //scroll_list.clear();
-                    treeListDao = bean.data;
+    }
 
-                    tree_list.addAll(treeListDao.tree_list);
-                    //LogUtil.e("获取到报表数据-----------" + result);
-                    getItems(tree_list, 1);
+    /**
+     * 防止后台数据给的是残疾的
+     */
+    private void formateEmployees() {
+        for (AddressEmployeesBean employeesBean : employeesBeanList) {
+            if (employeesBean.user != null) {
+                employeesBean.user.id = employeesBean.user.id.replace(".0", "");
+                employeesBean.user.source_id = employeesBean.user.source_id.replace(".0", "");
+            }
+        }
+    }
 
-                } else {
+    /**
+     * 格式化岗位---从userID相同的添加开始
+     *
+     * @param childrens
+     * @param pId
+     */
+    private void getPositions(ArrayList<AddressPositionsBean> childrens, String pId) {
+
+        for (AddressPositionsBean bean : childrens) {
+            bean.pId = pId;
+            //添加职工信息
+            for (AddressEmployeesBean employee : employeesBeanList) {
+                if (bean.employee_id.equals(employee.id)) {
+                    //bean.id = employee.id;
+                    bean.employee = employee;
                 }
             }
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("获取到报表数据&&&&&&&&错误信息" + ex);
+            if (bean.children != null && bean.children.size() > 0) {
+                getPositions(bean.children, bean.id);
+            }
+            if (formate_positionsBeanList.size() == 0) {
+                if (bean.employee.user != null) {
+                    if (!SPUtil.getUserId(mActivity).equals(bean.employee.user.id)) {
+                        break;
+                    }
+                } else {
+                    break;
+                }
             }
 
-            @Override
-            public void onCancelled(CancelledException cex) {
+            //如果有就添加,没有就 不添加
+            formate_positionsBeanList.add(formate_positionsBeanList.size(), bean);
 
-            }
 
-            @Override
-            public void onFinished() {
-                dismissProgressDialog();
-            }
-        });
+        }
+
     }
+
+    private void getFormatePositions() {
+        for (AddressPositionsBean positionsBean : formate_positionsBeanList) {
+            if (positionsBean.employee != null) {
+                LogUtil.e("------------------岗位信息====" + positionsBean.name + "::"+positionsBean.id+"::"+positionsBean.pId+"::" + positionsBean.employee.name);
+                fileBean = new FileTreeTaskUnderlingBean(
+                        Long.parseLong(positionsBean.id)
+                        , Long.parseLong(positionsBean.pId)
+                        , positionsBean.name
+                        , positionsBean);
+                fileBeanList.add(fileBean);
+            }
+        }
+
+        for (FileTreeTaskUnderlingBean bean:fileBeanList){
+            LogUtil.e("联系人信息-------------"+bean.getName()+"::"+bean.get_id()+"::"+bean.getParentId()+"::"+bean.getPositionsBean());
+        }
+    }
+
 
     //初始化树形结构---------------------------开始----------------------------
 
-    private void initList() {
-        pushUnderlingBean = new PostJsonBean();
-
-        if (tree_list == null) {
-            tree_list = new ArrayList<>();
-        }
-        tree_list.clear();
-        if (mDatas == null) {
-            mDatas = new ArrayList<>();
-        }
-        mDatas.clear();
-    }
 
     private void setTreeView() {
 
         //getItems(tree_list, 0);
         try {
-            mAdapter = new TaskUnderlingTreeAdapter<FileTaskBean>(list_underling, mActivity, mDatas, 1);
+            mAdapter = new TreeTaskAddressUnderlingAdapter<FileTreeTaskUnderlingBean>(list_underling, mActivity, fileBeanList, 1);
             list_underling.setAdapter(mAdapter);
 
-            mAdapter.setOnTreeNodeClickListener(new TreeTaskUnderlingAdapter.OnTreeNodeClickListener() {
+            mAdapter.setOnTreeNodeClickListener(new TreeListUnderlingViewAdapter.OnTreeNodeClickListener() {
                 @Override
-                public void onClick(NodeTaskUnderling node, int position) {
-                    Log.e("点击的条目", "tiaomu wei ====" + position);
-
+                public void onClick(TreeTaskUnderlingNode node, int position) {
 
                 }
             });
@@ -196,44 +262,6 @@ public class TopTaskUnderlingFragment extends BaseFragment {
             e.printStackTrace();
         }
         dismissProgressDialog();
-    }
-
-    //将网络数据添加到本地的数据格式中去
-    public void getItems(ArrayList<ListTaskBean.TreeTaskListDao> list, int level) {
-        level++;
-
-        for (ListTaskBean.TreeTaskListDao children : list) {
-            fileTaskBean = null;
-            if (children.children != null) {
-                fileTaskBean = new FileTaskBean(Integer.parseInt(children.id)
-                        , Integer.parseInt(children.pid)
-                        , children.name
-                        , children.url
-                        , children.department
-                        , children.task_num);
-
-                mDatas.add(fileTaskBean);
-
-                LogUtil.e("获取到报表数据&&&&&&&&" + fileTaskBean.getName());
-
-                getItems(children.children, level);
-            } else {
-                if (!children.name.equals("")) {
-                    //mDatas.add(new FileBean(Integer.parseInt(children.id), Integer.parseInt(children.pid), children.name));
-                    fileTaskBean = new FileTaskBean(Integer.parseInt(children.id)
-                            , Integer.parseInt(children.pid)
-                            , children.name
-                            , children.url
-                            , children.department
-                            , children.task_num);
-
-                    mDatas.add(fileTaskBean);
-                    LogUtil.e("获取到报表数据&&&&&&&&" + fileTaskBean.getName());
-                }
-            }
-
-        }
-        setTreeView();
     }
     //初始化树形结构---------------------------结束----------------------------
 }

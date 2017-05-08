@@ -1,4 +1,4 @@
-package cn.net.bjsoft.sxdz.fragment.bartop.message.approve;
+package cn.net.bjsoft.sxdz.fragment.bartop.message.approve.add_approve;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,8 +15,8 @@ import org.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.adapter.approve.ApproveNewExpensesAdapter;
-import cn.net.bjsoft.sxdz.bean.approve.ApproveExpensesDao;
+import cn.net.bjsoft.sxdz.adapter.approve.ApproveNewBuyAdapter;
+import cn.net.bjsoft.sxdz.bean.approve.ApproveBuyDao;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 
@@ -24,11 +24,11 @@ import cn.net.bjsoft.sxdz.utils.function.Utility;
  * 审批
  * Created by 靳宁宁 on 2017/1/10.
  */
-@ContentView(R.layout.fragment_approve_new_expenses)
-public class TopApproveNewExpensesFragment extends BaseFragment {
-    @ViewInject(R.id.approve_new_expenses_entry)
+@ContentView(R.layout.fragment_approve_new_buy)
+public class TopApproveNewBuyFragment extends BaseFragment {
+    @ViewInject(R.id.approve_new_buy_entry)
     private ListView entry;
-    //@ViewInject(R.id.approve_new_expenses_total)
+    //@ViewInject(R.id.approve_new_buy_total)
     private TextView total;
 
 
@@ -37,31 +37,31 @@ public class TopApproveNewExpensesFragment extends BaseFragment {
 //    private ArrayList<String> list;
 
     //添加费用明细相关
-    private ApproveExpensesDao expensesDao = null;
-    private ArrayList<ApproveExpensesDao> resList;
-    private ApproveNewExpensesAdapter resListAdapter;
+    private ApproveBuyDao buyDao = null;
+    private ArrayList<ApproveBuyDao> resList;
+    private ApproveNewBuyAdapter resListAdapter;
 
     //    @ViewInject(R.id.message_approve_new_back)
 //    private ImageView back;//返回按钮
 
     int i = 0;
-
     @Override
     public void initData() {
-
 
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        total = (TextView) getView().findViewById(R.id.approve_new_expenses_total);
+        total = (TextView) getView().findViewById(R.id.approve_new_buy_total);
         resList = new ArrayList<>();
-        resListAdapter = new ApproveNewExpensesAdapter(mActivity, resList, total);
+        resListAdapter = new ApproveNewBuyAdapter(mActivity, resList,total);
         entry.setAdapter(resListAdapter);
 
-        expensesDao = new ApproveExpensesDao();
-        resList.add(expensesDao);
+
+        //默认添加一条数据
+        buyDao = new ApproveBuyDao();
+        resList.add(buyDao);
         resListAdapter.notifyDataSetChanged();
         Utility.setListViewHeightBasedOnChildren(entry);
         entry.setOnTouchListener(new View.OnTouchListener() {
@@ -78,6 +78,7 @@ public class TopApproveNewExpensesFragment extends BaseFragment {
             }
         });
     }
+
 
 
 //    /**
@@ -104,15 +105,15 @@ public class TopApproveNewExpensesFragment extends BaseFragment {
 //                        view.clear();
 //
 //                        //刷新界面操作
-//                        expensesDao = new ApproveExpensesDao();
-//                        expensesDao.res = result.get(0);
+//                        buyDao = new ApprovebuyDao();
+//                        buyDao.res = result.get(0);
 //                        float f1 = Float.parseFloat(result.get(1));
 //                        float f2 = Float.parseFloat(result.get(2));
 //                        float f3 = f1 * f2;
-//                        expensesDao.unit_price = f1 + "";
-//                        expensesDao.quantity = f2 + "";
-//                        expensesDao.money = f3 + "";
-//                        resList.add(expensesDao);
+//                        buyDao.unit_price = f1 + "";
+//                        buyDao.quantity = f2 + "";
+//                        buyDao.money = f3 + "";
+//                        resList.add(buyDao);
 //                        resListAdapter.notifyDataSetChanged();
 //
 //                        //********动态设置高度
@@ -148,29 +149,30 @@ public class TopApproveNewExpensesFragment extends BaseFragment {
 //    }
 
 
-    @Event(value = {R.id.approve_new_expenses_add})
+    @Event(value = {R.id.approve_new_buy_add})
     private void onButtonClick(View view) {
         switch (view.getId()) {
-            case R.id.approve_new_expenses_add://添加明细
+            case R.id.approve_new_buy_add://添加明细
 
                 //创建条目的时候一定要创建完整,如果不不赋("") ,那么在创建类的时候一定将字符串赋("")
-                ApproveExpensesDao dao = new ApproveExpensesDao();
-//                expensesDao.res = "";
-//                expensesDao.unit_price = "";
-//                expensesDao.quantity = "";
+                ApproveBuyDao dao = new ApproveBuyDao();
+//                buyDao.res = "";
+//                buyDao.unit_price = "";
+//                buyDao.quantity = "";
 
                 resList.add(dao);
                 resListAdapter.notifyDataSetChanged();
                 Utility.setListViewHeightBasedOnChildren(entry);
                 dao = null;
-                LogUtil.e("add还剩=========" + resList.size() + "=======条信息!");
+                LogUtil.e("add还剩========="+resList.size()+"=======条信息!");
                 //showDialog(mActivity, list);
                 break;
         }
     }
 
-    public ArrayList<ApproveExpensesDao> getEntryData() {
+    public ArrayList<ApproveBuyDao> getEntryData() {
 
         return resList;
     }
+
 }

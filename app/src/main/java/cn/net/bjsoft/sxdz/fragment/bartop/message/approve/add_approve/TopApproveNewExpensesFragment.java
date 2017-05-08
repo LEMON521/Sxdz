@@ -1,10 +1,13 @@
-package cn.net.bjsoft.sxdz.fragment.bartop.message.approve;
+package cn.net.bjsoft.sxdz.fragment.bartop.message.approve.add_approve;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.xutils.common.util.LogUtil;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -12,46 +15,53 @@ import org.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.adapter.approve.ApproveNewTripAdapter;
-import cn.net.bjsoft.sxdz.bean.approve.ApproveTripDao;
+import cn.net.bjsoft.sxdz.adapter.approve.ApproveNewExpensesAdapter;
+import cn.net.bjsoft.sxdz.bean.approve.ApproveExpensesDao;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 
 /**
- *  新建出差审批
+ * 审批
  * Created by 靳宁宁 on 2017/1/10.
  */
-@ContentView(R.layout.fragment_approve_new_trip)
-public class TopApproveNewTripFragment extends BaseFragment {
-
-    @ViewInject(R.id.approve_new_trip_entry)
+@ContentView(R.layout.fragment_approve_new_expenses)
+public class TopApproveNewExpensesFragment extends BaseFragment {
+    @ViewInject(R.id.approve_new_expenses_entry)
     private ListView entry;
-    @ViewInject(R.id.approve_new_trip_total)
+    //@ViewInject(R.id.approve_new_expenses_total)
     private TextView total;
-//
+
+
 //    private Dialog dialog;
 //    private ArrayList<String> result;
 //    private ArrayList<String> list;
 
     //添加费用明细相关
-    private ApproveTripDao tripDao;
-    private ArrayList<ApproveTripDao> dataList;
-    private ApproveNewTripAdapter resListAdapter;
+    private ApproveExpensesDao expensesDao = null;
+    private ArrayList<ApproveExpensesDao> resList;
+    private ApproveNewExpensesAdapter resListAdapter;
 
+    //    @ViewInject(R.id.message_approve_new_back)
+//    private ImageView back;//返回按钮
+
+    int i = 0;
 
     @Override
     public void initData() {
 
 
-        if (dataList == null) {
-            dataList = new ArrayList<>();
-        }
+    }
 
-        resListAdapter = new ApproveNewTripAdapter(mActivity, dataList,total);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        total = (TextView) getView().findViewById(R.id.approve_new_expenses_total);
+        resList = new ArrayList<>();
+        resListAdapter = new ApproveNewExpensesAdapter(mActivity, resList, total);
         entry.setAdapter(resListAdapter);
 
-        tripDao = new ApproveTripDao();
-        dataList.add(tripDao);
+        expensesDao = new ApproveExpensesDao();
+        resList.add(expensesDao);
         resListAdapter.notifyDataSetChanged();
         Utility.setListViewHeightBasedOnChildren(entry);
         entry.setOnTouchListener(new View.OnTouchListener() {
@@ -69,25 +79,6 @@ public class TopApproveNewTripFragment extends BaseFragment {
         });
     }
 
-
-
-
-    @Event(value = {R.id.approve_new_trip_add})
-    private void onButtonClick(View view) {
-        switch (view.getId()) {
-            case R.id.approve_new_trip_add://添加明细
-                ApproveTripDao dao = new ApproveTripDao();
-                dataList.add(dao);
-                resListAdapter.notifyDataSetChanged();
-                Utility.setListViewHeightBasedOnChildren(entry);
-                break;
-        }
-    }
-
-    public ArrayList<ApproveTripDao> getEntryData() {
-
-        return dataList;
-    }
 
 //    /**
 //     * 添加明细的 输入对话框
@@ -113,22 +104,23 @@ public class TopApproveNewTripFragment extends BaseFragment {
 //                        view.clear();
 //
 //                        //刷新界面操作
-//                        tripDao = new ApproveTripDao();
-//                        tripDao.situs = result.get(0);
+//                        expensesDao = new ApproveExpensesDao();
+//                        expensesDao.res = result.get(0);
 //                        float f1 = Float.parseFloat(result.get(1));
 //                        float f2 = Float.parseFloat(result.get(2));
-//                        tripDao.startTime_str = f1 + "";
-//                        tripDao.endTime_str = f2 + "";
-//                        tripDao.totleDate = result.get(3);
-//                        dataList.add(tripDao);
+//                        float f3 = f1 * f2;
+//                        expensesDao.unit_price = f1 + "";
+//                        expensesDao.quantity = f2 + "";
+//                        expensesDao.money = f3 + "";
+//                        resList.add(expensesDao);
 //                        resListAdapter.notifyDataSetChanged();
 //
 //                        //********动态设置高度
 //                        Utility.setListViewHeightBasedOnChildren(entry);
 //
 //                        float sum = 0;
-//                        for (int i = 0; i < dataList.size(); i++) {
-//                            sum = Integer.parseInt(dataList.get(i).totleDate) + sum;
+//                        for (int i = 0; i < resList.size(); i++) {
+//                            sum = Float.parseFloat(resList.get(i).money) + sum;
 //                        }
 //                        total.setText(sum + "");
 //
@@ -154,4 +146,31 @@ public class TopApproveNewTripFragment extends BaseFragment {
 //            dialog.show();
 //        }
 //    }
+
+
+    @Event(value = {R.id.approve_new_expenses_add})
+    private void onButtonClick(View view) {
+        switch (view.getId()) {
+            case R.id.approve_new_expenses_add://添加明细
+
+                //创建条目的时候一定要创建完整,如果不不赋("") ,那么在创建类的时候一定将字符串赋("")
+                ApproveExpensesDao dao = new ApproveExpensesDao();
+//                expensesDao.res = "";
+//                expensesDao.unit_price = "";
+//                expensesDao.quantity = "";
+
+                resList.add(dao);
+                resListAdapter.notifyDataSetChanged();
+                Utility.setListViewHeightBasedOnChildren(entry);
+                dao = null;
+                LogUtil.e("add还剩=========" + resList.size() + "=======条信息!");
+                //showDialog(mActivity, list);
+                break;
+        }
+    }
+
+    public ArrayList<ApproveExpensesDao> getEntryData() {
+
+        return resList;
+    }
 }
