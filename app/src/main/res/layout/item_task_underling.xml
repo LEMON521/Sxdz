@@ -7,7 +7,7 @@
     >
 
     <ImageView
-        android:id="@+id/item_task_underling_node"
+        android:id="@+id/item_task_underling_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

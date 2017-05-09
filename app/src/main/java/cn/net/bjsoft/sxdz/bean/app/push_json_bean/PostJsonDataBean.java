@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class PostJsonDataBean implements Serializable {
     private StringBuilder stringBuilder;
     public String task_id = "";
+    public String source_id = "";
 
     @Override
     public String toString() {
@@ -18,6 +19,7 @@ public class PostJsonDataBean implements Serializable {
         stringBuilder.delete(0, stringBuilder.length());
         stringBuilder.append("data:");
         stringBuilder.append("{");
+        stringBuilder.append("\"source_id\":" + "\"" + source_id + "\",");//最后一个元素不要有,号
         stringBuilder.append("\"task_id\":" + "\"" + task_id + "\"");//最后一个元素不要有,号
         stringBuilder.append("}");
         return stringBuilder.toString();

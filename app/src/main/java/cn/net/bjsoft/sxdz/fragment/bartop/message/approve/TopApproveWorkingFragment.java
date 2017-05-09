@@ -19,9 +19,11 @@ import cn.net.bjsoft.sxdz.activity.home.WebActivity;
 import cn.net.bjsoft.sxdz.adapter.approve.ApproveShowApprovalItemAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveDataItemsBean;
 import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
-import cn.net.bjsoft.sxdz.fragment.bartop.message.TopApproveFragment;
+import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
@@ -42,9 +44,8 @@ public class TopApproveWorkingFragment extends BaseFragment {
 
 
 
-    private TopApproveFragment fragment = null;
-
-    private ArrayList<ApproveDatasDao.ApproveItems> approvalList;
+    private MessageApproveBean messageApproveBean;
+    private ArrayList<MessageApproveDataItemsBean> dataItemsBeenList;
     private ApproveShowApprovalItemAdapter approvalAdapter;
 
     private PostJsonBean pushWorkingBean;
@@ -54,12 +55,27 @@ public class TopApproveWorkingFragment extends BaseFragment {
     private void initList(){
         pushWorkingBean = new PostJsonBean();
 
-        if (approvalList==null) {
-            approvalList = new ArrayList<>();
+        if (dataItemsBeenList==null) {
+            dataItemsBeenList = new ArrayList<>();
         }
-        approvalList.clear();
+        dataItemsBeenList.clear();
 
+        if (approvalAdapter == null) {
+            approvalAdapter = new ApproveShowApprovalItemAdapter(mActivity, dataItemsBeenList);
+        }
+        listView.setAdapter(approvalAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(mActivity, WebActivity.class);
+//                intent.putExtra("url", dataItemsBeenList.get(position).url);
+//                intent.putExtra("type", dataItemsBeenList.get(position).type);
+//                startActivity(intent);
+                MyToast.showShort(mActivity,"点击");
+
+            }
+        });
     }
 
     @Override
@@ -67,21 +83,7 @@ public class TopApproveWorkingFragment extends BaseFragment {
         initList();
 
 
-        if (approvalAdapter == null) {
-            approvalAdapter = new ApproveShowApprovalItemAdapter(mActivity, approvalList);
-        }
-        listView.setAdapter(approvalAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mActivity, WebActivity.class);
-                intent.putExtra("url", approvalList.get(position).url);
-                intent.putExtra("type", approvalList.get(position).type);
-                startActivity(intent);
-
-            }
-        });
 
 
 
@@ -99,7 +101,7 @@ public class TopApproveWorkingFragment extends BaseFragment {
                         // 千万别忘了告诉控件刷新完毕了哦！
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                         get_start = "0";
-                        approvalList.clear();
+                        dataItemsBeenList.clear();
 
                     }
                 }.sendEmptyMessageDelayed(0, 500);
@@ -152,37 +154,26 @@ public class TopApproveWorkingFragment extends BaseFragment {
             @Override
             public void onSuccess(String strJson) {
                 LogUtil.e("-----------------获取正在进行审批消息----------------" + strJson);
-//                taskBean = GsonUtil.getMessageTaskBean(strJson);
-//                if (taskBean.code.equals("0")) {
-//                    tasksDoingDao.addAll(taskBean.data.items);
-//                    get_start = tasksDoingDao.size() + "";//设置开始查询
-//                    get_count = taskBean.data.count + "";
-//
-//                    formateDatas();//格式化信息
-//
-//                    taskAdapter.notifyDataSetChanged();
-//                    if (get_count.equals("0")) {
-//                        MyToast.showLong(mActivity, "没有任何消息可查看!");
-//                    }
-//                } else {
-//                    MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
-//                }
+                messageApproveBean = GsonUtil.getMessageApproveBean(strJson);
+                if (messageApproveBean.code.equals("0")) {//数据正确
+                    get_count = messageApproveBean.data.count;
+                    formateDatas(messageApproveBean.data.items);//格式化信息
+                    dataItemsBeenList.addAll(messageApproveBean.data.items);
+                    approvalAdapter.notifyDataSetChanged();
+
+                    if (get_count.equals("0")) {
+                        MyToast.showLong(mActivity, "没有任何消息可查看!");
+                    }
+                } else {
+                    MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
+                }
 
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
-                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
-                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
-                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
-                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
                 ex.printStackTrace();
                 StackTraceElement[] elements = ex.getStackTrace();
-                for (StackTraceElement element : elements) {
-                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
-                }
-
                 MyToast.showShort(mActivity, "获取数据失败!!");
             }
 
@@ -202,23 +193,17 @@ public class TopApproveWorkingFragment extends BaseFragment {
     /**
      * 格式化从后台拿过来的数据
      */
-//    private void formateDatas() {
-//        for (MessageTaskBean.TasksAllDao dao : tasksDoingDao) {
-//            if (SPUtil.getUserId(mActivity).equals(dao.userid)) {
-//                dao.is_executant = 0;
-//
-//                String time = dao.starttime;
-//                time = time.replace("/Date(", "");
-//                time = time.replace(")/", "");
-//                dao.starttime = time;
-//                time = dao.limittime;
-//                time = time.replace("/Date(", "");
-//                time = time.replace(")/", "");
-//                dao.limittime = time;
-//
-//            }
-//        }
-//    }
+    private void formateDatas(ArrayList<MessageApproveDataItemsBean> list) {
+        for (MessageApproveDataItemsBean bean : list) {
+            String time = bean.ctime;
+            time = time.replace("/Date(", "");
+            time = time.replace(")/", "");
+            bean.ctime = time;
+            time = bean.node_time;
+            time = time.replace("/Date(", "");
+            time = time.replace(")/", "");
+            bean.node_time = time;
 
-
+        }
+    }
 }

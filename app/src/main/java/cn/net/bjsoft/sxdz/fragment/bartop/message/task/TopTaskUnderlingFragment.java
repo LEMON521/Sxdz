@@ -20,10 +20,10 @@ import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
-import cn.net.bjsoft.sxdz.view.tree_task_underling_show.bean.FileTreeTaskUnderlingBean;
-import cn.net.bjsoft.sxdz.view.tree_task_underling_show.helper.TreeListUnderlingViewAdapter;
-import cn.net.bjsoft.sxdz.view.tree_task_underling_show.helper.TreeTaskAddressUnderlingAdapter;
-import cn.net.bjsoft.sxdz.view.tree_task_underling_show.helper.TreeTaskUnderlingNode;
+import cn.net.bjsoft.sxdz.view.tree_message_task_underling.bean.FileMessageTaskUnderlingBean;
+import cn.net.bjsoft.sxdz.view.tree_message_task_underling.helper.NodeMessageTaskUnderling;
+import cn.net.bjsoft.sxdz.view.tree_message_task_underling.helper.TreeMessageTaskUnderlingAdapter;
+import cn.net.bjsoft.sxdz.view.tree_message_task_underling.helper.TreeMessageTaskUnderlingListViewAdapter;
 
 /**
  * 下属任务列表
@@ -53,24 +53,19 @@ public class TopTaskUnderlingFragment extends BaseFragment {
     private ArrayList<AddressPositionsBean> positionsBeanList;
     private ArrayList<AddressPositionsBean> formate_positionsBeanList;
 
-    private FileTreeTaskUnderlingBean fileBean;
-    private ArrayList<FileTreeTaskUnderlingBean> fileBeanList;
-    private TreeTaskAddressUnderlingAdapter mAdapter;
+    private FileMessageTaskUnderlingBean fileBean;
+    private ArrayList<FileMessageTaskUnderlingBean> fileBeanList;
+    private TreeMessageTaskUnderlingAdapter mAdapter;
 
     private String get_start = "0";
     private String get_count = "0";
 
     @Override
     public void initData() {
-
-
         initList();
-
         getOrganizationData();
-
-
-        //getFormData();
     }
+
 
     private void initList() {
         pushUnderlingBean = new PostJsonBean();
@@ -96,22 +91,6 @@ public class TopTaskUnderlingFragment extends BaseFragment {
             fileBeanList = new ArrayList<>();
         }
         fileBeanList.clear();
-
-
-//        if (treeDatas == null) {
-//            treeDatas = new ArrayList<>();
-//        }
-//        treeDatas.clear();
-//
-//
-//        if (tree_list == null) {
-//            tree_list = new ArrayList<>();
-//        }
-//        tree_list.clear();
-//        if (mDatas == null) {
-//            mDatas = new ArrayList<>();
-//        }
-//        mDatas.clear();
     }
 
 
@@ -143,6 +122,11 @@ public class TopTaskUnderlingFragment extends BaseFragment {
                         if (positionsBeanList.size() > 0) {
                             getPositions(positionsBeanList, "0");
                         }
+
+                        getFormatePositions();
+
+                        setTreeView();
+
                     } else {
                         MyToast.showLong(mActivity, "获取组织架构信息失败!");
                     }
@@ -164,8 +148,7 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
-                getFormatePositions();
-                setTreeView();
+
                 dismissProgressDialog();
             }
         });
@@ -190,8 +173,9 @@ public class TopTaskUnderlingFragment extends BaseFragment {
      * @param childrens
      * @param pId
      */
-    private void getPositions(ArrayList<AddressPositionsBean> childrens, String pId) {
 
+    private void getPositions(ArrayList<AddressPositionsBean> childrens, String pId) {
+        boolean find = true;
         for (AddressPositionsBean bean : childrens) {
             bean.pId = pId;
             //添加职工信息
@@ -205,17 +189,17 @@ public class TopTaskUnderlingFragment extends BaseFragment {
             if (bean.children != null && bean.children.size() > 0) {
                 getPositions(bean.children, bean.id);
             }
-            if (formate_positionsBeanList.size() == 0) {
-                if (bean.employee.user != null) {
-                    if (!SPUtil.getUserId(mActivity).equals(bean.employee.user.id)) {
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
+
+//            if (find) {
+//                if (SPUtil.getUsers_SourceId(mActivity).equals(bean.employee.source_id)) {
+//                    find = false;
+//                }else {
+//                    continue;
+//                }
+//            }
 
             //如果有就添加,没有就 不添加
+            //formate_positionsBeanList.add(bean);
             formate_positionsBeanList.add(formate_positionsBeanList.size(), bean);
 
 
@@ -226,19 +210,18 @@ public class TopTaskUnderlingFragment extends BaseFragment {
     private void getFormatePositions() {
         for (AddressPositionsBean positionsBean : formate_positionsBeanList) {
             if (positionsBean.employee != null) {
-                LogUtil.e("------------------岗位信息====" + positionsBean.name + "::"+positionsBean.id+"::"+positionsBean.pId+"::" + positionsBean.employee.name);
-                fileBean = new FileTreeTaskUnderlingBean(
-                        Long.parseLong(positionsBean.id)
-                        , Long.parseLong(positionsBean.pId)
-                        , positionsBean.name
+                //LogUtil.e("------------------岗位信息====" + positionsBean.name + "::" + positionsBean.id + "::" + positionsBean.pId + "::" + positionsBean.employee.name);
+                fileBean = new FileMessageTaskUnderlingBean(
+                        positionsBean.id
+                        , positionsBean.pId
                         , positionsBean);
                 fileBeanList.add(fileBean);
             }
         }
 
-        for (FileTreeTaskUnderlingBean bean:fileBeanList){
-            LogUtil.e("联系人信息-------------"+bean.getName()+"::"+bean.get_id()+"::"+bean.getParentId()+"::"+bean.getPositionsBean());
-        }
+//        for (FileMessageTaskUnderlingBean bean : fileBeanList) {
+//            LogUtil.e("联系人信息-------------" + "::" + bean.get_id() + "::" + bean.getParentId() + "::" + bean.getPositionsBean());
+//        }
     }
 
 
@@ -249,12 +232,12 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
         //getItems(tree_list, 0);
         try {
-            mAdapter = new TreeTaskAddressUnderlingAdapter<FileTreeTaskUnderlingBean>(list_underling, mActivity, fileBeanList, 1);
+            mAdapter = new TreeMessageTaskUnderlingAdapter<FileMessageTaskUnderlingBean>(list_underling, mActivity, fileBeanList, 1);
             list_underling.setAdapter(mAdapter);
 
-            mAdapter.setOnTreeNodeClickListener(new TreeListUnderlingViewAdapter.OnTreeNodeClickListener() {
+            mAdapter.setOnTreeNodeClickListener(new TreeMessageTaskUnderlingListViewAdapter.OnTreeNodeClickListener() {
                 @Override
-                public void onClick(TreeTaskUnderlingNode node, int position) {
+                public void onClick(NodeMessageTaskUnderling node, int position) {
 
                 }
             });

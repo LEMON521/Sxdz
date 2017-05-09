@@ -1,21 +1,17 @@
-package cn.net.bjsoft.sxdz.view.tree_task_underling_show.helper;
+package cn.net.bjsoft.sxdz.view.tree_message_task_underling.helper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressPositionsBean;
 
-public class TreeTaskUnderlingNode {
+public class NodeMessageTaskUnderling {
 
-    private Long id;
+    private String id;
     /**
      * 根节点pId为0
      */
-    private Long pId = 0l;
-
-
-    //显示样式
-    private String name;
+    private String pId = "";
 
     /**
      * 当前的级别
@@ -32,23 +28,29 @@ public class TreeTaskUnderlingNode {
     /**
      * 下一级的子Node
      */
-    private List<TreeTaskUnderlingNode> children = new ArrayList<TreeTaskUnderlingNode>();
+    private List<NodeMessageTaskUnderling> children = new ArrayList<NodeMessageTaskUnderling>();
 
     /**
      * 父Node
      */
-    private TreeTaskUnderlingNode parent;
+    private NodeMessageTaskUnderling parent;
 
 
     private AddressPositionsBean positionsBean;
 
 
-    public TreeTaskUnderlingNode(Long id, Long pId, String name, AddressPositionsBean positionsBean) {
+    public NodeMessageTaskUnderling() {
         super();
-        this.id = id;
-        this.pId = pId;
-        this.name = name;
+    }
+
+    public NodeMessageTaskUnderling(String _id
+            , String _pId
+            , AddressPositionsBean positionsBean) {
+        super();
+        this.id = _id;
+        this.pId = _pId;
         this.positionsBean = positionsBean;
+
 
     }
 
@@ -61,21 +63,22 @@ public class TreeTaskUnderlingNode {
         this.icon = icon;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getpId() {
+    public String getpId() {
         return pId;
     }
 
-    public void setpId(Long pId) {
+    public void setpId(String pId) {
         this.pId = pId;
     }
+
 
     public void setLevel(int level) {
         this.level = level;
@@ -85,30 +88,21 @@ public class TreeTaskUnderlingNode {
         return isExpand;
     }
 
-    public List<TreeTaskUnderlingNode> getChildren() {
+    public List<NodeMessageTaskUnderling> getChildren() {
         return children;
     }
 
-    public void setChildren(List<TreeTaskUnderlingNode> children) {
+    public void setChildren(List<NodeMessageTaskUnderling> children) {
         this.children = children;
     }
 
-    public TreeTaskUnderlingNode getParent() {
+    public NodeMessageTaskUnderling getParent() {
         return parent;
     }
 
-    public void setParent(TreeTaskUnderlingNode parent) {
+    public void setParent(NodeMessageTaskUnderling parent) {
         this.parent = parent;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public AddressPositionsBean getPositionsBean() {
         return positionsBean;
     }
@@ -162,7 +156,7 @@ public class TreeTaskUnderlingNode {
         this.isExpand = isExpand;
         if (!isExpand) {
 
-            for (TreeTaskUnderlingNode node : children) {
+            for (NodeMessageTaskUnderling node : children) {
                 node.setExpand(isExpand);
             }
         }

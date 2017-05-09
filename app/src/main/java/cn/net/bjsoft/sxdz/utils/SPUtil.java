@@ -11,6 +11,26 @@ public class SPUtil {
 
 
     /**
+     * source_id ----source_id--获取
+     * 获取  --  source_id = "source_id"缓存
+     */
+    public static String getUsers_SourceId(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ALL, Context.MODE_PRIVATE);
+        return preferences.getString("source_id", "");
+    }
+
+    /**
+     * source_id----
+     * 设置   --   source_id = "source_id"缓存
+     */
+    public static void setUsers_SourceId(Context context, String source_id) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ALL, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("source_id", source_id);
+        editor.commit();
+    }
+
+    /**
      * users_all ----url--获取
      * 获取  --  USER_KEY_API_USER = "api_user"缓存
      */

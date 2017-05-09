@@ -1,4 +1,4 @@
-package cn.net.bjsoft.sxdz.view.tree_task_underling_show.helper;
+package cn.net.bjsoft.sxdz.view.tree_message_task_underling.helper;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,19 +11,19 @@ import android.widget.ListView;
 
 import java.util.List;
 
-public abstract class TreeListUnderlingViewAdapter<T> extends BaseAdapter
+public abstract class TreeMessageTaskUnderlingListViewAdapter<T> extends BaseAdapter
 {
 
     protected Context mContext;
     /**
      * 存储所有可见的Node
      */
-    protected List<TreeTaskUnderlingNode> mNodes;
+    protected List<NodeMessageTaskUnderling> mNodes;
     protected LayoutInflater mInflater;
     /**
      * 存储所有的Node
      */
-    protected List<TreeTaskUnderlingNode> mAllNodes;
+    protected List<NodeMessageTaskUnderling> mAllNodes;
 
     /**
      * 点击的回调接口
@@ -32,7 +32,7 @@ public abstract class TreeListUnderlingViewAdapter<T> extends BaseAdapter
 
     public interface OnTreeNodeClickListener
     {
-        void onClick(TreeTaskUnderlingNode node, int position);
+        void onClick(NodeMessageTaskUnderling node, int position);
     }
 
     public void setOnTreeNodeClickListener(
@@ -51,7 +51,7 @@ public abstract class TreeListUnderlingViewAdapter<T> extends BaseAdapter
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
-    public TreeListUnderlingViewAdapter(ListView mTree, Context context, List<T> datas,
+    public TreeMessageTaskUnderlingListViewAdapter(ListView mTree, Context context, List<T> datas,
                                int defaultExpandLevel) throws IllegalArgumentException,
             IllegalAccessException
     {
@@ -59,11 +59,11 @@ public abstract class TreeListUnderlingViewAdapter<T> extends BaseAdapter
         /**
          * 对所有的Node进行排序
          */
-        mAllNodes = TreeTaskUnderlingHelper.getSortedNodes(datas, defaultExpandLevel);
+        mAllNodes = TreeMessageTaskUnderlingHelper.getSortedNodes(datas, defaultExpandLevel);
         /**
          * 过滤出可见的Node
          */
-        mNodes = TreeTaskUnderlingHelper.filterVisibleNode(mAllNodes);
+        mNodes = TreeMessageTaskUnderlingHelper.filterVisibleNode(mAllNodes);
         mInflater = LayoutInflater.from(context);
 
         /**
@@ -95,14 +95,14 @@ public abstract class TreeListUnderlingViewAdapter<T> extends BaseAdapter
      */
     public void expandOrCollapse(int position)
     {
-        TreeTaskUnderlingNode n = mNodes.get(position);
+        NodeMessageTaskUnderling n = mNodes.get(position);
 
         if (n != null)// 排除传入参数错误异常
         {
             if (!n.isLeaf())
             {
                 n.setExpand(!n.isExpand());
-                mNodes = TreeTaskUnderlingHelper.filterVisibleNode(mAllNodes);
+                mNodes = TreeMessageTaskUnderlingHelper.filterVisibleNode(mAllNodes);
                 notifyDataSetChanged();// 刷新视图
             }
         }
@@ -129,14 +129,14 @@ public abstract class TreeListUnderlingViewAdapter<T> extends BaseAdapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        TreeTaskUnderlingNode node = mNodes.get(position);
+        NodeMessageTaskUnderling node = mNodes.get(position);
         convertView = getConvertView(node, position, convertView, parent);
         // 设置内边距
-        convertView.setPadding(node.getLevel() * 30, 3, 3, 3);
+        convertView.setPadding(node.getLevel() * 50, 5, 5, 5);
         return convertView;
     }
 
-    public abstract View getConvertView(TreeTaskUnderlingNode node, int position,
+    public abstract View getConvertView(NodeMessageTaskUnderling node, int position,
                                         View convertView, ViewGroup parent);
 
 }

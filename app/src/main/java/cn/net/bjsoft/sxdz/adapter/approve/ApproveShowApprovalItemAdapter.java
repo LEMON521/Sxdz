@@ -1,19 +1,16 @@
 package cn.net.bjsoft.sxdz.adapter.approve;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import org.xutils.common.util.LogUtil;
-
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
+import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveDataItemsBean;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 
 /**
@@ -24,10 +21,10 @@ import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 public class ApproveShowApprovalItemAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<ApproveDatasDao.ApproveItems> list;
+    private ArrayList<MessageApproveDataItemsBean> list;
     private int type = -1;
 
-    public ApproveShowApprovalItemAdapter(Context context, ArrayList<ApproveDatasDao.ApproveItems> list/*, int type*/) {
+    public ApproveShowApprovalItemAdapter(Context context, ArrayList<MessageApproveDataItemsBean> list/*, int type*/) {
         this.context = context;
         this.list = list;
         //this.type = type;
@@ -63,27 +60,24 @@ public class ApproveShowApprovalItemAdapter extends BaseAdapter {
         }
         //设置数据
         Holder holder = (Holder) convertView.getTag();
-        holder.mater.setText(list.get(position).mater);
-        LogUtil.e(list.get(position).time+"-------time------");
-
-        LogUtil.e(Long.parseLong(list.get(position).time)+"-------long------");
-        LogUtil.e(TimeUtils.getFormateDate(Long.parseLong(list.get(position).time),"/")+"-----date-----");
-        holder.time.setText(TimeUtils.getFormateDate(Long.parseLong(list.get(position).time),"/"));
-        if (list.get(position).state.equals("history")){
-            //holder.state.setText("审批通过");
-            if (list.get(position).approve_result.equals("agree")){
-                holder.state.setText("已通过");
-                holder.state.setTextColor(Color.argb(255,0,255,0));
-            }else if (list.get(position).approve_result.equals("reject")){
-                holder.state.setText("驳回");
-                holder.state.setTextColor(Color.argb(255,255,0,0));
-            }else {
-                holder.state.setText("未知");
-                holder.state.setTextColor(Color.argb(255,255,255,255));
-            }
-        }else if (list.get(position).state.equals("approval")){
-            holder.state.setText("审批中");
-        }
+        holder.mater.setText(list.get(position).title);
+        holder.time.setText(TimeUtils.getFormateDate(Long.parseLong(list.get(position).ctime),"/"));
+//        if (list.get(position).state.equals("history")){
+//            //holder.state.setText("审批通过");
+//            if (list.get(position).approve_result.equals("agree")){
+//                holder.state.setText("已通过");
+//                holder.state.setTextColor(Color.argb(255,0,255,0));
+//            }else if (list.get(position).approve_result.equals("reject")){
+//                holder.state.setText("驳回");
+//                holder.state.setTextColor(Color.argb(255,255,0,0));
+//            }else {
+//                holder.state.setText("未知");
+//                holder.state.setTextColor(Color.argb(255,255,255,255));
+//            }
+//        }else if (list.get(position).state.equals("approval")){
+//            holder.state.setText("审批中");
+//        }
+        holder.state.setText(list.get(position).node_name);
 
         /**
          * 将list的数据设置到控件中

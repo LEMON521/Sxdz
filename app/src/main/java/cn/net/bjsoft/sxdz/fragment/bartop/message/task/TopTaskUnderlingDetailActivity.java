@@ -8,19 +8,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.xutils.common.util.LogUtil;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.BaseActivity;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 
 /**
- * Created by Zrzc on 2017/1/10.
+ * Created by Zrzc on 2017/5/9.
  */
 @ContentView(R.layout.fragment_task_underling_detail)
-public class TopTaskUnderlingDetailFragment extends BaseFragment {
+public class TopTaskUnderlingDetailActivity extends BaseActivity {
+
 
     @ViewInject(R.id.title_title)
     private TextView title;
@@ -35,12 +38,18 @@ public class TopTaskUnderlingDetailFragment extends BaseFragment {
     private LinearLayout content;
 
 
+    private BaseActivity mActivity;
+    private String source_id = "";
+
     @Override
-    public void initData() {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mActivity = this;
+        source_id = getIntent().getStringExtra("source_id");
+        LogUtil.e("source_id--------------"+source_id);
         title.setText("下属任务");
         back.setVisibility(View.VISIBLE);
         taskChange(done);
-
 
     }
 
@@ -101,6 +110,7 @@ public class TopTaskUnderlingDetailFragment extends BaseFragment {
          * 这里添加切换任务
          */
         bundle.putString("json", "");
+        bundle.putString("source_id", source_id);
         fragment.setArguments(bundle);
         mActivity.getSupportFragmentManager()
                 .beginTransaction()

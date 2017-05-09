@@ -91,7 +91,7 @@
         <activity android:name=".activity.home.bartop.message.MessageListItemActivity"></activity>
         <activity android:name=".activity.home.bartop.message.ApproveNewActivity"></activity>
         <activity android:name=".activity.home.bartop.message.ApproveNewParticularActivity"></activity>
-
+        <activity android:name=".fragment.bartop.message.task.TopTaskUnderlingDetailActivity"/>
         <!--用户页面-->
         <activity android:name=".activity.home.bartop.UserActivity"></activity>
         <!--搜索页面-->

@@ -9,6 +9,7 @@ import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.AppPushBean;
 import cn.net.bjsoft.sxdz.bean.app.ali_push.ALiPushMessageBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
 import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressBean;
 import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersAllBean;
@@ -271,6 +272,17 @@ public class GsonUtil {
      */
     public static UsersAllBean getUsersAllBean(String json){
         return getGson().fromJson(json , UsersAllBean.class);
+//        return datasBean;
+    }
+
+
+    /**
+     * 获取审批json
+     * @param json
+     * @return
+     */
+    public static MessageApproveBean getMessageApproveBean(String json){
+        return getGson().fromJson(json , MessageApproveBean.class);
 //        return datasBean;
     }
 

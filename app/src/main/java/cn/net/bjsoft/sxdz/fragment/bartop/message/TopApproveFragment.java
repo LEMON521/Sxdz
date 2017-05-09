@@ -14,10 +14,10 @@ import org.xutils.view.annotation.ViewInject;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.home.bartop.message.ApproveNewActivity;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
-import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.TopApproveApplyFragment;
+import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.TopApproveApplyFragment_new;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.TopApproveFinishedFragment;
+import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.TopApproveJoinedFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.TopApproveWorkingFragment;
-import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.add_approve.TopApproveJoinedFragment;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 
 /**
@@ -95,7 +95,7 @@ public class TopApproveFragment extends BaseFragment {
 
         switch (view.getId()) {
             case R.id.approve_apply:
-                fragment = new TopApproveApplyFragment();
+                fragment = new TopApproveApplyFragment_new();
                 fragmentTag = "approve_apply";
                 setBackgroundDefult();
                 setBackgroundChack((TextView) view);

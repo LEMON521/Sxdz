@@ -1,0 +1,396 @@
+package cn.net.bjsoft.sxdz.fragment.bartop.message.approve;
+
+import android.content.Intent;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+
+import org.xutils.common.Callback;
+import org.xutils.common.util.LogUtil;
+import org.xutils.http.RequestParams;
+import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.ViewInject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.home.WebActivity;
+import cn.net.bjsoft.sxdz.adapter.approve.ApproveShowWaiteItemAdapter;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
+import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveDataItemsBean;
+import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
+import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
+import cn.net.bjsoft.sxdz.utils.function.Utility;
+import cn.net.bjsoft.sxdz.view.ViewMessageApproveApply;
+
+/**
+ * 我发起的审批
+ * Created by Zrzc on 2017/3/9.
+ */
+@ContentView(R.layout.fragment_approve_wait)
+public class TopApproveApplyFragment_new extends BaseFragment {
+
+
+    @ViewInject(R.id.approve_approval_root)
+    private LinearLayout root;//人事审批
+
+    @ViewInject(R.id.approve_approval_personnel)
+    private ListView personnel;//人事审批
+    @ViewInject(R.id.approve_approval_administration)
+    private ListView administration;//行政审批
+    @ViewInject(R.id.approve_approval_financial)
+    private ListView financial;//财务审批
+    @ViewInject(R.id.approve_approval_official)
+    private ListView official;//办公审批
+
+    private PostJsonBean pushApplyBean = new PostJsonBean();
+    private ArrayList<MessageApproveDataItemsBean> list;
+    private HashMap<String, ArrayList<MessageApproveDataItemsBean>> datas;
+
+    private String get_start = "0";
+    private String get_count = "0";
+
+    private MessageApproveBean messageApproveBean;
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    private ArrayList<ApproveDatasDao.ApproveItems> waiteList;
+
+
+    private ArrayList<ApproveDatasDao.ApproveItems> personnelList;////人事审批
+    private ApproveShowWaiteItemAdapter personneAdapter;
+
+
+    private ArrayList<ApproveDatasDao.ApproveItems> administrationList;//行政审批
+    private ApproveShowWaiteItemAdapter administrationAdapter;
+
+
+    private ArrayList<ApproveDatasDao.ApproveItems> financialList;//财务审批
+    private ApproveShowWaiteItemAdapter financialAdapter;
+
+
+    private ArrayList<ApproveDatasDao.ApproveItems> officialList;//办公审批
+    private ApproveShowWaiteItemAdapter officialAdapter;
+
+    @Override
+    public void initData() {
+
+        initList();
+
+        //getData();
+
+        test();
+        //getListData();
+        //setListAdapter();
+    }
+
+    private void test(){
+        String s = "{\"code\":0,\"data\":{\"count\":7,\"items\":[{\"id\":\"4658686682444083413\",\"title\":\"综合行政费用报销舒新东\",\"wf_id\":\"baoxiao\",\"wf_name\":\"费用报销\",\"wf_type\":\"综合行政\",\"userid\":10001,\"ctime\":\"\\/Date(1493257553519)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493703320503)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"初审\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":1,\"reject\":true,\"edit\":false}]},{\"id\":\"4681582354848769442\",\"title\":\"综合行政费用报销舒新东\",\"wf_id\":\"baoxiao\",\"wf_name\":\"费用报销\",\"wf_type\":\"综合行政\",\"userid\":10001,\"ctime\":\"\\/Date(1493703247407)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493703247464)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"初审\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":1,\"reject\":false,\"edit\":false}]},{\"id\":\"4940935902148911191\",\"title\":\"舒新东发起的报销申请\",\"wf_id\":\"baoxiao\",\"wf_name\":\"费用报销\",\"wf_type\":\"综合行政\",\"userid\":10001,\"ctime\":\"\\/Date(1491798201000)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493272863886)\\/\",\"node_id\":3,\"description\":null,\"node_name\":\"记账\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":1,\"reject\":true,\"edit\":false}]},{\"id\":\"5500507181100263467\",\"title\":\"项目管理等级变更审批许慧玲\",\"wf_id\":\"dengjibiangeng\",\"wf_name\":\"等级变更审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493810270234)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493810270313)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]},{\"id\":\"4684978392075617072\",\"title\":\"项目管理立项审批舒新东\",\"wf_id\":\"lixiangshenpi\",\"wf_name\":\"立项审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493801487008)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493801487097)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"11003\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]},{\"id\":\"5259334455050929590\",\"title\":\"项目管理立项审批舒新东\",\"wf_id\":\"lixiangshenpi\",\"wf_name\":\"立项审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493801385053)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493801385133)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"11003\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]},{\"id\":\"5599153418535202739\",\"title\":\"项目管理立项审批舒新东\",\"wf_id\":\"lixiangshenpi\",\"wf_name\":\"立项审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493800429982)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493800430058)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"11003\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]}]},\"msg\":null}\n";
+
+        messageApproveBean = GsonUtil.getMessageApproveBean(s);
+        if (messageApproveBean.code.equals("0")) {
+            list.addAll(messageApproveBean.data.items);
+            get_start = list.size() + "";//设置开始查询
+            get_count = messageApproveBean.data.count + "";
+
+            formateDatas();//格式化信息
+
+            groupingDatas();//将数据分组
+            //taskAdapter.notifyDataSetChanged();
+            if (get_count.equals("0")) {
+                MyToast.showLong(mActivity, "没有任何消息可查看!");
+            }
+        } else {
+            MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
+        }
+
+    }
+
+
+    private void initList() {
+        pushApplyBean = new PostJsonBean();
+
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        list.clear();
+
+        if (datas == null) {
+            datas = new HashMap<>();
+        }
+        datas.clear();
+    }
+
+    private void getData() {
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/load";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("source_id", "workflow_apply");
+
+        pushApplyBean.start = get_start;//设置开始查询
+        pushApplyBean.limit = "10";
+        params.addBodyParameter("data", pushApplyBean.toString());
+        LogUtil.e("-------------------------bean.toString()" + pushApplyBean.toString());
+        httpPostUtils.get(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取我发起的审批消息----------------" + strJson);
+                messageApproveBean = GsonUtil.getMessageApproveBean(strJson);
+                if (messageApproveBean.code.equals("0")) {
+                    list.addAll(messageApproveBean.data.items);
+                    get_start = list.size() + "";//设置开始查询
+                    get_count = messageApproveBean.data.count + "";
+
+                    formateDatas();//格式化信息
+
+                    groupingDatas();//将数据分组
+                    //taskAdapter.notifyDataSetChanged();
+                    if (get_count.equals("0")) {
+                        MyToast.showLong(mActivity, "没有任何消息可查看!");
+                    }
+                } else {
+                    MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                ex.printStackTrace();
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+    }
+
+    /**
+     * 将数据分组
+     */
+    private void groupingDatas() {
+        for (MessageApproveDataItemsBean bean : list) {
+            datas.put(bean.wf_type, new ArrayList<MessageApproveDataItemsBean>());
+        }
+
+        Iterator iter = datas.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            String key = entry.getKey().toString();
+
+            for (MessageApproveDataItemsBean bean : list) {
+                if (key.equals(bean.wf_type)){
+                    datas.get(key).add(bean);
+                }
+            }
+
+            ViewMessageApproveApply child = new ViewMessageApproveApply(mActivity);
+            child.setTag(key);
+            child.setDatas(datas.get(key));
+            root.addView(child);
+        }
+
+
+    }
+
+    /**
+     * 格式化从后台拿过来的数据
+     */
+    private void formateDatas() {
+        for (MessageApproveDataItemsBean dao : list) {
+            if (SPUtil.getUserId(mActivity).equals(dao.userid)) {
+
+                String time = dao.ctime;
+                time = time.replace("/Date(", "");
+                time = time.replace(")/", "");
+                dao.ctime = time;
+                time = dao.node_time;
+                time = time.replace("/Date(", "");
+                time = time.replace(")/", "");
+                dao.node_time = time;
+
+            }
+        }
+    }
+
+    /**
+     * 获取各个列表的内容
+     */
+    private void getListData() {
+        if (personnelList == null) {
+            personnelList = new ArrayList<>();
+        }
+        if (administrationList == null) {
+            administrationList = new ArrayList<>();
+        }
+        if (financialList == null) {
+            financialList = new ArrayList<>();
+        }
+        if (officialList == null) {
+            officialList = new ArrayList<>();
+        }
+
+
+        for (int i = 0; i < waiteList.size(); i++) {
+            if (waiteList.get(i).type.equals("leave")) {
+                personnelList.add(waiteList.get(i));
+            } else if (waiteList.get(i).type.equals("trip")) {
+                personnelList.add(waiteList.get(i));
+            } else if (waiteList.get(i).type.equals("out")) {
+                personnelList.add(waiteList.get(i));
+            } else if (waiteList.get(i).type.equals("res")) {
+                administrationList.add(waiteList.get(i));
+            } else if (waiteList.get(i).type.equals("expenses")) {
+                financialList.add(waiteList.get(i));
+            } else if (waiteList.get(i).type.equals("buy")) {
+                financialList.add(waiteList.get(i));
+            } else if (waiteList.get(i).type.equals("agreement")) {
+                officialList.add(waiteList.get(i));
+            }
+        }
+    }
+
+    /**
+     * 为list设置适配器
+     */
+    private void setListAdapter() {
+        if (personneAdapter == null) {
+            personneAdapter = new ApproveShowWaiteItemAdapter(mActivity, personnelList);
+        }
+        personnel.setAdapter(personneAdapter);
+        Utility.setListViewHeightBasedOnChildren(personnel);
+        personnel.setOnTouchListener(new View.OnTouchListener() {
+            //屏蔽滑动事件
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+        personnel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mActivity, WebActivity.class);
+                intent.putExtra("url", personnelList.get(position).url);
+                intent.putExtra("type", personnelList.get(position).type);
+                startActivity(intent);
+
+            }
+        });
+
+        if (administrationAdapter == null) {
+            administrationAdapter = new ApproveShowWaiteItemAdapter(mActivity, administrationList);
+        }
+        administration.setAdapter(administrationAdapter);
+        Utility.setListViewHeightBasedOnChildren(administration);
+        administration.setOnTouchListener(new View.OnTouchListener() {
+            //屏蔽滑动事件
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+        administration.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mActivity, WebActivity.class);
+                intent.putExtra("url", administrationList.get(position).url);
+                intent.putExtra("type", administrationList.get(position).type);
+                startActivity(intent);
+
+            }
+        });
+
+        if (financialAdapter == null) {
+            financialAdapter = new ApproveShowWaiteItemAdapter(mActivity, financialList);
+        }
+        financial.setAdapter(financialAdapter);
+        Utility.setListViewHeightBasedOnChildren(financial);
+        financial.setOnTouchListener(new View.OnTouchListener() {
+            //屏蔽滑动事件
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+        financial.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mActivity, WebActivity.class);
+                intent.putExtra("url", financialList.get(position).url);
+                intent.putExtra("type", financialList.get(position).type);
+                startActivity(intent);
+
+            }
+        });
+
+        if (officialAdapter == null) {
+            officialAdapter = new ApproveShowWaiteItemAdapter(mActivity, officialList);
+        }
+        official.setAdapter(officialAdapter);
+        Utility.setListViewHeightBasedOnChildren(official);
+        official.setOnTouchListener(new View.OnTouchListener() {
+            //屏蔽滑动事件
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+        official.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mActivity, WebActivity.class);
+                intent.putExtra("url", officialList.get(position).url);
+                intent.putExtra("type", officialList.get(position).type);
+                startActivity(intent);
+
+            }
+        });
+    }
+
+
+}

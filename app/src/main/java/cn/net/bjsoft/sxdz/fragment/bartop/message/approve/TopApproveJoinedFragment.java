@@ -1,4 +1,4 @@
-package cn.net.bjsoft.sxdz.fragment.bartop.message.approve.add_approve;
+package cn.net.bjsoft.sxdz.fragment.bartop.message.approve;
 
 import android.os.Handler;
 import android.os.Message;
@@ -17,8 +17,10 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.adapter.approve.ApproveShowHistoryItemAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
-import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
+import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveDataItemsBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
@@ -36,8 +38,8 @@ public class TopApproveJoinedFragment extends BaseFragment {
     @ViewInject(R.id.refresh_view)
     private PullToRefreshLayout refresh_view;
 
-
-    private ArrayList<ApproveDatasDao.ApproveItems> hostorylList;
+    private MessageApproveBean messageApproveBean;
+    private ArrayList<MessageApproveDataItemsBean> dataItemsBeenList;
     private ApproveShowHistoryItemAdapter historyAdapter;
 
 
@@ -50,20 +52,15 @@ public class TopApproveJoinedFragment extends BaseFragment {
 
         pushJoinedBean = new PostJsonBean();
 
-        if (hostorylList == null) {
-            hostorylList = new ArrayList<>();
+
+        if (dataItemsBeenList == null) {
+            dataItemsBeenList = new ArrayList<>();
         }
-        hostorylList.clear();
+        dataItemsBeenList.clear();
 
-
-    }
-
-    @Override
-    public void initData() {
-        initList();
 
         if (historyAdapter == null) {
-            historyAdapter = new ApproveShowHistoryItemAdapter(mActivity, hostorylList);
+            historyAdapter = new ApproveShowHistoryItemAdapter(mActivity, dataItemsBeenList);
         }
         listView.setAdapter(historyAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -72,6 +69,13 @@ public class TopApproveJoinedFragment extends BaseFragment {
                 MyToast.showShort(mActivity, "点击了我" + position);
             }
         });
+
+
+    }
+
+    @Override
+    public void initData() {
+        initList();
 
 
         /**
@@ -88,7 +92,7 @@ public class TopApproveJoinedFragment extends BaseFragment {
                         // 千万别忘了告诉控件刷新完毕了哦！
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                         get_start = "0";
-                        hostorylList.clear();
+                        dataItemsBeenList.clear();
                         getData();
 
                     }
@@ -142,31 +146,24 @@ public class TopApproveJoinedFragment extends BaseFragment {
             @Override
             public void onSuccess(String strJson) {
                 LogUtil.e("-----------------获取我参与的审批消息----------------" + strJson);
-//                taskBean = GsonUtil.getMessageTaskBean(strJson);
-//                if (taskBean.code.equals("0")) {
-//                    tasksDoingDao.addAll(taskBean.data.items);
-//                    get_start = tasksDoingDao.size() + "";//设置开始查询
-//                    get_count = taskBean.data.count + "";
-//
-//                    formateDatas();//格式化信息
-//
-//                    taskAdapter.notifyDataSetChanged();
-//                    if (get_count.equals("0")) {
-//                        MyToast.showLong(mActivity, "没有任何消息可查看!");
-//                    }
-//                } else {
-//                    MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
-//                }
+                messageApproveBean = GsonUtil.getMessageApproveBean(strJson);
+                if (messageApproveBean.code.equals("0")) {//数据正确
+                    get_count = messageApproveBean.data.count;
+                    formateDatas(messageApproveBean.data.items);//格式化信息
+                    dataItemsBeenList.addAll(messageApproveBean.data.items);
+                    historyAdapter.notifyDataSetChanged();
+
+                    if (get_count.equals("0")) {
+                        MyToast.showLong(mActivity, "没有任何消息可查看!");
+                    }
+                } else {
+                    MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
+                }
 
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
-                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
-                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
-                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
-                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
                 ex.printStackTrace();
                 StackTraceElement[] elements = ex.getStackTrace();
                 for (StackTraceElement element : elements) {
@@ -191,22 +188,19 @@ public class TopApproveJoinedFragment extends BaseFragment {
     /**
      * 格式化从后台拿过来的数据
      */
-//    private void formateDatas() {
-//        for (MessageTaskBean.TasksAllDao dao : tasksDoingDao) {
-//            if (SPUtil.getUserId(mActivity).equals(dao.userid)) {
-//                dao.is_executant = 0;
-//
-//                String time = dao.starttime;
-//                time = time.replace("/Date(", "");
-//                time = time.replace(")/", "");
-//                dao.starttime = time;
-//                time = dao.limittime;
-//                time = time.replace("/Date(", "");
-//                time = time.replace(")/", "");
-//                dao.limittime = time;
-//
-//            }
-//        }
-//    }
+    private void formateDatas(ArrayList<MessageApproveDataItemsBean> list) {
+        for (MessageApproveDataItemsBean bean : list) {
+            String time = bean.ctime;
+            time = time.replace("/Date(", "");
+            time = time.replace(")/", "");
+            bean.ctime = time;
+            time = bean.node_time;
+            time = time.replace("/Date(", "");
+            time = time.replace(")/", "");
+            bean.node_time = time;
+
+        }
+    }
+
 
 }

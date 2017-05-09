@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
@@ -55,6 +56,7 @@ public class TopTaskDoingFragment extends BaseFragment {
 
     private String get_start = "0";
     private String get_count = "0";
+    private String source_id = "";
 
     private MessageTaskBean.TaskQueryDao taskQueryDao;
     private TaskSearchPopupWindow window;
@@ -63,12 +65,11 @@ public class TopTaskDoingFragment extends BaseFragment {
     @Override
     public void initData() {
         pushDoingBean = new PostJsonBean();
+        source_id = getArguments().getString("source_id");
+        if (!TextUtils.isEmpty(source_id)){
+            pushDoingBean.data.source_id = source_id;
+        }
 
-//        if (tasksAllDao == null) {
-//            tasksAllDao = new ArrayList<>();
-//        } else {
-//            tasksAllDao.clear();
-//        }
         if (tasksDoingDao == null) {
             tasksDoingDao = new ArrayList<>();
         } else {
@@ -129,7 +130,7 @@ public class TopTaskDoingFragment extends BaseFragment {
                             LogUtil.e("onLoadMore-----------");
                             getData();
                         } else {
-                            MyToast.showLong(mActivity, "已经没有更多的消息了!");
+                            MyToast.showShort(mActivity, "已经没有更多的消息了!");
                         }
                         LogUtil.e("onLoadMore-----------");
                     }
@@ -186,10 +187,10 @@ public class TopTaskDoingFragment extends BaseFragment {
 
                     taskAdapter.notifyDataSetChanged();
                     if (get_count.equals("0")) {
-                        MyToast.showLong(mActivity, "没有任何消息可查看!");
+                        MyToast.showShort(mActivity, "没有任何消息可查看!");
                     }
                 } else {
-                    MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
+                    MyToast.showShort(mActivity, "获取消息失败-"/*+taskBean.msg*/);
                 }
 
             }
