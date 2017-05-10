@@ -7,7 +7,7 @@ import org.xutils.view.annotation.ContentView;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
-import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TaskDetailFragment;
+import cn.net.bjsoft.sxdz.fragment.bartop.message.task.TaskDetailFragment_new;
 
 /**
  * Created by Zrzc on 2017/4/19.
@@ -20,7 +20,7 @@ public class TaskDetailActivity extends BaseActivity {
 
         String fragment_name = "TaskDetailFragment";
 
-        BaseFragment fragment = new TaskDetailFragment();
+        BaseFragment fragment = new TaskDetailFragment_new();
         Bundle bundle = new Bundle();
         Bundle b = getIntent().getBundleExtra("isEdited");
         bundle.putBundle("isEdited", b);

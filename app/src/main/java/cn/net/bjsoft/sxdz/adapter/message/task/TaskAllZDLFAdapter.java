@@ -107,6 +107,7 @@ public class TaskAllZDLFAdapter extends BaseAdapter {
         viewHolder.title.setText(tasksDaos.get(position).title);
 
         viewHolder.classify.setText(tasksDaos.get(position).type);
+        //viewHolder.classify.setTextColor(Color.parseColor("#"+tasksDaos.get(position).priority_color));
 
         /////////////////////////////////////////////////////
         StringBuffer name = new StringBuffer();

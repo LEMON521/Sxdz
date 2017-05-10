@@ -21,7 +21,6 @@ import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveDataItemsBean;
-import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
@@ -72,7 +71,15 @@ public class TopApproveWorkingFragment extends BaseFragment {
 //                intent.putExtra("url", dataItemsBeenList.get(position).url);
 //                intent.putExtra("type", dataItemsBeenList.get(position).type);
 //                startActivity(intent);
-                MyToast.showShort(mActivity,"点击");
+                //MyToast.showShort(mActivity,"点击");
+                Intent intent = new Intent(mActivity, WebActivity.class);
+                //目前还没有跳转字段
+                intent.putExtra("url", "www.baidu.com");
+                intent.putExtra("title", dataItemsBeenList.get(position).title);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("task_id", formate_list.get(position).id);
+//                intent.putExtra("isEdited", bundle);
+                mActivity.startActivity(intent);
 
             }
         });

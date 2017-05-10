@@ -10,6 +10,7 @@ import cn.net.bjsoft.sxdz.bean.app.AppPushBean;
 import cn.net.bjsoft.sxdz.bean.app.ali_push.ALiPushMessageBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailBeanNew;
 import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressBean;
 import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersAllBean;
@@ -217,6 +218,15 @@ public class GsonUtil {
      */
     public static MessageTaskDetailBean getMessageTaskDetailBean(String json){
         return getGson().fromJson(json , MessageTaskDetailBean.class);
+    }
+
+    /**
+     * 中电联发信息模块-任务详情--模块json
+     * @param json
+     * @return
+     */
+    public static MessageTaskDetailBeanNew getMessageTaskDetailBeanNew(String json){
+        return getGson().fromJson(json , MessageTaskDetailBeanNew.class);
     }
 
     /**

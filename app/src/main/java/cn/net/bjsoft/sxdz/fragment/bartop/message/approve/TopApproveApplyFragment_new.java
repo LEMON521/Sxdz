@@ -200,7 +200,17 @@ public class TopApproveApplyFragment_new extends BaseFragment {
         root.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LogUtil.e("点击---"+formate_list.get(position).wf_name+"::"+position);
+                LogUtil.e("点击---" + formate_list.get(position).wf_name + "::" + position);
+                if (!formate_list.get(position).id.equals("-1")) {
+                    Intent intent = new Intent(mActivity, WebActivity.class);
+                    //目前还没有跳转字段
+                    intent.putExtra("url", "www.baidu.com");
+                    intent.putExtra("title", formate_list.get(position).title);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("task_id", formate_list.get(position).id);
+//                intent.putExtra("isEdited", bundle);
+                    mActivity.startActivity(intent);
+                }
             }
         });
 
@@ -298,6 +308,7 @@ public class TopApproveApplyFragment_new extends BaseFragment {
 
             MessageApproveDataItemsBean title = new MessageApproveDataItemsBean();
             title.title = key;
+            title.id = "-1";
             formate_list.add(title);
             formate_list.addAll(datas.get(key));
 //            ViewMessageApproveApply child = new ViewMessageApproveApply(mActivity);

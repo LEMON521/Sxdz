@@ -1,7 +1,6 @@
 package cn.net.bjsoft.sxdz.adapter.approve;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +90,7 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
 //            type = 7;
 //        }
 
-        if (TextUtils.isEmpty(list.get(position).id)) {
+        if (list.get(position).id.equals("-1")) {
             holder.root.setVisibility(View.VISIBLE);
             holder.body.setVisibility(View.GONE);
             holder.title.setText(list.get(position).title);

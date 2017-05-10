@@ -78,13 +78,17 @@ public class TopMessageFragment extends BaseFragment {
         messageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                //intent.setClass(getActivity(), MessageListItemActivity.class);
-                intent.setClass(getActivity(), WebActivity.class);
-                intent.putExtra("url", "http://www.baidu.com");
-                intent.putExtra("title", "消息详情");
-                //intent.putExtra("json", mJson);
-                getContext().startActivity(intent);
+
+                if (!dataDaos.get(position).link_url.equals("")) {
+                    Intent intent = new Intent();
+                    //intent.setClass(getActivity(), MessageListItemActivity.class);
+                    intent.setClass(getActivity(), WebActivity.class);
+                    intent.putExtra("url", dataDaos.get(position).link_url);
+                    intent.putExtra("title", dataDaos.get(position).name);
+                    //intent.putExtra("json", mJson);
+                    getContext().startActivity(intent);
+                }
+
             }
         });
 

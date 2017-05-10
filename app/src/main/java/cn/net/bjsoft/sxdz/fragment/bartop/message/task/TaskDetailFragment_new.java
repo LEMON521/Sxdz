@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,18 +24,23 @@ import org.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.adapter.message.task.TaskDetailAddAdapter;
-import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemHeadFilesListAdapter;
+import cn.net.bjsoft.sxdz.adapter.message.task.KnowledgeItemHeadFilesListAdapter_new;
+import cn.net.bjsoft.sxdz.adapter.message.task.TaskDetailAddAdapter_new;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
-import cn.net.bjsoft.sxdz.bean.message.MessageTaskDetailBean;
-import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailBeanNew;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataFilesBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataUsersBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataUsersPlanBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.DownLoadFilesUtils;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
+import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.ChildrenListView;
 import cn.net.bjsoft.sxdz.view.observable_scroll_view.ObservableScrollView;
@@ -44,7 +50,7 @@ import cn.net.bjsoft.sxdz.view.observable_scroll_view.ObservableScrollView;
  */
 
 @ContentView(R.layout.fragment_task_detail)
-public class TaskDetailFragment extends BaseFragment {
+public class TaskDetailFragment_new extends BaseFragment {
 
     @ViewInject(R.id.title_back)
     private ImageView back;
@@ -105,27 +111,22 @@ public class TaskDetailFragment extends BaseFragment {
     private PostJsonBean pushMessageBean;
     private String task_id = "";
 
-    private MessageTaskDetailBean detailBean;
-    private MessageTaskDetailBean.MessageTaskDetailDao detailDao;
-    private MessageTaskDetailBean.TasksDao taskDao;
+    private MessageTaskDetailBeanNew taskDetailBean;
+    private MessageTaskDetailDataBean dataBean;
 
 
-    private KnowLedgeItemBean bean;
-    //发起者的附件列表
-    private KnowLedgeItemBean.FilesKnowledgeItemDao filesHostDao;
-    private ArrayList<KnowLedgeItemBean.FilesKnowledgeItemDao> filesHostList;
-    private KnowledgeItemHeadFilesListAdapter filesHostAdapter;
+    ///////////////////////////////发起者任务附件/////////////////////////////////
+    private ArrayList<MessageTaskDetailDataFilesBean> filesHostList;
+    private KnowledgeItemHeadFilesListAdapter_new filesHostAdapter;
 
-    //执行者添加详情
-    private MessageTaskDetailBean.DetailAddDao addBean;
-    private ArrayList<MessageTaskDetailBean.DetailAddDao> detailList;
-    //private ArrayList<MessageTaskDetailAddBean> addDetailList;
-    private TaskDetailAddAdapter detailAddAdapter;
 
-    //执行者添加附件
-    private KnowLedgeItemBean.FilesKnowledgeItemDao filesAddDao;
-    private ArrayList<KnowLedgeItemBean.FilesKnowledgeItemDao> filesAddList;
-    private KnowledgeItemHeadFilesListAdapter filesAddAdapter;
+    ///////////////////////////////执行者条目/////////////////////////////////
+    private ArrayList<MessageTaskDetailDataUsersBean> usersBeenList;
+    private ArrayList<MessageTaskDetailDataFilesBean> usersFilesBeenList;//执行者上传的附件
+    private KnowledgeItemHeadFilesListAdapter_new filesAddAdapter;
+    private ArrayList<MessageTaskDetailDataUsersPlanBean> usersPlanBeenList;//执行者添加的详情
+    private TaskDetailAddAdapter_new detailAddAdapter;
+
 
     private boolean isEdited = false;
 
@@ -167,84 +168,6 @@ public class TaskDetailFragment extends BaseFragment {
             }
         };
 
-        //发起者的附件列表
-        if (filesHostList == null) {
-            filesHostList = new ArrayList<>();
-        }
-        filesHostList.clear();
-
-        if (filesHostAdapter == null) {
-            filesHostAdapter = new KnowledgeItemHeadFilesListAdapter(mActivity, filesHostList);
-        }
-        attachment.setAdapter(filesHostAdapter);
-
-        attachment.setOnTouchListener(touchListener);
-        attachment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!filesAddList.get(position).isEditing) {
-                    //不可编辑状态,就下载文件
-                    DownLoadFilesUtils downLoad = new DownLoadFilesUtils();
-                    String url = "";
-                    url = filesHostList.get(position).file_url;
-                    if (downLoad.downloadFile(mActivity, url)) {
-                        filesAddList.get(position).file_path = url.substring(url.lastIndexOf("/") + 1);//不包含 (/)线
-                        filesAddAdapter.notifyDataSetChanged();
-                    }
-                } else {
-                    MyToast.showShort(mActivity, "打开文件！");
-                }
-            }
-        });
-
-
-        //执行人添加详情的列表
-        if (detailList == null) {
-            detailList = new ArrayList<>();
-        }
-        detailList.clear();
-
-        if (detailAddAdapter == null) {
-            detailAddAdapter = new TaskDetailAddAdapter(mActivity, detail_list, detailList);
-        }
-        detail_list.setAdapter(detailAddAdapter);
-        detail_list.setOnTouchListener(touchListener);
-
-        //执行人添加附件的列表
-        if (filesAddList == null) {
-            filesAddList = new ArrayList<>();
-        }
-        filesAddList.clear();
-
-        //添加新增附件条目
-//        bean = new KnowLedgeItemBean();
-//        filesAddDao = bean.new FilesKnowledgeItemDao();
-//        filesAddDao.isAdd = true;
-//        filesAddList.add(filesAddDao);
-
-
-        if (filesAddAdapter == null) {
-            filesAddAdapter = new KnowledgeItemHeadFilesListAdapter(mActivity, filesAddList);
-        }
-        files.setAdapter(filesAddAdapter);
-        files.setOnTouchListener(touchListener);
-        files.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!filesAddList.get(position).isEditing) {
-                    //不可编辑状态,就下载文件
-                    DownLoadFilesUtils downLoad = new DownLoadFilesUtils();
-                    String url = "";
-                    url = filesAddList.get(position).file_url;
-                    if (downLoad.downloadFile(mActivity, url)) {
-                        filesAddList.get(position).file_path = url.substring(url.lastIndexOf("/") + 1);//不包含 (/)线
-                        filesAddAdapter.notifyDataSetChanged();
-                    }
-                } else {
-                    MyToast.showShort(mActivity, "打开文件！");
-                }
-            }
-        });
 
         //滚动监听
         scroll.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
@@ -261,8 +184,98 @@ public class TaskDetailFragment extends BaseFragment {
             }
         });
 
+
+        initList();
+
         //设置数据
         getData();
+    }
+
+    private void initList() {
+
+        //发起者的附件列表
+        if (filesHostList == null) {
+            filesHostList = new ArrayList<>();
+        }
+        filesHostList.clear();
+        if (filesHostAdapter == null) {
+            filesHostAdapter = new KnowledgeItemHeadFilesListAdapter_new(mActivity, filesHostList);
+        }
+        attachment.setAdapter(filesHostAdapter);
+
+        attachment.setOnTouchListener(touchListener);
+        attachment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!filesHostList.get(position).isEditing) {
+                    //不可编辑状态,就下载文件
+                    DownLoadFilesUtils downLoad = new DownLoadFilesUtils();
+                    String url = "";
+                    url = filesHostList.get(position).url;
+                    if (url.equals("")) {
+                        if (downLoad.downloadFile(mActivity, url)) {
+                            filesHostList.get(position).url = url.substring(url.lastIndexOf("/") + 1);//不包含 (/)线
+                            filesHostAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        MyToast.showShort(mActivity, "打开文件！");
+                    }
+                } else {
+                    MyToast.showShort(mActivity, "下载路径不能为空!");
+                }
+            }
+        });
+
+
+        //////////////////////执行者相关/////////////////////////
+        if (usersBeenList == null) {
+            usersBeenList = new ArrayList<>();
+        }
+        usersBeenList.clear();
+
+        if (usersFilesBeenList == null) {
+            usersFilesBeenList = new ArrayList<>();
+        }
+        usersFilesBeenList.clear();
+        if (filesAddAdapter == null) {
+            filesAddAdapter = new KnowledgeItemHeadFilesListAdapter_new(mActivity, usersFilesBeenList);
+        }
+        files.setAdapter(filesAddAdapter);
+        files.setOnTouchListener(touchListener);
+
+        files.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!usersFilesBeenList.get(position).isEditing) {
+                    //不可编辑状态,就下载文件
+                    DownLoadFilesUtils downLoad = new DownLoadFilesUtils();
+                    String url = "";
+                    url = usersFilesBeenList.get(position).url;
+                    if (url.equals("")) {
+                        if (downLoad.downloadFile(mActivity, url)) {
+                            usersFilesBeenList.get(position).url = url.substring(url.lastIndexOf("/") + 1);//不包含 (/)线
+                            filesAddAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        MyToast.showShort(mActivity, "打开文件！");
+                    }
+                } else {
+                    MyToast.showShort(mActivity, "下载路径不能为空!");
+                }
+            }
+        });
+
+
+        if (usersPlanBeenList == null) {
+            usersPlanBeenList = new ArrayList<>();
+        }
+        usersPlanBeenList.clear();
+        if (detailAddAdapter == null) {
+            detailAddAdapter = new TaskDetailAddAdapter_new(mActivity, usersPlanBeenList);
+        }
+
+        detail_list.setAdapter(detailAddAdapter);
+        detail_list.setOnTouchListener(touchListener);
     }
 
 
@@ -283,24 +296,26 @@ public class TaskDetailFragment extends BaseFragment {
         pushMessageBean.limit = "10";
         pushMessageBean.data.task_id = task_id;//设置开始查询
         params.addBodyParameter("data", pushMessageBean.toString());
-        LogUtil.e("-------------------------bean.toString()"+pushMessageBean.toString());
+        LogUtil.e("-------------------------bean.toString()" + pushMessageBean.toString());
         httpPostUtils.get(mActivity, params);
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
                 LogUtil.e("-----------------任务详情------获取消息----------------" + strJson);
-//                messageBean = GsonUtil.getMessageMessageBean(strJson);
-//                if (messageBean.code.equals("0")) {
+                //strJson = fomateString(strJson);
+                LogUtil.e("-----------------任务详情------获取消息----------------" + strJson);
+                taskDetailBean = GsonUtil.getMessageTaskDetailBeanNew(strJson);
+                if (taskDetailBean.code.equals("0")) {
+                    dataBean = taskDetailBean.data;
+                    fomateDataDate();
+                    setData();
 //                    dataDaos.addAll(messageBean.data.items);
 //                    message_Start = dataDaos.size()+"";//设置开始查询
 //                    message_count = messageBean.data.count+"";
 //                    messageAdapter.notifyDataSetChanged();
-//                    if (message_count.equals("0")){
-//                        MyToast.showLong(mActivity,"没有任何消息可查看!");
-//                    }
-//                }else {
-//                    MyToast.showLong(mActivity,"获取消息失败-"+messageBean.msg);
-//                }
+                } else {
+                    MyToast.showLong(mActivity, "获取消息失败");
+                }
 
             }
 
@@ -332,52 +347,38 @@ public class TaskDetailFragment extends BaseFragment {
         });
 
 
+    }
 
+    private String fomateString(String json) {
+        json = json.replace("null", "\"\"");
+        return json;
 
+    }
 
+    /**
+     * 格式化数据
+     */
+    private void fomateDataDate() {
+        String time = "";
+        time = dataBean.ctime;
+        time = time.replace("/Date(", "");
+        time = time.replace(")/", "");
+        dataBean.ctime = time;
 
+        time = dataBean.finishtime;
+        time = time.replace("/Date(", "");
+        time = time.replace(")/", "");
+        dataBean.finishtime = time;
 
+        time = dataBean.limittime;
+        time = time.replace("/Date(", "");
+        time = time.replace(")/", "");
+        dataBean.limittime = time;
 
-
-
-
-
-
-
-
-//        showProgressDialog();
-//        RequestParams params = new RequestParams(TestAddressUtils.test_get_message_task_detail_url);
-//        x.http().get(params, new Callback.CommonCallback<String>() {
-//            @Override
-//            public void onSuccess(String result) {
-//                detailBean = GsonUtil.getMessageTaskDetailBean(result);
-//                LogUtil.e("获取到的条目-----------" + detailBean.result);
-//                if (detailBean.result) {
-//                    //LogUtil.e("获取到的条目-----------" + result);
-//
-//                    setData();
-//                } else {
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable ex, boolean isOnCallback) {
-//                LogUtil.e("获取到的条目--------失败!!!---" + ex);
-//            }
-//
-//            @Override
-//            public void onCancelled(CancelledException cex) {
-//            }
-//
-//            @Override
-//            public void onFinished() {
-//                dismissProgressDialog();
-//            }
-//        });
-
-
-
+        time = dataBean.starttime;
+        time = time.replace("/Date(", "");
+        time = time.replace(")/", "");
+        dataBean.starttime = time;
 
     }
 
@@ -385,101 +386,61 @@ public class TaskDetailFragment extends BaseFragment {
      * 设置数据
      */
     private void setData() {
+        //任务头
+        task_title.setText(dataBean.title);
+        task_classify.setText(dataBean.type);
+        task_name.setText(UsersInforUtils.getInstance(mActivity).getUserInfo(dataBean.userid).nickname);
+        task_start.setText("开始时间:" + TimeUtils.getFormateTime(Long.parseLong(dataBean.starttime), "-", ":"));
+        task_end.setText("结束时间:" + TimeUtils.getFormateTime(Long.parseLong(dataBean.ctime), "-", ":"));
+        task_level.setText(dataBean.priority);
+        if (!TextUtils.isEmpty(dataBean.priority_color)) {
+            task_level.setTextColor(Color.parseColor("#" + dataBean.priority_color));
+        }
 
-        detailDao = detailBean.data;
-        taskDao = detailDao.executor;
+        if (dataBean.finished) {
+            task_state.setText("已完成");
+            submit.setVisibility(View.GONE);
+            progress.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return true;
+                }
+            });
 
-        progress.setProgress(detailDao.degree);
-
-        /*
-        设置任务一个条目信息
-         */
-
-        if (taskDao.isOverdue) {
-            task_overdue.setVisibility(View.VISIBLE);
         } else {
-            task_overdue.setVisibility(View.GONE);
+            task_state.setText("进行中");
+            submit.setVisibility(View.VISIBLE);
         }
 
+        //任务描述
+        detail.setText(dataBean.description);
 
-        switch (taskDao.level) {
-            case 1:
-                task_level.setText("非常重要");
-                task_level.setTextColor(Color.parseColor("#FF0101"));
-                break;
-            case 2:
-                task_level.setText("重要");
-                task_level.setTextColor(Color.parseColor("#02ED02"));
-                break;
-            case 3:
-                task_level.setText("一般");
-                task_level.setTextColor(Color.parseColor("#666666"));
-                break;
-            default:
-                task_level.setText("");
-                task_level.setTextColor(Color.parseColor("#666666"));
+        //任务进度
+        progress.setProgress(Float.parseFloat(dataBean.progress));
+
+
+        //任务附件
+        if (dataBean.files != null) {
+            filesHostList.addAll(dataBean.files);
+            filesHostAdapter.notifyDataSetChanged();
         }
-
-        task_title.setText(taskDao.title);
-        task_classify.setText(taskDao.classify);
-        StringBuffer name = new StringBuffer();
-        for (int i = 0; i < taskDao.name.size(); i++) {
-            name.append(taskDao.name.get(i).name);
-            if (i + 1 != taskDao.name.size()) {
-                name.append("、");
-            }
-        }
-        task_name.setText(name);
-        task_start.setText("开始时间:" + TimeUtils.getFormateTime(taskDao.start, "-", ":"));
-        task_end.setText("结束时间:" + TimeUtils.getFormateTime(taskDao.end, "-", ":"));
-
-        switch (taskDao.state) {
-            case 1:
-                task_state.setText("完成");
-                task_state.setTextColor(Color.parseColor("#FBBB0E"));
-                break;
-            case 2:
-                task_state.setText("进行中");
-                task_state.setTextColor(Color.parseColor("#0156E2"));
-                break;
-//            case 3:
-//                level.setText("新到");
-//                level.setTextColor(Color.parseColor("#FF0000"));
-//                break;
-            default:
-                task_state.setText("");
-                task_state.setTextColor(Color.parseColor("#FF0000"));
-        }
-        //设置任务一个条目信息完毕
-        detail.setText(detailDao.detail);
-
-        detailList.addAll(detailDao.detail_list);
-
-        filesHostList.addAll(detailDao.attachment_list);
-        filesAddList.addAll(detailDao.attachment_list_add);
-
-
         if (!(filesHostList.size() > 0)) {
             attachment_show.setVisibility(View.GONE);
-        } else {
-            attachment_show.setVisibility(View.VISIBLE);
         }
 
+        //执行人相关
+        if (dataBean.users != null) {
+            usersBeenList.addAll(dataBean.users);
 
-        //增加一个添加条目
-        //if (!(filesAddList.size() > 0)) {
-
-//        bean = new KnowLedgeItemBean();
-//        filesAddDao = bean.new FilesKnowledgeItemDao();
-//
-//        filesAddDao.isAdd = true;
-//        filesAddList.add(filesAddList.size(), filesAddDao);
-//}
-        filesHostAdapter.notifyDataSetChanged();
-        detailAddAdapter.notifyDataSetChanged();
-        filesAddAdapter.notifyDataSetChanged();
-
-
+            for (MessageTaskDetailDataUsersBean usersBean : usersBeenList) {
+                if (usersBean.files != null) {
+                    usersFilesBeenList.addAll(usersBean.files);
+                }
+                if (usersBean.plan != null) {
+                    usersPlanBeenList.addAll(usersBean.plan);
+                }
+            }
+        }
     }
 
     @Event(value = {R.id.title_back
@@ -493,13 +454,12 @@ public class TaskDetailFragment extends BaseFragment {
                 break;
             case R.id.fragment_task_add_detail://添加详情条目
                 //addBean = new MessageTaskDetailAddBean();
-                detailBean = new MessageTaskDetailBean();
-                addBean = detailBean.new DetailAddDao();
-                addBean.isEditing = true;
-                detailList.add(detailList.size(), addBean);
+                MessageTaskDetailDataUsersPlanBean detailBean = new MessageTaskDetailDataUsersPlanBean();
+                detailBean.isEditing = true;
+                usersPlanBeenList.add(usersPlanBeenList.size(), detailBean);
                 Utility.setListViewHeightBasedOnChildren(detail_list);
                 detailAddAdapter.notifyDataSetChanged();
-                LogUtil.e("正价的条目为" + detailList.size());
+                LogUtil.e("正价的条目为" + usersPlanBeenList.size());
 
 
                 //Utility.setListViewHeightBasedOnChildren(detail_list);
@@ -509,7 +469,7 @@ public class TaskDetailFragment extends BaseFragment {
 
             case R.id.fragment_task_add_files://添加任务附件条目
 
-                PhotoOrVideoUtils.doFiles(null, TaskDetailFragment.this);//打开文件管理器意图
+                PhotoOrVideoUtils.doFiles(null, TaskDetailFragment_new.this);//打开文件管理器意图
 
 
                 break;
@@ -538,13 +498,12 @@ public class TaskDetailFragment extends BaseFragment {
         if (uri != null) {
             path = PhotoOrVideoUtils.getPath(mActivity, uri);
             LogUtil.e("onActivityResult-----path" + path);
-            bean = new KnowLedgeItemBean();
-            filesAddDao = bean.new FilesKnowledgeItemDao();
-            filesAddDao.file_path = path;
-            filesAddDao.file_name = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
+            MessageTaskDetailDataFilesBean filesAddDao = new MessageTaskDetailDataFilesBean();
+            filesAddDao.url = path;
+            filesAddDao.title = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
             filesAddDao.isAdd = false;
             filesAddDao.isEditing = true;
-            filesAddList.add(filesAddList.size(), filesAddDao);
+            usersFilesBeenList.add(usersFilesBeenList.size(), filesAddDao);
             filesAddAdapter.notifyDataSetChanged();
             Utility.setListViewHeightBasedOnChildren(files);
 

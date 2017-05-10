@@ -87,7 +87,8 @@ public class TopTaskDoingFragment extends BaseFragment {
                 Intent intent = new Intent(mActivity, TaskDetailActivity.class);
                 intent.putExtra("fragment_name", "task_detail");
                 Bundle bundle = new Bundle();
-                bundle.putBoolean("isEdited", true);
+                bundle.putBoolean("isEdited", !tasksDoingDao.get(position).finished);
+                bundle.putString("task_id", tasksDoingDao.get(position).id);
                 intent.putExtra("isEdited", bundle);
                 mActivity.startActivity(intent);
             }
