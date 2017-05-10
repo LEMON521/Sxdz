@@ -1,10 +1,11 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message.approve;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import org.xutils.common.Callback;
@@ -21,6 +22,7 @@ import java.util.Map;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.home.WebActivity;
 import cn.net.bjsoft.sxdz.adapter.approve.ApproveShowWaiteItemAdapter;
+import cn.net.bjsoft.sxdz.adapter.approve.ApproveShowWaiteItemAdapter_new_1;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
@@ -32,6 +34,8 @@ import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.ViewMessageApproveApply;
+import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
+import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
 
 /**
  * 我发起的审批
@@ -40,9 +44,12 @@ import cn.net.bjsoft.sxdz.view.ViewMessageApproveApply;
 @ContentView(R.layout.fragment_approve_wait)
 public class TopApproveApplyFragment_new extends BaseFragment {
 
+    @ViewInject(R.id.refresh_view)
+    private PullToRefreshLayout refresh_view;
+
 
     @ViewInject(R.id.approve_approval_root)
-    private LinearLayout root;//人事审批
+    private PullableListView root;
 
     @ViewInject(R.id.approve_approval_personnel)
     private ListView personnel;//人事审批
@@ -56,11 +63,15 @@ public class TopApproveApplyFragment_new extends BaseFragment {
     private PostJsonBean pushApplyBean = new PostJsonBean();
     private ArrayList<MessageApproveDataItemsBean> list;
     private HashMap<String, ArrayList<MessageApproveDataItemsBean>> datas;
+    private ArrayList<MessageApproveDataItemsBean> formate_list;
+    private ApproveShowWaiteItemAdapter_new_1 adapter;
 
     private String get_start = "0";
     private String get_count = "0";
 
     private MessageApproveBean messageApproveBean;
+
+    private HashMap<String, ViewMessageApproveApply> views;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,14 +98,66 @@ public class TopApproveApplyFragment_new extends BaseFragment {
 
         initList();
 
-        //getData();
+        /**
+         * 刷新///加载     的操作
+         */
+        refresh_view.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
 
-        test();
+                // 下拉刷新操作
+                new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        // 千万别忘了告诉控件刷新完毕了哦！
+                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                        get_start = "0";
+                        list.clear();
+                        datas.clear();
+                        getData();
+
+                    }
+                }.sendEmptyMessageDelayed(0, 500);
+
+            }
+
+            @Override
+            public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
+                // 加载操作
+
+                new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        // 千万别忘了告诉控件加载完毕了哦！
+                        pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                        if (!get_start.equals(get_count)) {
+                            pushApplyBean.start = get_start;//设置开始查询
+                            LogUtil.e("onLoadMore-----------");
+                            getData();
+                        } else {
+                            MyToast.showLong(mActivity, "已经没有更多的消息了!");
+                        }
+                        LogUtil.e("onLoadMore-----------");
+
+
+                    }
+                }.sendEmptyMessageDelayed(0, 500);
+
+            }
+
+        });
+
+
+        getData();
+
+        //test();
+
+
         //getListData();
         //setListAdapter();
     }
 
-    private void test(){
+    private void test() {
         String s = "{\"code\":0,\"data\":{\"count\":7,\"items\":[{\"id\":\"4658686682444083413\",\"title\":\"综合行政费用报销舒新东\",\"wf_id\":\"baoxiao\",\"wf_name\":\"费用报销\",\"wf_type\":\"综合行政\",\"userid\":10001,\"ctime\":\"\\/Date(1493257553519)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493703320503)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"初审\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":1,\"reject\":true,\"edit\":false}]},{\"id\":\"4681582354848769442\",\"title\":\"综合行政费用报销舒新东\",\"wf_id\":\"baoxiao\",\"wf_name\":\"费用报销\",\"wf_type\":\"综合行政\",\"userid\":10001,\"ctime\":\"\\/Date(1493703247407)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493703247464)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"初审\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":1,\"reject\":false,\"edit\":false}]},{\"id\":\"4940935902148911191\",\"title\":\"舒新东发起的报销申请\",\"wf_id\":\"baoxiao\",\"wf_name\":\"费用报销\",\"wf_type\":\"综合行政\",\"userid\":10001,\"ctime\":\"\\/Date(1491798201000)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493272863886)\\/\",\"node_id\":3,\"description\":null,\"node_name\":\"记账\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":1,\"reject\":true,\"edit\":false}]},{\"id\":\"5500507181100263467\",\"title\":\"项目管理等级变更审批许慧玲\",\"wf_id\":\"dengjibiangeng\",\"wf_name\":\"等级变更审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493810270234)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493810270313)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]},{\"id\":\"4684978392075617072\",\"title\":\"项目管理立项审批舒新东\",\"wf_id\":\"lixiangshenpi\",\"wf_name\":\"立项审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493801487008)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493801487097)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"11003\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]},{\"id\":\"5259334455050929590\",\"title\":\"项目管理立项审批舒新东\",\"wf_id\":\"lixiangshenpi\",\"wf_name\":\"立项审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493801385053)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493801385133)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"11003\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]},{\"id\":\"5599153418535202739\",\"title\":\"项目管理立项审批舒新东\",\"wf_id\":\"lixiangshenpi\",\"wf_name\":\"立项审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493800429982)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493800430058)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"11003\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]}]},\"msg\":null}\n";
 
         messageApproveBean = GsonUtil.getMessageApproveBean(s);
@@ -125,10 +188,32 @@ public class TopApproveApplyFragment_new extends BaseFragment {
         }
         list.clear();
 
+        if (formate_list == null) {
+            formate_list = new ArrayList<>();
+        }
+        formate_list.clear();
+
+        if (adapter == null) {
+            adapter = new ApproveShowWaiteItemAdapter_new_1(mActivity, formate_list);
+        }
+        root.setAdapter(adapter);
+        root.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                LogUtil.e("点击---"+formate_list.get(position).wf_name+"::"+position);
+            }
+        });
+
         if (datas == null) {
             datas = new HashMap<>();
         }
         datas.clear();
+
+        if (views == null) {
+            views = new HashMap<>();
+        }
+        views.clear();
+
     }
 
     private void getData() {
@@ -190,26 +275,39 @@ public class TopApproveApplyFragment_new extends BaseFragment {
      * 将数据分组
      */
     private void groupingDatas() {
+
+        formate_list.clear();
+
+        //获取分组数----去除重复
         for (MessageApproveDataItemsBean bean : list) {
             datas.put(bean.wf_type, new ArrayList<MessageApproveDataItemsBean>());
         }
+
 
         Iterator iter = datas.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
             String key = entry.getKey().toString();
-
+            //将数据添加到不同的分组中
             for (MessageApproveDataItemsBean bean : list) {
-                if (key.equals(bean.wf_type)){
+                if (key.equals(bean.wf_type)) {
                     datas.get(key).add(bean);
                 }
             }
 
-            ViewMessageApproveApply child = new ViewMessageApproveApply(mActivity);
-            child.setTag(key);
-            child.setDatas(datas.get(key));
-            root.addView(child);
+
+            MessageApproveDataItemsBean title = new MessageApproveDataItemsBean();
+            title.title = key;
+            formate_list.add(title);
+            formate_list.addAll(datas.get(key));
+//            ViewMessageApproveApply child = new ViewMessageApproveApply(mActivity);
+//            child.setTag(key);
+//            child.setDatas(datas.get(key));
+//            root.addView(child);
+//
+//            views.put(key, child);
         }
+        adapter.notifyDataSetChanged();
 
 
     }

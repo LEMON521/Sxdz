@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
+import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressEmployeesBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressPositionsBean;
@@ -46,11 +47,15 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 //    private ArrayList<ListTaskBean.TreeTaskListDao> tree_list;
 
 
+    private UserBean userBean;
+    private String position_id = "";
+
     private AddressBean addressBean;
     private AddressEmployeesBean employeesBean;
     private AddressPositionsBean positionsBean;
     private ArrayList<AddressEmployeesBean> employeesBeanList;
     private ArrayList<AddressPositionsBean> positionsBeanList;
+    private ArrayList<AddressPositionsBean> buffer_positionsBeanList;
     private ArrayList<AddressPositionsBean> formate_positionsBeanList;
 
     private FileMessageTaskUnderlingBean fileBean;
@@ -63,7 +68,8 @@ public class TopTaskUnderlingFragment extends BaseFragment {
     @Override
     public void initData() {
         initList();
-        getOrganizationData();
+
+        getUserInfos();
     }
 
 
@@ -80,6 +86,11 @@ public class TopTaskUnderlingFragment extends BaseFragment {
         }
         positionsBeanList.clear();
 
+        if (buffer_positionsBeanList == null) {
+            buffer_positionsBeanList = new ArrayList<>();
+        }
+        buffer_positionsBeanList.clear();
+
 
         if (formate_positionsBeanList == null) {
             formate_positionsBeanList = new ArrayList<>();
@@ -93,10 +104,50 @@ public class TopTaskUnderlingFragment extends BaseFragment {
         fileBeanList.clear();
     }
 
+    private void getUserInfos() {
+        showProgressDialog();
+        HttpPostUtils httpPostUtil = new HttpPostUtils();
+        String url = "";
+        url = SPUtil.getApiUser(mActivity) + "/" + SPUtil.getUserId(mActivity) + "/my.json";
+        LogUtil.e("公司架构userOrganizationBean url----===========" + url);
+        RequestParams params = new RequestParams(url);
+        httpPostUtil.get(mActivity, params);
+
+        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                //SPUtil.setUserJson(mActivity, strJson);//缓存公司架构信息
+                //LogUtil.e("我的页面json");
+//                LogUtil.e("公司架构==========="+SPUtil.getUserOrganizationJson(mActivity));
+                userBean = GsonUtil.getUserBean(strJson);
+                if (userBean != null) {
+                    position_id = userBean.organization.position_id;
+                    getOrganizationData();
+                } else {
+                    MyToast.showLong(mActivity, "获取信息失败!");
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("我的页面json-----错误" + ex);
+                MyToast.showLong(mActivity, "获取信息失败!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
 
     private void getOrganizationData() {
 
-        showProgressDialog();
         HttpPostUtils httpPostUtil = new HttpPostUtils();
         String url = "";
         url = SPUtil.getApiUser(mActivity) + "/" + SPUtil.getUserId(mActivity) + "/organization.json";
@@ -120,7 +171,10 @@ public class TopTaskUnderlingFragment extends BaseFragment {
                         formateEmployees();
 
                         if (positionsBeanList.size() > 0) {
-                            getPositions(positionsBeanList, "0");
+                            getBufferPosition(positionsBeanList);
+                            if (buffer_positionsBeanList.size() > 0) {
+                                getPositions(buffer_positionsBeanList, "0");
+                            }
                         }
 
                         getFormatePositions();
@@ -167,6 +221,30 @@ public class TopTaskUnderlingFragment extends BaseFragment {
         }
     }
 
+
+    /**
+     * 截取
+     * @param childrens
+     */
+    private void getBufferPosition(ArrayList<AddressPositionsBean> childrens) {
+
+
+        for (AddressPositionsBean bean : childrens) {
+
+
+            if (bean.id.equals(position_id)) {
+                buffer_positionsBeanList.add(bean);
+                LogUtil.e("--------bean---------"+bean.children.size());
+                return;
+            } else {
+                if (bean.children != null && bean.children.size() > 0) {
+                    getBufferPosition(bean.children);
+                }
+
+            }
+        }
+    }
+
     /**
      * 格式化岗位---从userID相同的添加开始
      *
@@ -175,7 +253,7 @@ public class TopTaskUnderlingFragment extends BaseFragment {
      */
 
     private void getPositions(ArrayList<AddressPositionsBean> childrens, String pId) {
-        boolean find = true;
+
         for (AddressPositionsBean bean : childrens) {
             bean.pId = pId;
             //添加职工信息
@@ -185,32 +263,23 @@ public class TopTaskUnderlingFragment extends BaseFragment {
                     bean.employee = employee;
                 }
             }
-
+            LogUtil.e("========bean.name========"+bean.name);
+            LogUtil.e("========bean.children.size()========"+bean.children.size());
+            formate_positionsBeanList.add(bean);
             if (bean.children != null && bean.children.size() > 0) {
                 getPositions(bean.children, bean.id);
             }
-
-//            if (find) {
-//                if (SPUtil.getUsers_SourceId(mActivity).equals(bean.employee.source_id)) {
-//                    find = false;
-//                }else {
-//                    continue;
-//                }
-//            }
-
-            //如果有就添加,没有就 不添加
-            //formate_positionsBeanList.add(bean);
-            formate_positionsBeanList.add(formate_positionsBeanList.size(), bean);
-
-
+            LogUtil.e("========formate_positionsBeanList.size()========"+formate_positionsBeanList.size());
         }
 
     }
 
+
     private void getFormatePositions() {
+        LogUtil.e("========formate_positionsBeanList.size()========"+formate_positionsBeanList.size());
         for (AddressPositionsBean positionsBean : formate_positionsBeanList) {
             if (positionsBean.employee != null) {
-                //LogUtil.e("------------------岗位信息====" + positionsBean.name + "::" + positionsBean.id + "::" + positionsBean.pId + "::" + positionsBean.employee.name);
+                LogUtil.e("------------------岗位信息====" + positionsBean.name + "::" + positionsBean.id + "::" + positionsBean.pId + "::" + positionsBean.employee.name);
                 fileBean = new FileMessageTaskUnderlingBean(
                         positionsBean.id
                         , positionsBean.pId

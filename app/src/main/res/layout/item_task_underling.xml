@@ -53,6 +53,7 @@
             android:textSize="@dimen/dm024" />
 
         <FrameLayout
+            android:visibility="gone"
             android:id="@+id/item_task_underling_number_background"
             android:layout_width="@dimen/dm022"
             android:layout_height="@dimen/dm022"

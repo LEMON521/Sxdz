@@ -86,4 +86,21 @@ public class ViewMessageApproveApply extends LinearLayout {
 
     }
 
+    public void refresh(){
+        Utility.setListViewHeightBasedOnChildren(content);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
+
+                MeasureSpec.AT_MOST);
+
+        super.onMeasure(widthMeasureSpec, expandSpec);
+
+    }
+
 }

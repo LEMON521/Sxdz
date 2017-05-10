@@ -4,14 +4,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout
+        android:id="@+id/refresh_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/refresh_head" />
+        <!-- 支持所有实现Pullable接口的View -->
+
+        <cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView
+            android:id="@+id/approve_approval_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:divider="#00FFFFFF"
+            android:dividerHeight="0dp"
+            android:footerDividersEnabled="false">
+
+
+        </cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView>
+
+        <include layout="@layout/load_more" />
+
+    </cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout>
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#00000000"
-        android:scrollbars="none">
-
+        android:scrollbars="none"
+        android:visibility="gone">
+        <!--android:id="@+id/approve_approval_root"-->
         <LinearLayout
-            android:id="@+id/approve_approval_root"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
