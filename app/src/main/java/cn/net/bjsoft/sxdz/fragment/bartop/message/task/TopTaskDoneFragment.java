@@ -109,7 +109,7 @@ public class TopTaskDoneFragment extends BaseFragment {
         refresh_view.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
-
+                showProgressDialog();
                 // 下拉刷新操作
                 new Handler() {
                     @Override
@@ -129,6 +129,7 @@ public class TopTaskDoneFragment extends BaseFragment {
 
             @Override
             public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
+                showProgressDialog();
                 // 加载操作
                 new Handler() {
                     @Override
@@ -141,6 +142,7 @@ public class TopTaskDoneFragment extends BaseFragment {
                             getData();
                         }else {
                             MyToast.showShort(mActivity,"已经没有更多的消息了!");
+                            dismissProgressDialog();
                         }
                     }
                 }.sendEmptyMessageDelayed(0, 500);

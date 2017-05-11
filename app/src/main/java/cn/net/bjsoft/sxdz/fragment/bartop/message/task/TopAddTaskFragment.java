@@ -182,8 +182,8 @@ public class TopAddTaskFragment extends BaseFragment {
         }
         nodeDepartment.clear();
 
-        if (adapter==null) {
-            adapter = new TaskAddAddressListAdapter(mActivity,humenList);
+        if (adapter == null) {
+            adapter = new TaskAddAddressListAdapter(mActivity, humenList);
         }
         new_humens.setAdapter(adapter);
         //联系人相关结束
@@ -268,46 +268,49 @@ public class TopAddTaskFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_ADDRESS_LIST) {
-            //获取到选择的联系人
-            Bundle bundle = data.getExtras();
-            nodeId.addAll(bundle.getStringArrayList("nodeId"));
-            nodeAvatar.addAll(bundle.getStringArrayList("nodeAvatar"));
-            nodeName.addAll(bundle.getStringArrayList("nodeName"));
-            nodeDepartment.addAll(bundle.getStringArrayList("nodeDepartment"));
-            TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
-            for (int i = 0; i < nodeId.size(); i++) {
-                TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
-                dao.id = nodeId.get(i);
-                dao.avatar = nodeAvatar.get(i);
-                dao.name = nodeName.get(i);
-                dao.department = nodeDepartment.get(i);
-                humenList.add(dao);
-            }
-            nodeId.clear();
-            nodeAvatar.clear();
-            nodeName.clear();
-            nodeDepartment.clear();
-            adapter.notifyDataSetChanged();
-            Utility.setListViewHeightBasedOnChildren(new_humens);
 
-            LogUtil.e("返回结果===========" + nodeId.size() + nodeName.size() + nodeDepartment.size());
+        if (data != null) {
+            if (requestCode == ADD_ADDRESS_LIST) {
+                //获取到选择的联系人
+                Bundle bundle = data.getExtras();
+                nodeId.addAll(bundle.getStringArrayList("nodeId"));
+                nodeAvatar.addAll(bundle.getStringArrayList("nodeAvatar"));
+                nodeName.addAll(bundle.getStringArrayList("nodeName"));
+                nodeDepartment.addAll(bundle.getStringArrayList("nodeDepartment"));
+                TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
+                for (int i = 0; i < nodeId.size(); i++) {
+                    TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
+                    dao.id = nodeId.get(i);
+                    dao.avatar = nodeAvatar.get(i);
+                    dao.name = nodeName.get(i);
+                    dao.department = nodeDepartment.get(i);
+                    humenList.add(dao);
+                }
+                nodeId.clear();
+                nodeAvatar.clear();
+                nodeName.clear();
+                nodeDepartment.clear();
+                adapter.notifyDataSetChanged();
+                Utility.setListViewHeightBasedOnChildren(new_humens);
 
-        } else {
+                LogUtil.e("返回结果===========" + nodeId.size() + nodeName.size() + nodeDepartment.size());
 
-            Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
-            if (uri != null) {
-                String path = PhotoOrVideoUtils.getPath(mActivity, uri);
-                filesAddDao = bean.new FilesKnowledgeItemDao();
-                filesAddDao.isEditing = true;
-                filesAddDao.file_path = path;
-                filesAddDao.file_name = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
-                filesAddList.add(filesAddList.size() - 1, filesAddDao);
-                filesAddAdapter.notifyDataSetChanged();
-                Utility.setListViewHeightBasedOnChildren(new_files);
 
+            } else {
+
+                Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
+                if (uri != null) {
+                    String path = PhotoOrVideoUtils.getPath(mActivity, uri);
+                    filesAddDao = bean.new FilesKnowledgeItemDao();
+                    filesAddDao.isEditing = true;
+                    filesAddDao.file_path = path;
+                    filesAddDao.file_name = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
+                    filesAddList.add(filesAddList.size() - 1, filesAddDao);
+                    filesAddAdapter.notifyDataSetChanged();
+                    Utility.setListViewHeightBasedOnChildren(new_files);
+
+                }
             }
         }
-
     }
 }

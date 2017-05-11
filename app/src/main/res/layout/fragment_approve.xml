@@ -104,7 +104,7 @@
                         android:gravity="center"
                         android:paddingBottom="@dimen/dm010"
                         android:paddingTop="@dimen/dm010"
-                        android:text="我执行的"
+                        android:text="审批中"
                         android:textSize="@dimen/dm024" />
 
 
@@ -131,7 +131,7 @@
                         android:gravity="center"
                         android:paddingBottom="@dimen/dm010"
                         android:paddingTop="@dimen/dm010"
-                        android:text="已完成的"
+                        android:text="历史审批"
                         android:textSize="@dimen/dm024" />
                 </LinearLayout>
             </RelativeLayout>

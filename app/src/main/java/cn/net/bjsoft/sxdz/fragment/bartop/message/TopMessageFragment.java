@@ -47,11 +47,10 @@ public class TopMessageFragment extends BaseFragment {
     @ViewInject(R.id.message_message_add)
     private ImageView add_message;
 
-    private PostJsonBean pushMessageBean;
+    private PostJsonBean pushMessageBean = null;
     private MessageMessageBean messageBean;
     private ArrayList<MessageMessageBean.MessageDataDao> dataDaos;
     private MessageMessageAdapter messageAdapter;
-
 
 
     private String message_Start = "0";
@@ -71,7 +70,9 @@ public class TopMessageFragment extends BaseFragment {
             messageAdapter = new MessageMessageAdapter(getActivity(), dataDaos);
         }
 
+        pushMessageBean = null;
         pushMessageBean = new PostJsonBean();
+        message_Start = "0";
 
         messageListView.setAdapter(messageAdapter);
 
@@ -99,7 +100,7 @@ public class TopMessageFragment extends BaseFragment {
         refresh_view.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
-
+                showProgressDialog();
                 // 下拉刷新操作
                 new Handler() {
                     @Override
@@ -117,18 +118,20 @@ public class TopMessageFragment extends BaseFragment {
 
             @Override
             public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
+                showProgressDialog();
                 // 加载操作
                 new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
                         // 千万别忘了告诉控件加载完毕了哦！
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-                        if (!message_Start.equals(message_count)){
+                        if (!message_Start.equals(message_count)) {
                             pushMessageBean.start = message_Start;//设置开始查询
                             LogUtil.e("onLoadMore-----------");
                             getData();
-                        }else {
-                            MyToast.showLong(mActivity,"已经没有更多的消息了!");
+                        } else {
+                            MyToast.showLong(mActivity, "已经没有更多的消息了!");
+                            dismissProgressDialog();
                         }
 
                     }
@@ -159,7 +162,7 @@ public class TopMessageFragment extends BaseFragment {
         pushMessageBean.start = message_Start;//设置开始查询
         pushMessageBean.limit = "10";
         params.addBodyParameter("data", pushMessageBean.toString());
-        LogUtil.e("-------------------------bean.toString()"+pushMessageBean.toString());
+        LogUtil.e("-------------------------bean.toString()" + pushMessageBean.toString());
         httpPostUtils.get(mActivity, params);
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
@@ -168,14 +171,14 @@ public class TopMessageFragment extends BaseFragment {
                 messageBean = GsonUtil.getMessageMessageBean(strJson);
                 if (messageBean.code.equals("0")) {
                     dataDaos.addAll(messageBean.data.items);
-                    message_Start = dataDaos.size()+"";//设置开始查询
-                    message_count = messageBean.data.count+"";
+                    message_Start = dataDaos.size() + "";//设置开始查询
+                    message_count = messageBean.data.count + "";
                     messageAdapter.notifyDataSetChanged();
-                    if (message_count.equals("0")){
-                        MyToast.showLong(mActivity,"没有任何消息可查看!");
+                    if (message_count.equals("0")) {
+                        MyToast.showLong(mActivity, "没有任何消息可查看!");
                     }
-                }else {
-                    MyToast.showLong(mActivity,"获取消息失败-"+messageBean.msg);
+                } else {
+                    MyToast.showLong(mActivity, "获取消息失败-" + messageBean.msg);
                 }
 
             }

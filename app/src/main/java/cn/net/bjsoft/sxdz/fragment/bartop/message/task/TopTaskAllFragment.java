@@ -91,7 +91,7 @@ public class TopTaskAllFragment extends BaseFragment {
         refresh_view.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
-
+                //showProgressDialog();
                 // 下拉刷新操作
                 new Handler() {
                     @Override
@@ -111,6 +111,7 @@ public class TopTaskAllFragment extends BaseFragment {
 
             @Override
             public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
+                //showProgressDialog();
                 // 加载操作
                 new Handler() {
                     @Override

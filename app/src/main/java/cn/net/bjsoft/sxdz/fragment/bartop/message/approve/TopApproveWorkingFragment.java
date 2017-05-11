@@ -88,19 +88,13 @@ public class TopApproveWorkingFragment extends BaseFragment {
     @Override
     public void initData() {
         initList();
-
-
-
-
-
-
         /**
          * 刷新///加载     的操作
          */
         refresh_view.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
-
+                showProgressDialog();
                 // 下拉刷新操作
                 new Handler() {
                     @Override
@@ -109,7 +103,7 @@ public class TopApproveWorkingFragment extends BaseFragment {
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                         get_start = "0";
                         dataItemsBeenList.clear();
-
+                        getData();
                     }
                 }.sendEmptyMessageDelayed(0, 500);
 
@@ -117,6 +111,7 @@ public class TopApproveWorkingFragment extends BaseFragment {
 
             @Override
             public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
+                showProgressDialog();
                 // 加载操作
                 new Handler() {
                     @Override
@@ -129,6 +124,7 @@ public class TopApproveWorkingFragment extends BaseFragment {
                             getData();
                         } else {
                             MyToast.showLong(mActivity, "已经没有更多的消息了!");
+                            dismissProgressDialog();
                         }
                         LogUtil.e("onLoadMore-----------");
                     }
@@ -163,9 +159,12 @@ public class TopApproveWorkingFragment extends BaseFragment {
                 LogUtil.e("-----------------获取正在进行审批消息----------------" + strJson);
                 messageApproveBean = GsonUtil.getMessageApproveBean(strJson);
                 if (messageApproveBean.code.equals("0")) {//数据正确
-                    get_count = messageApproveBean.data.count;
                     formateDatas(messageApproveBean.data.items);//格式化信息
                     dataItemsBeenList.addAll(messageApproveBean.data.items);
+
+                    get_start = dataItemsBeenList.size() + "";//设置开始查询
+                    get_count = messageApproveBean.data.count + "";
+
                     approvalAdapter.notifyDataSetChanged();
 
                     if (get_count.equals("0")) {

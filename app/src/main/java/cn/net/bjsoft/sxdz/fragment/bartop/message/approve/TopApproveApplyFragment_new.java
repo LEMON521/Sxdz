@@ -104,7 +104,7 @@ public class TopApproveApplyFragment_new extends BaseFragment {
         refresh_view.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
-
+                showProgressDialog();
                 // 下拉刷新操作
                 new Handler() {
                     @Override
@@ -124,7 +124,7 @@ public class TopApproveApplyFragment_new extends BaseFragment {
             @Override
             public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
                 // 加载操作
-
+                showProgressDialog();
                 new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
@@ -136,23 +136,17 @@ public class TopApproveApplyFragment_new extends BaseFragment {
                             getData();
                         } else {
                             MyToast.showLong(mActivity, "已经没有更多的消息了!");
+                            dismissProgressDialog();
                         }
                         LogUtil.e("onLoadMore-----------");
-
-
                     }
                 }.sendEmptyMessageDelayed(0, 500);
 
             }
 
         });
-
-
         getData();
-
         //test();
-
-
         //getListData();
         //setListAdapter();
     }
@@ -304,7 +298,6 @@ public class TopApproveApplyFragment_new extends BaseFragment {
                     datas.get(key).add(bean);
                 }
             }
-
 
             MessageApproveDataItemsBean title = new MessageApproveDataItemsBean();
             title.title = key;
