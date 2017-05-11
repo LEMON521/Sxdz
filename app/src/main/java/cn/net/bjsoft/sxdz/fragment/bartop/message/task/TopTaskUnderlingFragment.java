@@ -68,9 +68,44 @@ public class TopTaskUnderlingFragment extends BaseFragment {
     @Override
     public void initData() {
         initList();
-
-        getUserInfos();
+        userOrganizationData();
+        //getUserInfos();
     }
+
+    private void userOrganizationData(){
+
+        userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
+        position_id = userBean.organization.position_id;
+
+        addressBean = GsonUtil.getAddressBean(SPUtil.getUserOrganizationJson(mActivity));
+
+        if (addressBean != null) {
+            employeesBeanList.addAll(addressBean.employees);
+            if (addressBean.positions != null) {
+                positionsBeanList.add(addressBean.positions);
+
+                formateEmployees();
+
+                if (positionsBeanList.size() > 0) {
+                    getBufferPosition(positionsBeanList);
+                    if (buffer_positionsBeanList.size() > 0) {
+                        getPositions(buffer_positionsBeanList, "0");
+                    }
+                }
+
+                getFormatePositions();
+
+                setTreeView();
+
+            } else {
+                MyToast.showLong(mActivity, "获取组织架构信息失败!");
+            }
+        } else {
+            MyToast.showLong(mActivity, "获取组织架构信息失败!");
+        }
+    }
+
+
 
 
     private void initList() {

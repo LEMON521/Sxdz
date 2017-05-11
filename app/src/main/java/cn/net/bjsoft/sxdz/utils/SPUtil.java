@@ -8,7 +8,25 @@ import android.content.SharedPreferences;
  * Created by zkagang on 2016/5/10.
  */
 public class SPUtil {
+    /**
+     * source_id ----source_id--获取
+     * 获取  --  source_id = "source_id"缓存
+     */
+    public static String getMobileJson(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_MOBILE, Context.MODE_PRIVATE);
+        return preferences.getString("user_mobile", "");
+    }
 
+    /**
+     * source_id----
+     * 设置   --   source_id = "source_id"缓存
+     */
+    public static void setMobileJson(Context context, String user_mobile) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_MOBILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("user_mobile", user_mobile);
+        editor.commit();
+    }
 
     /**
      * source_id ----source_id--获取

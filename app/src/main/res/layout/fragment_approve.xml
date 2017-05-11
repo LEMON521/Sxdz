@@ -104,7 +104,7 @@
                         android:gravity="center"
                         android:paddingBottom="@dimen/dm010"
                         android:paddingTop="@dimen/dm010"
-                        android:text="审批中"
+                        android:text="需我审批"
                         android:textSize="@dimen/dm024" />
 
 

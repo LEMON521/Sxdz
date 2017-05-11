@@ -61,8 +61,6 @@ import cn.net.bjsoft.sxdz.view.CircleImageView;
 import cn.net.bjsoft.sxdz.view.WindowRecettingPasswordView;
 import cn.net.bjsoft.sxdz.view.picker_scroll_view.Pickers;
 
-import static cn.net.bjsoft.sxdz.utils.AddressUtils.http_shuxinyun_url;
-
 
 /**
  * 中电联发的我的页面   - -   我的页面
@@ -263,45 +261,47 @@ public class MineZDLFFragment extends BaseFragment {
 
     private void getUserData() {
         showProgressDialog();
+
+        userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
+        userOrganizationBean = userBean.organization;
+        setUserData();
+        dismissProgressDialog();
         //LogUtil.e("json" + mJson);
-        appBean = GsonUtil.getAppBean(mJson);
-        HttpPostUtils httpPostUtil = new HttpPostUtils();
-        String url = "";
-        url = appBean.api_user + "/" + SPUtil.getUserId(mActivity) + "/" + "my.json";
-        LogUtil.e("url--------------------" + url);
-        RequestParams params = new RequestParams(url);
-        httpPostUtil.get(mActivity, params);
-
-        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
-            @Override
-            public void onSuccess(String strJson) {
-                SPUtil.setUserJson(mActivity, strJson);//缓存用户信息
-                LogUtil.e("getUserJson--------------------" + SPUtil.getUserJson(mActivity));
-                userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
-                userOrganizationBean = userBean.organization;
-
-
-                setUserData();
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("我的页面json-----错误" + ex);
-            }
-
-            @Override
-            public void onCancelled(Callback.CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                dismissProgressDialog();
-            }
-        });
-
+//        appBean = GsonUtil.getAppBean(mJson);
+//        HttpPostUtils httpPostUtil = new HttpPostUtils();
+//        String url = "";
+//        url = appBean.api_user + "/" + SPUtil.getUserId(mActivity) + "/" + "my.json";
+//        LogUtil.e("url--------------------" + url);
+//        RequestParams params = new RequestParams(url);
+//        httpPostUtil.get(mActivity, params);
 //
-
+//        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+//            @Override
+//            public void onSuccess(String strJson) {
+//                SPUtil.setUserJson(mActivity, strJson);//缓存用户信息
+//                LogUtil.e("getUserJson--------------------" + SPUtil.getUserJson(mActivity));
+//                userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
+//                userOrganizationBean = userBean.organization;
+//
+//
+//                setUserData();
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                LogUtil.e("我的页面json-----错误" + ex);
+//            }
+//
+//            @Override
+//            public void onCancelled(Callback.CancelledException cex) {
+//
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//                dismissProgressDialog();
+//            }
+//        });
     }
 
     /**
@@ -316,7 +316,7 @@ public class MineZDLFFragment extends BaseFragment {
 
         if (userOrganizationBean != null) {
             company.setText(userOrganizationBean.root_company_name + "");//+""是为了防止userOrganizationBean为空
-            getOrganizationData();
+            //getOrganizationData();
         }
 
         setPickers();
@@ -331,42 +331,43 @@ public class MineZDLFFragment extends BaseFragment {
         Utility.setListViewHeightBasedOnChildren(function);
     }
 
-    private void getOrganizationData() {
-
-        showProgressDialog();
-        HttpPostUtils httpPostUtil = new HttpPostUtils();
-        String url = "";
-        url = http_shuxinyun_url + userOrganizationBean.url;
-        LogUtil.e("公司架构userOrganizationBean url----===========" + url);
-        RequestParams params = new RequestParams(url);
-        httpPostUtil.get(mActivity, params);
-
-        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
-            @Override
-            public void onSuccess(String strJson) {
-                SPUtil.setUserOrganizationJson(mActivity, strJson);//缓存公司架构信息
-                //LogUtil.e("我的页面json");
-//                LogUtil.e("公司架构==========="+SPUtil.getUserOrganizationJson(mActivity));
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                SPUtil.setUserOrganizationJson(mActivity, "");
-                LogUtil.e("我的页面json-----错误" + ex);
-            }
-
-            @Override
-            public void onCancelled(Callback.CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                dismissProgressDialog();
-            }
-        });
-
-    }
+//    private void getOrganizationData() {
+//
+//
+//        showProgressDialog();
+//        HttpPostUtils httpPostUtil = new HttpPostUtils();
+//        String url = "";
+//        url = http_shuxinyun_url + userOrganizationBean.url;
+//        LogUtil.e("公司架构userOrganizationBean url----===========" + url);
+//        RequestParams params = new RequestParams(url);
+//        httpPostUtil.get(mActivity, params);
+//
+//        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+//            @Override
+//            public void onSuccess(String strJson) {
+//                SPUtil.setUserOrganizationJson(mActivity, strJson);//缓存公司架构信息
+//                //LogUtil.e("我的页面json");
+////                LogUtil.e("公司架构==========="+SPUtil.getUserOrganizationJson(mActivity));
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                SPUtil.setUserOrganizationJson(mActivity, "");
+//                LogUtil.e("我的页面json-----错误" + ex);
+//            }
+//
+//            @Override
+//            public void onCancelled(Callback.CancelledException cex) {
+//
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//                dismissProgressDialog();
+//            }
+//        });
+//
+//    }
 
 
     /**

@@ -100,24 +100,26 @@ public class TopTaskFragment extends BaseFragment {
     }
 
     @Event(value = {R.id.fragment_task_all
-            , R.id.fragment_task_branch
+            , R.id.fragment_task_mine
             , R.id.fragment_task_on
+            , R.id.fragment_task_branch
             , R.id.fragment_task_off
-            , R.id.fragment_task_mine})
+            })
     private void taskChange(View view) {
         //showProgressDialog();
 
         {//先把全部设置成默认的样式
             task_all.setTextColor(Color.parseColor("#999999"));
             task_all.setBackgroundResource(R.drawable.approve_left_kongxin);
-            task_branch.setTextColor(Color.parseColor("#999999"));
-            task_branch.setBackgroundResource(R.drawable.approve_middle_kongxin);
+            task_mine.setTextColor(Color.parseColor("#999999"));
+            task_mine.setBackgroundResource(R.drawable.approve_middle_kongxin);
             task_on.setTextColor(Color.parseColor("#999999"));
             task_on.setBackgroundResource(R.drawable.approve_middle_kongxin);
+            task_branch.setTextColor(Color.parseColor("#999999"));
+            task_branch.setBackgroundResource(R.drawable.approve_middle_kongxin);
             task_off.setTextColor(Color.parseColor("#999999"));
-            task_off.setBackgroundResource(R.drawable.approve_middle_kongxin);
-            task_mine.setTextColor(Color.parseColor("#999999"));
-            task_mine.setBackgroundResource(R.drawable.approve_right_kongxin);
+            task_off.setBackgroundResource(R.drawable.approve_right_kongxin);
+
         }
 
         BaseFragment fragment = null;
@@ -131,11 +133,11 @@ public class TopTaskFragment extends BaseFragment {
                 tag = "TopTaskAllFragment";
                 //getData();
                 break;
-            case R.id.fragment_task_branch:
-                task_branch.setTextColor(Color.parseColor("#FFFFFF"));
-                task_branch.setBackgroundResource(R.drawable.approve_middle_shixin);
-                fragment = new TopTaskUnderlingFragment();
-                tag = "TopTaskUnderlingFragment";
+            case R.id.fragment_task_mine:
+                task_mine.setTextColor(Color.parseColor("#FFFFFF"));
+                task_mine.setBackgroundResource(R.drawable.approve_middle_shixin);
+                fragment = new TopTaskMyPublishFragment();
+                tag = "TopTaskMyPublishFragment";
                 //getData();
                 break;
             case R.id.fragment_task_on:
@@ -145,20 +147,21 @@ public class TopTaskFragment extends BaseFragment {
                 tag = "TopTaskDoingFragment";
                 //getData();
                 break;
+            case R.id.fragment_task_branch:
+                task_branch.setTextColor(Color.parseColor("#FFFFFF"));
+                task_branch.setBackgroundResource(R.drawable.approve_middle_shixin);
+                fragment = new TopTaskUnderlingFragment();
+                tag = "TopTaskUnderlingFragment";
+                //getData();
+                break;
             case R.id.fragment_task_off:
                 task_off.setTextColor(Color.parseColor("#FFFFFF"));
-                task_off.setBackgroundResource(R.drawable.approve_middle_shixin);
+                task_off.setBackgroundResource(R.drawable.approve_right_shixin);
                 fragment = new TopTaskDoneFragment();
                 tag = "TopTaskDoneFragment";
                 //getData();
                 break;
-            case R.id.fragment_task_mine:
-                task_mine.setTextColor(Color.parseColor("#FFFFFF"));
-                task_mine.setBackgroundResource(R.drawable.approve_right_shixin);
-                fragment = new TopTaskMyPublishFragment();
-                tag = "TopTaskMyPublishFragment";
-                //getData();
-                break;
+
 
         }
 

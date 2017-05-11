@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xw.repo.BubbleSeekBar;
@@ -68,10 +69,15 @@ public class TaskDetailFragment_new extends BaseFragment {
 //    @ViewInject(R.id.item_task_sxdz_state)
 //    private TextView sxdz_state;
 
+
+
     @ViewInject(R.id.task_item_title)
     private TextView task_title;
     @ViewInject(R.id.task_item_overdue)
     private ImageView task_overdue;
+
+    @ViewInject(R.id.task_item_classify_root)
+    private RelativeLayout task_classify_root;
     @ViewInject(R.id.task_item_classify)
     private TextView task_classify;
     @ViewInject(R.id.task_item_name)
@@ -388,6 +394,7 @@ public class TaskDetailFragment_new extends BaseFragment {
     private void setData() {
         //任务头
         task_title.setText(dataBean.title);
+        task_classify_root.setVisibility(View.GONE);
         task_classify.setText(dataBean.type);
         task_name.setText(UsersInforUtils.getInstance(mActivity).getUserInfo(dataBean.userid).nickname);
         task_start.setText("开始时间:" + TimeUtils.getFormateTime(Long.parseLong(dataBean.starttime), "-", ":"));

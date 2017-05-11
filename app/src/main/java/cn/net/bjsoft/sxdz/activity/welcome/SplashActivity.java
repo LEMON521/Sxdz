@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -49,6 +50,7 @@ import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.ReadFile;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 
+import static cn.net.bjsoft.sxdz.utils.AddressUtils.http_shuxinyun_url;
 import static cn.net.bjsoft.sxdz.utils.UrlUtil.init_url;
 import static cn.net.bjsoft.sxdz.utils.UrlUtil.users_all;
 
@@ -62,6 +64,7 @@ public class SplashActivity extends BaseActivity {
     @ViewInject(R.id.splash_version)
     private TextView versionText;
 
+    private FragmentActivity mActivity;
 
     private AppBean appBean;//最新数据结构
 
@@ -138,7 +141,7 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //启动服务
-
+        mActivity = this;
         versionText.setText(getVersionName());
         BASE_PATH = context.getFilesDir() + File.separator;
         startService(new Intent(this, JPushService.class));
@@ -499,8 +502,8 @@ public class SplashActivity extends BaseActivity {
                 }
             });
         }
-
-        jump(result);
+        SPUtil.setMobileJson(mActivity,result);
+        jump();
     }
 
 
@@ -539,9 +542,10 @@ public class SplashActivity extends BaseActivity {
                         }
                     });
                 }
+                LogUtil.e("----######------getMobileJson-----====------"+strJson);
+                SPUtil.setMobileJson(mActivity,strJson);
+                jump();
 
-
-                jump(strJson);
             }
 
             @Override
@@ -561,6 +565,86 @@ public class SplashActivity extends BaseActivity {
 
             }
         });
+    }
+
+
+
+    /**
+     * 如果Token值存在,那么就初始化用户信息
+     */
+    private void getUserData() {
+        HttpPostUtils httpPostUtil = new HttpPostUtils();
+        String url = "";
+        url = http_shuxinyun_url + "cache/users/" + SPUtil.getUserId(mActivity) + "/" + "my.json";
+        LogUtil.e("url--------------------" + url);
+        RequestParams params = new RequestParams(url);
+        httpPostUtil.get(mActivity, params);
+
+        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                SPUtil.setUserJson(mActivity, strJson);//缓存用户信息
+                getOrganizationData();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("我的页面json-----错误" + ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
+    }
+
+    /**
+     * 获取工资组织架构信息
+     */
+    private void getOrganizationData() {
+        HttpPostUtils httpPostUtil = new HttpPostUtils();
+        String url = "";
+        url = http_shuxinyun_url + "cache/users/"+SPUtil.getUserId(mActivity)+"/organization.json";
+        LogUtil.e("公司架构userOrganizationBean url----===========" + url);
+        RequestParams params = new RequestParams(url);
+        httpPostUtil.get(mActivity, params);
+
+        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                SPUtil.setUserOrganizationJson(mActivity, strJson);//缓存公司架构信息
+                //LogUtil.e("我的页面json");
+//                LogUtil.e("公司架构==========="+SPUtil.getUserOrganizationJson(mActivity));
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                //将返回的json传递过去，在下一个页面将必要的参数本地化
+                LogUtil.e("----------getMobileJson-----------"+SPUtil.getMobileJson(mActivity));
+                intent.putExtra("json", SPUtil.getMobileJson(mActivity));
+                // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
+                finish();
+                startActivity(intent);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                SPUtil.setUserOrganizationJson(mActivity, "");
+                LogUtil.e("我的页面json-----错误" + ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
+
     }
 
 //    private void getData() {
@@ -620,53 +704,42 @@ public class SplashActivity extends BaseActivity {
     /**
      * 页面的跳转
      */
-    private void jump(String json) {
-
+    private void jump() {
 
         if (appBean.loaders.size() == 0) {
             if (appBean.authentication) {//需要验证
-                if (SPUtil.getToken(this).equals("")) {//登录状态
+                if (SPUtil.getToken(this).equals("")) {//未登录状态
+
                     Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     //将返回的json传递过去，在下一个页面将必要的参数本地化
-                    intent.putExtra("json", json);
+                    intent.putExtra("json", SPUtil.getMobileJson(mActivity));
                     // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
                     finish();
                     startActivity(intent);
-
-                } else {//未登录状态
-
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    //将返回的json传递过去，在下一个页面将必要的参数本地化
-                    intent.putExtra("json", json);
-                    // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
-                    finish();
-                    startActivity(intent);
-
-
+                } else {//登录状态
+                    getUserData();
                 }
 
             } else {//不需要验证
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 //将返回的json传递过去，在下一个页面将必要的参数本地化
-                intent.putExtra("json", json);
+                intent.putExtra("json", SPUtil.getMobileJson(mActivity));
                 //LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
                 finish();
                 startActivity(intent);
-
-
             }
         }
         if (appBean.loaders.size() == 1) {
             Intent intentJumpOver = new Intent(SplashActivity.this, JumpOverActivity.class);
             //Intent intentJumpOver = new Intent(SplashActivity.this, MainActivity.class);
-            intentJumpOver.putExtra("json", json);
+            intentJumpOver.putExtra("json", SPUtil.getMobileJson(mActivity));
             finish();
             startActivity(intentJumpOver);
 
         } else if (appBean.loaders.size() > 1) {//跳到轮播图
             Intent intent = new Intent(SplashActivity.this, CarouselFigureActivity.class);
             //将返回的json传递过去，在下一个页面将必要的参数本地化
-            intent.putExtra("json", json);
+            intent.putExtra("json", SPUtil.getMobileJson(mActivity));
             intent.setAction("SplashActivity");
             //LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
             finish();

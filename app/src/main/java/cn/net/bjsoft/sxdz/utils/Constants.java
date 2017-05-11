@@ -98,6 +98,11 @@ public class Constants {
     public static final String USER_KEY_USER_ALL = "users_all";
 
     /**
+     * 用户 users_all
+     */
+    public static final String USER_KEY_USER_MOBILE = "users_mobile";
+
+    /**
      * 用户 api_user
      */
     public static final String USER_KEY_API_USER = "api_user";
