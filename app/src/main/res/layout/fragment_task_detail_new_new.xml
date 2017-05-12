@@ -8,111 +8,12 @@
 
     <include layout="@layout/top_title" />
 
-    <cn.net.bjsoft.sxdz.view.observable_scroll_view.ObservableScrollView
-        android:id="@+id/fragment_task_scroll"
+    <ListView
+        android:id="@+id/fragment_task_detail_users"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-
-            <!--<include layout="@layout/item_task_sxdz" />-->
-            <include layout="@layout/item_task_zdlf" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/dm020"
-                android:paddingRight="@dimen/dm020"
-                android:paddingTop="@dimen/dm020">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="任务详情"
-                    android:textColor="#333333"
-                    android:textSize="@dimen/dm028"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/fragment_task_detail_host"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dm020"
-                    android:lineSpacingExtra="3dp"
-                    android:lineSpacingMultiplier="1.5"
-                    android:text="唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目唯恩私人度假旅游项目"
-                    android:textColor="#55616A"
-                    android:textSize="@dimen/dm024" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/fragment_task_attachment_show"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/dm020"
-                android:paddingLeft="@dimen/dm020"
-                android:paddingRight="@dimen/dm020"
-                android:paddingTop="@dimen/dm040">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="任务附件"
-                    android:textColor="#333333"
-                    android:textSize="@dimen/dm028"
-                    android:textStyle="bold" />
-
-                <cn.net.bjsoft.sxdz.view.ChildrenListView
-                    android:id="@+id/fragment_task_attachment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:divider="#00000000"></cn.net.bjsoft.sxdz.view.ChildrenListView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <cn.net.bjsoft.sxdz.view.ChildrenListView
-                    android:id="@+id/fragment_task_detail_users"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </cn.net.bjsoft.sxdz.view.ChildrenListView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dm030"
-                android:background="@color/white"
-                android:paddingBottom="@dimen/dm020"
-                android:paddingLeft="@dimen/dm020"
-                android:paddingRight="@dimen/dm020"
-                android:paddingTop="@dimen/dm020">
-
-                <TextView
-                    android:id="@+id/fragment_task_add_submit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/approve_shixin_blue"
-                    android:gravity="center"
-                    android:padding="@dimen/dm015"
-                    android:text="提交"
-                    android:textColor="@color/aMap_wite" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </cn.net.bjsoft.sxdz.view.observable_scroll_view.ObservableScrollView>
+    </ListView>
 
 </LinearLayout>

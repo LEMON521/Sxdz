@@ -15,13 +15,17 @@ import android.widget.TextView;
 
 import com.xw.repo.BubbleSeekBar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
@@ -34,6 +38,7 @@ import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataFilesBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataUsersBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataUsersPlanBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskPushDetailBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
@@ -68,7 +73,6 @@ public class TaskDetailFragment_new extends BaseFragment {
 //    private TextView sxdz_end;
 //    @ViewInject(R.id.item_task_sxdz_state)
 //    private TextView sxdz_state;
-
 
 
     @ViewInject(R.id.task_item_title)
@@ -505,14 +509,8 @@ public class TaskDetailFragment_new extends BaseFragment {
         if (uri != null) {
             path = PhotoOrVideoUtils.getPath(mActivity, uri);
             LogUtil.e("onActivityResult-----path" + path);
-            MessageTaskDetailDataFilesBean filesAddDao = new MessageTaskDetailDataFilesBean();
-            filesAddDao.url = path;
-            filesAddDao.title = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
-            filesAddDao.isAdd = false;
-            filesAddDao.isEditing = true;
-            usersFilesBeenList.add(usersFilesBeenList.size(), filesAddDao);
-            filesAddAdapter.notifyDataSetChanged();
-            Utility.setListViewHeightBasedOnChildren(files);
+            upLoadFile(path);
+
 
         }
 
@@ -520,11 +518,140 @@ public class TaskDetailFragment_new extends BaseFragment {
     }
 
     /**
+     * 上传文件到服务器
+     *
+     * @param imagePath
+     */
+    private void upLoadFile(final String imagePath) {
+        showProgressDialog();
+        RequestParams params = new RequestParams(SPUtil.getApiUpload(mActivity));
+        params.setMultipart(true);
+        File file = new File(imagePath);
+
+        params.addBodyParameter("file", file);
+        x.http().post(params, new Callback.ProgressCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                LogUtil.e("上传成功onSuccess" + result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    if (jsonObject.optInt("code") == 0) {
+
+                        //返回路径名
+                        String url = jsonObject.optJSONObject("data").optString("src");
+
+                        MessageTaskDetailDataFilesBean filesAddDao = new MessageTaskDetailDataFilesBean();
+                        filesAddDao.url = url;
+                        filesAddDao.title = imagePath.substring(imagePath.lastIndexOf("/") + 1);//不包含 (/)线
+                        filesAddDao.isAdd = false;
+                        filesAddDao.isEditing = true;
+                        usersFilesBeenList.add(usersFilesBeenList.size(), filesAddDao);
+                        filesAddAdapter.notifyDataSetChanged();
+                        Utility.setListViewHeightBasedOnChildren(files);
+
+                    } else {
+                        MyToast.showLong(mActivity, "文件上传失败,请联系管理员");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("上传失败onError" + ex);
+                MyToast.showLong(mActivity, "上传头像失败,请联系管理员");
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+
+            @Override
+            public void onWaiting() {
+
+            }
+
+            @Override
+            public void onStarted() {
+
+            }
+
+            @Override
+            public void onLoading(long total, long current, boolean isDownloading) {
+                LogUtil.e("上传onLoading--" + isDownloading + ":total:==" + total + ":current:==" + current);
+            }
+        });
+
+    }
+
+    /**
      * 提交数据到服务器
      */
     private void submitToServicer() {
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/submit";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("submit_id", "task_submit");
+
+        MessageTaskPushDetailBean pushData = new MessageTaskPushDetailBean();
 
 
-        mActivity.finish();
+        pushData.id = dataBean.id;
+        pushData.submit = false;
+        pushData.users = usersBeenList;
+        pushData.plan = usersPlanBeenList;
+        pushData.files = usersFilesBeenList;
+        params.addBodyParameter("data", pushData.toString());
+
+
+        LogUtil.e("-------------------------bean.toString()" + pushData.toString());
+        httpPostUtils.post(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------任务详情------上传获取消息----------------" + strJson);
+
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
+                }
+
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
+
+        //mActivity.finish();
     }
 }

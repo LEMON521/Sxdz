@@ -12,7 +12,7 @@ public class MessageTaskDetailDataUsersPlanBean implements Serializable {
     public String endtime = "";
     public String finished = "";
     public String finishtime = "";
-    public String startime = "";
+    public String starttime = "";
     public String title = "";
     public boolean isEditing = false;
 }

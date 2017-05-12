@@ -26,4 +26,7 @@ public class MessageTaskDetailDataBean implements Serializable {
     public String type = "";
     public String userid = "";
     public ArrayList<MessageTaskDetailDataUsersBean> users ;
+    public boolean submit = false;
+
+
 }

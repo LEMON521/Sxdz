@@ -3,7 +3,6 @@ package cn.net.bjsoft.sxdz.fragment.bartop.message.approve;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -20,19 +19,16 @@ import java.util.Iterator;
 import java.util.Map;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.home.WebActivity;
-import cn.net.bjsoft.sxdz.adapter.approve.ApproveShowWaiteItemAdapter;
+import cn.net.bjsoft.sxdz.activity.home.bartop.message.WebViewApproveActivity;
 import cn.net.bjsoft.sxdz.adapter.approve.ApproveShowWaiteItemAdapter_new_1;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveDataItemsBean;
-import cn.net.bjsoft.sxdz.bean.approve.ApproveDatasDao;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
-import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.ViewMessageApproveApply;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
@@ -72,26 +68,6 @@ public class TopApproveApplyFragment_new extends BaseFragment {
     private MessageApproveBean messageApproveBean;
 
     private HashMap<String, ViewMessageApproveApply> views;
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    private ArrayList<ApproveDatasDao.ApproveItems> waiteList;
-
-
-    private ArrayList<ApproveDatasDao.ApproveItems> personnelList;////人事审批
-    private ApproveShowWaiteItemAdapter personneAdapter;
-
-
-    private ArrayList<ApproveDatasDao.ApproveItems> administrationList;//行政审批
-    private ApproveShowWaiteItemAdapter administrationAdapter;
-
-
-    private ArrayList<ApproveDatasDao.ApproveItems> financialList;//财务审批
-    private ApproveShowWaiteItemAdapter financialAdapter;
-
-
-    private ArrayList<ApproveDatasDao.ApproveItems> officialList;//办公审批
-    private ApproveShowWaiteItemAdapter officialAdapter;
 
     @Override
     public void initData() {
@@ -196,9 +172,10 @@ public class TopApproveApplyFragment_new extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 LogUtil.e("点击---" + formate_list.get(position).wf_name + "::" + position);
                 if (!formate_list.get(position).id.equals("-1")) {
-                    Intent intent = new Intent(mActivity, WebActivity.class);
+                    Intent intent = new Intent(mActivity, WebViewApproveActivity.class);
                     //目前还没有跳转字段
-                    intent.putExtra("url", "www.baidu.com");
+                    intent.putExtra("url", formate_list.get(position).url);
+                    intent.putExtra("id", formate_list.get(position).id);
                     intent.putExtra("title", formate_list.get(position).title);
 //                Bundle bundle = new Bundle();
 //                bundle.putString("task_id", formate_list.get(position).id);
@@ -304,12 +281,6 @@ public class TopApproveApplyFragment_new extends BaseFragment {
             title.id = "-1";
             formate_list.add(title);
             formate_list.addAll(datas.get(key));
-//            ViewMessageApproveApply child = new ViewMessageApproveApply(mActivity);
-//            child.setTag(key);
-//            child.setDatas(datas.get(key));
-//            root.addView(child);
-//
-//            views.put(key, child);
         }
         adapter.notifyDataSetChanged();
 
@@ -335,164 +306,5 @@ public class TopApproveApplyFragment_new extends BaseFragment {
             }
         }
     }
-
-    /**
-     * 获取各个列表的内容
-     */
-    private void getListData() {
-        if (personnelList == null) {
-            personnelList = new ArrayList<>();
-        }
-        if (administrationList == null) {
-            administrationList = new ArrayList<>();
-        }
-        if (financialList == null) {
-            financialList = new ArrayList<>();
-        }
-        if (officialList == null) {
-            officialList = new ArrayList<>();
-        }
-
-
-        for (int i = 0; i < waiteList.size(); i++) {
-            if (waiteList.get(i).type.equals("leave")) {
-                personnelList.add(waiteList.get(i));
-            } else if (waiteList.get(i).type.equals("trip")) {
-                personnelList.add(waiteList.get(i));
-            } else if (waiteList.get(i).type.equals("out")) {
-                personnelList.add(waiteList.get(i));
-            } else if (waiteList.get(i).type.equals("res")) {
-                administrationList.add(waiteList.get(i));
-            } else if (waiteList.get(i).type.equals("expenses")) {
-                financialList.add(waiteList.get(i));
-            } else if (waiteList.get(i).type.equals("buy")) {
-                financialList.add(waiteList.get(i));
-            } else if (waiteList.get(i).type.equals("agreement")) {
-                officialList.add(waiteList.get(i));
-            }
-        }
-    }
-
-    /**
-     * 为list设置适配器
-     */
-    private void setListAdapter() {
-        if (personneAdapter == null) {
-            personneAdapter = new ApproveShowWaiteItemAdapter(mActivity, personnelList);
-        }
-        personnel.setAdapter(personneAdapter);
-        Utility.setListViewHeightBasedOnChildren(personnel);
-        personnel.setOnTouchListener(new View.OnTouchListener() {
-            //屏蔽滑动事件
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        return true;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
-        personnel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mActivity, WebActivity.class);
-                intent.putExtra("url", personnelList.get(position).url);
-                intent.putExtra("type", personnelList.get(position).type);
-                startActivity(intent);
-
-            }
-        });
-
-        if (administrationAdapter == null) {
-            administrationAdapter = new ApproveShowWaiteItemAdapter(mActivity, administrationList);
-        }
-        administration.setAdapter(administrationAdapter);
-        Utility.setListViewHeightBasedOnChildren(administration);
-        administration.setOnTouchListener(new View.OnTouchListener() {
-            //屏蔽滑动事件
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        return true;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
-        administration.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mActivity, WebActivity.class);
-                intent.putExtra("url", administrationList.get(position).url);
-                intent.putExtra("type", administrationList.get(position).type);
-                startActivity(intent);
-
-            }
-        });
-
-        if (financialAdapter == null) {
-            financialAdapter = new ApproveShowWaiteItemAdapter(mActivity, financialList);
-        }
-        financial.setAdapter(financialAdapter);
-        Utility.setListViewHeightBasedOnChildren(financial);
-        financial.setOnTouchListener(new View.OnTouchListener() {
-            //屏蔽滑动事件
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        return true;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
-        financial.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mActivity, WebActivity.class);
-                intent.putExtra("url", financialList.get(position).url);
-                intent.putExtra("type", financialList.get(position).type);
-                startActivity(intent);
-
-            }
-        });
-
-        if (officialAdapter == null) {
-            officialAdapter = new ApproveShowWaiteItemAdapter(mActivity, officialList);
-        }
-        official.setAdapter(officialAdapter);
-        Utility.setListViewHeightBasedOnChildren(official);
-        official.setOnTouchListener(new View.OnTouchListener() {
-            //屏蔽滑动事件
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        return true;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
-        official.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mActivity, WebActivity.class);
-                intent.putExtra("url", officialList.get(position).url);
-                intent.putExtra("type", officialList.get(position).type);
-                startActivity(intent);
-
-            }
-        });
-    }
-
 
 }

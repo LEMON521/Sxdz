@@ -46,8 +46,8 @@
 
         <ImageView
             android:id="@+id/approve_show_item_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dm060"
+            android:layout_height="@dimen/dm060"
             android:src="@drawable/examination_and_approval_zdlf_contract_a_business_leave" />
 
         <LinearLayout
@@ -91,6 +91,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:layout_marginRight="@dimen/dm010"
                     android:id="@+id/approve_show_item_department"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -102,7 +103,7 @@
                     android:id="@+id/approve_show_item_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="@dimen/dm010"
                     android:text="姓名"
                     android:textColor="#999999"
                     android:textSize="@dimen/dm022" />
@@ -110,11 +111,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="申请"
+                    android:text="申请:"
                     android:textColor="#999999"
                     android:textSize="@dimen/dm022" />
 
                 <TextView
+                    android:layout_marginRight="@dimen/dm010"
                     android:id="@+id/approve_show_item_type_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -127,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="事由："
+                    android:text="类型："
                     android:textColor="#999999"
                     android:textSize="@dimen/dm022" />
 

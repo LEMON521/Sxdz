@@ -10,30 +10,27 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.xw.repo.BubbleSeekBar;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.adapter.message.task.KnowledgeItemHeadFilesListAdapter_new;
-import cn.net.bjsoft.sxdz.adapter.message.task.TaskDetailAddAdapter_new;
+import cn.net.bjsoft.sxdz.adapter.message.task.TaskDetailUsersAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailBeanNew;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataFilesBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataUsersBean;
-import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataUsersPlanBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
@@ -44,7 +41,6 @@ import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.ChildrenListView;
-import cn.net.bjsoft.sxdz.view.observable_scroll_view.ObservableScrollView;
 
 /**
  * Created by Zrzc on 2017/4/5.
@@ -58,60 +54,53 @@ public class TaskDetailFragment_new_new extends BaseFragment {
     @ViewInject(R.id.title_title)
     private TextView title;
 
-//    @ViewInject(R.id.item_task_sxdz_name)
-//    private TextView sxdz_title;
-//    @ViewInject(R.id.item_task_sxdz_title)
-//    private TextView sxdz_name;
-//    @ViewInject(R.id.item_task_sxdz_start)
-//    private TextView sxdz_start;
-//    @ViewInject(R.id.item_task_sxdz_end)
-//    private TextView sxdz_end;
-//    @ViewInject(R.id.item_task_sxdz_state)
-//    private TextView sxdz_state;
+
+    private View headView;
+    //@ViewInject(R.id.task_item_title)
+    private TextView headView_task_title;
+    //@ViewInject(R.id.task_item_overdue)
+    private ImageView headView_task_overdue;
+    //@ViewInject(R.id.task_item_classify_root)
+    private RelativeLayout headView_task_classify_root;
+    //@ViewInject(R.id.task_item_classify)
+    private TextView headView_task_classify;
+    // @ViewInject(R.id.task_item_name)
+    private TextView headView_task_name;
+    // @ViewInject(R.id.task_item_start)
+    private TextView headView_task_start;
+    //@ViewInject(R.id.task_item_end)
+    private TextView headView_task_end;
+    //@ViewInject(R.id.task_item_state)
+    private TextView headView_task_state;
+    //@ViewInject(R.id.task_item_level)
+    private TextView headView_task_level;
+    //@ViewInject(R.id.fragment_task_detail_host)
+    private TextView headView_detail;
+    //@ViewInject(R.id.fragment_task_attachment_show)
+    private LinearLayout headView_attachment_show;
+    //@ViewInject(R.id.fragment_task_attachment)
+    private ChildrenListView headView_attachment;//任务附件
 
 
-
-    @ViewInject(R.id.task_item_title)
-    private TextView task_title;
-    @ViewInject(R.id.task_item_overdue)
-    private ImageView task_overdue;
-
-    @ViewInject(R.id.task_item_classify_root)
-    private RelativeLayout task_classify_root;
-    @ViewInject(R.id.task_item_classify)
-    private TextView task_classify;
-    @ViewInject(R.id.task_item_name)
-    private TextView task_name;
-    @ViewInject(R.id.task_item_start)
-    private TextView task_start;
-    @ViewInject(R.id.task_item_end)
-    private TextView task_end;
-    @ViewInject(R.id.task_item_state)
-    private TextView task_state;
-    @ViewInject(R.id.task_item_level)
-    private TextView task_level;
+    @ViewInject(R.id.fragment_task_detail_users)
+    private ListView users_list;
 
 
-    @ViewInject(R.id.fragment_task_scroll)
-    private ObservableScrollView scroll;
-    @ViewInject(R.id.fragment_task_detail_host)
-    private TextView detail;
-    @ViewInject(R.id.fragment_task_attachment_show)
-    private LinearLayout attachment_show;
-    @ViewInject(R.id.fragment_task_attachment)
-    private ChildrenListView attachment;//任务附件
-    @ViewInject(R.id.fragment_task_detail_list)
-    private ChildrenListView detail_list;
-    @ViewInject(R.id.fragment_task_add_detail)
-    private TextView add_detail;
-    @ViewInject(R.id.fragment_task_progress)
-    private BubbleSeekBar progress;
-    @ViewInject(R.id.fragment_task_files)
-    private ChildrenListView files;//执行人新增附件
-    @ViewInject(R.id.fragment_task_add_files)
-    private TextView add_files;
-    @ViewInject(R.id.fragment_task_add_submit)
-    private TextView submit;
+    private View footView;
+    //@ViewInject(R.id.fragment_task_add_submit)
+    private TextView footView_submit;
+
+//    @ViewInject(R.id.fragment_task_detail_list)
+//    private ChildrenListView detail_list;
+//    @ViewInject(R.id.fragment_task_add_detail)
+//    private TextView add_detail;
+//    @ViewInject(R.id.fragment_task_progress)
+//    private BubbleSeekBar progress;
+//    @ViewInject(R.id.fragment_task_files)
+//    private ChildrenListView files;//执行人新增附件
+//    @ViewInject(R.id.fragment_task_add_files)
+//    private TextView add_files;
+
 
     ////////////////////////////////////数据相关
     private PostJsonBean pushMessageBean;
@@ -128,10 +117,11 @@ public class TaskDetailFragment_new_new extends BaseFragment {
 
     ///////////////////////////////执行者条目/////////////////////////////////
     private ArrayList<MessageTaskDetailDataUsersBean> usersBeenList;
-    private ArrayList<MessageTaskDetailDataFilesBean> usersFilesBeenList;//执行者上传的附件
-    private KnowledgeItemHeadFilesListAdapter_new filesAddAdapter;
-    private ArrayList<MessageTaskDetailDataUsersPlanBean> usersPlanBeenList;//执行者添加的详情
-    private TaskDetailAddAdapter_new detailAddAdapter;
+    private TaskDetailUsersAdapter usersAdapter;
+//    private ArrayList<MessageTaskDetailDataFilesBean> usersFilesBeenList;//执行者上传的附件
+//    private KnowledgeItemHeadFilesListAdapter_new filesAddAdapter;
+//    private ArrayList<MessageTaskDetailDataUsersPlanBean> usersPlanBeenList;//执行者添加的详情
+//    private TaskDetailAddAdapter_new detailAddAdapter;
 
 
     private boolean isEdited = false;
@@ -142,6 +132,7 @@ public class TaskDetailFragment_new_new extends BaseFragment {
     public void initData() {
         back.setVisibility(View.VISIBLE);
         title.setText("任务详情");
+
 
         pushMessageBean = new PostJsonBean();
 
@@ -154,9 +145,9 @@ public class TaskDetailFragment_new_new extends BaseFragment {
         //TODO 初始化页面的时候,或者获取到数据的时候,如果姓名中没有我,或者id不是用户id,那么就是不可编辑状态
 
         if (!isEdited) {
-            submit.setVisibility(View.GONE);
-            add_detail.setVisibility(View.GONE);
-            add_files.setVisibility(View.GONE);
+            footView_submit.setVisibility(View.GONE);
+//            add_detail.setVisibility(View.GONE);
+//            add_files.setVisibility(View.GONE);
         }
 
 
@@ -175,26 +166,56 @@ public class TaskDetailFragment_new_new extends BaseFragment {
         };
 
 
-        //滚动监听
-        scroll.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
-            @Override
-            public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
-                progress.correctOffsetWhenContainerOnScrolling();
-            }
-        });
-        //高度改变的时候的监听
-        scroll.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                progress.correctOffsetWhenContainerOnScrolling();
-            }
-        });
-
-
+        inflateHeadView();
+        inflateFootView();
         initList();
 
         //设置数据
-        getData();
+        //getData();
+        getDataTest();
+    }
+
+    private void inflateHeadView() {
+        headView = View.inflate(mActivity, R.layout.view_head_task_detail, null);
+        headView_task_title = (TextView) headView.findViewById(R.id.task_item_title);
+        headView_task_overdue = (ImageView) headView.findViewById(R.id.task_item_overdue);
+        headView_task_classify_root = (RelativeLayout) headView.findViewById(R.id.task_item_classify_root);
+        headView_task_name = (TextView) headView.findViewById(R.id.task_item_name);
+        headView_task_start = (TextView) headView.findViewById(R.id.task_item_start);
+        headView_task_end = (TextView) headView.findViewById(R.id.task_item_end);
+        headView_task_state = (TextView) headView.findViewById(R.id.task_item_state);
+        headView_task_level = (TextView) headView.findViewById(R.id.task_item_level);
+        headView_detail = (TextView) headView.findViewById(R.id.fragment_task_detail_host);
+        headView_attachment_show = (LinearLayout) headView.findViewById(R.id.fragment_task_attachment_show);
+        headView_attachment = (ChildrenListView) headView.findViewById(R.id.fragment_task_attachment);
+
+
+        users_list.addHeaderView(headView);
+    }
+
+    private void inflateFootView() {
+        footView = View.inflate(mActivity, R.layout.view_foot_task_detail, null);
+        footView_submit = (TextView) footView.findViewById(R.id.fragment_task_add_submit);
+
+        users_list.addFooterView(footView);
+    }
+
+
+    private void getDataTest() {
+        String s = "{\"code\":0,\"data\":{\"id\":\"4658686682444083412\",\"title\":\"BIIP界面设计\",\"userid\":10001,\"ctime\":\"\\/Date(1493257553519)\\/\",\"type\":\"日常任务\",\"finished\":false,\"finishtime\":\"\\/Date(-62135596800000)\\/\",\"shared\":false,\"progress\":20,\"starttime\":\"\\/Date(1493261629922)\\/\",\"limittime\":\"\\/Date(1493261629922)\\/\",\"hours\":0,\"message\":\"\",\"priority\":\"紧急\",\"priority_color\":null,\"description\":\"\",\"files\":[{\"id\":null,\"title\":\"\",\"ctime\":\"\\/Date(-62135596800000)\\/\",\"url\":\"\"}],\"users\":[{\"position\":false,\"id\":\"10001\",\"progress\":80,\"submited\":false,\"submittime\":\"\\/Date(-62135596800000)\\/\",\"finished\":false,\"finishtime\":\"\\/Date(-62135596800000)\\/\",\"evaluate\":\"\",\"files\":[{\"id\":null,\"title\":\"\",\"ctime\":\"\\/Date(-62135596800000)\\/\",\"url\":\"\"}],\"plan\":[{\"id\":null,\"title\":\"第一阶段\",\"content\":\"测试工作计划\",\"startime\":\"\\/Date(-62135596800000)\\/\",\"endtime\":\"\\/Date(-62135596800000)\\/\",\"finished\":true,\"finishtime\":\"\\/Date(-62135596800000)\\/\"}]}]},\"msg\":null}\n";
+        taskDetailBean = GsonUtil.getMessageTaskDetailBeanNew(s);
+        if (taskDetailBean.code.equals("0")) {
+            dataBean = taskDetailBean.data;
+            fomateDataDate();
+            setData();
+//                    dataDaos.addAll(messageBean.data.items);
+//                    message_Start = dataDaos.size()+"";//设置开始查询
+//                    message_count = messageBean.data.count+"";
+//                    messageAdapter.notifyDataSetChanged();
+        } else {
+            MyToast.showLong(mActivity, "获取消息失败");
+        }
+
     }
 
     private void initList() {
@@ -207,10 +228,10 @@ public class TaskDetailFragment_new_new extends BaseFragment {
         if (filesHostAdapter == null) {
             filesHostAdapter = new KnowledgeItemHeadFilesListAdapter_new(mActivity, filesHostList);
         }
-        attachment.setAdapter(filesHostAdapter);
+        headView_attachment.setAdapter(filesHostAdapter);
 
-        attachment.setOnTouchListener(touchListener);
-        attachment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        headView_attachment.setOnTouchListener(touchListener);
+        headView_attachment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!filesHostList.get(position).isEditing) {
@@ -239,49 +260,57 @@ public class TaskDetailFragment_new_new extends BaseFragment {
         }
         usersBeenList.clear();
 
-        if (usersFilesBeenList == null) {
-            usersFilesBeenList = new ArrayList<>();
+        if (usersAdapter == null) {
+            usersAdapter = new TaskDetailUsersAdapter(mActivity, this, usersBeenList);
         }
-        usersFilesBeenList.clear();
-        if (filesAddAdapter == null) {
-            filesAddAdapter = new KnowledgeItemHeadFilesListAdapter_new(mActivity, usersFilesBeenList);
-        }
-        files.setAdapter(filesAddAdapter);
-        files.setOnTouchListener(touchListener);
-
-        files.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!usersFilesBeenList.get(position).isEditing) {
-                    //不可编辑状态,就下载文件
-                    DownLoadFilesUtils downLoad = new DownLoadFilesUtils();
-                    String url = "";
-                    url = usersFilesBeenList.get(position).url;
-                    if (url.equals("")) {
-                        if (downLoad.downloadFile(mActivity, url)) {
-                            usersFilesBeenList.get(position).url = url.substring(url.lastIndexOf("/") + 1);//不包含 (/)线
-                            filesAddAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        MyToast.showShort(mActivity, "打开文件！");
-                    }
-                } else {
-                    MyToast.showShort(mActivity, "下载路径不能为空!");
-                }
-            }
-        });
+        users_list.setAdapter(usersAdapter);
 
 
-        if (usersPlanBeenList == null) {
-            usersPlanBeenList = new ArrayList<>();
-        }
-        usersPlanBeenList.clear();
-        if (detailAddAdapter == null) {
-            detailAddAdapter = new TaskDetailAddAdapter_new(mActivity, usersPlanBeenList);
-        }
+        //----------------------------------
 
-        detail_list.setAdapter(detailAddAdapter);
-        detail_list.setOnTouchListener(touchListener);
+//        if (usersFilesBeenList == null) {
+//            usersFilesBeenList = new ArrayList<>();
+//        }
+//        usersFilesBeenList.clear();
+//        if (filesAddAdapter == null) {
+//            filesAddAdapter = new KnowledgeItemHeadFilesListAdapter_new(mActivity, usersFilesBeenList);
+//        }
+//        files.setAdapter(filesAddAdapter);
+//        files.setOnTouchListener(touchListener);
+//
+//        files.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                if (!usersFilesBeenList.get(position).isEditing) {
+//                    //不可编辑状态,就下载文件
+//                    DownLoadFilesUtils downLoad = new DownLoadFilesUtils();
+//                    String url = "";
+//                    url = usersFilesBeenList.get(position).url;
+//                    if (url.equals("")) {
+//                        if (downLoad.downloadFile(mActivity, url)) {
+//                            usersFilesBeenList.get(position).url = url.substring(url.lastIndexOf("/") + 1);//不包含 (/)线
+//                            filesAddAdapter.notifyDataSetChanged();
+//                        }
+//                    } else {
+//                        MyToast.showShort(mActivity, "打开文件！");
+//                    }
+//                } else {
+//                    MyToast.showShort(mActivity, "下载路径不能为空!");
+//                }
+//            }
+//        });
+//
+//
+//        if (usersPlanBeenList == null) {
+//            usersPlanBeenList = new ArrayList<>();
+//        }
+//        usersPlanBeenList.clear();
+//        if (detailAddAdapter == null) {
+//            detailAddAdapter = new TaskDetailAddAdapter_new(mActivity, usersPlanBeenList);
+//        }
+//
+//        detail_list.setAdapter(detailAddAdapter);
+//        detail_list.setOnTouchListener(touchListener);
     }
 
 
@@ -393,37 +422,37 @@ public class TaskDetailFragment_new_new extends BaseFragment {
      */
     private void setData() {
         //任务头
-        task_title.setText(dataBean.title);
-        task_classify_root.setVisibility(View.GONE);
-        task_classify.setText(dataBean.type);
-        task_name.setText(UsersInforUtils.getInstance(mActivity).getUserInfo(dataBean.userid).nickname);
-        task_start.setText("开始时间:" + TimeUtils.getFormateTime(Long.parseLong(dataBean.starttime), "-", ":"));
-        task_end.setText("结束时间:" + TimeUtils.getFormateTime(Long.parseLong(dataBean.ctime), "-", ":"));
-        task_level.setText(dataBean.priority);
+        headView_task_title.setText(dataBean.title);
+        headView_task_classify_root.setVisibility(View.GONE);
+        headView_task_name.setText(UsersInforUtils.getInstance(mActivity).getUserInfo(dataBean.userid).nickname);
+        headView_task_start.setText("开始时间:" + TimeUtils.getFormateTime(Long.parseLong(dataBean.starttime), "-", ":"));
+        headView_task_end.setText("结束时间:" + TimeUtils.getFormateTime(Long.parseLong(dataBean.ctime), "-", ":"));
+        headView_task_level.setText(dataBean.priority);
         if (!TextUtils.isEmpty(dataBean.priority_color)) {
-            task_level.setTextColor(Color.parseColor("#" + dataBean.priority_color));
+            headView_task_level.setTextColor(Color.parseColor("#" + dataBean.priority_color));
         }
 
         if (dataBean.finished) {
-            task_state.setText("已完成");
-            submit.setVisibility(View.GONE);
-            progress.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return true;
-                }
-            });
+            headView_task_state.setText("已完成");
+            footView_submit.setVisibility(View.GONE);
+//            progress.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    return true;
+//                }
+//            });
 
         } else {
-            task_state.setText("进行中");
-            submit.setVisibility(View.VISIBLE);
+            headView_task_state.setText("进行中");
+            footView_submit.setVisibility(View.VISIBLE);
         }
 
         //任务描述
-        detail.setText(dataBean.description);
+        headView_detail.setText(dataBean.description);
+
 
         //任务进度
-        progress.setProgress(Float.parseFloat(dataBean.progress));
+        //progress.setProgress(Float.parseFloat(dataBean.progress));
 
 
         //任务附件
@@ -432,28 +461,34 @@ public class TaskDetailFragment_new_new extends BaseFragment {
             filesHostAdapter.notifyDataSetChanged();
         }
         if (!(filesHostList.size() > 0)) {
-            attachment_show.setVisibility(View.GONE);
+            headView_attachment_show.setVisibility(View.GONE);
         }
 
-        //执行人相关
         if (dataBean.users != null) {
             usersBeenList.addAll(dataBean.users);
-
-            for (MessageTaskDetailDataUsersBean usersBean : usersBeenList) {
-                if (usersBean.files != null) {
-                    usersFilesBeenList.addAll(usersBean.files);
-                }
-                if (usersBean.plan != null) {
-                    usersPlanBeenList.addAll(usersBean.plan);
-                }
-            }
         }
+
+
+//
+//        //执行人相关
+//        if (dataBean.users != null) {
+//            usersBeenList.addAll(dataBean.users);
+//
+//            for (MessageTaskDetailDataUsersBean usersBean : usersBeenList) {
+//                if (usersBean.files != null) {
+//                    usersFilesBeenList.addAll(usersBean.files);
+//                }
+//                if (usersBean.plan != null) {
+//                    usersPlanBeenList.addAll(usersBean.plan);
+//                }
+//            }
+//        }
     }
 
-    @Event(value = {R.id.title_back
-            , R.id.fragment_task_add_detail
-            , R.id.fragment_task_add_files
-            , R.id.fragment_task_add_submit})
+    //    @Event(value = {R.id.title_back
+//            , R.id.fragment_task_add_detail
+//            , R.id.fragment_task_add_files
+//            , R.id.fragment_task_add_submit})
     private void taskDetailOnClick(View view) {
         switch (view.getId()) {
             case R.id.title_back://添加详情条目
@@ -461,12 +496,12 @@ public class TaskDetailFragment_new_new extends BaseFragment {
                 break;
             case R.id.fragment_task_add_detail://添加详情条目
                 //addBean = new MessageTaskDetailAddBean();
-                MessageTaskDetailDataUsersPlanBean detailBean = new MessageTaskDetailDataUsersPlanBean();
-                detailBean.isEditing = true;
-                usersPlanBeenList.add(usersPlanBeenList.size(), detailBean);
-                Utility.setListViewHeightBasedOnChildren(detail_list);
-                detailAddAdapter.notifyDataSetChanged();
-                LogUtil.e("正价的条目为" + usersPlanBeenList.size());
+//                MessageTaskDetailDataUsersPlanBean detailBean = new MessageTaskDetailDataUsersPlanBean();
+//                detailBean.isEditing = true;
+//                usersPlanBeenList.add(usersPlanBeenList.size(), detailBean);
+//                Utility.setListViewHeightBasedOnChildren(detail_list);
+//                detailAddAdapter.notifyDataSetChanged();
+//                LogUtil.e("正价的条目为" + usersPlanBeenList.size());
 
 
                 //Utility.setListViewHeightBasedOnChildren(detail_list);
@@ -499,21 +534,25 @@ public class TaskDetailFragment_new_new extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
-        String path = "";
-        LogUtil.e("onActivityResult-----uri" + uri);
-        if (uri != null) {
-            path = PhotoOrVideoUtils.getPath(mActivity, uri);
-            LogUtil.e("onActivityResult-----path" + path);
-            MessageTaskDetailDataFilesBean filesAddDao = new MessageTaskDetailDataFilesBean();
-            filesAddDao.url = path;
-            filesAddDao.title = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
-            filesAddDao.isAdd = false;
-            filesAddDao.isEditing = true;
-            usersFilesBeenList.add(usersFilesBeenList.size(), filesAddDao);
-            filesAddAdapter.notifyDataSetChanged();
-            Utility.setListViewHeightBasedOnChildren(files);
 
+        if (data != null) {
+            Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
+            String path = "";
+            LogUtil.e("onActivityResult-----uri" + uri);
+            if (uri != null) {
+                path = PhotoOrVideoUtils.getPath(mActivity, uri);
+                LogUtil.e("onActivityResult-----path" + path);
+
+                MessageTaskDetailDataFilesBean filesAddDao = new MessageTaskDetailDataFilesBean();
+                filesAddDao.url = path;
+                filesAddDao.title = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
+                filesAddDao.isAdd = false;
+                filesAddDao.isEditing = true;
+//                usersBeenList.add(usersBeenList.size(), filesAddDao);
+                usersAdapter.notifyDataSetChanged();
+                Utility.setListViewHeightBasedOnChildren(users_list);
+
+            }
         }
 
 

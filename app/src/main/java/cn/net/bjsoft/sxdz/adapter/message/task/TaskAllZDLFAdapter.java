@@ -101,6 +101,12 @@ public class TaskAllZDLFAdapter extends BaseAdapter {
 //                viewHolder.level.setText("");
 //                viewHolder.level.setTextColor(Color.parseColor("#666666"));
 //        }
+        if (tasksDaos.get(position).alert) {
+            viewHolder.overdue.setVisibility(View.VISIBLE);
+        }else {
+            viewHolder.overdue.setVisibility(View.GONE);
+        }
+
         viewHolder.level.setText(tasksDaos.get(position).priority);
         viewHolder.level.setTextColor(Color.parseColor("#" + tasksDaos.get(position).priority_color));
         /////////////////////////////////////////////////////////////////
@@ -134,6 +140,13 @@ public class TaskAllZDLFAdapter extends BaseAdapter {
         viewHolder.name.setText(name.toString());
 
 //        //////////////////////////////////////////////////
+        tasksDaos.get(position).starttime.contains("/Date(");
+        tasksDaos.get(position).limittime.contains("/Date(");
+        tasksDaos.get(position).starttime = tasksDaos.get(position).starttime.replace("/Date(","");
+        tasksDaos.get(position).starttime = tasksDaos.get(position).starttime.replace(")/","");
+        tasksDaos.get(position).limittime = tasksDaos.get(position).starttime.replace("/Date(","");
+        tasksDaos.get(position).limittime = tasksDaos.get(position).starttime.replace(")/","");
+
         viewHolder.start.setText("开始时间:" + TimeUtils.getFormateTime(Long.parseLong(tasksDaos.get(position).starttime), "-", ":"));
         viewHolder.end.setText("结束时间:" + TimeUtils.getFormateTime(Long.parseLong(tasksDaos.get(position).limittime), "-", ":"));
 

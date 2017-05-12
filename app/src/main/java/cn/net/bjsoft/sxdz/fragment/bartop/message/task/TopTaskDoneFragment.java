@@ -121,7 +121,6 @@ public class TopTaskDoneFragment extends BaseFragment {
                         tasksDoneDao.clear();
                         LogUtil.e("setOnRefreshListener-----------");
                         getData();
-
                     }
                 }.sendEmptyMessageDelayed(0, 500);
 

@@ -2,9 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
+        android:background="@color/white"
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/dm020"
         android:paddingLeft="@dimen/dm020"
@@ -23,7 +26,7 @@
             android:textColor="#333333"
             android:textSize="@dimen/dm024"
             android:textStyle="bold"
-            android:id="@+id/fragment_task_detail_name"
+            android:id="@+id/item_task_detail_name"
             android:text="张经理"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -42,7 +45,7 @@
 
         <cn.net.bjsoft.sxdz.view.ChildrenListView
 
-            android:id="@+id/fragment_task_detail_list"
+            android:id="@+id/item_task_detail_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         </cn.net.bjsoft.sxdz.view.ChildrenListView>
@@ -53,7 +56,7 @@
             android:layout_marginTop="@dimen/dm020">
 
             <TextView
-                android:id="@+id/fragment_task_add_detail"
+                android:id="@+id/item_task_add_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -83,7 +86,7 @@
             android:textStyle="bold" />
 
         <com.xw.repo.BubbleSeekBar
-            android:id="@+id/fragment_task_progress"
+            android:id="@+id/item_task_progress"
             android:layout_width="match_parent"
             android:layout_height="16dp"
             android:layout_marginTop="8dp"
@@ -114,7 +117,7 @@
 
         <cn.net.bjsoft.sxdz.view.ChildrenListView
             android:divider="#00000000"
-            android:id="@+id/fragment_task_files"
+            android:id="@+id/item_task_files"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dm020"></cn.net.bjsoft.sxdz.view.ChildrenListView>
@@ -126,7 +129,7 @@
             android:layout_marginTop="@dimen/dm020">
 
             <TextView
-                android:id="@+id/fragment_task_add_files"
+                android:id="@+id/item_task_add_files"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

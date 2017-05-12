@@ -262,12 +262,14 @@ public class MineZDLFFragment extends BaseFragment {
     private void getUserData() {
         showProgressDialog();
 
+        appBean = GsonUtil.getAppBean(mJson);;
+
         userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
         userOrganizationBean = userBean.organization;
         setUserData();
         dismissProgressDialog();
         //LogUtil.e("json" + mJson);
-//        appBean = GsonUtil.getAppBean(mJson);
+//
 //        HttpPostUtils httpPostUtil = new HttpPostUtils();
 //        String url = "";
 //        url = appBean.api_user + "/" + SPUtil.getUserId(mActivity) + "/" + "my.json";

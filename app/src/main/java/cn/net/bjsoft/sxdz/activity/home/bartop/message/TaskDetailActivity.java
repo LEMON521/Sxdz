@@ -20,6 +20,7 @@ public class TaskDetailActivity extends BaseActivity {
 
         String fragment_name = "TaskDetailFragment";
 
+        //BaseFragment fragment = new TaskDetailFragment_new_new();
         BaseFragment fragment = new TaskDetailFragment_new();
         Bundle bundle = new Bundle();
         Bundle b = getIntent().getBundleExtra("isEdited");

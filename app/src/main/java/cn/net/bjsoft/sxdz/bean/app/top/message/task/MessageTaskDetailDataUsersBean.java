@@ -8,12 +8,14 @@ import java.util.ArrayList;
  */
 
 public class MessageTaskDetailDataUsersBean implements Serializable {
+    public String userid = "";
+    public boolean passed = false;
     public String evaluate = "";
-    public ArrayList<MessageTaskDetailDataFilesBean> files ;
+    public ArrayList<MessageTaskDetailDataFilesBean> files;
     public String finished = "";
     public String finishtime = "";
     public String id = "";
-    public ArrayList<MessageTaskDetailDataUsersPlanBean> plan ;
+    public ArrayList<MessageTaskDetailDataUsersPlanBean> plan;
     public String position = "";
     public String progress = "";
     public String submited = "";

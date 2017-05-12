@@ -37,6 +37,7 @@ public class MessageTaskBean implements Serializable {
     }
 
     public class TasksAllDao implements Serializable {
+        public boolean alert = false;
         //        public int state = -1;//状态
 //        public String title = "";//标题
 //        public String classify = "";//分类
@@ -69,6 +70,7 @@ public class MessageTaskBean implements Serializable {
     public class TasksAllWorkDao implements Serializable {
         public String submited = "";
         public String userid = "";
+        public String id = "";
     }
 
     public class AddressListDao implements Serializable {

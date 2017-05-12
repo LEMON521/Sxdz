@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
+
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
@@ -27,9 +30,14 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
     private ArrayList<MessageApproveDataItemsBean> list;
     private int type = -1;
 
+    private ImageOptions imageOptions;
+
     public ApproveShowWaiteItemAdapter_new_1(Context context, ArrayList<MessageApproveDataItemsBean> list/*, int type*/) {
         this.context = context;
         this.list = list;
+        imageOptions = new ImageOptions.Builder()
+                .setFailureDrawableId(R.drawable.examination_and_approval_zdlf_contract_approval) //以资源id设置加载失败的动画
+                .setLoadingDrawableId(R.drawable.http_loading_image).build();
         //this.type = type;
     }
 
@@ -74,21 +82,6 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
         }
         //设置数据
         Holder holder = (Holder) convertView.getTag();
-//        if (list.get(position).type.equals("expenses")) {
-//            type = 1;
-//        } else if (list.get(position).type.equals("trip")) {
-//            type = 2;
-//        } else if (list.get(position).type.equals("leave")) {
-//            type = 3;
-//        } else if (list.get(position).type.equals("out")) {
-//            type = 4;
-//        } else if (list.get(position).type.equals("buy")) {
-//            type = 5;
-//        } else if (list.get(position).type.equals("agreement")) {
-//            type = 6;
-//        } else if (list.get(position).type.equals("res")) {
-//            type = 7;
-//        }
 
         if (list.get(position).id.equals("-1")) {
             holder.root.setVisibility(View.VISIBLE);
@@ -98,61 +91,27 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
             holder.root.setVisibility(View.GONE);
             holder.body.setVisibility(View.VISIBLE);
 
-            int type = 6;
-            switch (type) {
-                case 1/*ConstantApprove.NEW_EXPENSES*/://报销
-                    holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_reimbursement);
-                    /**
-                     * list  在这里强转,然后将list中的数据设置在列表中
-                     */
-                    holder.type_1.setText("报销");
-                    holder.type_2.setText("报销");
-                    break;
-                case 2/*ConstantApprove.NEW_TRIP*/://出差
-                    holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_a_business_travel);
-                    holder.type_1.setText("出差");
-                    holder.type_2.setText("出差");
-                    break;
-                case 3/*ConstantApprove.NEW_LEAVE*/://请假
-                    holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_a_business_leave);
-                    holder.type_1.setText("请假");
-                    holder.type_2.setText("请假");
-                    break;
-                case 4/*ConstantApprove.NEW_OUT*/://外出
-                    holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_go_out);
-                    holder.type_1.setText("外出");
-                    holder.type_2.setText("外出");
-                    break;
-                case 5/*ConstantApprove.NEW_BUY*/://采购
-                    holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_purchase);
-                    holder.type_1.setText("采购");
-                    holder.type_2.setText("采购");
-                    break;
-                case 6/*ConstantApprove.NEW_AGREEMENT*/://合同
-                    holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_approval);
-//                holder.type_1.setText("合同签订");
-//                holder.type_2.setText("合同签订");
-                    holder.type_2.setText(list.get(position).wf_type);
-                    break;
-                case 7/*ConstantApprove.NEW_RES*/://物品
-                    holder.type.setImageResource(R.drawable.examination_and_approval_zdlf_contract_goods_claim);
-                    holder.type_1.setText("物品申领");
-                    holder.type_2.setText("物品申领");
-                    break;
-            }
+            x.image().bind(holder.type, list.get(position).wf_logo, imageOptions);
 
             holder.type_1.setText(list.get(position).title);
-            holder.name.setText(UsersInforUtils.getInstance(context).getUserInfo(list.get(position).userid).nickname);
 
             //部门暂时写成人名
+            holder.department.setVisibility(View.GONE);
             holder.department.setText(UsersInforUtils.getInstance(context).getUserInfo(list.get(position).userid).nickname);
 
+            holder.name.setText(UsersInforUtils.getInstance(context).getUserInfo(list.get(position).userid).nickname);
+
             //事由
-            holder.mater.setText(list.get(position).wf_name);
+            holder.mater.setText(list.get(position).wf_type);
+
+            holder.type_2.setText(list.get(position).wf_name);
+
             holder.time.setText(TimeUtils.getTimeDifference(Long.parseLong(list.get(position).ctime)));
             /**
              * 将list的数据设置到控件中
              */
+
+
         }
 
         return convertView;

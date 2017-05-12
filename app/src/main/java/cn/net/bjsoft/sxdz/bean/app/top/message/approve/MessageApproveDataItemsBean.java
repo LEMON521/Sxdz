@@ -21,6 +21,9 @@ public class MessageApproveDataItemsBean implements Serializable {
     public String wf_id = "";
     public String wf_name = "";
     public String wf_type = "";
+    public String wf_logo = "";
+    public String url = "";
+
 
 
     public class MessageApproveDataItemsUsersBean{
