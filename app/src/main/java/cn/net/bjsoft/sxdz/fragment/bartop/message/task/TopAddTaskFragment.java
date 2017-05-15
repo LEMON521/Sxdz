@@ -30,6 +30,7 @@ import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.adapter.message.task.TaskAddAddressListAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemHeadFilesListAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataUsersBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskPushAddBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.dialog.PickerDialog;
@@ -338,6 +339,9 @@ public class TopAddTaskFragment extends BaseFragment {
         params.addBodyParameter("submit_id", "task_save");
 
         MessageTaskPushAddBean pushData = new MessageTaskPushAddBean();
+        MessageTaskDetailDataUsersBean user = new MessageTaskDetailDataUsersBean();
+        user.id ="10001";
+        pushData.users.add(user);
 
 
         pushData.id = "";

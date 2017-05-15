@@ -68,6 +68,8 @@ public class TopTaskDoingFragment extends BaseFragment {
         source_id = getArguments().getString("source_id");
         if (!TextUtils.isEmpty(source_id)){
             pushDoingBean.data.source_id = source_id;
+        }else {
+            pushDoingBean.data.source_id  = SPUtil.getUsers_SourceId(mActivity);
         }
 
         if (tasksDoingDao == null) {

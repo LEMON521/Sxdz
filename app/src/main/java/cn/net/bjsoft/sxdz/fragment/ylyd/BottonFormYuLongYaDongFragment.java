@@ -1,10 +1,11 @@
 package cn.net.bjsoft.sxdz.fragment.ylyd;
 
-import android.os.Handler;
-import android.os.Message;
+import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -21,6 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.home.WebActivity;
+import cn.net.bjsoft.sxdz.activity.home.function.form.FunctionFormActivity;
+import cn.net.bjsoft.sxdz.adapter.function.form.FunctionFormAdapter;
+import cn.net.bjsoft.sxdz.bean.app.function.form.FunctionFormBean;
+import cn.net.bjsoft.sxdz.bean.app.function.form.FunctionFormDatasBean;
 import cn.net.bjsoft.sxdz.bean.ylyd.form.YLYDFormDao;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
@@ -31,6 +37,8 @@ import cn.net.bjsoft.sxdz.view.treeview.bean.FileBean;
 import cn.net.bjsoft.sxdz.view.treeview.helper.Node;
 import cn.net.bjsoft.sxdz.view.treeview.helper.SimpleTreeAdapter;
 import cn.net.bjsoft.sxdz.view.treeview.helper.TreeListViewAdapter;
+
+import static cn.net.bjsoft.sxdz.utils.function.TestAddressUtils.test_get_function_form_url;
 
 
 /**
@@ -74,42 +82,19 @@ public class BottonFormYuLongYaDongFragment extends BaseFragment {
 
     @ViewInject(R.id.tree_view)
     private ListView treeView;
-    private YLYDFormDao.TreeListBean treeListBean;
-    private ArrayList<YLYDFormDao.TreeListBean> tree_list;
+
+    private FunctionFormBean formsBean;
+    private ArrayList<FunctionFormDatasBean> dataBeanList;
+    private FunctionFormAdapter adapter;
+
+
+//    private YLYDFormDao.TreeListBean treeListBean;
+//    private ArrayList<YLYDFormDao.TreeListBean> tree_list;
 
     private FileBean bean;
     private List<FileBean> mDatas = new ArrayList<FileBean>();
     private ListView mTree;
     private TreeListViewAdapter mAdapter;
-
-
-    protected static final int SUCCESS = 1;
-    protected static final int ERROR = -1;
-    private Message message = null;
-    /**
-     * 向主线程发送消息的Handler
-     */
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                // 对数据进行解析和封装
-                case SUCCESS:
-                    setRollViewPage();
-                    setTreeView();
-                    break;
-
-                case ERROR:
-                    //
-
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-    };
 
     @Override
     public void initData() {
@@ -117,15 +102,86 @@ public class BottonFormYuLongYaDongFragment extends BaseFragment {
         title.setText("报表");
         LogUtil.e("initData"+"1111111111111111111111111");
 //        view = (RelativeLayout) View.inflate(mActivity,R.layout.layout_roll_view,null);
-        if (message != null) {
-            message = null;
-        }
-        message = Message.obtain();
         //root.addView(view);
 //        top_viewpager = (LinearLayout) view.findViewById(R.id.top_viewpager);
 //        top_title = (TextView) view.findViewById(R.id.top_title);
 //        dots_ll = (LinearLayout) view.findViewById(R.id.dots_ll);
-        getFormData();
+
+        initList();
+        getFormDataTest();
+
+
+
+
+
+    }
+
+    private void initList(){
+        if (dataBeanList==null) {
+            dataBeanList = new ArrayList<>();
+        }
+        dataBeanList.clear();
+
+        if (adapter==null) {
+            adapter = new FunctionFormAdapter(mActivity,dataBeanList);
+        }
+
+        treeView.setAdapter(adapter);
+
+        treeView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!TextUtils.isEmpty(dataBeanList.get(position).url)) {//不为空,那么就是子节点,并打开网页
+                    Intent webIntent = new Intent(mActivity, WebActivity.class);
+                    webIntent.putExtra("url", dataBeanList.get(position).url);
+                    webIntent.putExtra("title", dataBeanList.get(position).title);
+                    startActivity(webIntent);
+                } else {//不为空,那么他就有子节点
+                    Intent childIntent = new Intent(mActivity, FunctionFormActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("form_id", dataBeanList.get(position).id);
+                    bundle.putString("title", dataBeanList.get(position).title);
+                    childIntent.putExtra("form_data", bundle);
+                    startActivity(childIntent);
+                }
+            }
+        });
+    }
+
+    private void getFormDataTest(){
+
+        String url = test_get_function_form_url;
+        RequestParams params = new RequestParams(url);
+        //params.addBodyParameter("form_id", formId);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                LogUtil.e("-------------result------------"+result);
+                formsBean = GsonUtil.getFunctionFormBean(result);
+                dataBeanList.addAll(formsBean.data);
+
+                LogUtil.e("-------------dataBeanList------------"+dataBeanList.size());
+
+                adapter.notifyDataSetChanged();
+
+                getFormData();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
 
     }
 
@@ -143,10 +199,10 @@ public class BottonFormYuLongYaDongFragment extends BaseFragment {
                     LogUtil.e("获取到报表数据-----------" + result);
                     //scroll_list.clear();
                     scroll_list = formBean.data.scroll_list;
-                    tree_list = formBean.data.tree_list;
-                    message.what = SUCCESS;
+//                    tree_list = formBean.data.tree_list;
+
+                    setRollViewPage();
                 } else {
-                    message.what = ERROR;
                 }
             }
 
@@ -162,7 +218,6 @@ public class BottonFormYuLongYaDongFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
-                handler.sendMessage(message);
             }
         });
     }
@@ -249,7 +304,7 @@ public class BottonFormYuLongYaDongFragment extends BaseFragment {
 
     private void setTreeView(){
         mDatas.clear();
-        getItems(tree_list, 0);
+//        getItems(tree_list, 0);
         try {
 
             mAdapter = new SimpleTreeAdapter<FileBean>(treeView, mActivity, mDatas, 1);

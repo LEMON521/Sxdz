@@ -167,6 +167,7 @@ public class TopTaskMyPublishFragment extends BaseFragment {
 
         pushMyPublishBean.start = get_start;//设置开始查询
         pushMyPublishBean.limit = "10";
+        pushMyPublishBean.data.source_id = SPUtil.getUsers_SourceId(mActivity);
         params.addBodyParameter("data", pushMyPublishBean.toString());
         LogUtil.e("-------------------------bean.toString()" + pushMyPublishBean.toString());
         httpPostUtils.get(mActivity, params);

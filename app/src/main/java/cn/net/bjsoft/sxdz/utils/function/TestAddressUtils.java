@@ -37,7 +37,8 @@ public class TestAddressUtils {
 
     public static String test_get_message_task_detail_url="http://www.shuxin.net/api/app_json/android/message/message_task_detail.json";
 
-
     public static String test_get_message_task_add_address_listl_url="http://www.shuxin.net/api/app_json/android/message/message_task_add_address_list.json";
+
+    public static String test_get_function_form_url="http://www.shuxin.net/api/app_json/android/form/form.json";
 
 }

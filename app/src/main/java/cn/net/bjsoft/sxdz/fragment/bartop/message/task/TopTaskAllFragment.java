@@ -56,7 +56,7 @@ public class TopTaskAllFragment extends BaseFragment {
     private MessageTaskBean.TaskQueryDao taskQueryDao;
     private TaskSearchPopupWindow window;
 
-    private PostJsonBean pushDoneBean;
+    private PostJsonBean pushAllBean;
     private String get_start = "0";
     private String get_count = "0";
     private String source_id = "";
@@ -64,7 +64,7 @@ public class TopTaskAllFragment extends BaseFragment {
     @Override
     public void initData() {
 
-        pushDoneBean = new PostJsonBean();
+        pushAllBean = new PostJsonBean();
 
         if (tasksAllDao == null) {
             tasksAllDao = new ArrayList<>();
@@ -129,7 +129,7 @@ public class TopTaskAllFragment extends BaseFragment {
                         // 千万别忘了告诉控件加载完毕了哦！
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
                         if (!get_start.equals(get_count)){
-                            pushDoneBean.start = get_start;//设置开始查询
+                            pushAllBean.start = get_start;//设置开始查询
                             LogUtil.e("onLoadMore-----------");
                             getData();
                         }else {
@@ -168,10 +168,11 @@ public class TopTaskAllFragment extends BaseFragment {
         RequestParams params = new RequestParams(url);
         params.addBodyParameter("source_id", "task_all");
 
-        pushDoneBean.start = get_start;//设置开始查询
-        pushDoneBean.limit = "10";
-        params.addBodyParameter("data", pushDoneBean.toString());
-        LogUtil.e("-------------------------bean.toString()"+pushDoneBean.toString());
+        pushAllBean.start = get_start;//设置开始查询
+        pushAllBean.limit = "10";
+        pushAllBean.data.source_id = SPUtil.getUsers_SourceId(mActivity);
+        params.addBodyParameter("data", pushAllBean.toString());
+        LogUtil.e("-------------------------bean.toString()"+pushAllBean.toString());
         httpPostUtils.get(mActivity, params);
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
@@ -182,9 +183,7 @@ public class TopTaskAllFragment extends BaseFragment {
                     tasksAllDao.addAll(taskBean.data.items);
                     get_start = tasksAllDao.size() + "";//设置开始查询
                     get_count = taskBean.data.count + "";
-
                     formateDatas();//格式化信息
-
                     taskAdapter.notifyDataSetChanged();
                     if (get_count.equals("0")) {
                         MyToast.showShort(mActivity, "没有任何消息可查看!");
@@ -229,6 +228,7 @@ public class TopTaskAllFragment extends BaseFragment {
     private void formateDatas() {
         for (MessageTaskBean.TasksAllDao dao : tasksAllDao) {
             if (SPUtil.getUserId(mActivity).equals(dao.userid)) {
+                //设置发起人还是执行人
                 dao.is_executant = 0;
 
                 String time = dao.starttime;
