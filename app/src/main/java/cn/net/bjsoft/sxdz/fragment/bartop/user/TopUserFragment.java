@@ -23,7 +23,7 @@ import org.xutils.x;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.home.MainActivity;
 import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
-import cn.net.bjsoft.sxdz.bean.DatasBean;
+import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.Constants;
@@ -48,7 +48,7 @@ public class TopUserFragment extends BaseFragment {
     private TextView name;
 
     private ProgressDialog dialog;//上传时的提示框
-    private DatasBean.UserDao mUserDao;
+    private UserBean mUserDao;
     private ImageOptions mImageOptions;
     private BitmapUtils bitmapUtils;
 
@@ -65,7 +65,7 @@ public class TopUserFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        mUserDao = GsonUtil.getDatasBean(mJson).data.user;
+        mUserDao = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
         mImageOptions = new ImageOptions.Builder().setCircular(true).setUseMemCache(false).build();
         bitmapUtils = new BitmapUtils(getActivity(), AddressUtils.img_cache_url);
         bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);

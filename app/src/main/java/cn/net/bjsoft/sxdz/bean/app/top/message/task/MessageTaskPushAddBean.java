@@ -10,12 +10,12 @@ import java.util.ArrayList;
 public class MessageTaskPushAddBean implements Serializable {
 
     public String id = "";
-    public String title = "添加新任务";
-    public String starttime = "2017-05-03 13:37:00";
-    public String limittime = "2018-04-04 14:34:00";
-    public String message = "HEX3c703e313133333c62723e3c2f703e";
-    public String priority = "紧急";
-    public String description = "1133";
+    public String title = "";
+    public String starttime = "";
+    public String limittime = "";
+    public String message = "";
+    public String priority = "";
+    public String description = "";
     public boolean shared = false;
     public ArrayList<MessageTaskDetailDataUsersBean> users = new ArrayList<>();
     public ArrayList<MessageTaskDetailDataFilesBean> files = new ArrayList<>();

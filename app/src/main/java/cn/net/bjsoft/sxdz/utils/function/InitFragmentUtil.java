@@ -11,6 +11,7 @@ import cn.net.bjsoft.sxdz.bean.app.HomepageBean;
 import cn.net.bjsoft.sxdz.bean.app.ToolbarBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.fragment.WebViewFragment;
+import cn.net.bjsoft.sxdz.fragment.barbotton.BottonMineFragment;
 import cn.net.bjsoft.sxdz.fragment.barbotton.BottonNewsFragment;
 import cn.net.bjsoft.sxdz.fragment.barbotton.BottonScanFragment;
 import cn.net.bjsoft.sxdz.fragment.barbotton.BottonUploadFragment;
@@ -30,6 +31,7 @@ import cn.net.bjsoft.sxdz.fragment.bartop.message.TopTaskFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.user.TopUserFragment;
 import cn.net.bjsoft.sxdz.fragment.ylyd.BottonFormYuLongYaDongFragment;
 import cn.net.bjsoft.sxdz.fragment.ylyd.BottonMineYuLongYaDongFragment;
+import cn.net.bjsoft.sxdz.fragment.zdlf.KnowledgeZDLFFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.MineZDLFFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.WorkFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
@@ -79,20 +81,22 @@ public class InitFragmentUtil {
                         } else if (mBottonList.get(i).tag.equals("mine_zdlf")) {
                             fragment = new MineZDLFFragment();//中电联发的我界面
                         } else if (mBottonList.get(i).tag.equals("knowledge_zdlf")) {
-                            //fragment = new KnowledgeZDLFFragment();//中电联发的z知识界面
-                            fragment = new BottonFormYuLongYaDongFragment();
+                            fragment = new KnowledgeZDLFFragment();//中电联发的z知识界面
+                            //fragment = new BottonFormYuLongYaDongFragment();
                         } else if (mBottonList.get(i).tag.equals("upload")) {
                             fragment = new BottonUploadFragment();//上传
                         } else if (mBottonList.get(i).tag.equals("article")) {
                             fragment = new BottonNewsFragment();//新闻页面
                         } else if (mBottonList.get(i).tag.equals("form")) {
                             fragment = new WebViewFragment();
-                        } else if (mBottonList.get(i).tag.equals("approve_ylyd")) {
+                        } else if (mBottonList.get(i).tag.equals("workflow")) {
                             fragment = new TopApproveFragment();//
                         } else if (mBottonList.get(i).tag.equals("form_ylyd")) {
                             fragment = new BottonFormYuLongYaDongFragment();
                         } else if (mBottonList.get(i).tag.equals("mine_ylyd")) {
                             fragment = new BottonMineYuLongYaDongFragment();
+                        }else if (mBottonList.get(i).tag.equals("mine_rcjg")) {
+                            fragment = new BottonMineFragment();
                         } else if (mBottonList.get(i).tag.equals("mine")) {
 //                            if (mAppBean.user.logined) {
                             //fragment = new BottonMineFragment();

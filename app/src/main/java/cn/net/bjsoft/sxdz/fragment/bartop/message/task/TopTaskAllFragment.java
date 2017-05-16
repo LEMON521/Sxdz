@@ -1,6 +1,7 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -86,8 +87,16 @@ public class TopTaskAllFragment extends BaseFragment {
         task_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(mActivity, TaskDetailActivity.class);
+//                intent.putExtra("fragment_name", "task_detail");
+//                mActivity.startActivity(intent);
+
                 Intent intent = new Intent(mActivity, TaskDetailActivity.class);
                 intent.putExtra("fragment_name", "task_detail");
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isEdited", !tasksAllDao.get(position).finished);
+                bundle.putString("task_id", tasksAllDao.get(position).id);
+                intent.putExtra("isEdited", bundle);
                 mActivity.startActivity(intent);
             }
         });

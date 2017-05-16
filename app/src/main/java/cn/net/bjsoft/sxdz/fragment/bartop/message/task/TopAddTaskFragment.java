@@ -3,6 +3,7 @@ package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,6 +31,7 @@ import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.adapter.message.task.TaskAddAddressListAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemHeadFilesListAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataFilesBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataUsersBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskPushAddBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
@@ -39,6 +41,7 @@ import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
+import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.tree_task_add_addresslist.bean.TreeTaskAddAddressListBean;
 
@@ -157,7 +160,7 @@ public class TopAddTaskFragment extends BaseFragment {
 
                 submit2Service();
 
-                mActivity.finish();
+
                 break;
         }
     }
@@ -309,18 +312,12 @@ public class TopAddTaskFragment extends BaseFragment {
                 LogUtil.e("返回结果===========" + nodeId.size() + nodeName.size() + nodeDepartment.size());
 
 
-            } else {
+            } else {//如果是选择附件---则上传
 
                 Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
                 if (uri != null) {
                     String path = PhotoOrVideoUtils.getPath(mActivity, uri);
-                    filesAddDao = bean.new FilesKnowledgeItemDao();
-                    filesAddDao.isEditing = true;
-                    filesAddDao.file_path = path;
-                    filesAddDao.file_name = path.substring(path.lastIndexOf("/") + 1);//不包含 (/)线
-                    filesAddList.add(filesAddList.size() - 1, filesAddDao);
-                    filesAddAdapter.notifyDataSetChanged();
-                    Utility.setListViewHeightBasedOnChildren(new_files);
+                    upLoadFile(path);
 
                 }
             }
@@ -328,7 +325,46 @@ public class TopAddTaskFragment extends BaseFragment {
     }
 
 
-    private void submit2Service(){
+    private void submit2Service() {
+
+
+
+        String title = new_name.getText().toString().trim();
+        Long subTime = System.currentTimeMillis();
+        String time = new_data.getText().toString().trim();
+        String discription = new_discription.getText().toString().trim();
+        String classify = new_classify.getText().toString().trim();
+        String leave = new_leave.getText().toString().trim();
+
+        if (TextUtils.isEmpty(title)) {
+            MyToast.showShort(mActivity, "请输入标题");
+            return;
+        }
+
+        if (TextUtils.isEmpty(time)) {
+            MyToast.showShort(mActivity, "请添加截止时间");
+            return;
+        }
+
+        if (TextUtils.isEmpty(discription)) {
+            MyToast.showShort(mActivity, "请添加任务描述");
+            return;
+        }
+
+        if (TextUtils.isEmpty(classify)) {
+            MyToast.showShort(mActivity, "请添加任务分类");
+            return;
+        }
+
+        if (TextUtils.isEmpty(leave)) {
+            MyToast.showShort(mActivity, "请添加任务性质");
+            return;
+        }
+
+        if (!(humenList.size() > 0)) {
+            MyToast.showShort(mActivity, "请至少添加一个任务执行者");
+            return;
+        }
 
         showProgressDialog();
         HttpPostUtils httpPostUtils = new HttpPostUtils();
@@ -339,12 +375,38 @@ public class TopAddTaskFragment extends BaseFragment {
         params.addBodyParameter("submit_id", "task_save");
 
         MessageTaskPushAddBean pushData = new MessageTaskPushAddBean();
+
+        pushData.title = title;
+        pushData.description = discription;
+        pushData.starttime = TimeUtils.getFormateTime(subTime,"-",":");
+        pushData.limittime = TimeUtils.getFormateTime(Long.parseLong(TimeUtils.getDateStamp(time,"-")),"-",":");
+        pushData.priority = leave;
+
+        for (int i = 0;i<filesAddList.size();i++){
+            MessageTaskDetailDataFilesBean filesBean = new MessageTaskDetailDataFilesBean();
+            filesBean.title = filesAddList.get(i).file_name;
+            filesBean.url = filesAddList.get(i).file_url;
+            filesBean.ctime = TimeUtils.getFormateTime(subTime,"-",":");
+
+            pushData.files.add(filesBean);
+        }
+
+        //联系人暂时未添加
+        for (int i = 0;i<humenList.size();i++){
+
+
+
+
+        }
+
         MessageTaskDetailDataUsersBean user = new MessageTaskDetailDataUsersBean();
-        user.id ="10001";
+        user.id = "12341";
+        user.userid = "12341";
+        MessageTaskDetailDataUsersBean user1 = new MessageTaskDetailDataUsersBean();
+        user1.userid = "10001";
         pushData.users.add(user);
-
-
-        pushData.id = "";
+        pushData.users.add(user1);
+        pushData.id = "";//新建任务---id应该为空
         params.addBodyParameter("data", pushData.toString());
 
 
@@ -355,7 +417,19 @@ public class TopAddTaskFragment extends BaseFragment {
             public void onSuccess(String strJson) {
                 LogUtil.e("-----------------任务详情------上传获取消息----------------" + strJson);
 
+                try {
+                    JSONObject jsonObject = new JSONObject(strJson);
+                    if (jsonObject.optInt("code") == 0) {
 
+                        MyToast.showShort(mActivity,"提交成功!");
+
+                    } else {
+                        MyToast.showLong(mActivity, "提交任务失败,请联系管理员");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mActivity.finish();
             }
 
             @Override
@@ -391,13 +465,13 @@ public class TopAddTaskFragment extends BaseFragment {
     /**
      * 上传文件到服务器
      *
-     * @param imagePath
+     * @param filePath
      */
-    private void upLoadFile(final String imagePath) {
+    private void upLoadFile(final String filePath) {
         showProgressDialog();
         RequestParams params = new RequestParams(SPUtil.getApiUpload(mActivity));
         params.setMultipart(true);
-        File file = new File(imagePath);
+        File file = new File(filePath);
 
         params.addBodyParameter("file", file);
         x.http().post(params, new Callback.ProgressCallback<String>() {
@@ -419,6 +493,17 @@ public class TopAddTaskFragment extends BaseFragment {
 //                        usersFilesBeenList.add(usersFilesBeenList.size(), filesAddDao);
 //                        filesAddAdapter.notifyDataSetChanged();
 //                        Utility.setListViewHeightBasedOnChildren(files);
+
+
+                        filesAddDao = bean.new FilesKnowledgeItemDao();
+                        filesAddDao.isEditing = true;
+                        filesAddDao.file_path = filePath;
+                        filesAddDao.file_name = filePath.substring(filePath.lastIndexOf("/") + 1);//不包含 (/)线
+                        filesAddDao.file_url = url;
+                        filesAddList.add(filesAddList.size() - 1, filesAddDao);
+                        filesAddAdapter.notifyDataSetChanged();
+                        Utility.setListViewHeightBasedOnChildren(new_files);
+
 
                     } else {
                         MyToast.showLong(mActivity, "文件上传失败,请联系管理员");

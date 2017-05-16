@@ -61,7 +61,7 @@ import cn.net.bjsoft.sxdz.utils.function.InitFragmentUtil;
 import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.utils.function.WidgetUtils;
 import cn.net.bjsoft.sxdz.view.BottomIconView;
-import cn.net.bjsoft.sxdz.view.BottomIconView_1;
+import cn.net.bjsoft.sxdz.view.BottomIconView_2;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
 
 /**
@@ -138,7 +138,7 @@ public class MainActivity extends BaseActivity {
     private LinearLayout llll;
     @ViewInject(R.id.main_botton_ll_ll)
     private LinearLayout mBottonBar_ll_ll;
-    public BottomIconView_1 bottomView;
+    public BottomIconView_2 bottomView;
     public BottomIconView scanView;
     public BottomIconView uploadView;
     public BottomIconView articleView;
@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity {
     private int time = 2;//默认自动定位时间
 
     private ArrayList<ImageView> mBottonIVList;
-    private ArrayList<BottomIconView_1> mBottomIconViewList;
+    private ArrayList<BottomIconView_2> mBottomIconViewList;
     private ArrayList<BaseFragment> mBottonFragmentList;
 
     private MainActivity mActivity = null;
@@ -211,7 +211,7 @@ public class MainActivity extends BaseActivity {
         mActivity = this;
         mainActivity = this;
         mJson = getIntent().getStringExtra("json");
-        LogUtil.e("=====mJson=====" + mJson);
+        LogUtil.e("=====mJson@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=====" + mJson);
         //mDatasBean = GsonUtil.getDatasBean(mJson);
 
         showProgressDialog();
@@ -431,13 +431,13 @@ public class MainActivity extends BaseActivity {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1f);
             params.setMargins(0, 2, 0, 2);
             //给View绑定Tag的时候用创建Fragment时指定的Tag，这样就避免点击图标而导致找不到与Fragment相同的tag了
-            bottomView = new BottomIconView_1(this, mBottonFragmentList.get(homepageNum).getArguments().getString("tag"));
-            bottomView.setModeView(homepageBean.get(homepageNum).icon_position, homepageBean.get(homepageNum).text, homepageBean.get(homepageNum).icon_selected, homepageBean.get(homepageNum).icon_default);
+            bottomView = new BottomIconView_2(this, mBottonFragmentList.get(homepageNum).getArguments().getString("tag"));
+            bottomView.setModeView(homepageBean.get(homepageNum).icon_position, homepageBean.get(homepageNum).text, homepageBean.get(homepageNum).icon_selected, homepageBean.get(homepageNum).icon_default,homepageBean.get(homepageNum).icon);
             LogUtil.e("添加了新图标" + bottomView.toString());
             bottomView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    BottomIconView_1 view = (BottomIconView_1) v;
+                    BottomIconView_2 view = (BottomIconView_2) v;
                     //view.setClickShow();
                     onBottomIconClick(view);
                     LogUtil.e("点击了新图标" + view.toString());
@@ -524,7 +524,7 @@ public class MainActivity extends BaseActivity {
      *
      * @param v 被点击的图标
      */
-    public void onBottomIconClick(BottomIconView_1 v) {
+    public void onBottomIconClick(BottomIconView_2 v) {
         //LogUtil.e("BottomIconView_1的TAG==="+v.getTag().toString());
         for (int i = 0; i < mBottonFragmentList.size(); i++) {
 //            MyToast.showShort(this,"是否为：："+(v.getTag().toString().equals(mBottonFragmentList.get(i).getArguments().get("tag").toString())));

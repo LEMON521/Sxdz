@@ -2,6 +2,7 @@ package cn.net.bjsoft.sxdz.adapter.message.task;
 
 import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,7 +104,7 @@ public class TaskAllZDLFAdapter extends BaseAdapter {
 //        }
         if (tasksDaos.get(position).alert) {
             viewHolder.overdue.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             viewHolder.overdue.setVisibility(View.GONE);
         }
 
@@ -127,10 +128,15 @@ public class TaskAllZDLFAdapter extends BaseAdapter {
                 name.append("执行人：");
                 if (tasksDaos.get(position).worker != null) {
                     for (int i = 0; i < tasksDaos.get(position).worker.size(); i++) {
-                        name.append(usersInfor.getUserInfo(tasksDaos.get(position).worker.get(i).userid).nickname);
+                        if (TextUtils.isEmpty(tasksDaos.get(position).worker.get(i).userid)) {
+                            name.append("未知");
+                        } else {
+                            name.append(usersInfor.getUserInfo(tasksDaos.get(position).worker.get(i).userid).nickname);
+                        }
                         if (i + 1 != tasksDaos.get(position).worker.size()) {
                             name.append("、");
                         }
+
                     }
                 }
                 break;
@@ -142,10 +148,10 @@ public class TaskAllZDLFAdapter extends BaseAdapter {
 //        //////////////////////////////////////////////////
         tasksDaos.get(position).starttime.contains("/Date(");
         tasksDaos.get(position).limittime.contains("/Date(");
-        tasksDaos.get(position).starttime = tasksDaos.get(position).starttime.replace("/Date(","");
-        tasksDaos.get(position).starttime = tasksDaos.get(position).starttime.replace(")/","");
-        tasksDaos.get(position).limittime = tasksDaos.get(position).starttime.replace("/Date(","");
-        tasksDaos.get(position).limittime = tasksDaos.get(position).starttime.replace(")/","");
+        tasksDaos.get(position).starttime = tasksDaos.get(position).starttime.replace("/Date(", "");
+        tasksDaos.get(position).starttime = tasksDaos.get(position).starttime.replace(")/", "");
+        tasksDaos.get(position).limittime = tasksDaos.get(position).limittime.replace("/Date(", "");
+        tasksDaos.get(position).limittime = tasksDaos.get(position).limittime.replace(")/", "");
 
         viewHolder.start.setText("开始时间:" + TimeUtils.getFormateTime(Long.parseLong(tasksDaos.get(position).starttime), "-", ":"));
         viewHolder.end.setText("结束时间:" + TimeUtils.getFormateTime(Long.parseLong(tasksDaos.get(position).limittime), "-", ":"));

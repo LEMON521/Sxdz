@@ -435,7 +435,6 @@ public class SplashActivity extends BaseActivity {
 
         LogUtil.e("初始化数据了=================" + SPJpushUtil.getSignin(this));
 
-
         getDataFromService();
         //getDataFromFile();
         getUsersInfo();
@@ -485,9 +484,12 @@ public class SplashActivity extends BaseActivity {
         SPUtil.setApiAuth(SplashActivity.this, appBean.api_auth);
         SPUtil.setResetPasswordUrl(SplashActivity.this, appBean.login.passreset);
         SPUtil.setLogoutApi(SplashActivity.this, appBean.login.logoutapi);
+        SPUtil.setApiUser(SplashActivity.this, appBean.api_user);
+        SPUtil.setHomepageBean(SplashActivity.this, appBean.homepage.toString());
 
+        LogUtil.e("-----@@@@@@-----getHomepageBean------%%%%%%%%%----"+SPUtil.getHomepageBean(mActivity));
         //----------------------按用户id绑定推送-------------------------
-        String user_id = SPUtil.getUserId(this);
+        String user_id = SPUtil.getUserId(SplashActivity.this);
         if (!TextUtils.isEmpty(user_id)) {
             CloudPushService pushService = PushServiceFactory.getCloudPushService();
             pushService.bindAccount(user_id, new CommonCallback() {
@@ -502,7 +504,8 @@ public class SplashActivity extends BaseActivity {
                 }
             });
         }
-        SPUtil.setMobileJson(mActivity,result);
+        LogUtil.e("----######------getMobileJson-----====------" + result);
+        SPUtil.setMobileJson(mActivity, result);
         jump();
     }
 
@@ -526,6 +529,8 @@ public class SplashActivity extends BaseActivity {
                 SPUtil.setResetPasswordUrl(SplashActivity.this, appBean.login.passreset);
                 SPUtil.setLogoutApi(SplashActivity.this, appBean.login.logoutapi);
                 SPUtil.setApiUser(SplashActivity.this, appBean.api_user);
+
+
                 //----------------------按用户id绑定推送-------------------------
                 String user_id = SPUtil.getUserId(SplashActivity.this);
                 if (!TextUtils.isEmpty(user_id)) {
@@ -542,8 +547,8 @@ public class SplashActivity extends BaseActivity {
                         }
                     });
                 }
-                LogUtil.e("----######------getMobileJson-----====------"+strJson);
-                SPUtil.setMobileJson(mActivity,strJson);
+                LogUtil.e("----######------getMobileJson-----====------" + strJson);
+                SPUtil.setMobileJson(mActivity, strJson);
                 jump();
 
             }
@@ -568,7 +573,6 @@ public class SplashActivity extends BaseActivity {
     }
 
 
-
     /**
      * 如果Token值存在,那么就初始化用户信息
      */
@@ -590,6 +594,11 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 LogUtil.e("我的页面json-----错误" + ex);
+                MyToast.showShort(mActivity, "程序初始化出错,正在重新启动程序");
+                SPUtil.setToken(mActivity, "");
+                Intent intent = new Intent(mActivity, SplashActivity.class);
+                mActivity.startActivity(intent);
+                mActivity.finish();
             }
 
             @Override
@@ -609,7 +618,7 @@ public class SplashActivity extends BaseActivity {
     private void getOrganizationData() {
         HttpPostUtils httpPostUtil = new HttpPostUtils();
         String url = "";
-        url = http_shuxinyun_url + "cache/users/"+SPUtil.getUserId(mActivity)+"/organization.json";
+        url = http_shuxinyun_url + "cache/users/" + SPUtil.getUserId(mActivity) + "/organization.json";
         LogUtil.e("公司架构userOrganizationBean url----===========" + url);
         RequestParams params = new RequestParams(url);
         httpPostUtil.get(mActivity, params);
@@ -622,7 +631,7 @@ public class SplashActivity extends BaseActivity {
 //                LogUtil.e("公司架构==========="+SPUtil.getUserOrganizationJson(mActivity));
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 //将返回的json传递过去，在下一个页面将必要的参数本地化
-                LogUtil.e("----------getMobileJson-----------"+SPUtil.getMobileJson(mActivity));
+                LogUtil.e("----------getMobileJson-----------" + SPUtil.getMobileJson(mActivity));
                 intent.putExtra("json", SPUtil.getMobileJson(mActivity));
                 // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
                 finish();
@@ -633,6 +642,11 @@ public class SplashActivity extends BaseActivity {
             public void onError(Throwable ex, boolean isOnCallback) {
                 SPUtil.setUserOrganizationJson(mActivity, "");
                 LogUtil.e("我的页面json-----错误" + ex);
+                MyToast.showShort(mActivity, "程序初始化出错,正在重新启动程序");
+                SPUtil.setToken(mActivity, "");
+                Intent intent = new Intent(mActivity, SplashActivity.class);
+                mActivity.startActivity(intent);
+                mActivity.finish();
             }
 
             @Override

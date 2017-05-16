@@ -262,10 +262,17 @@ public class MineZDLFFragment extends BaseFragment {
     private void getUserData() {
         showProgressDialog();
 
-        appBean = GsonUtil.getAppBean(mJson);;
+        appBean = GsonUtil.getAppBean(mJson);
 
         userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
+
+        if (userBean == null) {
+            MyToast.showShort(mActivity, "程序初始化出错,正在重启程序");
+            mActivity.finish();
+        }
+
         userOrganizationBean = userBean.organization;
+
         setUserData();
         dismissProgressDialog();
         //LogUtil.e("json" + mJson);

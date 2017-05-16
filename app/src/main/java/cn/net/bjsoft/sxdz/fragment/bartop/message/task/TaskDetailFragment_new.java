@@ -402,7 +402,7 @@ public class TaskDetailFragment_new extends BaseFragment {
         task_classify.setText(dataBean.type);
         task_name.setText(UsersInforUtils.getInstance(mActivity).getUserInfo(dataBean.userid).nickname);
         task_start.setText("开始时间:" + TimeUtils.getFormateTime(Long.parseLong(dataBean.starttime), "-", ":"));
-        task_end.setText("结束时间:" + TimeUtils.getFormateTime(Long.parseLong(dataBean.ctime), "-", ":"));
+        task_end.setText("结束时间:" + TimeUtils.getFormateTime(Long.parseLong(dataBean.limittime), "-", ":"));
         task_level.setText(dataBean.priority);
         if (!TextUtils.isEmpty(dataBean.priority_color)) {
             task_level.setTextColor(Color.parseColor("#" + dataBean.priority_color));

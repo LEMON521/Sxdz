@@ -623,4 +623,22 @@ public class SPUtil {
         editor.commit();
     }
 
+    /**
+     * HomepageBean
+     */
+    public static String getHomepageBean(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences("HomepageBean", Context.MODE_PRIVATE);
+        return preferences.getString(Constants.AVATAR, "");
+    }
+
+    /**
+     * HomepageBean
+     */
+    public static void setHomepageBean(Context context, String HomepageBean) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences("HomepageBean", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("HomepageBean", HomepageBean);
+        editor.commit();
+    }
+
 }
