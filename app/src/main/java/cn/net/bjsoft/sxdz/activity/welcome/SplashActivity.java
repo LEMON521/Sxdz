@@ -485,9 +485,9 @@ public class SplashActivity extends BaseActivity {
         SPUtil.setResetPasswordUrl(SplashActivity.this, appBean.login.passreset);
         SPUtil.setLogoutApi(SplashActivity.this, appBean.login.logoutapi);
         SPUtil.setApiUser(SplashActivity.this, appBean.api_user);
-        SPUtil.setHomepageBean(SplashActivity.this, appBean.homepage.toString());
-
-        LogUtil.e("-----@@@@@@-----getHomepageBean------%%%%%%%%%----"+SPUtil.getHomepageBean(mActivity));
+//        SPUtil.setHomepageBean(SplashActivity.this, appBean.homepage.toString());
+//
+//        LogUtil.e("-----@@@@@@-----getHomepageBean------%%%%%%%%%----"+SPUtil.getHomepageBean(mActivity));
         //----------------------按用户id绑定推送-------------------------
         String user_id = SPUtil.getUserId(SplashActivity.this);
         if (!TextUtils.isEmpty(user_id)) {

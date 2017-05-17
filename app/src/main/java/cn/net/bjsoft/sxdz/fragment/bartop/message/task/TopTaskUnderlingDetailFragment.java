@@ -1,6 +1,5 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +12,6 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 
 /**
@@ -44,20 +42,23 @@ public class TopTaskUnderlingDetailFragment extends BaseFragment {
 
     }
 
-    @Event(value = {R.id.title_back, R.id.message_task_add, R.id.message_task_query})
+    @Event(value = {R.id.title_back,
+//            R.id.message_task_add,
+//            R.id.message_task_query
+    })
     private void taskOnClick(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 mActivity.finish();
                 break;
-            case R.id.message_task_add:
-                Intent intent = new Intent(mActivity, EmptyActivity.class);
-                intent.putExtra("fragment_name", "addTaskFragment");
-                mActivity.startActivity(intent);
-                break;
-            case R.id.message_task_query:
-                //MyToast.showShort(mActivity,"添加新任务");
-                break;
+//            case R.id.message_task_add:
+//                Intent intent = new Intent(mActivity, EmptyActivity.class);
+//                intent.putExtra("fragment_name", "addTaskFragment");
+//                mActivity.startActivity(intent);
+//                break;
+//            case R.id.message_task_query:
+//                //MyToast.showShort(mActivity,"添加新任务");
+//                break;
 
         }
     }

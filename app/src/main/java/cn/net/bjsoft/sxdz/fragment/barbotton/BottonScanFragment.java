@@ -99,13 +99,13 @@ public class BottonScanFragment extends BaseFragment {
     }
 
     private void findViewById() {
-        title = (TextView) view.findViewById(R.id.scan_title_include).findViewById(R.id.title_title);
-        title.setText(text);
+        //title = (TextView) view.findViewById(R.id.scan_title_include).findViewById(R.id.title_title);
+        //title.setText(text);
         scanPreview = (FrameLayout) view.findViewById(R.id.capture_preview);
         iv_flashlight = (ImageView) view.findViewById(R.id.iv_flashlight);
         scanCropView = (RelativeLayout) view.findViewById(R.id.capture_crop_layout);
         scanLine = (ImageView) view.findViewById(R.id.capture_scan_line);
-        back = (ImageView) view.findViewById(R.id.scan_title_include).findViewById(R.id.title_back);
+        //back = (ImageView) view.findViewById(R.id.scan_title_include).findViewById(R.id.title_back);
         iv_flashlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

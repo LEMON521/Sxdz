@@ -20,6 +20,7 @@ public class AppBean implements Serializable {
     public ArrayList<LoadersBean> loaders;
     public LoginBean login;
     public String logo = "";
+    public ModulesBean modules;
     public String position = "";
     public AppPushBean push;
     public PushdataBean pushdata;

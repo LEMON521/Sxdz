@@ -5,7 +5,9 @@
     android:background="@color/background"
     android:orientation="vertical">
 
-    <include layout="@layout/top_title" />
+    <include
+        android:visibility="gone"
+        layout="@layout/top_title" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -276,9 +278,10 @@
             </LinearLayout>
 
             <FrameLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:visibility="invisible"></FrameLayout>
+                android:visibility="gone"></FrameLayout>
         </LinearLayout>
 
     </ScrollView>

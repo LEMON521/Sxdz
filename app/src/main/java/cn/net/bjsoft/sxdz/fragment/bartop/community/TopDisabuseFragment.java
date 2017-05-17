@@ -25,7 +25,7 @@ import cn.net.bjsoft.sxdz.utils.MyToast;
  */
 @ContentView(R.layout.fragment_disabuse)
 public class TopDisabuseFragment extends BaseFragment {
-    @ViewInject(R.id.community_disabuse_title)
+        @ViewInject(R.id.community_disabuse_title)
     private TextView title;
     @ViewInject(R.id.empty_text)
     private TextView test;
@@ -83,11 +83,13 @@ public class TopDisabuseFragment extends BaseFragment {
         }
 
 
-        adapter = new DisabuseAdapter(getActivity(), disabuseItemList,mJson);
+        adapter = new DisabuseAdapter(getActivity(), disabuseItemList, mJson);
         proposalList.setAdapter(adapter);
     }
 
-    @Event(value = {R.id.community_disabuse_back, R.id.community_disabuse_new})
+    @Event(value = {
+            R.id.community_disabuse_back,
+            R.id.community_disabuse_new})
     private void helpOnclick(View view) {
         switch (view.getId()) {
             case R.id.community_disabuse_back:

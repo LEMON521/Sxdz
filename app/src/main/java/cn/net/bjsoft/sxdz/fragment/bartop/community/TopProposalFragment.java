@@ -73,7 +73,7 @@ public class TopProposalFragment extends BaseFragment {
     }
 
 
-    @Event(value = {R.id.community_proposal_back,R.id.community_proposal_new})
+    @Event(value = {R.id.community_proposal_back, R.id.community_proposal_new})
     private void proposalOnclick(View view){
 
         switch (view.getId()){

@@ -7,6 +7,10 @@
     <dimen name="btn_size">22sp</dimen>
     <dimen name="txt_size">18sp</dimen>
 
+    <dimen name="refresh_header_height_twitter">80dp</dimen>
+    <dimen name="load_more_footer_height_twitter">60dp</dimen>
+
+
     <!-- 分割线高度 -->
     <dimen name="line_height">1dp</dimen>
     <dimen name="dm001">1px</dimen>

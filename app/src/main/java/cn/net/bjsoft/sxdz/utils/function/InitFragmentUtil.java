@@ -74,7 +74,13 @@ public class InitFragmentUtil {
 //                if (datasBean.data.authentication) {
 
                     if ((!mBottonList.get(i).tag.equals(""))/*||homepageList.get(i).linkto != null*/) {
-                        if (mBottonList.get(i).tag.equals("scaning")) {
+                        if (mBottonList.get(i).tag.equals("message")) {
+                            fragment = new TopMessageFragment();
+                        } else if (mBottonList.get(i).tag.equals("workflow")) {
+                            fragment = new TopApproveFragment();
+                        } else if (mBottonList.get(i).tag.equals("signin")) {
+                            fragment = new TopSignFragment();
+                        } else if (mBottonList.get(i).tag.equals("scaning")) {
                             fragment = new BottonScanFragment();
                         } else if (mBottonList.get(i).tag.equals("work_items")) {
                             fragment = new WorkFragment();//中电联发的工作界面
@@ -82,7 +88,7 @@ public class InitFragmentUtil {
                             fragment = new MineZDLFFragment();//中电联发的我界面
                         } else if (mBottonList.get(i).tag.equals("knowledge_zdlf")) {
                             fragment = new KnowledgeZDLFFragment();//中电联发的z知识界面
-                            //fragment = new BottonFormYuLongYaDongFragment();
+                            //fragment = new BottonNewsFragment_new();
                         } else if (mBottonList.get(i).tag.equals("upload")) {
                             fragment = new BottonUploadFragment();//上传
                         } else if (mBottonList.get(i).tag.equals("article")) {
@@ -91,11 +97,13 @@ public class InitFragmentUtil {
                             fragment = new WebViewFragment();
                         } else if (mBottonList.get(i).tag.equals("workflow")) {
                             fragment = new TopApproveFragment();//
+                        } else if (mBottonList.get(i).tag.equals("task")) {
+                            fragment = new TopTaskFragment();//
                         } else if (mBottonList.get(i).tag.equals("form_ylyd")) {
                             fragment = new BottonFormYuLongYaDongFragment();
                         } else if (mBottonList.get(i).tag.equals("mine_ylyd")) {
                             fragment = new BottonMineYuLongYaDongFragment();
-                        }else if (mBottonList.get(i).tag.equals("mine_rcjg")) {
+                        } else if (mBottonList.get(i).tag.equals("mine_rcjg")) {
                             fragment = new BottonMineFragment();
                         } else if (mBottonList.get(i).tag.equals("mine")) {
 //                            if (mAppBean.user.logined) {

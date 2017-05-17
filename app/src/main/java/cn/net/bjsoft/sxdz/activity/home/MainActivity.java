@@ -71,6 +71,10 @@ import cn.net.bjsoft.sxdz.view.CircleImageView;
 @ContentView(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
 
+    @ViewInject(R.id.title_title)
+    private TextView title;
+
+
     @ViewInject(R.id.main_content)
     private LinearLayout main_content;
 
@@ -553,7 +557,7 @@ public class MainActivity extends BaseActivity {
                     startActivity(intent);
                     return;//这句话的效果在于,结束当前方法体,避免底部图标被点击之后的改变状态
                 } else {
-
+                    title.setText(homepageBean.get(i).text);
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.content, mBottonFragmentList.get(i), mBottonFragmentList.get(i).getArguments().get("tag").toString())
@@ -613,8 +617,8 @@ public class MainActivity extends BaseActivity {
 //                            .setDuration(500).start();
                     ObjectAnimator.ofFloat(mTopBar_ll, "TranslationY", -WidgetUtils.getWidthHigh(1, mTopBar_ll)[0])
                             .setDuration(500).start();
-                    ObjectAnimator.ofFloat(main_content, "TranslationY", -WidgetUtils.getWidthHigh(1, mTopBar_ll)[0])
-                            .setDuration(500).start();
+//                    ObjectAnimator.ofFloat(main_content, "TranslationY", -WidgetUtils.getWidthHigh(1, mTopBar_ll)[0])
+//                            .setDuration(500).start();
 
                     LogUtil.e("第一种方法获取的宽高" + WidgetUtils.getWidthHigh(1, mTopBar_ll)[0]);
                     LogUtil.e("第二种方法获取的宽高" + WidgetUtils.getWidthHigh(2, mTopBar_ll)[0]);
@@ -627,8 +631,8 @@ public class MainActivity extends BaseActivity {
                 } else {//点击之后显示
                     ObjectAnimator.ofFloat(mTopBar_ll, "TranslationY", 0)
                             .setDuration(500).start();
-                    ObjectAnimator.ofFloat(main_content, "TranslationY", 0)
-                            .setDuration(500).start();
+//                    ObjectAnimator.ofFloat(main_content, "TranslationY", 0)
+//                            .setDuration(500).start();
 //                    ObjectAnimator.ofFloat(showOrHide, "TranslationY",0)
 //                            .setDuration(500).start();
 //                    mTopBar_ll.startAnimation(mDownAnimation);

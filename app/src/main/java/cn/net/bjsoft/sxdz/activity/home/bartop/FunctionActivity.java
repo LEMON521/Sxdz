@@ -38,6 +38,13 @@ import cn.net.bjsoft.sxdz.utils.function.InitFragmentUtil;
  */
 @ContentView(R.layout.activity_function)
 public class FunctionActivity extends BaseActivity {
+
+    @ViewInject(R.id.title_back)
+    private ImageView back;
+    @ViewInject(R.id.title_title)
+    private TextView title;
+
+
     @ViewInject(R.id.function_content)
     private FrameLayout content;
 
@@ -119,6 +126,8 @@ public class FunctionActivity extends BaseActivity {
         openTag = getIntent().getStringExtra("opentag");
         LogUtil.e("function接收到的opentag为=====" + openTag);
         appBean = GsonUtil.getAppBean(mJson);
+
+        back.setVisibility(View.VISIBLE);
 
         initData();
         setView();
@@ -293,26 +302,40 @@ public class FunctionActivity extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.function_scan:
+                title.setText("扫一扫");
                 scan_icon.setImageResource(R.drawable.saoyisao_s);
                 scan_text.setTextColor(getResources().getColor(R.color.blue));
                 break;
             case R.id.funciton_photo:
+                title.setText("拍照");
                 photo_icon.setImageResource(R.drawable.paizhao_s);
                 photo_text.setTextColor(getResources().getColor(R.color.blue));
                 photo_num.setText("");
                 photo_num.setVisibility(View.INVISIBLE);
                 break;
             case R.id.function_sign:
+                title.setText("签到");
                 sign_icon.setImageResource(R.drawable.qiandao_s);
                 sign_text.setTextColor(getResources().getColor(R.color.blue));
                 sign_num.setText("");
                 sign_num.setVisibility(View.INVISIBLE);
                 break;
             case R.id.function_pay:
+                title.setText("支付");
                 pay_icon.setImageResource(R.drawable.pay_s);
                 pay_text.setTextColor(getResources().getColor(R.color.blue));
                 pay_num.setText("");
                 pay_num.setVisibility(View.INVISIBLE);
+                break;
+        }
+    }
+
+    @Event(value = {R.id.title_back})
+    private void click(View view) {
+        switch (view.getId()) {
+
+            case R.id.title_back:
+                finish();
                 break;
         }
     }

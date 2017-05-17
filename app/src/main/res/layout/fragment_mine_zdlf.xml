@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/top_title" />
+    <include
+        android:visibility="gone"
+        layout="@layout/top_title" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -246,7 +248,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"></RelativeLayout>
+                android:layout_height="@dimen/dm020"></RelativeLayout>
         </LinearLayout>
 
     </ScrollView>

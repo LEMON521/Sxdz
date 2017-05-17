@@ -70,7 +70,7 @@ dependencies {
     compile files('libs/open_sdk_r5509.jar')
     compile files('libs/SocialSDK_WeiXin_1.jar')
     compile files('libs/org.apache.http.legacy.jar')
-    compile 'junit:junit:4.12'
+    provided 'junit:junit:4.12'
     compile files('libs/jcore-android_v1.1.0.jar')
     compile files('libs/jpush-android_v3.0.1.jar')
     //    compile files('libs/AMap3DMap_4.1.3_AMapLocation_3.3.0_20170118.jar')
@@ -92,4 +92,9 @@ dependencies {
     //支付宝
     compile files('libs/alipaySingle-20161222.jar')
     compile files('libs/utdid4all-1.1.5.3_proguard.jar')
+    compile('com.github.Aspsine:SwipeToLoadLayout:1.0.4')
+//            {
+//        transitive = true
+//    }
+    //下拉加载上拉加载
 }

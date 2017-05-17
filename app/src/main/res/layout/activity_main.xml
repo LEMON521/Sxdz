@@ -7,11 +7,14 @@
     android:orientation="vertical">
     <!--tools:context=".main.ui.home.MainActivity">-->
 
+    <include layout="@layout/top_title"/>
 
     <FrameLayout
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_above="@+id/main_botton_ll_ll">
 
 
         <LinearLayout

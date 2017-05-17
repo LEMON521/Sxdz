@@ -18,7 +18,6 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
@@ -42,6 +41,12 @@ import cn.net.bjsoft.sxdz.utils.function.InitFragmentUtil;
 
 @ContentView(R.layout.activity_communtiy)
 public class CommunityActivity extends BaseActivity {
+
+    @ViewInject(R.id.title_back)
+    private ImageView back;
+    @ViewInject(R.id.title_title)
+    private TextView title;
+
     @ViewInject(R.id.community_content)
     private FrameLayout content;
 
@@ -110,7 +115,7 @@ public class CommunityActivity extends BaseActivity {
     @ViewInject(R.id.community_community_img)
     private ImageView community_img;
 
-    private HashMap<String, Integer> pushNum;
+   // private HashMap<String, Integer> pushNum;
     private int mTrain, mKnowledge, mProposal, mBug, mCommunity;
     /**
      * 广播
@@ -141,6 +146,7 @@ public class CommunityActivity extends BaseActivity {
         appBean = GsonUtil.getAppBean(mJson);
         mBarList = new ArrayList<>();
 
+        back.setVisibility(View.VISIBLE);
 
         initData();
         setView();
@@ -152,7 +158,7 @@ public class CommunityActivity extends BaseActivity {
 
         super.onStart();
 
-        LogUtil.e("社区页面====" + pushNum.get("proposal").toString());
+        //LogUtil.e("社区页面====" + pushNum.get("proposal").toString());
         LogUtil.e("main==onStart");
 
         /**
@@ -303,6 +309,17 @@ public class CommunityActivity extends BaseActivity {
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    @Event(value = {R.id.title_back})
+    private void click(View view) {
+        switch (view.getId()) {
+
+            case R.id.title_back:
+                finish();
+                break;
+        }
+    }
+
     /**
      * 点击事件
      *
@@ -328,28 +345,33 @@ public class CommunityActivity extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.community_live:
+                title.setText("直播");
                 live_icon.setImageResource(R.drawable.aid_tab_btn_live_s);
                 live_text.setTextColor(getResources().getColor(R.color.blue));
                 break;
             case R.id.community_help:
+                title.setText("帮助");
                 help_icon.setImageResource(R.drawable.aid_tab_btn_help_s);
                 help_text.setTextColor(getResources().getColor(R.color.blue));
                 help_num.setText("");
                 help_num.setVisibility(View.INVISIBLE);
                 break;
             case R.id.community_proposal:
+                title.setText("建议");
                 proposal_icon.setImageResource(R.drawable.aid_tab_btn_adcise_s);
                 proposal_text.setTextColor(getResources().getColor(R.color.blue));
                 proposal_num.setText("");
                 proposal_num.setVisibility(View.INVISIBLE);
                 break;
             case R.id.community_disabuse:
+                title.setText("报错");
                 disabuse_icon.setImageResource(R.drawable.aid_tab_btn_bug_s);
                 disabuse_text.setTextColor(getResources().getColor(R.color.blue));
                 disabuse_num.setText("");
                 disabuse_num.setVisibility(View.INVISIBLE);
                 break;
             case R.id.community_community:
+                title.setText("社区");
                 community_icon.setImageResource(R.drawable.aid_tab_btn_live_s);
                 community_text.setTextColor(getResources().getColor(R.color.blue));
                 community_num.setText("");

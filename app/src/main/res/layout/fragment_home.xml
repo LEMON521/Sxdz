@@ -5,11 +5,13 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dm080"
         android:gravity="center_vertical">
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/homepage_frag_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

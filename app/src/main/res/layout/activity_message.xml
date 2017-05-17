@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.home.bartop.MessageActivity">
-
+<include layout="@layout/top_title"/>
     <RelativeLayout
         android:visibility="gone"
         android:id="@+id/titlebar"

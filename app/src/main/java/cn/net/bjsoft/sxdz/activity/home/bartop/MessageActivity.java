@@ -37,6 +37,12 @@ import static cn.net.bjsoft.sxdz.utils.function.InitFragmentUtil.getMessageFragm
  */
 @ContentView(R.layout.activity_message)
 public class MessageActivity extends BaseActivity {
+    @ViewInject(R.id.title_back)
+    private ImageView back;
+    @ViewInject(R.id.title_title)
+    private TextView title;
+
+
     @ViewInject(R.id.message_content)
     private FrameLayout content;
 
@@ -121,6 +127,7 @@ public class MessageActivity extends BaseActivity {
         LogUtil.e("message接收到的opentag为=====" + openTag);
         appBean = GsonUtil.getAppBean(mJson);
 
+        back.setVisibility(View.VISIBLE);
 
         initData();
         setView();
@@ -292,6 +299,7 @@ public class MessageActivity extends BaseActivity {
         switch (v.getId()) {
 
             case R.id.message_message:
+                title.setText("消息");
                 message_icon.setImageResource(R.drawable.xinxi_s);
                 message_text.setTextColor(getResources().getColor(R.color.blue));
 //                message_num.setText("");
@@ -299,6 +307,7 @@ public class MessageActivity extends BaseActivity {
                 //app.reFreshMessagePushNumList("message", 0 - mMessage);
                 break;
             case R.id.message_task:
+                title.setText("任务");
                 task_icon.setImageResource(R.drawable.renwu_s);
                 task_text.setTextColor(getResources().getColor(R.color.blue));
 //                task_num.setText("");
@@ -306,6 +315,7 @@ public class MessageActivity extends BaseActivity {
                 //app.reFreshMessagePushNumList("task", 0 - mTask);
                 break;
             case R.id.message_client:
+                title.setText("客户");
                 client_icon.setImageResource(R.drawable.clientele_s);
                 client_text.setTextColor(getResources().getColor(R.color.blue));
 //                client_num.setText("");
@@ -313,6 +323,7 @@ public class MessageActivity extends BaseActivity {
                 //app.reFreshMessagePushNumList("crm", 0 - mCrm);
                 break;
             case R.id.message_approve:
+                title.setText("审批");
                 approve_icon.setImageResource(R.drawable.shenpi_s);
                 approve_text.setTextColor(getResources().getColor(R.color.blue));
                 //approve_num.setText("");
@@ -322,6 +333,16 @@ public class MessageActivity extends BaseActivity {
         }
     }
 
+
+    @Event(value = {R.id.title_back})
+    private void click(View view) {
+        switch (view.getId()) {
+
+            case R.id.title_back:
+                finish();
+                break;
+        }
+    }
     /**
      * 设置底部未选中的图片为默认颜色
      */

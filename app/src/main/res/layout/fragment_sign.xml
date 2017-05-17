@@ -6,6 +6,7 @@
     android:orientation="vertical"
     >
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dm080"
@@ -47,7 +48,7 @@
                 android:layout_height="0dp"
                 android:gravity="center_vertical"
                 android:layout_weight="2">
-                <cn.net.bjsoft.sxdz.view.CircleImageView
+                <cn.net.bjsoft.sxdz.view.RoundImageView
                     android:id="@+id/sign_user_icon"
                     android:layout_width="@dimen/dm045"
                     android:layout_height="@dimen/dm045"

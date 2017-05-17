@@ -73,6 +73,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <include
+            android:visibility="gone"
             android:id="@+id/scan_title_include"
             layout="@layout/top_title"/>
         <!--<RelativeLayout-->

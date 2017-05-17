@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <!--tools:context=".main.ui.home.MainActivity">-->
-
+    <include layout="@layout/top_title"/>
     <FrameLayout
         android:id="@+id/community_content"
         android:layout_width="match_parent"
