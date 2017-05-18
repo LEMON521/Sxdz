@@ -22,8 +22,9 @@
             android:orientation="horizontal">
 
             <EditText
+                android:layout_weight="2"
                 android:id="@+id/function_sing_history_partment"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/attendance_history_technical_department"
                 android:editable="false"
@@ -36,8 +37,9 @@
                 android:textSize="@dimen/dm024"></EditText>
 
             <EditText
+                android:layout_weight="2"
                 android:id="@+id/function_sing_history_date"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dm020"
                 android:background="@mipmap/task_search_zdlf_date"
@@ -46,6 +48,19 @@
                 android:textColor="#999999"
                 android:textSize="@dimen/dm020" />
 
+            <TextView
+                android:id="@+id/function_sing_history_get_users"
+                android:padding="@dimen/dm010"
+                android:textSize="@dimen/dm020"
+                android:textColor="@color/white"
+                android:background="@drawable/approve_shixin_blue"
+                android:layout_marginRight="@dimen/dm020"
+                android:layout_marginLeft="@dimen/dm020"
+                android:gravity="center"
+                android:text="确定"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
 

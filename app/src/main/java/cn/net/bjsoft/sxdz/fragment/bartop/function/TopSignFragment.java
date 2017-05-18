@@ -5,13 +5,17 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lidroid.xutils.BitmapUtils;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,19 +32,21 @@ import java.io.File;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.welcome.LinkToActivity;
+import cn.net.bjsoft.sxdz.activity.home.bartop.function.SignHistoryActivity;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.HomepageBean;
 import cn.net.bjsoft.sxdz.bean.app.ModulesBean;
-import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersSingleBean;
-import cn.net.bjsoft.sxdz.dialog.AppProgressDialog;
+import cn.net.bjsoft.sxdz.bean.app.function.sign.SignUserLastBean;
+import cn.net.bjsoft.sxdz.bean.app.function.sign.SignUserLastDataBean;
+import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
+import cn.net.bjsoft.sxdz.bean.app.user.UserOrganizationBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
-import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.view.RoundImageView;
 
 /**
@@ -84,33 +90,48 @@ public class TopSignFragment extends BaseFragment {
     @ViewInject(R.id.sign_last_address)
     private TextView oldaddress;
 
-    private BitmapUtils bitmapUtils;
 
-    private String url_image = "";
-
-    private String imgdata = "";
-
-    private AppProgressDialog progressDialog;
-
+    private UserBean userBean;
+    private UserOrganizationBean organizationBean;
     private String mJson = "";
 
     private TopSignFragment mFragment;
-    
-    private UsersSingleBean usersSingleBean;
+
+    //private UsersSingleBean usersSingleBean;
     private AppBean appBean;
     private ArrayList<HomepageBean> homepageBeen;
     private ModulesBean modulesBean;
 
+
     private String source_id = "";
     private String submit_id = "";
 
+    private String sign_image_url = "";
+
     private ImageOptions imageOptions;
+    private ImageOptions pictureOptions;
+
+
+    //声明AMapLocationClient类对象
+    private AMapLocationClient mLocationClient = null;
+    //声明定位回调监听器
+    private AMapLocationListener mLocationListener = null;
+    //声明AMapLocationClientOption对象
+    private AMapLocationClientOption mLocationOption = null;
+    //地理位置信息
+    private AMapLocation mAmapLocation;
+
 
     @Override
     public void initData() {
-        mFragment =this;
-        
+        mFragment = this;
+
         imageOptions = new ImageOptions.Builder()
+                .setFailureDrawableId(R.drawable.get_back_passwoed) //以资源id设置加载失败的动画
+                .setLoadingDrawableId(R.drawable.get_back_passwoed).build();
+
+        pictureOptions = new ImageOptions.Builder()
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
                 .setFailureDrawableId(R.drawable.get_back_passwoed) //以资源id设置加载失败的动画
                 .setLoadingDrawableId(R.drawable.get_back_passwoed).build();
 
@@ -134,53 +155,37 @@ public class TopSignFragment extends BaseFragment {
             submit_id = modulesBean.signin.get("submit_id");
         }
 
-        usersSingleBean = UsersInforUtils.getInstance(getActivity()).getUserInfo(SPUtil.getUserId(getActivity()));
+        userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
+        organizationBean = userBean.organization;
+        //usersSingleBean = UsersInforUtils.getInstance(getActivity()).getUserInfo(SPUtil.getUserId(getActivity()));
 
+        initDataLast();
         setData();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initMapLocation(5);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //声明AMapLocationClient类对象
+        mLocationClient = null;
+        //声明定位回调监听器
+        mLocationListener = null;
+        //声明AMapLocationClientOption对象
+        mLocationOption = null;
     }
 
     public void setData() {
 
         time.setText(TimeUtils.getFormateTime(System.currentTimeMillis(), "-", ":"));
-
-
-        x.image().bind(userIcon, usersSingleBean.avatar, imageOptions);
-        name.setText(usersSingleBean.nickname);
-//      oldaddress.setText(InitModel.getInstance(getActivity()).getUserData().getAddress());
-//      oletime.setText(InitModel.getInstance(getActivity()).getUserData().getSigntime());
-        //----------------------注意
-
-
-//        if (mDatasBean.data.pushdata.sign_last != null) {
-//            if (mDatasBean.data.pushdata.sign_last.address != null) {
-//                if (!mDatasBean.data.pushdata.sign_last.address.equals("")) {
-//                    oldaddress.setText(mDatasBean.data.pushdata.sign_last.address);
-//                }
-//            } else {
-//                oldaddress.setText("未获取到信息");
-//            }
-//            if (mDatasBean.data.pushdata.sign_last.signtime != null) {
-//                if (!mDatasBean.data.pushdata.sign_last.signtime.equals("")) {
-//                    oletime.setText(mDatasBean.data.pushdata.sign_last.signtime);
-//                }
-//            } else {
-//                oletime.setText("未获取到信息");
-//            }
-//            if (SPUtil.getAddress(getActivity()) != null) {
-//                if (!SPUtil.getAddress(getActivity()).equals("")) {
-//                    address.setText(SPUtil.getAddress(getActivity()));
-//                }
-//            } else {
-//                address.setText("未获取到信息");
-//            }
-//        } else {
-//            oldaddress.setText("未获取到信息");
-//            oletime.setText("未获取到信息");
-//            address.setText("未获取到信息");
-//
-//        }
-
-
+        x.image().bind(userIcon, userBean.avatar, imageOptions);
+        name.setText(userBean.name);
+        bumen.setText(organizationBean.dept_name);
     }
 
     @Event(type = View.OnClickListener.class, value = {R.id.sign_back, R.id.sign_history, R.id.sign_picture, R.id.sign_btn})
@@ -193,10 +198,10 @@ public class TopSignFragment extends BaseFragment {
                 break;
             case R.id.sign_history:
                 //MyToast.showShort(mActivity, "查看历史");
-                Intent i = new Intent(getActivity(), LinkToActivity.class);
+                Intent i = new Intent(getActivity(), SignHistoryActivity.class);
 //                i.putExtra("url", CacheSerializableUtil.getlist(getActivity()).getToolBar().getSignurl());
                 i.putExtra("url", "www.baidu.com");
-                i.putExtra("title", "网页");
+                i.putExtra("title", "签到历史");
                 startActivity(i);
                 break;
             case R.id.sign_picture:
@@ -212,94 +217,80 @@ public class TopSignFragment extends BaseFragment {
                 if (state.equals(Environment.MEDIA_MOUNTED)) {
                     Intent intent = new Intent();
                     intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    //TODO 这里要用fragment---这样本fragment才能接收到返回数据
                     mFragment.startActivityForResult(intent, 100);
-                    MyToast.showShort(getActivity(), "打开了照相机！");
+                    //MyToast.showShort(getActivity(), "打开了照相机！");
                 } else {
                     Toast.makeText(getActivity(), "请确认已经插入SD卡", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.sign_btn:
-
+                if (TextUtils.isEmpty(sign_image_url)) {
+                    MyToast.showShort(mActivity, "请先拍照!");
+                    return;
+                } else {
+                    submitInforToService();
+                }
                 break;
         }
     }
 
+
     /**
-     * 签到
+     * 获取上次签到信息
      */
-    public void upData() {
-//        RequestParams params = new RequestParams(AddressUtils.httpurl);
-//        params.addBodyParameter("client_name", Constants.app_name);
-//        params.addBodyParameter("phone_uuid", SPUtil.getUserPUUID(getActivity()));
-//        params.addBodyParameter("single_code", SPUtil.getUserRandCode(getActivity()));
-//        params.addBodyParameter("uuid", SPUtil.getUserUUID(getActivity()));
-//        params.addBodyParameter("method", "auto_position");
-//        params.addBodyParameter("action", "submit");
-//        params.addBodyParameter("user_id", SPUtil.getUserId(getActivity()));
-//        params.addBodyParameter("abs_x", SPUtil.getLong(getActivity()) + "");
-//        params.addBodyParameter("abs_y", SPUtil.getLat(getActivity()) + "");
-//        params.addBodyParameter("abs_z", "");
-//        params.addBodyParameter("address", SPUtil.getAddress(getActivity()));
-//        params.addBodyParameter("imgdata", imgdata);
-//
-//        x.http().post(params, new Callback.CommonCallback<String>() {
-//            @Override
-//            public void onSuccess(String result) {
-//                dismissProgressDialog();
-//                Log.e("tag", "video" + result);
-//                try {
-//                    JSONObject jsonObject = new JSONObject(result);
-//                    if (jsonObject != null) {
-//                        boolean tag = jsonObject.optBoolean("success");
-//                        if (tag) {
-//                            MyToast.showShort(getActivity(), "签到成功");
-////                            InitModel.getInstance(getActivity()).getUserData().setAddress(jsonObject.optJSONObject("data").optString("address"));
-////                            InitModel.getInstance(getActivity()).getUserData().setSigntime(jsonObject.optJSONObject("data").optString("signtime"));
-////                            oldaddress.setText(jsonObject.optJSONObject("data").optString("address"));
-////                            oletime.setText(jsonObject.optJSONObject("data").optString("signtime"));
-//                        } else {
-//                            MyToast.showShort(getActivity(), jsonObject.optString("feedback"));
-//                        }
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onError(Throwable ex, boolean isOnCallback) {
-//
-//                MyToast.showShort(getActivity(), "网络连接异常");
-//            }
-//
-//            @Override
-//            public void onCancelled(CancelledException cex) {
-//
-//            }
-//
-//            @Override
-//            public void onFinished() {
-//                dismissProgressDialog();
-//            }
-//        });
+    private void initDataLast() {
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
 
-    }
+        String url = SPUtil.getApiAuth(mActivity) + "/load";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("source_id", source_id);
 
+        LogUtil.e("-------------------------source_id.toString()--" + source_id);
+        httpPostUtils.get(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取签到----消息----------------" + strJson);
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        LogUtil.e("上传成功头像onSuccess1111" +  SPUtil.getAvatar(getActivity()));
-        if (data != null) {
-            LogUtil.e("上传成功头像onSuccess2222" +  SPUtil.getAvatar(getActivity()));
-            Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
-            if (uri != null) {
-                LogUtil.e("上传成功头像onSuccess3333" +  SPUtil.getAvatar(getActivity()));
-                String imagePath = PhotoOrVideoUtils.getPath(mActivity, uri);
-                //upLoadFile(imagePath, "", "");
-                upLoadAvatar(imagePath);
+                SignUserLastBean lastBean = GsonUtil.getSignUserLastBean(strJson);
+                if (lastBean.code.equals("0")) {
+                    SignUserLastDataBean dataBean = lastBean.data;
+                    oletime.setText(dataBean.ctime);
+                    oldaddress.setText(dataBean.address);
+                } else {
+                    MyToast.showLong(mActivity, "获取数据失败");
+                }
             }
-        }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
+                }
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
 
     }
 
@@ -308,8 +299,8 @@ public class TopSignFragment extends BaseFragment {
      *
      * @param imagePath
      */
-    private void upLoadAvatar(String imagePath) {
-        LogUtil.e("上传成功头像onSuccess444" +  SPUtil.getAvatar(getActivity()));
+    private void upLoadAvatar(final String imagePath) {
+        LogUtil.e("上传成功头像onSuccess444" + SPUtil.getAvatar(getActivity()));
         showProgressDialog();
         RequestParams params = new RequestParams(SPUtil.getApiUpload(mActivity));
         params.setMultipart(true);
@@ -323,9 +314,9 @@ public class TopSignFragment extends BaseFragment {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     if (jsonObject.optInt("code") == 0) {
-                        SPUtil.setAvatar(mActivity, jsonObject.optJSONObject("data").optString("src"));
-
-                        LogUtil.e("上传成功头像onSuccess" +  SPUtil.getAvatar(getActivity()));
+                        x.image().bind(picture, imagePath, pictureOptions);
+                        sign_image_url = jsonObject.optJSONObject("data").optString("src");
+                        MyToast.showLong(mActivity, "上传图片成功");
                     } else {
                         MyToast.showLong(mActivity, "上传头像失败,请联系管理员");
                     }
@@ -368,23 +359,173 @@ public class TopSignFragment extends BaseFragment {
 
     }
 
-    public synchronized void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new AppProgressDialog();
-        }
-        progressDialog.show(getActivity());
+    /**
+     * 提交到服务器
+     */
+
+    private void submitInforToService() {
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/submit";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("submit_id", submit_id);
+
+        LogUtil.e("-------------------------submit_id--" + submit_id);
+
+        StringBuilder sb = new StringBuilder();
+
+        //sb.append("{\"data\":{");
+        sb.append("{");
+
+
+        sb.append("\"userid\":\"");
+        sb.append(SPUtil.getUserId(mActivity));
+        sb.append("\",");
+
+        sb.append("\"abs_x\":\"");
+        sb.append(mAmapLocation.getLongitude());
+        sb.append("\",");
+
+        sb.append("\"abs_y\":\"");
+        sb.append(mAmapLocation.getLatitude());
+        sb.append("\",");
+
+        sb.append("\"abs_z\":\"");
+        sb.append("");
+        sb.append("\",");
+
+        sb.append("\"address\":\"");
+        sb.append(mAmapLocation.getAddress());
+        sb.append("\",");
+
+        sb.append("\"ctime\":\"");
+        sb.append(TimeUtils.getFormateTime(System.currentTimeMillis(), "-", ":"));
+        sb.append("\",");
+
+        sb.append("\"img_url\":\"");
+        sb.append(sign_image_url);
+        sb.append("\"");
+
+        sb.append("}");
+
+
+        params.addBodyParameter("data", sb.toString());
+        LogUtil.e("-------------------------source_id.toString()--" + sb.toString());
+
+        LogUtil.e("-------------------------params.toString()--" + params.toString());
+        httpPostUtils.post(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取签到后++++++++++++++++----消息----------------" + strJson);
+                try {
+                    JSONObject jsonObject = new JSONObject(strJson);
+                    if (jsonObject.optInt("code") == 0) {
+                        MyToast.showLong(mActivity, "签到成功");
+                    } else {
+                        MyToast.showLong(mActivity, "签到失败");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
+                }
+
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
     }
 
-    public void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismissDialog();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null) {
+            Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
+            LogUtil.e("拍照图片路径为----uri是否为null-----------"+(uri==null));
+            if (uri != null) {
+                String imagePath = PhotoOrVideoUtils.getPath(mActivity, uri);
+                //upLoadFile(imagePath, "", "");
+                LogUtil.e("拍照图片路径为----imagePath-----------"+imagePath);
+                upLoadAvatar(imagePath);
+            }
         }
+
     }
 
-    public synchronized AppProgressDialog getProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new AppProgressDialog();
-        }
-        return progressDialog;
+    /**
+     * 初始化定位
+     */
+    private void initMapLocation(int time) {
+        mLocationListener = new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation amapLocation) {
+                if (amapLocation != null) {
+                    if (amapLocation.getErrorCode() == 0) {
+                        //可在其中解析amapLocation获取相应内容。
+                        mAmapLocation = amapLocation;
+                        SPUtil.setLat(mActivity, amapLocation.getLatitude() + "");
+                        SPUtil.setLong(mActivity, amapLocation.getLongitude() + "");
+                        SPUtil.setAddress(mActivity, amapLocation.getAddress());
+                        //T.showShort(MainActivity.this, amapLocation.getAddress());
+                        //sendLocation(amapLocation);
+                        address.setText(mAmapLocation.getAddress());
+//                        LogUtil.e("定位地址为" + amapLocation.getAddress());
+//                        LogUtil.e("纬度" + amapLocation.getLatitude());
+//                        LogUtil.e("经度" + amapLocation.getLongitude());
+                    } else {
+                        //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                        LogUtil.e("AmapErrorlocation Error, ErrCode:"
+                                + amapLocation.getErrorCode() + ", errInfo:"
+                                + amapLocation.getErrorInfo());
+                    }
+                }
+            }
+        };
+        //初始化定位
+        mLocationClient = new AMapLocationClient(mActivity);
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为AMapLocationMode.Battery_Saving，低功耗模式。
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
+        //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
+        mLocationOption.setInterval(time * 1000);
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setNeedAddress(true);
+        //设置是否强制刷新WIFI，默认为true，强制刷新。
+        mLocationOption.setWifiActiveScan(true);
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
     }
+
 }

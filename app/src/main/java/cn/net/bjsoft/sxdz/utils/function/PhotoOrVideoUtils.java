@@ -360,10 +360,13 @@ public class PhotoOrVideoUtils {
                         file.mkdirs();// 创建文件夹
                         fileName = getSavePath() + name;
                         try {
+                            LogUtil.e("保存文件地址-------@@@@@@@@@@@@@@------------"+fileName);
                             b = new FileOutputStream(fileName);
                             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件--参数100，即压缩品质为100%
                             //TODO 获取文件的URI  Uri uri = Uri.parse("file:///sdcard/img.png");
                             uri = Uri.fromFile(new File(fileName));
+
+                            //uri = data.getData();
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         } finally {

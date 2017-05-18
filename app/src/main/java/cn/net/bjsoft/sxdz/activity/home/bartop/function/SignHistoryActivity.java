@@ -26,7 +26,6 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
-import com.lidroid.xutils.BitmapUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
@@ -38,16 +37,21 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
 import cn.net.bjsoft.sxdz.adapter.function.sign.FunctionSignHistoryAdapter;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
+import cn.net.bjsoft.sxdz.bean.app.AppBean;
+import cn.net.bjsoft.sxdz.bean.app.HomepageBean;
+import cn.net.bjsoft.sxdz.bean.app.ModulesBean;
+import cn.net.bjsoft.sxdz.bean.app.function.sign.SignUserDataBean;
 import cn.net.bjsoft.sxdz.bean.function.sign.FunctionSignHistoryBean;
-import cn.net.bjsoft.sxdz.dialog.ListPopupWindow;
 import cn.net.bjsoft.sxdz.dialog.PickerDialog;
+import cn.net.bjsoft.sxdz.dialog.SignLastDropDowwnPopupWindow;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
@@ -81,7 +85,7 @@ public class SignHistoryActivity extends BaseActivity {
     private FunctionSignHistoryBean signHistoryBean;//总数据
 
     private ArrayList<FunctionSignHistoryBean.DepartmentListDao> departments;//全部部门集合
-    private ArrayList<String> departmentNames;
+    private ArrayList<SignUserDataBean> departmentNames;
     private ArrayList<FunctionSignHistoryBean.HumenListDao> humenList;//每个部门的全部的人的集合
 
     private HashMap<String, ArrayList<FunctionSignHistoryBean.HumenListDao>> departmentMap;//将每个部门分组
@@ -105,15 +109,23 @@ public class SignHistoryActivity extends BaseActivity {
 
     private ArrayList<LatLng> latLngs;
 
-    private ListPopupWindow listPopupWindow;
+    private SignLastDropDowwnPopupWindow checkWindow;
 
-    private BitmapUtils bitmapUtils;
 
     private long signDate = 0;
+
+    private BaseActivity mActivity;
+
+    private AppBean appBean;
+    private ArrayList<HomepageBean> homepageBeen;
+    private ModulesBean modulesBean;
+
+    private String load_list = "";
 
 
     @Event(value = {R.id.function_sing_history_date
             , R.id.function_sing_history_partment
+            , R.id.function_sing_history_get_users
             , R.id.title_back})
     private void onClick(View view) {
         switch (view.getId()) {
@@ -124,17 +136,99 @@ public class SignHistoryActivity extends BaseActivity {
                 int[] location = new int[2];//窗口位置
                 spinner_partment.getLocationOnScreen(location);
                 location[1] = location[1] + spinner_partment.getHeight();
-                listPopupWindow.showWindow(departmentNames, location);
+                checkWindow.showWindow(departmentNames, location);
                 break;
+
+            case R.id.function_sing_history_get_users:
+                getUsersSignInfo();
+                break;
+
             case R.id.title_back:
                 finish();
                 break;
         }
     }
 
+    private void getUsersSignInfo() {
+
+        for (SignUserDataBean bean : departmentNames) {
+            LogUtil.e("获取信息---------------------" + bean.user_name + "::" + bean.select);
+        }
+    }
+
+
+    private void initData() {
+
+        appBean = GsonUtil.getAppBean(SPUtil.getMobileJson(this));
+
+        homepageBeen = appBean.homepage;
+        modulesBean = new ModulesBean();
+
+        for (int i = 0; i < homepageBeen.size(); i++) {
+            if (homepageBeen.get(i).tag.equals("signin")) {
+                modulesBean.signin = homepageBeen.get(i).tag_params;
+            }
+        }
+
+        if (modulesBean.signin != null && !(modulesBean.signin.size() > 0)) {
+            modulesBean.signin = appBean.modules.signin;
+        }
+
+        if (modulesBean.signin != null && modulesBean.signin.size() > 0) {
+            load_list = modulesBean.signin.get("load_list");
+        }
+    }
+
+    private void getUserList(){
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(this) + "/load";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("load_list", load_list);
+
+        LogUtil.e("-------------------------source_id.toString()--" + load_list);
+        httpPostUtils.get(this, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取联系人签到----消息----------------" + strJson);
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
+                }
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = this;
+        initData();
         //setContentView(R.layout.activity_function_sign_history);
 
         //x.view().inject(this);
@@ -269,7 +363,7 @@ public class SignHistoryActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                setGridViewData(departmentMap.get(s.toString()));
+                //setGridViewData(departmentMap.get(s.toString()));
             }
 
             @Override
@@ -279,8 +373,8 @@ public class SignHistoryActivity extends BaseActivity {
         });
 
 
-        listPopupWindow = new ListPopupWindow(this, spinner_partment);
-        listPopupWindow.setOnData(new ListPopupWindow.OnGetData() {
+        checkWindow = new SignLastDropDowwnPopupWindow(this, spinner_partment);
+        checkWindow.setOnData(new SignLastDropDowwnPopupWindow.OnGetData() {
             @Override
             public void onDataCallBack(String result) {
                 LogUtil.e("获取到的结果为====");
@@ -302,10 +396,11 @@ public class SignHistoryActivity extends BaseActivity {
                  * 当日期改变时,查询网络,获取最新数据
                  */
 
-                departmentMap.clear();
-                signHistoryAdapter.notifyDataSetChanged();
-
-                getData();
+//                departmentMap.clear();
+//                signHistoryAdapter.notifyDataSetChanged();
+//
+//                getData();
+                getUserList();
             }
 
             @Override
@@ -343,7 +438,6 @@ public class SignHistoryActivity extends BaseActivity {
                     //LogUtil.e("获取到的条目-----------" + result);
 
                     departments.addAll(signHistoryBean.data);
-
                     {
                         //信息分类
                         for (int i = 0; i < departments.size(); i++) {
@@ -351,16 +445,21 @@ public class SignHistoryActivity extends BaseActivity {
                         }
 
                         departmentNames.clear();
-                        Iterator iter = departmentMap.entrySet().iterator();
-                        while (iter.hasNext()) {
-                            Map.Entry entry = (Map.Entry) iter.next();
-                            departmentNames.add(entry.getKey().toString());
+//                        Iterator iter = departmentMap.entrySet().iterator();
+//                        while (iter.hasNext()) {
+//                            Map.Entry entry = (Map.Entry) iter.next();
+//                            departmentNames.add(entry.getKey().toString());
+//                        }
+                        for (int i = 0; i < 5; i++) {
+                            SignUserDataBean bean = new SignUserDataBean();
+                            bean.user_name = "张三--" + i;
+                            departmentNames.add(bean);
                         }
-
                     }
 
                     init();
-                    spinner_partment.setText(departmentNames.get(0));
+                    //spinner_partment.setText(departmentNames.get(0));
+                    spinner_partment.setText("选择下属");
                 } else {
                 }
 

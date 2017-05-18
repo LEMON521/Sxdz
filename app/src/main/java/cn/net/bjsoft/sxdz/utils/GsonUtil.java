@@ -9,6 +9,7 @@ import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.AppPushBean;
 import cn.net.bjsoft.sxdz.bean.app.ali_push.ALiPushMessageBean;
 import cn.net.bjsoft.sxdz.bean.app.function.form.FunctionFormBean;
+import cn.net.bjsoft.sxdz.bean.app.function.sign.SignUserLastBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailBeanNew;
@@ -304,6 +305,16 @@ public class GsonUtil {
      */
     public static FunctionFormBean getFunctionFormBean(String json){
         return getGson().fromJson(json , FunctionFormBean.class);
+//        return datasBean;
+    }
+
+    /**
+     * 获取--FunctionFormBean --json
+     * @param json
+     * @return
+     */
+    public static SignUserLastBean getSignUserLastBean(String json){
+        return getGson().fromJson(json , SignUserLastBean.class);
 //        return datasBean;
     }
 

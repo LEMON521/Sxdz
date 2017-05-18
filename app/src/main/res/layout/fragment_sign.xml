@@ -167,8 +167,8 @@
                 app:borderWidth="1dp"-->
                     <cn.net.bjsoft.sxdz.view.RoundImageView
                         android:src="@drawable/past_bg"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="@dimen/dm400"
+                        android:layout_height="@dimen/dm300"
                         android:adjustViewBounds="true"
                         android:scaleType="fitXY"
                         app:borderRadius="10dp"
