@@ -29,6 +29,26 @@ public class SPUtil {
     }
 
     /**
+     * position_id ----position_id--获取
+     * 获取  --  position_id = "position_id"缓存
+     */
+    public static String getUsers_PositionId(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ALL, Context.MODE_PRIVATE);
+        return preferences.getString("position_id", "");
+    }
+
+    /**
+     * position_id----
+     * 设置   --   position_id = "position_id"缓存
+     */
+    public static void setUsers_PositionId(Context context, String position_id) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ALL, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("source_id", position_id);
+        editor.commit();
+    }
+
+    /**
      * source_id ----source_id--获取
      * 获取  --  source_id = "source_id"缓存
      */

@@ -184,6 +184,7 @@ public class LoginFragment extends BaseFragment {
                     SPUtil.setLoginUserName(getContext(), loginedDataBean.loginname);
                     SPUtil.setUsers_SourceId(getContext(),loginedDataBean.source_id+"");
 
+
                     //----------------------按用户id绑定推送-------------------------
                     String user_id = SPUtil.getUserId(getActivity());
                     if (!TextUtils.isEmpty(user_id)) {
