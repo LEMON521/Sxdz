@@ -454,7 +454,6 @@ public class SplashActivity extends BaseActivity {
 
                 SPUtil.setUsersAll(SplashActivity.this, strJson);
 
-
             }
 
             @Override

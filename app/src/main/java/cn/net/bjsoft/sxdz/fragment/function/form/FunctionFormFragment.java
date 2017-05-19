@@ -30,12 +30,11 @@ import cn.net.bjsoft.sxdz.activity.home.function.form.FunctionFormActivity;
 import cn.net.bjsoft.sxdz.adapter.function.form.FunctionFormAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.function.form.FunctionFormBean;
-import cn.net.bjsoft.sxdz.bean.app.function.form.FunctionFormDatasBean;
+import cn.net.bjsoft.sxdz.bean.app.function.form.FunctionFormDataItemsBean;
+import cn.net.bjsoft.sxdz.dialog.AppProgressDialog;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
-
-import static cn.net.bjsoft.sxdz.utils.function.TestAddressUtils.test_get_function_form_url;
 
 /**
  * Created by Zrzc on 2017/5/15.
@@ -44,6 +43,7 @@ import static cn.net.bjsoft.sxdz.utils.function.TestAddressUtils.test_get_functi
 public class FunctionFormFragment extends Fragment {
     private FragmentActivity mActivity;
     private View view;
+    private AppProgressDialog progressDialog;
 
 
     @ViewInject(R.id.title_back)
@@ -53,15 +53,20 @@ public class FunctionFormFragment extends Fragment {
 
     @ViewInject(R.id.fragment_function_form_listview)
     private ListView listView;
+    @ViewInject(R.id.fragment_function_form_info)
+    private TextView form_info;
 
-    private FunctionFormBean formBean;
-    private ArrayList<FunctionFormDatasBean> dataBeanList;
-    private FunctionFormAdapter adapter;
+
+    private FunctionFormBean functionFormBean;
+    private ArrayList<FunctionFormDataItemsBean> dataBeanList;
+    private FunctionFormAdapter functionFormAdapter;
 
 
     private Bundle bundle;
     private String titleStr = "";
-    private String formId = "";
+    private String parent_id = "";
+    private String stat_source_id = "";
+    private String stat_target = "";
 
 
     @Override
@@ -78,11 +83,13 @@ public class FunctionFormFragment extends Fragment {
         mActivity = getActivity();
 
         bundle = getArguments();
-        LogUtil.e("========bundle========"+bundle.getString("title"));
+        LogUtil.e("========bundle========" + bundle.getString("title"));
 
         if (bundle != null) {
-            formId = bundle.getString("form_id");
+            parent_id = bundle.getString("parent_id");
             titleStr = bundle.getString("title");
+            stat_source_id = bundle.getString("stat_source_id");
+            stat_target = bundle.getString("stat_target");
         }
 
         if (!TextUtils.isEmpty(titleStr)) {
@@ -92,8 +99,7 @@ public class FunctionFormFragment extends Fragment {
         }
         back.setVisibility(View.VISIBLE);
         initData();
-        //getData();
-        getDataTest();
+        getData();
         return view;
     }
 
@@ -114,56 +120,102 @@ public class FunctionFormFragment extends Fragment {
         }
         dataBeanList.clear();
 
-        if (adapter == null) {
-            adapter = new FunctionFormAdapter(mActivity, dataBeanList);
+        if (functionFormAdapter == null) {
+            functionFormAdapter = new FunctionFormAdapter(mActivity, dataBeanList);
         }
 
-        listView.setAdapter(adapter);
+        listView.setAdapter(functionFormAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!TextUtils.isEmpty(dataBeanList.get(position).url)) {//不为空,那么就是子节点,并打开网页
-                    Intent webIntent = new Intent(mActivity, WebActivity.class);
-                    webIntent.putExtra("url", dataBeanList.get(position).url);
-                    webIntent.putExtra("title", dataBeanList.get(position).title);
-                    startActivity(webIntent);
-                } else {//不为空,那么他就有子节点
-                    Intent childIntent = new Intent(mActivity, FunctionFormActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("form_id", dataBeanList.get(position).id);
-                    bundle.putString("title", dataBeanList.get(position).title);
-                    childIntent.putExtra("form_data", bundle);
-                    startActivity(childIntent);
-                }
+
+                    if (TextUtils.isEmpty(dataBeanList.get(position).url)) {
+                        Intent childIntent = new Intent(mActivity, FunctionFormActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("stat_source_id", stat_source_id);
+                        bundle.putString("stat_target", stat_target);
+                        bundle.putString("parent_id", dataBeanList.get(position).id);
+                        bundle.putString("title", dataBeanList.get(position).name);
+                        childIntent.putExtra("form_data", bundle);
+                        startActivity(childIntent);
+                    } else {
+                        if (!TextUtils.isEmpty(dataBeanList.get(position).url)) {
+                            Intent webIntent = new Intent(mActivity, WebActivity.class);
+                            webIntent.putExtra("url", dataBeanList.get(position).url);
+                            webIntent.putExtra("title", dataBeanList.get(position).name);
+                            startActivity(webIntent);
+                        } else {
+                            MyToast.showShort(getActivity(), "此报表暂时没有信息");
+                        }
+
+                    }
             }
         });
 
     }
 
 
-
     private void getData() {
+
+
+        showProgressDialog();
         HttpPostUtils httpPostUtils = new HttpPostUtils();
 
         String url = SPUtil.getApiAuth(mActivity) + "/load";
         LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
         RequestParams params = new RequestParams(url);
-        params.addBodyParameter("form_id", formId);
+        params.addBodyParameter("source_id", stat_source_id);
+        params.addBodyParameter("target", stat_target);
+//        {data:{parent_id:stat_parent_id}}
+        StringBuilder sb = new StringBuilder();
+
+        //sb.append("{\"data\":{");
+        sb.append("{");
+
+
+        sb.append("\"data\":{");
+
+        sb.append("\"parent_id\":\"");
+        sb.append(parent_id);
+        sb.append("\"");
+
+        sb.append("}");
+        sb.append("}");
+
+        params.addBodyParameter("data", sb.toString());
+
+        LogUtil.e("-------------------------data.toString()--" + sb.toString());
         httpPostUtils.get(mActivity, params);
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取报表----报表信息----------------" + strJson);
 
+                functionFormBean = GsonUtil.getFunctionFormBean(strJson);
 
-                formBean = GsonUtil.getFunctionFormBean(strJson);
-                dataBeanList.addAll(formBean.data);
-                adapter.notifyDataSetChanged();
+                if (functionFormBean.code.equals("0")) {
+                    if (functionFormBean.data.items != null) {
 
+                        dataBeanList.addAll(functionFormBean.data.items);
+                        functionFormAdapter.notifyDataSetChanged();
+                        if (dataBeanList.size()>0){
+                            form_info.setVisibility(View.GONE);
+                        }else {
+                            form_info.setVisibility(View.VISIBLE);
+                        }
+                    }else {
+                        form_info.setVisibility(View.VISIBLE);
+                    }
+
+                }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+
+                form_info.setVisibility(View.VISIBLE);
+
                 LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
                 LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
                 LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
@@ -174,7 +226,6 @@ public class FunctionFormFragment extends Fragment {
                 for (StackTraceElement element : elements) {
                     LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
                 }
-
                 MyToast.showShort(mActivity, "获取数据失败!!");
             }
 
@@ -185,37 +236,28 @@ public class FunctionFormFragment extends Fragment {
 
             @Override
             public void onFinished() {
+                dismissProgressDialog();
             }
         });
     }
 
-    private void getDataTest() {
+    public synchronized void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new AppProgressDialog();
+        }
+        progressDialog.show(getActivity());
+    }
 
-        String url = test_get_function_form_url;
-        RequestParams params = new RequestParams(url);
-        //params.addBodyParameter("form_id", formId);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                formBean = GsonUtil.getFunctionFormBean(result);
-                dataBeanList.addAll(formBean.data);
-                adapter.notifyDataSetChanged();
-            }
+    public void dismissProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismissDialog();
+        }
+    }
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
+    public synchronized AppProgressDialog getProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new AppProgressDialog();
+        }
+        return progressDialog;
     }
 }

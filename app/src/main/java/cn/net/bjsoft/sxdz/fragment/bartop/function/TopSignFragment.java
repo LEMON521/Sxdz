@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -111,11 +112,15 @@ public class TopSignFragment extends BaseFragment {
 
     private String source_id = "";
     private String submit_id = "";
+    private String load_list = "";
 
     private String sign_image_url = "";
 
     private ImageOptions imageOptions;
     private ImageOptions pictureOptions;
+
+    private Bundle mBundle;
+    private String fragmentTag;
 
 
     //声明AMapLocationClient类对象
@@ -146,23 +151,43 @@ public class TopSignFragment extends BaseFragment {
         homepageBeen = appBean.homepage;
         modulesBean = new ModulesBean();
 
-        for (int i = 0; i < homepageBeen.size(); i++) {
-            if (homepageBeen.get(i).tag.equals("signin")) {
-                modulesBean.signin = homepageBeen.get(i).tag_params;
+        mBundle = getArguments();
+
+        fragmentTag = mBundle.getString("tag");
+
+
+        if (fragmentTag!=null){
+            LogUtil.e("==========fragmentTag==========="+fragmentTag);
+            if (fragmentTag.equals("signin")) {//底部栏创建
+                for (int i = 0; i < homepageBeen.size(); i++) {
+                    if (homepageBeen.get(i).tag.equals("signin")) {
+                        modulesBean.signin = homepageBeen.get(i).tag_params;
+                    }
+                }
+            }else if (fragmentTag.equals("sign")){
+                modulesBean.signin = appBean.modules.signin;
+
             }
+
         }
 
-        if (modulesBean.signin != null && !(modulesBean.signin.size() > 0)) {
-            modulesBean.signin = appBean.modules.signin;
-        }
-
+//        if (modulesBean.signin != null && !(modulesBean.signin.size() > 0)) {
+//
+//        }
         if (modulesBean.signin != null && modulesBean.signin.size() > 0) {
             source_id = modulesBean.signin.get("source_id");
             submit_id = modulesBean.signin.get("submit_id");
+            load_list = modulesBean.signin.get("load_list");
         }
 
         userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
-        organizationBean = userBean.organization;
+
+        if (userBean == null) {
+            MyToast.showShort(mActivity, "数据初始化尚未完成,请稍后进入!");
+            mActivity.finish();
+        } else {
+            organizationBean = userBean.organization;
+        }
         //usersSingleBean = UsersInforUtils.getInstance(getActivity()).getUserInfo(SPUtil.getUserId(getActivity()));
 
         initDataLast();
@@ -192,6 +217,11 @@ public class TopSignFragment extends BaseFragment {
         x.image().bind(userIcon, userBean.avatar, imageOptions);
         name.setText(userBean.name);
         bumen.setText(organizationBean.dept_name);
+        if (TextUtils.isEmpty(load_list)) {
+            sign_history.setVisibility(View.GONE);
+        } else {
+            sign_history.setVisibility(View.VISIBLE);
+        }
     }
 
     @Event(type = View.OnClickListener.class, value = {R.id.sign_back, R.id.sign_history, R.id.sign_picture, R.id.sign_btn})
@@ -364,6 +394,12 @@ public class TopSignFragment extends BaseFragment {
 
     private void submitInforToService() {
         showProgressDialog();
+
+        if (mAmapLocation == null) {
+            MyToast.showShort(mActivity, "获取位置失败,请打开权限并重启软件");
+            return;
+        }
+
         HttpPostUtils httpPostUtils = new HttpPostUtils();
 
         String url = SPUtil.getApiAuth(mActivity) + "/submit";
@@ -423,6 +459,7 @@ public class TopSignFragment extends BaseFragment {
                     JSONObject jsonObject = new JSONObject(strJson);
                     if (jsonObject.optInt("code") == 0) {
                         MyToast.showLong(mActivity, "签到成功");
+                        initDataLast();
                     } else {
                         MyToast.showLong(mActivity, "签到失败");
                     }
@@ -461,7 +498,6 @@ public class TopSignFragment extends BaseFragment {
         });
 
     }
-
 
 
     /**
@@ -512,6 +548,7 @@ public class TopSignFragment extends BaseFragment {
         //启动定位
         mLocationClient.startLocation();
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e("tag", "onActivityResult");
@@ -520,25 +557,26 @@ public class TopSignFragment extends BaseFragment {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     private Uri photoUri;
 
     private String picPath;
 
     private void takePhoto() {
-//执行拍照前，应该先判断SD卡是否存在
+        //执行拍照前，应该先判断SD卡是否存在
         String SDState = Environment.getExternalStorageState();
         if (SDState.equals(Environment.MEDIA_MOUNTED)) {
 
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//"android.media.action.IMAGE_CAPTURE"
-/***
- * 需要说明一下，以下操作使用照相机拍照，拍照后的图片会存放在相册中的
- * 这里使用的这种方式有一个好处就是获取的图片是拍照后的原图
- * 如果不实用ContentValues存放照片路径的话，拍照后获取的图片为缩略图不清晰
- */
+            /***
+             * 需要说明一下，以下操作使用照相机拍照，拍照后的图片会存放在相册中的
+             * 这里使用的这种方式有一个好处就是获取的图片是拍照后的原图
+             * 如果不实用ContentValues存放照片路径的话，拍照后获取的图片为缩略图不清晰
+             */
             ContentValues values = new ContentValues();
             photoUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-/**-----------------*/
+            /**-----------------*/
             startActivityForResult(intent, 100);
         } else {
             Toast.makeText(getActivity(), "内存卡不存在", Toast.LENGTH_LONG).show();
@@ -549,8 +587,6 @@ public class TopSignFragment extends BaseFragment {
 
     /**
      * 选择图片后，获取图片的路径
-     *
-
      */
     private void doPhoto() {
         Log.e("tag", "doPhoto");

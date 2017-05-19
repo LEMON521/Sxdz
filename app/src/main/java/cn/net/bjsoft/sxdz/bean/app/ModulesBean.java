@@ -10,5 +10,6 @@ import java.util.HashMap;
 public class ModulesBean implements Serializable {
 
     public HashMap<String, String> signin ;//= new HashMap<>();
+    public HashMap<String, String> form_ylyd ;//= new HashMap<>();
 
 }

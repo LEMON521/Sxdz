@@ -24,6 +24,7 @@ public class RollViewPager extends ViewPager {
     private List<String> titleList;
     private TextView top_news_title;
     private List<String> imgUrlList;
+    private List<String> linktoUrlList;
     private List<ImageView> dotList;
     //private BitmapUtils bitmapUtils;
     private MyPagerAdapter myPagerAdapter;
@@ -88,7 +89,7 @@ public class RollViewPager extends ViewPager {
 
     public interface OnViewClickListener {
         //业务逻辑对应操作
-        public void viewClickListener(String url);
+        public void viewClickListener(String title,String url,String linktoUrl);
     }
 
     //界面移除出界面时候调用的方法
@@ -149,6 +150,11 @@ public class RollViewPager extends ViewPager {
     //图片的链接地址所在集合
     public void initImgUrl(List<String> imgUrlList) {
         this.imgUrlList = imgUrlList;
+    }
+
+    //点击链接地址
+    public void initLinktoUrl(List<String> linktoUrlList){
+        this.linktoUrlList = linktoUrlList;
     }
 
     class RunnableTask implements Runnable {
@@ -233,7 +239,7 @@ public class RollViewPager extends ViewPager {
                                 //回调(1，定义一个接口2，有未实现的方法(未知的后续业务逻辑)3，获取实现了接口的类生成的对象，4，调用一下)
 //							Toast.makeText(getContext(),position+"", 0).show();
                                 if (clickListener != null) {
-                                    clickListener.viewClickListener(imgUrlList.get(position));
+                                    clickListener.viewClickListener(titleList.get(position),imgUrlList.get(position),linktoUrlList.get(position));
                                 }
                             }
                             break;

@@ -382,7 +382,7 @@ public class WorkFragment extends BaseFragment {
             RollViewPager rollViewPager = new RollViewPager(mActivity, viewList,
                     new RollViewPager.OnViewClickListener() {
                         @Override
-                        public void viewClickListener(String imgUrl) {
+                        public void viewClickListener(String title, String imgUrl, String LinktoUrl) {
                             //在当前的方法中要去获取图片的链接地址
                             //MyToast.showShort(mActivity, imgUrl);
                         }

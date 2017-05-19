@@ -10,15 +10,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.app.function.form.FunctionFormDatasBean;
+import cn.net.bjsoft.sxdz.bean.app.function.form.FunctionFormDataItemsBean;
 
 public class FunctionFormAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<FunctionFormDatasBean> formList;
+    private ArrayList<FunctionFormDataItemsBean> formList;
 
     public FunctionFormAdapter(Context context
-            , ArrayList<FunctionFormDatasBean> formList) {
+            , ArrayList<FunctionFormDataItemsBean> formList) {
         this.context = context;
         this.formList = formList;
     }
@@ -53,7 +53,7 @@ public class FunctionFormAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.title.setText(formList.get(position).title);
+        viewHolder.title.setText(formList.get(position).name);
 
         return convertView;
     }

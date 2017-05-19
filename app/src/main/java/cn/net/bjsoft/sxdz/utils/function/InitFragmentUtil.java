@@ -135,7 +135,7 @@ public class InitFragmentUtil {
                     } else {
                         bundle.putString("tag", mBottonList.get(i).tag);
                     }
-//                    bundle.putString("tag", mBottonList.get(i).tag);
+                    bundle.putString("tag", mBottonList.get(i).tag);
                     bundle.putString("linkto", mBottonList.get(i).linkto);
                     bundle.putString("url", mBottonList.get(i).url);
                     bundle.putString("text", mBottonList.get(i).title);

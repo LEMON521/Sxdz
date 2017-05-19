@@ -32,16 +32,20 @@ import cn.net.bjsoft.sxdz.activity.home.bartop.UserActivity;
 import cn.net.bjsoft.sxdz.activity.login.ForgetPasswordActivity;
 import cn.net.bjsoft.sxdz.activity.login.LoginActivity;
 import cn.net.bjsoft.sxdz.activity.login.RegisterActivity;
+import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.LoginBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedDataBean;
+import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MDUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
+
+import static cn.net.bjsoft.sxdz.utils.AddressUtils.http_shuxinyun_url;
 
 
 /**
@@ -115,7 +119,7 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        LogUtil.e("mActivity=&&&&&&&&&&=" + mActivity);
+        LogUtil.e("getActivity()=&&&&&&&&&&=" + getActivity());
     }
 
     /**
@@ -156,6 +160,7 @@ public class LoginFragment extends BaseFragment {
     public void login() {
         if (userEdit.getText().toString().isEmpty() || passEdit.getText().toString().isEmpty()) {
             MyToast.showShort(getActivity(), "用户名和密码不能为空");
+            //getUserData();
             return;
         }
 
@@ -182,7 +187,7 @@ public class LoginFragment extends BaseFragment {
                     //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
                     SPUtil.setAvatar(getContext(), loginedDataBean.avatar);
                     SPUtil.setLoginUserName(getContext(), loginedDataBean.loginname);
-                    SPUtil.setUsers_SourceId(getContext(),loginedDataBean.source_id+"");
+                    SPUtil.setUsers_SourceId(getContext(), loginedDataBean.source_id + "");
 
 
                     //----------------------按用户id绑定推送-------------------------
@@ -204,25 +209,8 @@ public class LoginFragment extends BaseFragment {
 
 
                     LogUtil.e("登录结果");
+                    getUserData();
 
-                    Intent i3 = new Intent(getActivity(), MainActivity.class);
-                    LogUtil.e("数据请求=json=" + json);
-                    i3.putExtra("json", json);
-                    startActivity(i3);
-                    LogUtil.e("mActivity=&&&&&&&&&&=" + mActivity);
-                    LogUtil.e("getActivity=&&&&&&&&&&=" + getActivity());
-                    LogUtil.e("getContext=&&&&&&&&&&=" + getContext());
-                    if (getActivity() instanceof MainActivity) {
-                        getActivity().finish();
-                    }
-                    if (getActivity() instanceof UserActivity) {
-                        MainActivity.getMainActivity().finish();//不这样做的话，登录之后，点击返回按钮会返回到未登录状态的主页
-                        getActivity().finish();
-                    }
-                    if (getActivity() instanceof LoginActivity) {
-                        LoginActivity.getLoginActivity().finish();//不这样做的话，登录之后，点击返回按钮会返回到未登录状态的主页
-                        getActivity().finish();
-                    }
                 } else {
 
                     MyToast.showLong(getActivity(), "登录失败,用户名或密码错误");
@@ -248,6 +236,110 @@ public class LoginFragment extends BaseFragment {
                 dismissProgressDialog();
             }
         });
+    }
+
+    /**
+     * 如果Token值存在,那么就初始化用户信息
+     */
+    private void getUserData() {
+        HttpPostUtils httpPostUtil = new HttpPostUtils();
+        String url = "";
+        url = http_shuxinyun_url + "cache/users/" + SPUtil.getUserId(getActivity()) + "/" + "my.json";
+        LogUtil.e("url--------------------" + url);
+        RequestParams params = new RequestParams(url);
+        httpPostUtil.get(getActivity(), params);
+
+        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                SPUtil.setUserJson(getActivity(), strJson);//缓存用户信息
+
+                UserBean userBean = GsonUtil.getUserBean(strJson);
+                SPUtil.setAvatar(getActivity(), userBean.avatar);
+
+                getOrganizationData();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("我的页面json-----错误" + ex);
+                MyToast.showShort(getActivity(), "程序初始化出错,正在重新启动程序");
+                SPUtil.setToken(getActivity(), "");
+                Intent intent = new Intent(getActivity(), SplashActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
+    }
+
+    /**
+     * 获取工资组织架构信息
+     */
+    private void getOrganizationData() {
+        HttpPostUtils httpPostUtil = new HttpPostUtils();
+        String url = "";
+        url = http_shuxinyun_url + "cache/users/" + SPUtil.getUserId(getActivity()) + "/organization.json";
+        LogUtil.e("公司架构userOrganizationBean url----===========" + url);
+        RequestParams params = new RequestParams(url);
+        httpPostUtil.get(getActivity(), params);
+
+        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                SPUtil.setUserOrganizationJson(getActivity(), strJson);//缓存公司架构信息
+                //LogUtil.e("我的页面json");
+//                LogUtil.e("公司架构==========="+SPUtil.getUserOrganizationJson(getActivity()));
+                Intent i3 = new Intent(getActivity(), MainActivity.class);
+                LogUtil.e("数据请求=json=" + json);
+                i3.putExtra("json", json);
+                startActivity(i3);
+                LogUtil.e("getActivity()=&&&&&&&&&&=" + getActivity());
+                LogUtil.e("getActivity=&&&&&&&&&&=" + getActivity());
+                LogUtil.e("getContext=&&&&&&&&&&=" + getContext());
+
+                if (getActivity() instanceof MainActivity) {
+                    getActivity().finish();
+                }
+                if (getActivity() instanceof UserActivity) {
+                    MainActivity.getMainActivity().finish();//不这样做的话，登录之后，点击返回按钮会返回到未登录状态的主页
+                    getActivity().finish();
+                }
+                if (getActivity() instanceof LoginActivity) {
+                    LoginActivity.getLoginActivity().finish();//不这样做的话，登录之后，点击返回按钮会返回到未登录状态的主页
+                    getActivity().finish();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                SPUtil.setUserOrganizationJson(getActivity(), "");
+                LogUtil.e("我的页面json-----错误" + ex);
+                MyToast.showShort(getActivity(), "程序初始化出错,正在重新启动程序");
+                SPUtil.setToken(getActivity(), "");
+                Intent intent = new Intent(getActivity(), SplashActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
+
     }
 
     @Event(value = {R.id.login_back
