@@ -96,7 +96,6 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        showProgressDialog();
         isFirst = true;
 
 
@@ -282,7 +281,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
      * 获取分组数据
      */
     public void getData() {
-
+        showProgressDialog();
         RequestParams params = new RequestParams(TestAddressUtils.test_get_knowledge_url);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
@@ -311,6 +310,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
+                dismissProgressDialog();
             }
         });
     }
@@ -345,7 +345,6 @@ public class KnowledgeZDLFFragment extends BaseFragment {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 LogUtil.e("获取到的id" + checkedId);
-                showProgressDialog();
                 //RadioButton tempButton = (RadioButton) group.getChildAt(checkedId);
                 for (int i = 0; i < radioButtons.size(); i++) {
                     if (i == checkedId) {
@@ -377,7 +376,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
      * 获取条目数据
      */
     public void getItemsData(String url) {
-
+        showProgressDialog();
         RequestParams params = new RequestParams(url);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
@@ -407,6 +406,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
+                dismissProgressDialog();
             }
         });
     }
@@ -425,7 +425,6 @@ public class KnowledgeZDLFFragment extends BaseFragment {
         itemsAdapter.notifyDataSetChanged();
 
         //Utility.setListViewHeightBasedOnChildren(items);
-        dismissProgressDialog();
 
     }
 

@@ -3,10 +3,10 @@ package cn.net.bjsoft.sxdz.fragment.zdlf;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -204,7 +204,7 @@ public class MineZDLFFragment extends BaseFragment {
 
         HttpPostUtils httpPostUtil = new HttpPostUtils();
 
-        httpPostUtil.get(mActivity, params);
+        httpPostUtil.post(mActivity, params);
 
         httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
@@ -233,7 +233,7 @@ public class MineZDLFFragment extends BaseFragment {
                         SPJpushUtil.setTask(getContext(), 0);
                         SPJpushUtil.setTrain(getContext(), 0);
 
-                        getPushCount(getContext());
+                        getPushCount(getActivity());
 //                        pickerSelecect = selecect;
 //                        positions.setText(pickersItemList.get(pickerSelecect).getShowConetnt());
                     }
@@ -264,54 +264,60 @@ public class MineZDLFFragment extends BaseFragment {
 
         appBean = GsonUtil.getAppBean(mJson);
 
-        userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
 
-        if (userBean == null) {
-            MyToast.showShort(mActivity, "程序初始化出错,正在重启程序");
-            mActivity.finish();
-        }
 
-        userOrganizationBean = userBean.organization;
+//        userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
+//
+//        if (userBean == null) {
+//            MyToast.showShort(mActivity, "程序初始化出错,正在重启程序");
+//            mActivity.finish();
+//        }
+//
+//        userOrganizationBean = userBean.organization;
+//
+//        setUserData();
+//        dismissProgressDialog();
 
-        setUserData();
-        dismissProgressDialog();
-        //LogUtil.e("json" + mJson);
-//
-//        HttpPostUtils httpPostUtil = new HttpPostUtils();
-//        String url = "";
-//        url = appBean.api_user + "/" + SPUtil.getUserId(mActivity) + "/" + "my.json";
-//        LogUtil.e("url--------------------" + url);
-//        RequestParams params = new RequestParams(url);
-//        httpPostUtil.get(mActivity, params);
-//
-//        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
-//            @Override
-//            public void onSuccess(String strJson) {
-//                SPUtil.setUserJson(mActivity, strJson);//缓存用户信息
-//                LogUtil.e("getUserJson--------------------" + SPUtil.getUserJson(mActivity));
-//                userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
-//                userOrganizationBean = userBean.organization;
-//
-//
-//                setUserData();
-//            }
-//
-//            @Override
-//            public void onError(Throwable ex, boolean isOnCallback) {
-//                LogUtil.e("我的页面json-----错误" + ex);
-//            }
-//
-//            @Override
-//            public void onCancelled(Callback.CancelledException cex) {
-//
-//            }
-//
-//            @Override
-//            public void onFinished() {
-//                dismissProgressDialog();
-//            }
-//        });
+        HttpPostUtils httpPostUtil = new HttpPostUtils();
+        String url = "";
+        url = appBean.api_user + "/" + SPUtil.getUserId(mActivity) + "/" + "my.json";
+        LogUtil.e("url--------------------" + url);
+        RequestParams params = new RequestParams(url);
+        httpPostUtil.get(mActivity, params);
+
+        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                SPUtil.setUserJson(mActivity, strJson);//缓存用户信息
+                LogUtil.e("getUserJson--------------------" + SPUtil.getUserJson(mActivity));
+                userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
+                userOrganizationBean = userBean.organization;
+
+
+                setUserData();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("我的页面json-----错误" + ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
     }
+
+
+//    private void getUserData(){
+//
+//    }
 
     /**
      * 设置用户数据
@@ -795,7 +801,7 @@ public class MineZDLFFragment extends BaseFragment {
      *
      * @param context
      */
-    public void getPushCount(Context context) {
+    public void getPushCount(FragmentActivity context) {
 
         HttpPostUtils httpPostUtils = new HttpPostUtils();
 
@@ -804,7 +810,7 @@ public class MineZDLFFragment extends BaseFragment {
 
         RequestParams params = new RequestParams(url);
 
-        httpPostUtils.post(context, params);
+        httpPostUtils.get(context, params);
 
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override

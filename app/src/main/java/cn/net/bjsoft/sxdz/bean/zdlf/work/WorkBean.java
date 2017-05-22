@@ -42,6 +42,7 @@ public class WorkBean implements Serializable {
         public String image_url;//图片地址
         public String file_url;//附件地址
         public String file_text;//附件提示信息
+        public String url;//附件提示信息
     }
 
 }

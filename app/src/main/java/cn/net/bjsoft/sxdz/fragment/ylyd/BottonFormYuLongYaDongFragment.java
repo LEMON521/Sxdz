@@ -59,7 +59,7 @@ public class BottonFormYuLongYaDongFragment extends BaseFragment {
     private List<String> titleList = new ArrayList<String>();
     //存放顶部轮播图图片链接地址所在的集合
     private List<String> imgUrlList = new ArrayList<String>();
-    //存放顶部轮播图文字所在的集合
+    //存放顶部轮播图url所在的集合
     private List<String> linktoUrlList = new ArrayList<String>();
     //存放点对应view对象的集合
     private List<ImageView> viewList = new ArrayList<ImageView>();
@@ -168,7 +168,7 @@ public class BottonFormYuLongYaDongFragment extends BaseFragment {
 
         roll_root.setVisibility(View.GONE);
         if (!TextUtils.isEmpty(img_source_id)) {
-            roll_root.setVisibility(View.VISIBLE);
+            //roll_root.setVisibility(View.VISIBLE);
             getImageListData();
             //getTest();
         }
@@ -424,6 +424,7 @@ public class BottonFormYuLongYaDongFragment extends BaseFragment {
 
             titleList.clear();
             imgUrlList.clear();
+            linktoUrlList.clear();
             for (int i = 0; i < scrollBeanList.size(); i++) {
                 titleList.add(scrollBeanList.get(i).name);
                 imgUrlList.add(scrollBeanList.get(i).logo);

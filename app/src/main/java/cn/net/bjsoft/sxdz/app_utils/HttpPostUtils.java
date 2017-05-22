@@ -1,12 +1,18 @@
 package cn.net.bjsoft.sxdz.app_utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 /**
@@ -16,11 +22,31 @@ import cn.net.bjsoft.sxdz.utils.SPUtil;
 public class HttpPostUtils {
 
     private OnSetData mOnCallBack;
+    private Context mActivity;
 
     private Callback.CommonCallback callBack = new Callback.CommonCallback<String>() {
         @Override
         public void onSuccess(String result) {
-            mOnCallBack.onSuccess(result);
+
+            //result = "{\"code\":1,\"data\":null,\"msg\":\"unauthorized\"}";
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                int code = jsonObject.optInt("code");
+                if (code == 1) {//请求失败
+                    if (jsonObject.optString("msg").equals("unauthorized")) {
+                        callBackUnauthorized(mActivity);
+                    }
+
+                } else if (code == 0) {
+                    mOnCallBack.onSuccess(result);
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
         }
 
 
@@ -60,24 +86,58 @@ public class HttpPostUtils {
     }
 
 
-    public void post(Context context, RequestParams params) {
-
-        params.addBodyParameter("token", SPUtil.getToken(context));
-        params.addBodyParameter("appid", SPUtil.getAppid(context));
-        params.addBodyParameter("secret", SPUtil.getSecret(context));
-        LogUtil.e("================params============"+params.toString());
+    public void post(Context activity, RequestParams params) {
+        mActivity = activity;
+        params.addBodyParameter("token", SPUtil.getToken(activity));
+        params.addBodyParameter("appid", SPUtil.getAppid(activity));
+        params.addBodyParameter("secret", SPUtil.getSecret(activity));
+        LogUtil.e("================params============" + params.toString());
         x.http().post(params, callBack);
 
     }
 
-    public void get(Context context, RequestParams params) {
-
-        params.addBodyParameter("token", SPUtil.getToken(context));
-        params.addBodyParameter("appid", SPUtil.getAppid(context));
-        params.addBodyParameter("secret", SPUtil.getSecret(context));
-        LogUtil.e("================params============"+params.toString());
+    public void get(Context activity, RequestParams params) {
+        mActivity = activity;
+        params.addBodyParameter("token", SPUtil.getToken(activity));
+        params.addBodyParameter("appid", SPUtil.getAppid(activity));
+        params.addBodyParameter("secret", SPUtil.getSecret(activity));
+        LogUtil.e("================params============" + params.toString());
         x.http().get(params, callBack);
 
     }
 
+
+    private AlertDialog dialog;
+
+    private void callBackUnauthorized(final Context activity) {
+        // mActivity = activity;
+        if (dialog == null) {//防止创建多个dialog
+            dialog = new AlertDialog.Builder(activity).setTitle("友情提示").setMessage("该用户已被注销,点击确定重新登录")
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 点击“确认”后的操作
+//                        loginAgain();//从服务器注销
+                            SPUtil.setUserUUID(activity, "");
+                            SPUtil.setUserId(activity, "");
+                            SPUtil.setToken(activity, "");
+                            SPUtil.setAvatar(activity, "");
+
+
+                            Intent i = new Intent(activity, SplashActivity.class);
+                            activity.startActivity(i);
+                            //activity.finish();
+
+                        }
+                    })
+                    .setNegativeButton("退出", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 点击“返回”后的操作,这里不设置没有任何操作
+                            //activity.finish();
+                        }
+                    }).show();
+        }
+    }
 }

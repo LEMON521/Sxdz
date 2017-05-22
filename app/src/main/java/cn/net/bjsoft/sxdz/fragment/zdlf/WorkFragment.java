@@ -98,6 +98,8 @@ public class WorkFragment extends BaseFragment {
     private List<String> titleList = new ArrayList<String>();
     //存放顶部轮播图图片链接地址所在的集合
     private List<String> imgUrlList = new ArrayList<String>();
+    //存放顶部轮播图url所在的集合
+    private List<String> linktoUrlList = new ArrayList<String>();
     //存放点对应view对象的集合
     private List<ImageView> viewList = new ArrayList<ImageView>();
 
@@ -390,10 +392,11 @@ public class WorkFragment extends BaseFragment {
 
             titleList.clear();
             imgUrlList.clear();
+            linktoUrlList.clear();
             for (int i = 0; i < scrollListDaos.size(); i++) {
                 titleList.add(scrollListDaos.get(i).file_text);
                 imgUrlList.add(scrollListDaos.get(i).image_url);
-
+                linktoUrlList.add(scrollListDaos.get(i).url);
             }
             //点
             initDot();
@@ -401,6 +404,10 @@ public class WorkFragment extends BaseFragment {
             rollViewPager.initTitle(titleList, top_title);
             //图片
             rollViewPager.initImgUrl(imgUrlList);
+
+            //连接地址
+            rollViewPager.initLinktoUrl(linktoUrlList);
+
             rollViewPager.startRoll();
             //底部一般列表页的数据填充界面
 

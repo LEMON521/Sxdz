@@ -172,7 +172,7 @@ public class LoginFragment extends BaseFragment {
         params.addBodyParameter("password", MDUtil.MD5(passEdit.getText().toString()));
 
 
-        postUtils.post(getContext(), params);
+        postUtils.post(getActivity(), params);
         postUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
