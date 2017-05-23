@@ -1,6 +1,7 @@
 package cn.net.bjsoft.sxdz.adapter.zdlf;
 
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +21,12 @@ import org.xutils.common.util.LogUtil;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsItemsBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsReplayBean;
 import cn.net.bjsoft.sxdz.dialog.KnowledgeReplyPopupWindow_1;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.MyToast;
-import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
+import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.ChildrenListView;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
@@ -39,12 +41,12 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
     private BitmapUtils bitmapUtils;
     //private Context context;
     private FragmentActivity mActivity;
-    private ArrayList<KnowLedgeItemBean.ReplyListDao> list;
+    private ArrayList<KnowItemsDataItemsItemsBean> list;
 
     //private KnowledgeItemsItemReplyAdapter adapter;
     private ArrayList<KnowledgeItemsItemReplyAdapter> adaptersList;
 
-    public KnowledgeItemsItemAdapter(FragmentActivity mActivity, ArrayList<KnowLedgeItemBean.ReplyListDao> list) {
+    public KnowledgeItemsItemAdapter(FragmentActivity mActivity, ArrayList<KnowItemsDataItemsItemsBean> list) {
         this.mActivity = mActivity;
         this.list = list;
         //LogUtil.e("适配器中==="+list.getClass().toString());
@@ -114,17 +116,30 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
         //设置数据
         //Holder holder = (Holder) convertView.getTag();
         bitmapUtils = new BitmapUtils(mActivity, AddressUtils.img_cache_url);//初始化头像
-        bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
-        bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
-        bitmapUtils.display(holder.avatar, list.get(position).avatar_url);
-        //x.image().bind(holder.avatar,list.get(position).avatar_url);
-        holder.name.setText(list.get(position).name);
+        bitmapUtils.configDefaultLoadingImage(R.drawable.tab_me_n);//初始化头像
+        bitmapUtils.configDefaultLoadFailedImage(R.drawable.tab_me_n);//初始化头像
+        //bitmapUtils.display(holder.avatar, list.get(position).avatar_url);
+        if (!TextUtils.isEmpty(list.get(position).userid)) {
+            if (UsersInforUtils.getInstance(mActivity)
+                    .getUserInfo(list.get(position).userid) != null) {
+                bitmapUtils.display(holder.avatar
+                        , UsersInforUtils.getInstance(mActivity)
+                                .getUserInfo(list.get(position).userid)
+                                .avatar);
+                //x.image().bind(holder.avatar,list.get(position).avatar_url);
+                holder.name.setText(UsersInforUtils
+                        .getInstance(mActivity)
+                        .getUserInfo(list.get(position).userid)
+                        .nickname);
+            }
 
-        if (list.get(position).reply_list != null && list.get(position).reply_list.size() > 0) {
+        }
+
+        if (list.get(position).knowledge_item != null && list.get(position).knowledge_item.size() > 0) {
             holder.reply.setVisibility(View.VISIBLE);
-            LogUtil.e("第几条有数据===" + list.get(position).reply_list.size() + "::楼==" + (position + 1));
+            LogUtil.e("第几条有数据===" + list.get(position).knowledge_item.size() + "::楼==" + (position + 1));
             holder.replyList.clear();
-            holder.replyList.addAll(list.get(position).reply_list);
+            holder.replyList.addAll(list.get(position).knowledge_item);
             holder.lv_list.setAdapter(holder.adpter);
             Utility.setListViewHeightBasedOnChildren(holder.lv_list);
 
@@ -140,22 +155,23 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
             holder.lv_list.setVisibility(View.GONE);
             // holder.reply.setVisibility(View.GONE);
         }
-        RichText.from(list.get(position).comment_text).autoFix(false).into(holder.text);
+        RichText.from(list.get(position).content).autoFix(false).into(holder.text);
         holder.leavel.setText((position + 1) + "楼");
-        holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).time), "-", ":"));
+        //holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).time), "-", ":"));
+        holder.time.setText(list.get(position).ctime);
         holder.lv_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int positionChild, long id) {
-                LogUtil.e("点击前数量" + list.get(position).reply_list.size());
+                LogUtil.e("点击前数量" + list.get(position).knowledge_item.size());
                 MyToast.showShort(mActivity, "点击条目" + positionChild);
 
                 //调出popuWindow
 //
-                KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity, view, list.get(position).reply_list.get(positionChild).name);
+                KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity, view, list.get(position).knowledge_item.get(positionChild).name);
                 replyWindow.setOnData(new KnowledgeReplyPopupWindow_1.OnGetData() {
                     @Override
-                    public void onDataCallBack(KnowLedgeItemBean.ReplyListDao replyListDao) {
-                        list.get(position).reply_list.add(replyListDao);
+                    public void onDataCallBack(KnowItemsDataItemsReplayBean replyListDao) {
+                        list.get(position).knowledge_item.add(replyListDao);
                     }
                 });
             }
@@ -163,14 +179,15 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
         holder.ll_host.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyToast.showShort(mActivity, "点击详情" + list.get(position).comment_text);
+                MyToast.showShort(mActivity, "点击详情" + list.get(position).content);
                 //调出popuWindow
 //
                 KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity, view);
                 replyWindow.setOnData(new KnowledgeReplyPopupWindow_1.OnGetData() {
                     @Override
-                    public void onDataCallBack(KnowLedgeItemBean.ReplyListDao replyListDao) {
-                        list.get(position).reply_list.add(replyListDao);
+                    public void onDataCallBack(KnowItemsDataItemsReplayBean replyListDao) {
+                        //TODO 待修改添加回复
+                        //list.get(position).knowledge_item.add(replyListDao);
                     }
                 });
             }
@@ -194,7 +211,7 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
         public LinearLayout /*ll_host,*/ ll_reply;
         public FrameLayout ll_host;
         public KnowledgeItemsItemReplyAdapter adpter;
-        public ArrayList<KnowLedgeItemBean.ReplyListDao> replyList;
+        public ArrayList<KnowItemsDataItemsReplayBean> replyList;
         public boolean isCheck = true;
     }
 

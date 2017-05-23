@@ -127,7 +127,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dm060"
-                        android:text="生活"
+                        android:text=""
                         android:textColor="#333333"
                         android:textSize="@dimen/dm024" />
 
@@ -160,6 +160,7 @@
                         android:textSize="@dimen/dm024" />
 
                     <EditText
+                        android:singleLine="true"
                         android:id="@+id/knowledge_new_keyowrd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

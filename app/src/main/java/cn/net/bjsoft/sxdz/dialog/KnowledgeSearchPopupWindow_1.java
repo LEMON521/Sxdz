@@ -21,7 +21,8 @@ import org.xutils.x;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsBean;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 
@@ -48,12 +49,12 @@ public class KnowledgeSearchPopupWindow_1/* extends PopupWindow*/ implements Vie
     // 数据接口
     OnGetData mOnGetData;
 
-    private KnowledgeBean.ItemsBean itemsBean;
-    private ArrayList<KnowledgeBean.ItemsDataDao> cacheItemsDataList;
-    private ArrayList<KnowledgeBean.ItemsDataDao> itemsDataList;
+    private KnowItemsBean itemsBean;
+    private ArrayList<KnowItemsDataItemsBean> cacheItemsDataList;
+    private ArrayList<KnowItemsDataItemsBean> itemsDataList;
 
     public KnowledgeSearchPopupWindow_1(FragmentActivity activity
-            , ArrayList<KnowledgeBean.ItemsDataDao> itemsDataList
+            , ArrayList<KnowItemsDataItemsBean> itemsDataList
             , String search
             , View view) {
         this.mActivity = activity;
@@ -161,7 +162,7 @@ public class KnowledgeSearchPopupWindow_1/* extends PopupWindow*/ implements Vie
     public interface OnGetData {
         //abstract ArrayList<KnowledgeBean.ItemsDataDao> cacheItemsDataList();
 
-        abstract void onDataCallBack(String search, ArrayList<KnowledgeBean.ItemsDataDao> list);
+        abstract void onDataCallBack(String search, ArrayList<KnowItemsDataItemsBean> list);
     }
 
     // 数据接口设置,数据源接口传入
@@ -180,18 +181,18 @@ public class KnowledgeSearchPopupWindow_1/* extends PopupWindow*/ implements Vie
             public void onSuccess(String result) {
                 //LogUtil.e("获取到的条目-----------" + result);
                 itemsBean = GsonUtil.getKnowledgeItemsBean(result);
-                if (itemsBean.result) {
+                if (itemsBean.code.equals("0")) {
                     //LogUtil.e("获取到的条目-----------" + result);
                     itemsDataList.clear();
                     cacheItemsDataList.clear();
-                    itemsDataList.addAll(itemsBean.items);
+                    itemsDataList.addAll(itemsBean.data.items);
 
 
-                    for (KnowledgeBean.ItemsDataDao dao : itemsDataList) {
+                    for (KnowItemsDataItemsBean dao : itemsDataList) {
 
                         if (dao.title.contains(search)) {
                             cacheItemsDataList.add(dao);
-                        } else if (dao.category.contains(search)) {
+                        } else if (dao.title.contains(search)) {
                             cacheItemsDataList.add(dao);
                         }
                         //cacheItemsDataList.add(dao);

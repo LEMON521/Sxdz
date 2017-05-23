@@ -40,6 +40,10 @@ public class EmptyActivity extends BaseActivity {
             if (!fragment_name.equals("")) {
                 Bundle bundle = new Bundle();
                 if (fragment_name.equals("knowledge_item")) {
+
+                    Bundle b = getIntent().getBundleExtra("knowledge_item_bundle");
+                    bundle.putBundle("knowledge_item_bundle", b);
+
                     fragment = new KnowledgeItemZDLFFragment();//中电联发知识详情条目
                     LogUtil.e("Fragment 的值为" + fragment_name);
                 } else if (fragment_name.equals("addressList")) {

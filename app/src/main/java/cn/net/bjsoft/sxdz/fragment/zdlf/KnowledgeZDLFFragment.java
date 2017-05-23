@@ -2,6 +2,7 @@ package cn.net.bjsoft.sxdz.fragment.zdlf;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.IdRes;
@@ -17,7 +18,6 @@ import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,11 +27,17 @@ import cn.net.bjsoft.sxdz.activity.EmptyActivity;
 import cn.net.bjsoft.sxdz.activity.home.bartop.message.KnowledgeNewZDLFActivity;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeGroupAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemsAdapter;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowGroupBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowGroupDataItemsBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
 import cn.net.bjsoft.sxdz.dialog.KnowledgeSearchPopupWindow_1;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
-import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
+import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
@@ -43,7 +49,7 @@ import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
 
 @ContentView(R.layout.fragment_konwledge)
 public class KnowledgeZDLFFragment extends BaseFragment {
-//    @ViewInject(R.id.knowledge_search)
+    //    @ViewInject(R.id.knowledge_search)
 //    private LinearLayout search;
     //    @ViewInject(R.id.search_edittext)
 //    private EditText search_edit;
@@ -65,19 +71,25 @@ public class KnowledgeZDLFFragment extends BaseFragment {
     private ArrayList<RadioButton> radioButtons;
 
 
-    private KnowledgeBean knowledgeBean;
+    private KnowGroupBean knowGroupBean;//知识分类实体
+    private ArrayList<KnowGroupDataItemsBean> groupDataList;//分组所在集合
+
+    private KnowItemsBean itemsBean;//文章条目
+    private ArrayList<KnowItemsDataItemsBean> itemsDataList;
+    private ArrayList<KnowItemsDataItemsBean> cacheItemsDataList;
+    private ArrayList<KnowItemsDataItemsBean> searchItemsDataList;
+
+
     private KnowledgeBean.KnowledgeDataDao knowledgeDataDao;
     private KnowledgeBean.GroupDataDao groupDataDao;
     private KnowledgeBean.GroupBean groupBean;
-    private KnowledgeBean.ItemsBean itemsBean;
+
     private KnowledgeBean.ItemsDataDao itemsDataDao;
 
     private HashMap<String, ArrayList<KnowledgeBean.GroupDataDao>> groupsMap;
-    private ArrayList<KnowledgeBean.GroupDataDao> groupDataList;
+
     private ArrayList<String> groupNameList;
-    private ArrayList<KnowledgeBean.ItemsDataDao> itemsDataList;
-    private ArrayList<KnowledgeBean.ItemsDataDao> cacheItemsDataList;
-    private ArrayList<KnowledgeBean.ItemsDataDao> searchItemsDataList;
+
 
     private KnowledgeGroupAdapter groupAdapter;
     private KnowledgeItemsAdapter itemsAdapter;
@@ -87,6 +99,9 @@ public class KnowledgeZDLFFragment extends BaseFragment {
     private boolean isFirst = true;
     private String mSearchUrl = "";
 
+    private String get_start = "0";
+    private String get_count = "0";
+    private String group_id = "0";
 
     @Override
     public void onStart() {
@@ -138,12 +153,14 @@ public class KnowledgeZDLFFragment extends BaseFragment {
             itemsAdapter = new KnowledgeItemsAdapter(mActivity, cacheItemsDataList);
         }
         items.setAdapter(itemsAdapter);
-        items.setOnItemClickListener(new AdapterView.OnItemClickListener()
-
-        {
+        items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(mActivity, EmptyActivity.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("know_id", itemsDataList.get(position).id);
+                intent.putExtra("knowledge_item_bundle", bundle);
                 intent.putExtra("fragment_name", "knowledge_item");
                 startActivity(intent);
             }
@@ -247,7 +264,8 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                         itemsDataList.clear();
                         cacheItemsDataList.clear();
                         LogUtil.e("setOnRefreshListener-----------");
-                        getItemsData(mSearchUrl);
+                        get_start = "0";
+                        getItemsData();//group_id
 
                     }
                 }.sendEmptyMessageDelayed(0, 500);
@@ -262,16 +280,20 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                     public void handleMessage(Message msg) {
                         // 千万别忘了告诉控件加载完毕了哦！
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-
+                        if (get_start.equals(get_count)) {
+                            MyToast.showShort(mActivity,"已经没有更多的信息!");
+                        }else {
+                            getItemsData();//group_id
+                        }
                         LogUtil.e("onLoadMore-----------");
-                        getItemsData(mSearchUrl);
+
                     }
                 }.sendEmptyMessageDelayed(0, 500);
 
             }
 
         });
-
+        //getItemsDataTest();
         getData();
 
     }
@@ -281,30 +303,47 @@ public class KnowledgeZDLFFragment extends BaseFragment {
      * 获取分组数据
      */
     public void getData() {
-        showProgressDialog();
-        RequestParams params = new RequestParams(TestAddressUtils.test_get_knowledge_url);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                //LogUtil.e("获取到的条目-----------" + result);
-                knowledgeBean = GsonUtil.getKnowledgeBean(result);
-                if (knowledgeBean.result) {
-                    //LogUtil.e("获取到的条目-----------" + result);
-                    groupDataList.addAll(knowledgeBean.data.group);
-                    knowledgeBean = null;
-                    setGroupData();
-                } else {
-                }
 
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/load";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("source_id", "shuxin_know_type");
+        httpPostUtils.get(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取文章分组----分组信息----------------" + strJson);
+                knowGroupBean = GsonUtil.getKnowGroupBean(strJson);
+                if (knowGroupBean.code.equals("0")) {//0的时候获取成功
+                    //LogUtil.e("获取到的条目-----------" + result);
+                    groupDataList.addAll(knowGroupBean.data.items);
+                    setGroupData();
+                } else if (knowGroupBean.code.equals("1")) {
+                    MyToast.showShort(mActivity, "获取文章分组失败");
+                }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("获取到的条目--------失败!!!---" + ex);
+
+                LogUtil.e("-----------------获取分组消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取分组消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取分组消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取分组消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取分组消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取分组消息-----------失败方法-----" + element.getMethodName());
+                }
+                MyToast.showShort(mActivity, "获取分组数据失败!!");
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
+            public void onCancelled(Callback.CancelledException cex) {
 
             }
 
@@ -313,9 +352,44 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                 dismissProgressDialog();
             }
         });
+
+//        showProgressDialog();
+//        RequestParams params = new RequestParams(TestAddressUtils.test_get_knowledge_url);
+//        x.http().get(params, new Callback.CommonCallback<String>() {
+//            @Override
+//            public void onSuccess(String result) {
+//                //LogUtil.e("获取到的条目-----------" + result);
+//                knowledgeBean = GsonUtil.getKnowledgeBean(result);
+//                if (knowledgeBean.result) {
+//                    //LogUtil.e("获取到的条目-----------" + result);
+//                    groupDataList.addAll(knowledgeBean.data.group);
+//                    knowledgeBean = null;
+//                    setGroupData();
+//                } else {
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                LogUtil.e("获取到的条目--------失败!!!---" + ex);
+//            }
+//
+//            @Override
+//            public void onCancelled(CancelledException cex) {
+//
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//                dismissProgressDialog();
+//            }
+//        });
     }
 
-
+    /**
+     * 设置分组数据
+     */
     private void setGroupData() {
 //        groupAdapter.notifyDataSetChanged();
 //        Utility.setListViewHeightBasedOnChildren(group);
@@ -349,20 +423,24 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                 for (int i = 0; i < radioButtons.size(); i++) {
                     if (i == checkedId) {
                         radioButtons.get(i).setTextColor(Color.rgb(0, 93, 209));
+                        group_id = groupDataList.get(i).id;
+                        get_start = "0";
+                        get_count = "0";
+                        itemsDataList.clear();
+                        cacheItemsDataList.clear();
+                        //mSearchUrl = groupDataList.get(checkedId).url;
+                        LogUtil.e("setOnCheckedChangeListener-----------");
+                        getItemsData();//group_id
                     } else {
                         radioButtons.get(i).setTextColor(Color.rgb(0, 0, 0));
                     }
                 }
-                itemsDataList.clear();
-                cacheItemsDataList.clear();
-                mSearchUrl = groupDataList.get(checkedId).url;
-                LogUtil.e("setOnCheckedChangeListener-----------");
-                getItemsData(mSearchUrl);
+
 
             }
         });
         //rg_group.check(0);//如果用这个方法,那么会被调用多次
-        ((RadioButton)rg_group.getChildAt(0)).setChecked(true);
+        ((RadioButton) rg_group.getChildAt(0)).setChecked(true);
 //        if (isFirst) {
 //            showProgressDialog();
 //            LogUtil.e("第一次获取数据");
@@ -371,37 +449,135 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 //        }
     }
 
+    private void getItemsDataTest() {
+        String s = "{\n" +
+                "    \"code\": 0,\n" +
+                "    \"data\": {\n" +
+                "        \"count\": 14,\n" +
+                "        \"items\": [\n" +
+                "            {\n" +
+                "                \"abstract\": \"\",\n" +
+                "                \"author\": \"舒新东\",\n" +
+                "                \"company_id\": \"1\",\n" +
+                "                \"content\": \"我是个个个别地区经济的发展前景广阔前景广阔前景广阔前景看好？这么多天津滨海国际会展中心举行的记者招待会上说。\",\n" +
+                "                \"ctime\": \"2017-05-23 13:54:08\",\n" +
+                "                \"data_from\": \"0\",\n" +
+                "                \"id\": \"4924215211958823737\",\n" +
+                "                \"items\": [],\n" +
+                "                \"labels\": \"测试施工\",\n" +
+                "                \"logo\": \"\",\n" +
+                "                \"title\": \"发帖测试\",\n" +
+                "                \"tops\": [],\n" +
+                "                \"type\": \"5694166458358860202\",\n" +
+                "                \"userid\": \"10001\",\n" +
+                "                \"views\": \"0\"\n" +
+                "            }\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}";
+
+        itemsBean = GsonUtil.getKnowledgeItemsBean(s);
+        if (itemsBean.code.equals("0")) {//获取成功
+            //LogUtil.e("获取到的条目-----------" + result);
+
+            itemsDataList.addAll(itemsBean.data.items);
+            cacheItemsDataList.addAll(itemsBean.data.items);
+            setItemsData();
+        } else {
+        }
+    }
 
     /**
      * 获取条目数据
      */
-    public void getItemsData(String url) {
+    private void getItemsData(/*String groupId*/) {
+
+//        if (!this.group_id.equals(groupId)) {//相等,同一个类别刷新或加载
+//
+//            get_start = "0";
+//            get_count = "0";
+//            this.group_id = groupId;
+//        }
+
+
+
+
         showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/load";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
         RequestParams params = new RequestParams(url);
-        x.http().get(params, new Callback.CommonCallback<String>() {
+        params.addBodyParameter("source_id", "shuxin_know");
+
+        StringBuilder sb = new StringBuilder();
+
+        //sb.append("{\"data\":{");
+        sb.append("{");
+
+        sb.append("\"start\":\"");
+        sb.append(get_start);
+        sb.append("\",");
+
+        sb.append("\"limit\":\"");
+        sb.append("10");
+        sb.append("\",");
+
+        sb.append("\"data\":{");
+
+        sb.append("\"type\":\"");
+        sb.append(group_id);
+        sb.append("\"");
+
+        sb.append("}");
+
+        sb.append("}");
+
+        params.addBodyParameter("data", sb.toString());
+
+
+
+        httpPostUtils.get(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
-            public void onSuccess(String result) {
-                //LogUtil.e("获取到的条目-----------" + result);
-                itemsBean = GsonUtil.getKnowledgeItemsBean(result);
-                if (itemsBean.result) {
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取文章条目----文章信息----------------" + strJson);
+
+
+                itemsBean = GsonUtil.getKnowledgeItemsBean(strJson);
+                if (itemsBean.code.equals("0")) {//获取成功
                     //LogUtil.e("获取到的条目-----------" + result);
 
-                    itemsDataList.addAll(itemsBean.items);
-                    cacheItemsDataList.addAll(itemsBean.items);
-                    itemsBean = null;
+                    itemsDataList.addAll(itemsBean.data.items);
+                    cacheItemsDataList.addAll(itemsBean.data.items);
+
+                    get_start = (itemsBean.data.items.size()+Integer.parseInt(get_start))+"";
+                    get_count = itemsBean.data.count;
+
                     setItemsData();
                 } else {
                 }
-
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("获取到的条目--------失败!!!---" + ex);
+
+                LogUtil.e("-----------------获取条目消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取条目消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取条目消息-----------失败方法-----" + element.getMethodName());
+                }
+                MyToast.showShort(mActivity, "获取条目数据失败!!");
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
+            public void onCancelled(Callback.CancelledException cex) {
+
             }
 
             @Override
@@ -409,6 +585,41 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                 dismissProgressDialog();
             }
         });
+
+
+//        showProgressDialog();
+//        RequestParams params = new RequestParams(url);
+//        x.http().get(params, new Callback.CommonCallback<String>() {
+//            @Override
+//            public void onSuccess(String result) {
+//                //LogUtil.e("获取到的条目-----------" + result);
+//                itemsBean = GsonUtil.getKnowledgeItemsBean(result);
+//                if (itemsBean.result) {
+//                    //LogUtil.e("获取到的条目-----------" + result);
+//
+//                    itemsDataList.addAll(itemsBean.items);
+//                    cacheItemsDataList.addAll(itemsBean.items);
+//                    itemsBean = null;
+//                    setItemsData();
+//                } else {
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                LogUtil.e("获取到的条目--------失败!!!---" + ex);
+//            }
+//
+//            @Override
+//            public void onCancelled(CancelledException cex) {
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//                dismissProgressDialog();
+//            }
+//        });
     }
 
 
@@ -450,7 +661,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 
 
                     @Override
-                    public void onDataCallBack(String search, ArrayList<KnowledgeBean.ItemsDataDao> cacheItemsDataList) {
+                    public void onDataCallBack(String search, ArrayList<KnowItemsDataItemsBean> cacheItemsDataList) {
                         searchStr = search;
                         KnowledgeZDLFFragment.this.cacheItemsDataList.clear();
                         KnowledgeZDLFFragment.this.cacheItemsDataList.addAll(cacheItemsDataList);
@@ -467,7 +678,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
             case R.id.knowledge_add:
                 //MyToast.showShort(mActivity, "走,去发帖!");
                 Intent intent = new Intent(mActivity, KnowledgeNewZDLFActivity.class);
-                intent.putExtra("fragment_name","KnowledgeNewZDLFFragment");
+                intent.putExtra("fragment_name", "KnowledgeNewZDLFFragment");
                 startActivity(intent);
 
                 break;

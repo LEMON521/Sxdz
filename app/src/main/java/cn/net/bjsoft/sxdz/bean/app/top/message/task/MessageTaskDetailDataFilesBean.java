@@ -11,6 +11,7 @@ public class MessageTaskDetailDataFilesBean implements Serializable {
     public String ctime = "";
     public String title = "";
     public String url = "";
+    public String file_path = "";
     public boolean isAdd =false;
     public boolean isEditing =false;
 }

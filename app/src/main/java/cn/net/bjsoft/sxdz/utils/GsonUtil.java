@@ -9,6 +9,9 @@ import cn.net.bjsoft.sxdz.bean.app.AppBean;
 import cn.net.bjsoft.sxdz.bean.app.AppPushBean;
 import cn.net.bjsoft.sxdz.bean.app.ali_push.ALiPushMessageBean;
 import cn.net.bjsoft.sxdz.bean.app.function.form.FunctionFormBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowGroupBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsBean;
 import cn.net.bjsoft.sxdz.bean.app.function.sign.SignUserLastBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
@@ -24,7 +27,6 @@ import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskDetailBean;
 import cn.net.bjsoft.sxdz.bean.ylyd.form.YLYDFormDao;
 import cn.net.bjsoft.sxdz.bean.zdlf.address_list.AddressListBean;
-import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.work.WorkBean;
 import cn.net.bjsoft.sxdz.view.tree_task_add_addresslist.bean.TreeTaskAddAddressListBean;
@@ -154,8 +156,8 @@ public class GsonUtil {
      * @param json
      * @return
      */
-    public static KnowledgeBean getKnowledgeBean(String json){
-        return getGson().fromJson(json , KnowledgeBean.class);
+    public static KnowGroupBean getKnowGroupBean(String json){
+        return getGson().fromJson(json , KnowGroupBean.class);
     }
 
     /**
@@ -172,8 +174,8 @@ public class GsonUtil {
      * @param json
      * @return
      */
-    public static KnowledgeBean.ItemsBean getKnowledgeItemsBean(String json){
-        return getGson().fromJson(json , KnowledgeBean.ItemsBean.class);
+    public static KnowItemsBean getKnowledgeItemsBean(String json){
+        return getGson().fromJson(json , KnowItemsBean.class);
     }
 
     /**
@@ -181,8 +183,8 @@ public class GsonUtil {
      * @param json
      * @return
      */
-    public static KnowLedgeItemBean getKnowledgeItemsItemBean(String json){
-        return getGson().fromJson(json , KnowLedgeItemBean.class);
+    public static KnowItemBean getKnowledgeItemsItemBean(String json){
+        return getGson().fromJson(json , KnowItemBean.class);
     }
 
     /**

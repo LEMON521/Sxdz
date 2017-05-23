@@ -14,7 +14,7 @@ import com.lidroid.xutils.BitmapUtils;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsReplayBean;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
@@ -27,14 +27,14 @@ public class KnowledgeItemsItemReplyAdapter extends BaseAdapter {
     private BitmapUtils bitmapUtils;
     private FragmentActivity mActivity;
     private Context context;
-    private ArrayList<KnowLedgeItemBean.ReplyListDao> list;
+    private ArrayList<KnowItemsDataItemsReplayBean> list;
 
 
-    public KnowledgeItemsItemReplyAdapter(FragmentActivity mActivity, ArrayList<KnowLedgeItemBean.ReplyListDao> list) {
+    public KnowledgeItemsItemReplyAdapter(FragmentActivity mActivity, ArrayList<KnowItemsDataItemsReplayBean> list) {
         this.mActivity = mActivity;
         this.list = list;
 
-        for (KnowLedgeItemBean.ReplyListDao dao : list) {
+        for (KnowItemsDataItemsReplayBean dao : list) {
             //LogUtil.e("有数据===" + dao.name);
         }
 

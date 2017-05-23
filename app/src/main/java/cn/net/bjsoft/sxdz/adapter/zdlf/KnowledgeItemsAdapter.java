@@ -14,7 +14,7 @@ import org.xutils.x;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsBean;
 
 /**
  * 中电联发---知识模块分组条目适配器
@@ -24,10 +24,10 @@ import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
 public class KnowledgeItemsAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<KnowledgeBean.ItemsDataDao> list;
+    private ArrayList<KnowItemsDataItemsBean> list;
     private ImageOptions imageOptions;
 
-    public KnowledgeItemsAdapter(Context context, ArrayList<KnowledgeBean.ItemsDataDao> list) {
+    public KnowledgeItemsAdapter(Context context, ArrayList<KnowItemsDataItemsBean> list) {
         this.context = context;
         this.list = list;
         imageOptions = new ImageOptions.Builder()
@@ -69,19 +69,31 @@ public class KnowledgeItemsAdapter extends BaseAdapter {
         }
         //设置数据
         Holder holder = (Holder) convertView.getTag();
-        if (list.get(position).image_url != null && !list.get(position).image_url.equals("")) {
+        if (list.get(position).logo != null && !list.get(position).logo.equals("")) {
             holder.image.setVisibility(View.VISIBLE);
-            x.image().bind(holder.image, list.get(position).image_url, imageOptions);
+            x.image().bind(holder.image, list.get(position).logo, imageOptions);
             //LogUtil.e("图片路径--"+list.get(position).image_url);
         } else {
             holder.image.setVisibility(View.GONE);
         }
         holder.title.setText(list.get(position).title);
+
         holder.author.setText(list.get(position).author);
-        holder.date.setText(list.get(position).date);
-        holder.category.setText(list.get(position).category);
-        holder.reply_count.setText(list.get(position).reply_count);
-        holder.lookover_count.setText(list.get(position).lookover_count);
+        //holder.author.setText(UsersInforUtils.getInstance(context).getUserInfo(list.get(position).userid).nickname);
+
+        holder.date.setText(list.get(position).ctime);
+//        holder.category.setText(list.get(position).category);
+//        holder.reply_count.setText(list.get(position).reply_count);
+//        holder.lookover_count.setText(list.get(position).lookover_count);
+
+        holder.category.setText(list.get(position).labels);
+        if (list.get(position).items != null) {
+            holder.reply_count.setText(list.get(position).items.size()+"");
+        } else {
+            holder.reply_count.setText("0");
+        }
+
+        holder.lookover_count.setText(list.get(position).views);
         return convertView;
     }
 

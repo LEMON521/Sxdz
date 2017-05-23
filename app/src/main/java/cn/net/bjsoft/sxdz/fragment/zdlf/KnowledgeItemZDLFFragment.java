@@ -1,6 +1,7 @@
 package cn.net.bjsoft.sxdz.fragment.zdlf;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Environment;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.lidroid.xutils.BitmapUtils;
 import com.zzhoujay.richtext.RichText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
@@ -29,14 +32,18 @@ import java.util.ArrayList;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemHeadFilesListAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemsItemAdapter;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsItemsBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
-import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
+import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.ChildrenListView;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
@@ -83,12 +90,12 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
     private TextView head_reply_count;
     private BitmapUtils bitmapUtils;
 
-    private KnowLedgeItemBean.HostKnowledgeItemDao hostDao;
+    private KnowItemsDataItemsBean hostBean;
     private ArrayList<KnowLedgeItemBean.FilesKnowledgeItemDao> filesList;
     private KnowledgeItemHeadFilesListAdapter filesListAdapter;
 
-    private KnowLedgeItemBean knowLedgeItemBean;
-    private ArrayList<KnowLedgeItemBean.ReplyListDao> knowledgeItemList;
+    private KnowItemBean knowLedgeItemBean;
+    private ArrayList<KnowItemsDataItemsItemsBean> knowledgeItemList;
     private KnowledgeItemsItemAdapter knowledgeItemsItemAdapter;
 
     //下载文件保存的地址
@@ -97,15 +104,23 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
 
     private InputMethodManager imm;
 
+
+    private String know_id = "";
+
     @Override
     public void initData() {
         title_back.setVisibility(View.VISIBLE);
         title.setText("知识详情");
 
+        Bundle bundle = getArguments().getBundle("knowledge_item_bundle");
+        know_id = bundle.getString("know_id");
+        LogUtil.e("-----------------bundle.getString(\"know_id\");---------" + know_id);
+
+
         //软键盘管理器
         imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        showProgressDialog();
+
         headView = View.inflate(mActivity, R.layout.item_list_knowledge_headview, null);
         head_title = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_title);
         head_avatar = (CircleImageView) headView.findViewById(R.id.item_list_headview_knowledge_avatar);
@@ -153,24 +168,185 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
 
         lv_items.addHeaderView(headView);
         lv_items.setAdapter(knowledgeItemsItemAdapter);
+
+        //submitReadToService();
         getData();
+        //getDataTest();
+
     }
 
+    /**
+     * 提交阅读数量
+     */
+    private void submitReadToService() {
+
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/submit";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("submit_id", "shuxin_know_read");
+
+
+        StringBuilder sb = new StringBuilder();
+
+        //sb.append("{\"data\":{");
+        sb.append("{");
+
+        sb.append("\"know_id\":\"");
+        sb.append(know_id);
+        sb.append("\",");
+
+        sb.append("\"readed\":\"");
+        sb.append("1");
+        sb.append("\"");
+
+        sb.append("}");
+
+        params.addBodyParameter("data", sb.toString());
+
+        LogUtil.e("--------=====---------任务详情------上传阅读数量获取消息--------====--------");
+        httpPostUtils.post(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------任务详情------上传阅读数量获取消息----------------" + strJson);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(strJson);
+                    if (jsonObject.optInt("code") == 0) {
+
+                        MyToast.showShort(mActivity, "提交成功!阅读+1");
+                    } else {
+                        MyToast.showLong(mActivity, "提交任务失败,请联系管理员");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
+                }
+
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+                LogUtil.e("-----------------获取消息----------上传阅读数量取消------");
+            }
+
+            @Override
+            public void onFinished() {
+                LogUtil.e("-----------------获取消息----------上传阅读数量完成------");
+                dismissProgressDialog();
+            }
+        });
+
+    }
+
+    private void getDataTest() {
+        String s = "{\n" +
+                "    \"code\": 0,\n" +
+                "    \"data\": {\n" +
+                "        \"abstract\": \"\",\n" +
+                "        \"author\": \"靳宁宁\",\n" +
+                "        \"company_id\": \"1\",\n" +
+                "        \"content\": \"类别测试\",\n" +
+                "        \"ctime\": \"2017-05-23 11:44:58\",\n" +
+                "        \"data_from\": \"0\",\n" +
+                "        \"id\": \"4832050501307687649\",\n" +
+                "        \"items\": [\n" +
+                "            {\n" +
+                "                \"content\": \"HEXe6b58be8af95e6b58be8af95e6b58be8af95\",\n" +
+                "                \"ctime\": \"2017-05-23 13:37:07\",\n" +
+                "                \"id\": \"5285106344045222613\",\n" +
+                "                \"know_id\": \"4832050501307687649\",\n" +
+                "                \"reply_id\": \"0\",\n" +
+                "                \"sort_index\": \"6\",\n" +
+                "                \"title\": \"测试测试\",\n" +
+                "                \"userid\": \"12341\"\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"labels\": \"人事测试\",\n" +
+                "        \"logo\": \"\",\n" +
+                "        \"title\": \"测试类别\",\n" +
+                "        \"tops\": [],\n" +
+                "        \"type\": \"5371321317339812859\",\n" +
+                "        \"userid\": \"12341\",\n" +
+                "        \"views\": \"0\"\n" +
+                "    }\n" +
+                "}";
+        knowLedgeItemBean = GsonUtil.getKnowledgeItemsItemBean(s);
+        if (knowLedgeItemBean.code.equals("0")) {
+
+            hostBean = knowLedgeItemBean.data;
+            knowledgeItemList.addAll(knowLedgeItemBean.data.items);
+            submitReadToService();
+            setData();
+            //LogUtil.e("获取到的条目-----------" + knowledgeItemList.get(0).avatar_url);
+//                    classifyData();
+//                    setData();
+        } else {
+        }
+    }
 
     /**
      * 获取分组数据
      */
     public void getData() {
 
-        RequestParams params = new RequestParams(TestAddressUtils.test_get_knowledge_item_url);
-        x.http().get(params, new Callback.CommonCallback<String>() {
+
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/load";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        StringBuilder sb = new StringBuilder();
+
+        //sb.append("{\"data\":{");
+        sb.append("{");
+
+
+        sb.append("\"data\":{");
+
+        sb.append("\"id\":\"");
+        sb.append(know_id);
+        sb.append("\"");
+
+        sb.append("}");
+        sb.append("}");
+
+        params.addBodyParameter("data", sb.toString());
+        params.addBodyParameter("source_id", "shuxin_know");
+        LogUtil.e("-------------------------data.toString()--" + sb.toString());
+        httpPostUtils.get(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
-            public void onSuccess(String result) {
-                //LogUtil.e("获取到的条目-----------" + result);
-                knowLedgeItemBean = GsonUtil.getKnowledgeItemsItemBean(result);
-                if (knowLedgeItemBean.result) {
-                    hostDao = knowLedgeItemBean.data.host;
-                    knowledgeItemList.addAll(knowLedgeItemBean.data.knowledge_item);
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取知识详细----知识详细信息----------------" + strJson);
+
+
+                knowLedgeItemBean = GsonUtil.getKnowledgeItemsItemBean(strJson);
+                if (knowLedgeItemBean.code.equals("0")) {
+
+                    hostBean = knowLedgeItemBean.data;
+                    knowledgeItemList.addAll(knowLedgeItemBean.data.items);
+                    //TODO 接口有问题
+                    //submitReadToService();
                     setData();
                     //LogUtil.e("获取到的条目-----------" + knowledgeItemList.get(0).avatar_url);
 //                    classifyData();
@@ -178,15 +354,44 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                 } else {
                 }
 
+
+//                functionFormBean = GsonUtil.getFunctionFormBean(strJson);
+//
+//                if (functionFormBean.code.equals("0")) {
+//                    if (functionFormBean.data.items != null) {
+//
+//                        formBeanList.addAll(functionFormBean.data.items);
+//                        functionFormAdapter.notifyDataSetChanged();
+//                        if (formBeanList.size() > 0) {
+//                            form_info.setVisibility(View.GONE);
+//                        } else {
+//                            form_info.setVisibility(View.VISIBLE);
+//                        }
+//                    } else {
+//                        form_info.setVisibility(View.VISIBLE);
+//                    }
+//
+//                }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("获取到的条目--------失败!!!---" + ex);
+
+                LogUtil.e("-----------------获取知识详细消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取知识详细消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取知识详细消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取知识详细消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取知识详细消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
+                }
+                MyToast.showShort(mActivity, "获取知识详细数据失败!!");
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
+            public void onCancelled(Callback.CancelledException cex) {
 
             }
 
@@ -195,6 +400,41 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                 dismissProgressDialog();
             }
         });
+
+
+//
+//        RequestParams params = new RequestParams(TestAddressUtils.test_get_knowledge_item_url);
+//        x.http().get(params, new Callback.CommonCallback<String>() {
+//            @Override
+//            public void onSuccess(String result) {
+//                //LogUtil.e("获取到的条目-----------" + result);
+//                knowLedgeItemBean = GsonUtil.getKnowledgeItemsItemBean(result);
+//                if (knowLedgeItemBean.result) {
+//                    hostBean = knowLedgeItemBean.data.host;
+//                    knowledgeItemList.addAll(knowLedgeItemBean.data.knowledge_item);
+//                    setData();
+//                    //LogUtil.e("获取到的条目-----------" + knowledgeItemList.get(0).avatar_url);
+////                    classifyData();
+////                    setData();
+//                } else {
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                LogUtil.e("获取到的条目--------失败!!!---" + ex);
+//            }
+//
+//            @Override
+//            public void onCancelled(CancelledException cex) {
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//                dismissProgressDialog();
+//            }
+//        });
     }
 
 
@@ -216,17 +456,22 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
     private void setData() {
 
 
-        head_title.setText(hostDao.title);
+        head_title.setText(hostBean.title);
         bitmapUtils = new BitmapUtils(mActivity, AddressUtils.img_cache_url);//初始化头像
         bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
-        bitmapUtils.display(head_avatar, hostDao.avatar);
-        head_name.setText(hostDao.name);
-        head_mark.setText(hostDao.mark);
-        RichText.from(hostDao.content).autoFix(false).into(head_content);
+        if (UsersInforUtils.getInstance(mActivity).getUserInfo(hostBean.userid)!=null) {
+            bitmapUtils.display(head_avatar, UsersInforUtils.getInstance(mActivity).getUserInfo(hostBean.userid).avatar);
+            head_name.setText(UsersInforUtils.getInstance(mActivity).getUserInfo(hostBean.userid).nickname);
+
+        }
+
+        head_mark.setText(hostBean.labels);
+        RichText.from(hostBean.content).autoFix(false).into(head_content);
         //附件
         filesList.clear();
-        filesList.addAll(hostDao.files);
+        //暂时没有附件
+        //filesList.addAll(hostBean.files);
         filesListAdapter.notifyDataSetChanged();
         Utility.setListViewHeightBasedOnChildren(head_files);
         head_files.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -236,9 +481,13 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
             }
         });
 
-        head_time.setText(TimeUtils.getTimeDifference(Long.parseLong(hostDao.time)));
-        head_check_count.setText(hostDao.check_count);
-        head_reply_count.setText(hostDao.reply_count);
+        //head_time.setText(TimeUtils.getTimeDifference(Long.parseLong(hostBean.time)));
+        head_time.setText(hostBean.ctime);
+
+        head_check_count.setText(hostBean.views);
+        if (hostBean.items != null) {
+            head_reply_count.setText(hostBean.items.size() + "");
+        }
 
 
         knowledgeItemsItemAdapter.notifyDataSetChanged();
@@ -251,7 +500,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
      * @param positon
      */
     private void downloadFile(int positon) {
-        String url = hostDao.files.get(positon).file_url;
+        String url = hostBean.files.get(positon).url;
         String file_name = url.substring(url.lastIndexOf("/"));
         String path = "";
         // 首先判定是否有SDcard,并且可用
@@ -326,14 +575,10 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                 break;
 
             case R.id.knowledge_item_reply:
-                String replyStr = reply.getText().toString().trim();
-                if (replyStr.equals("")) {
-                    MyToast.showShort(mActivity, "请输入回复内容");
-                    return;
-                }
+
 
                 replyHost();
-                reply.setText("");//清除输入框
+
 
                 imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
@@ -345,23 +590,129 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
      * 回复楼主
      */
     private void replyHost() {
-        KnowLedgeItemBean bean = new KnowLedgeItemBean();
-        KnowLedgeItemBean.ReplyListDao newDao = bean.new ReplyListDao();
 
-        if (newDao.reply_list == null) {
-            newDao.reply_list = new ArrayList<>();
+        String replyStr = reply.getText().toString().trim();
+        if (replyStr.equals("")) {
+            MyToast.showShort(mActivity, "请输入回复内容");
+            return;
         }
-        newDao.reply_list.clear();
-        newDao.name = SPUtil.getUserName(mActivity);
-        newDao.avatar_url = SPUtil.getAvatar(mActivity);
-        newDao.time = System.currentTimeMillis() + "";
-        newDao.comment_text = reply.getText().toString().trim();
-        newDao.reply_to = "";
+
+
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/submit";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("submit_id", "shuxin_know_reply");
+
+
+        final KnowItemsDataItemsItemsBean newDao = new KnowItemsDataItemsItemsBean();
+
+        if (newDao.knowledge_item == null) {
+            newDao.knowledge_item = new ArrayList<>();
+        }
+        newDao.knowledge_item.clear();
+        newDao.userid = SPUtil.getUserId(mActivity);
+        //newDao.avatar_url = SPUtil.getAvatar(mActivity);
+        newDao.ctime = TimeUtils.getFormateTime(System.currentTimeMillis(), "-", ":") + "";
+        newDao.content = reply.getText().toString().trim();
+        newDao.reply_id = SPUtil.getUserId(mActivity);
+        newDao.know_id = know_id;
+        newDao.userid = SPUtil.getUserId(mActivity);
+
+
+        StringBuilder sb = new StringBuilder();
+
+        //sb.append("{\"data\":{");
+        sb.append("{");
+
+        sb.append("\"content\":\"");
+        sb.append(newDao.content);
+        sb.append("\",");
+
+//        sb.append("\"ctime\":\"");
+//        sb.append(newDao.ctime);
+//        sb.append("\",");
+
+
+        sb.append("\"know_id\":\"");
+        sb.append(know_id);
+        sb.append("\",");
+
+//        sb.append("\"reply_id\":\"");
+//        sb.append(newDao.reply_id);
+//        sb.append("\",");
+
+//        sb.append("\"author\":\"");
+//        sb.append(UsersInforUtils.getInstance(mActivity).getUserInfo(SPUtil.getUserId(mActivity)).nickname);
+//        sb.append("\",");
+//
+//        sb.append("\"userid\":\"");
+//        sb.append(newDao.userid);
+//        sb.append("\"");
+
+        sb.append("}");
+
+        params.addBodyParameter("data", sb.toString());
+
+        httpPostUtils.post(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------任务详情------上传获取消息----------------" + strJson);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(strJson);
+                    if (jsonObject.optInt("code") == 0) {
+                        knowledgeItemList.add(newDao);
+                        MyToast.showShort(mActivity, "评论成功");
+                        knowledgeItemsItemAdapter.notifyDataSetChanged();
+                        reply.setText("");//清除输入框
+                        //mActivity.finish();
+                    } else {
+                        MyToast.showLong(mActivity, "提交任务失败,请联系管理员");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
+                }
+
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
+
+//        KnowLedgeItemBean bean = new KnowLedgeItemBean();
 
         /**
          * 将数据推送到服务器,当返回成功的时候再将数据添加到本地
          */
-        knowledgeItemList.add(newDao);
+
 //        int i = 0;
 //        for (KnowLedgeItemBean.ReplyListDao Dao : knowledgeItemList) {
 //
@@ -371,8 +722,6 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
 //            i++;
 //
 //        }
-        MyToast.showShort(mActivity, "评论成功");
-        knowledgeItemsItemAdapter.notifyDataSetChanged();
 
 
     }

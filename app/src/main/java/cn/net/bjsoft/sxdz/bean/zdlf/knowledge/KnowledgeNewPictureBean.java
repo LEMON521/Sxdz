@@ -10,6 +10,8 @@ import java.io.Serializable;
 
 public class KnowledgeNewPictureBean  implements Serializable {
     public String pic_path = "";
+    public String url = "";
     public Uri pic_uri;
+    public String pic_name = "";
 
 }

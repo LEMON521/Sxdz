@@ -5,13 +5,14 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <!--标题-->
     <TextView
         android:id="@+id/item_list_headview_knowledge_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dm020"
         android:paddingTop="@dimen/dm020"
-        android:text="标题"
+        android:text=""
         android:textColor="#333333"
         android:textSize="@dimen/dm030"
         android:textStyle="bold" />
@@ -30,27 +31,30 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
+            <!--头像-->
             <cn.net.bjsoft.sxdz.view.CircleImageView
                 android:id="@+id/item_list_headview_knowledge_avatar"
                 android:layout_width="@dimen/dm060"
                 android:layout_height="@dimen/dm060"
-                android:src="@drawable/wlh" />
+                android:src="@drawable/tab_me_n" />
 
+            <!--姓名-->
             <TextView
                 android:id="@+id/item_list_headview_knowledge_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dm020"
-                android:text="David"
+                android:text=""
                 android:textColor="#2D64B3"
                 android:textSize="@dimen/dm022" />
 
+            <!--关键字-->
             <TextView
                 android:id="@+id/item_list_headview_knowledge_mark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="跑步,健身"
+                android:text=""
                 android:textColor="#999999"
                 android:textSize="@dimen/dm020" />
         </LinearLayout>
@@ -84,12 +88,13 @@
                 android:textColor="#999999"
                 android:textSize="@dimen/dm020" />
 
+            <!--时间-->
             <TextView
                 android:id="@+id/item_list_headview_knowledge_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dm020"
-                android:text="16小时前"
+                android:text=""
                 android:textColor="#999999"
                 android:textSize="@dimen/dm020" />
 
@@ -110,12 +115,13 @@
                         android:layout_height="wrap_content"
                         android:src="@mipmap/reading_quantity" />
 
+                    <!--查看数-->
                     <TextView
                         android:id="@+id/item_list_headview_knowledge_check_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dm010"
-                        android:text="222"
+                        android:text=""
                         android:textColor="#999999"
                         android:textSize="@dimen/dm020" />
 
@@ -126,13 +132,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dm020"
                         android:src="@mipmap/comment" />
-
+                    <!--回复数-->
                     <TextView
                         android:id="@+id/item_list_headview_knowledge_reply_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dm010"
-                        android:text="222"
+                        android:text=""
                         android:textColor="#999999"
                         android:textSize="@dimen/dm020" />
                 </LinearLayout>

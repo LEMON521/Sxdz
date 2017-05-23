@@ -21,7 +21,7 @@
                 android:id="@+id/knowledge_item_items_avatar"
                 android:layout_width="@dimen/dm065"
                 android:layout_height="@dimen/dm065"
-                android:src="@drawable/wlh" />
+                android:src="@drawable/tab_me_n" />
 
             <TextView
                 android:singleLine="true"

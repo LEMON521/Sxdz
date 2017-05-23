@@ -14,7 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsReplayBean;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 
@@ -110,7 +110,7 @@ public class KnowledgeReplyPopupWindow_1 implements View.OnClickListener {
     public interface OnGetData {
         //abstract ArrayList<KnowledgeBean.ItemsDataDao> cacheItemsDataList();
 
-        abstract void onDataCallBack(KnowLedgeItemBean.ReplyListDao replyListDao);
+        abstract void onDataCallBack(KnowItemsDataItemsReplayBean replyListDao);
     }
 
     // 数据接口设置,数据源接口传入
@@ -121,8 +121,8 @@ public class KnowledgeReplyPopupWindow_1 implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        KnowLedgeItemBean bean = new KnowLedgeItemBean();
-        KnowLedgeItemBean.ReplyListDao dao = bean.new ReplyListDao();
+//        KnowLedgeItemBean bean = new KnowLedgeItemBean();
+        KnowItemsDataItemsReplayBean dao = new KnowItemsDataItemsReplayBean();
 
 
         //dao.description = edit.getText().toString().split(replyName + " ")[1];
