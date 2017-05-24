@@ -18,5 +18,8 @@ public class KnowItemsDataItemsItemsBean implements Serializable {
     public String  title="";
     public String  userid="";
 
+    public ArrayList<KnowItemsDataItemsItemsBean> items;
+
+
     public ArrayList<KnowItemsDataItemsReplayBean> knowledge_item;
 }

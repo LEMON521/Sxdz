@@ -16,16 +16,24 @@ import android.widget.TextView;
 import com.lidroid.xutils.BitmapUtils;
 import com.zzhoujay.richtext.RichText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
+import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsItemsBean;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsReplayBean;
 import cn.net.bjsoft.sxdz.dialog.KnowledgeReplyPopupWindow_1;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
+import cn.net.bjsoft.sxdz.utils.MyBase16;
 import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
+import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.ChildrenListView;
@@ -91,28 +99,28 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
 
             holder.replyList = new ArrayList<>();
             holder.adpter = new KnowledgeItemsItemReplyAdapter(mActivity, holder.replyList);
-            final Holder finalTag = holder;
 
-            holder.reply.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    LogUtil.e("是否选中");
-                    //用于记录本次点击的选中状态
-                    if (isChecked) {
-                        finalTag.lv_list.setVisibility(View.VISIBLE);
-                        LogUtil.e("是否选中---显示");
-                    } else {
-                        finalTag.lv_list.setVisibility(View.GONE);
-                        LogUtil.e("是否选中--不显示");
-                    }
-                    finalTag.isCheck = isChecked;
-                }
-            });
 
             convertView.setTag(holder);
         } else {
             holder = (Holder) convertView.getTag();
         }
+        final Holder finalTag = holder;
+        holder.reply.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                LogUtil.e("是否选中");
+                //用于记录本次点击的选中状态
+                if (isChecked) {
+                    finalTag.lv_list.setVisibility(View.VISIBLE);
+                    LogUtil.e("是否选中---显示");
+                } else {
+                    finalTag.lv_list.setVisibility(View.GONE);
+                    LogUtil.e("是否选中--不显示");
+                }
+                finalTag.isCheck = isChecked;
+            }
+        });
         //设置数据
         //Holder holder = (Holder) convertView.getTag();
         bitmapUtils = new BitmapUtils(mActivity, AddressUtils.img_cache_url);//初始化头像
@@ -135,11 +143,11 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
 
         }
 
-        if (list.get(position).knowledge_item != null && list.get(position).knowledge_item.size() > 0) {
+        if (list.get(position).items != null && list.get(position).items.size() > 0) {
             holder.reply.setVisibility(View.VISIBLE);
-            LogUtil.e("第几条有数据===" + list.get(position).knowledge_item.size() + "::楼==" + (position + 1));
+            LogUtil.e("第几条有数据===" + list.get(position).items.size() + "::楼==" + (position + 1));
             holder.replyList.clear();
-            holder.replyList.addAll(list.get(position).knowledge_item);
+            holder.replyList.addAll(list.get(position).items);
             holder.lv_list.setAdapter(holder.adpter);
             Utility.setListViewHeightBasedOnChildren(holder.lv_list);
 
@@ -155,23 +163,25 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
             holder.lv_list.setVisibility(View.GONE);
             // holder.reply.setVisibility(View.GONE);
         }
-        RichText.from(list.get(position).content).autoFix(false).into(holder.text);
+        RichText.from(MyBase16.decode(list.get(position).content.substring(3, list.get(position).content.length()))).autoFix(false).into(holder.text);
+        //holder.text.setText(list.get(position).content);
         holder.leavel.setText((position + 1) + "楼");
         //holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).time), "-", ":"));
         holder.time.setText(list.get(position).ctime);
         holder.lv_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int positionChild, long id) {
-                LogUtil.e("点击前数量" + list.get(position).knowledge_item.size());
+                LogUtil.e("点击前数量" + list.get(position).items.size());
                 MyToast.showShort(mActivity, "点击条目" + positionChild);
 
                 //调出popuWindow
 //
-                KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity, view, list.get(position).knowledge_item.get(positionChild).name);
+                KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity, view, list.get(position).items.get(positionChild).reply_id);
                 replyWindow.setOnData(new KnowledgeReplyPopupWindow_1.OnGetData() {
                     @Override
                     public void onDataCallBack(KnowItemsDataItemsReplayBean replyListDao) {
-                        list.get(position).knowledge_item.add(replyListDao);
+                        //list.get(position).items.add(replyListDao);
+                        replayMessage(list, position, replyListDao, 2);
                     }
                 });
             }
@@ -187,7 +197,9 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
                     @Override
                     public void onDataCallBack(KnowItemsDataItemsReplayBean replyListDao) {
                         //TODO 待修改添加回复
+                        replayMessage(list, position, replyListDao, 1);
                         //list.get(position).knowledge_item.add(replyListDao);
+
                     }
                 });
             }
@@ -195,6 +207,163 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
         refresh();
         return convertView;
     }
+
+    /**
+     * 回复---楼主////楼层
+     *
+     * @param replyList    所在的items
+     * @param position     第几楼
+     * @param replyListDao 回复内容
+     * @param type         楼主或者楼层--1,楼主,2,楼层
+     */
+    private void replayMessage(final ArrayList<KnowItemsDataItemsItemsBean> replyList, final int position, KnowItemsDataItemsReplayBean replyListDao, final int type) {
+
+        if (replyListDao.comment_text.equals("")) {
+            MyToast.showShort(mActivity, "请输入回复内容");
+            return;
+        }
+
+
+        //showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/submit";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("submit_id", "shuxin_know_reply");
+
+
+        final KnowItemsDataItemsItemsBean newDao = new KnowItemsDataItemsItemsBean();
+
+        if (newDao.knowledge_item == null) {
+            newDao.knowledge_item = new ArrayList<>();
+        }
+        newDao.knowledge_item.clear();
+//        newDao.userid = SPUtil.getUserId(mActivity);
+//        //newDao.avatar_url = SPUtil.getAvatar(mActivity);
+        switch (type) {
+
+            case 1:
+                newDao.id = replyList.get(position).id;
+                newDao.reply_id = replyList.get(position).id;
+                break;
+
+            case 2:
+                //newDao.id = replyList.get(position).reply_id;
+                newDao.reply_id = replyList.get(position).reply_id;
+                break;
+        }
+
+        newDao.know_id = replyList.get(position).know_id;
+        newDao.ctime = TimeUtils.getFormateTime(System.currentTimeMillis(), "-", ":") + "";
+        newDao.content = "HEX" + MyBase16.encode(replyListDao.comment_text);
+//        newDao.reply_id = SPUtil.getUserId(mActivity);
+//        newDao.know_id = know_id;
+        newDao.userid = SPUtil.getUserId(mActivity);
+
+
+        StringBuilder sb = new StringBuilder();
+
+        //sb.append("{\"data\":{");
+        sb.append("{");
+
+
+        sb.append("\"content\":\"");
+        sb.append(newDao.content);
+        sb.append("\",");
+//        sb.append("\"content\":\"");
+//        sb.append(newDao.content);
+//        sb.append("\",");
+
+        sb.append("\"ctime\":\"");
+        sb.append(newDao.ctime);
+        sb.append("\",");
+
+        sb.append("\"reply_id\":\"");
+        sb.append(newDao.reply_id);
+        sb.append("\",");
+
+        sb.append("\"know_id\":\"");
+        sb.append(newDao.know_id);
+        sb.append("\",");
+
+//        sb.append("\"reply_id\":\"");
+//        sb.append(newDao.reply_id);
+//        sb.append("\",");
+
+//        sb.append("\"author\":\"");
+//        sb.append(UsersInforUtils.getInstance(mActivity).getUserInfo(SPUtil.getUserId(mActivity)).nickname);
+//        sb.append("\",");
+//
+        sb.append("\"userid\":\"");
+        sb.append(newDao.userid);
+        sb.append("\"");
+
+        sb.append("}");
+
+        params.addBodyParameter("data", sb.toString());
+
+        httpPostUtils.post(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------回复楼层------上传楼层获取消息----------------" + strJson);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(strJson);
+                    if (jsonObject.optInt("code") == 0) {
+//                        switch (type) {
+//
+//                            case 1:
+//                                replyList.add(newDao);
+//                                break;
+//
+//                            case 2:
+//                                replyList.get(position).items.add(newDao);
+//                                break;
+//                        }
+                        replyList.get(position).items.add(newDao);
+                        MyToast.showShort(mActivity, "评论成功");
+
+                    } else {
+                        MyToast.showLong(mActivity, "评论失败,请联系管理员");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取消息-----------失败方法-----" + element.getMethodName());
+                }
+
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+//                dismissProgressDialog();
+            }
+        });
+
+
+    }
+
 
     public void refresh() {
         this.notifyDataSetChanged();
@@ -211,7 +380,7 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
         public LinearLayout /*ll_host,*/ ll_reply;
         public FrameLayout ll_host;
         public KnowledgeItemsItemReplyAdapter adpter;
-        public ArrayList<KnowItemsDataItemsReplayBean> replyList;
+        public ArrayList<KnowItemsDataItemsItemsBean> replyList;
         public boolean isCheck = true;
     }
 

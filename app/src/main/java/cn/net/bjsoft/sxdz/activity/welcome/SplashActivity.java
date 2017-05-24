@@ -437,40 +437,64 @@ public class SplashActivity extends BaseActivity {
 
         getDataFromService();
         //getDataFromFile();
-        getUsersInfo();
+        //getUsersInfo();
 
 
     }
 
     private void getUsersInfo() {
-        HttpPostUtils postUtils = new HttpPostUtils();
+        LogUtil.e("联系人信息---------字符串开始-------");
         RequestParams params = new RequestParams(users_all);
-        postUtils.get(this, params);
-        postUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+        x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
-            public void onSuccess(String strJson) {
-
-                strJson = "{\"users_all\":" + strJson + "}";
-
-                SPUtil.setUsersAll(SplashActivity.this, strJson);
+            public void onSuccess(String result) {
+                result = "{\"users_all\":" + result + "}";
+                LogUtil.e("联系人信息---------字符串-------"+result);
+                SPUtil.setUsersAll(SplashActivity.this, result);
+                LogUtil.e("联系人信息----------------"+SPUtil.getUsersAll(SplashActivity.this));
 
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 MyToast.showLong(context, "获取联系人信息失败!");
+                LogUtil.e("联系人信息---------字符串失败-------"+ex);
             }
 
             @Override
-            public void onCancelled(Callback.CancelledException cex) {
+            public void onCancelled(CancelledException cex) {
 
             }
 
             @Override
             public void onFinished() {
-
+                jump();
             }
         });
+
+
+//        postUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+//            @Override
+//            public void onSuccess(String strJson) {
+//
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(Callback.CancelledException cex) {
+//
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//
+//            }
+//        });
     }
 
     private void getDataFromFile() {
@@ -505,7 +529,7 @@ public class SplashActivity extends BaseActivity {
         }
         LogUtil.e("----######------getMobileJson-----====------" + result);
         SPUtil.setMobileJson(mActivity, result);
-        jump();
+        getUsersInfo();
     }
 
 
@@ -548,7 +572,8 @@ public class SplashActivity extends BaseActivity {
                 }
                 LogUtil.e("----######------getMobileJson-----====------" + strJson);
                 SPUtil.setMobileJson(mActivity, strJson);
-                jump();
+                getUsersInfo();
+
 
             }
 

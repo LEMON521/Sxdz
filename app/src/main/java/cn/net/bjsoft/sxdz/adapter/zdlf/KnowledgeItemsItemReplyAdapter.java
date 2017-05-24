@@ -14,9 +14,11 @@ import com.lidroid.xutils.BitmapUtils;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsReplayBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsItemsBean;
+import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersSingleBean;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
-import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
+import cn.net.bjsoft.sxdz.utils.MyBase16;
+import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
 
 /**
@@ -27,14 +29,14 @@ public class KnowledgeItemsItemReplyAdapter extends BaseAdapter {
     private BitmapUtils bitmapUtils;
     private FragmentActivity mActivity;
     private Context context;
-    private ArrayList<KnowItemsDataItemsReplayBean> list;
+    private ArrayList<KnowItemsDataItemsItemsBean> list;
 
 
-    public KnowledgeItemsItemReplyAdapter(FragmentActivity mActivity, ArrayList<KnowItemsDataItemsReplayBean> list) {
+    public KnowledgeItemsItemReplyAdapter(FragmentActivity mActivity, ArrayList<KnowItemsDataItemsItemsBean> list) {
         this.mActivity = mActivity;
         this.list = list;
 
-        for (KnowItemsDataItemsReplayBean dao : list) {
+        for (KnowItemsDataItemsItemsBean dao : list) {
             //LogUtil.e("有数据===" + dao.name);
         }
 
@@ -77,18 +79,24 @@ public class KnowledgeItemsItemReplyAdapter extends BaseAdapter {
         bitmapUtils = new BitmapUtils(mActivity, AddressUtils.img_cache_url);//初始化头像
         bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
-        bitmapUtils.display(holder.avatar, list.get(position).avatar_url);
 
-        holder.name_main.setText(list.get(position).name);
+        UsersSingleBean usersSingleBean = UsersInforUtils.getInstance(mActivity).getUserInfo(list.get(position).userid);
+        if (usersSingleBean!=null) {
+            bitmapUtils.display(holder.avatar, usersSingleBean.avatar);
+            holder.name_main.setText(usersSingleBean.nickname);
+        }
+
+
+
         //LogUtil.e("有数据="+position+"==" + list.get(position).name);
-        if (!list.get(position).reply_to.equals("")) {
+        if (!list.get(position).reply_id.equals("")) {
             holder.layer_ll.setVisibility(View.VISIBLE);
-            holder.name_layer.setText(list.get(position).reply_to);
+            //holder.name_layer.setText(list.get(position).reply_id);
         } else {
             holder.layer_ll.setVisibility(View.GONE);
         }
 
-        holder.text.setText(list.get(position).comment_text);
+        holder.text.setText(MyBase16.decode(list.get(position).content.substring(3,list.get(position).content.length())));
 //        RichText.from(list.get(position).comment_text).autoFix(false).fix(new SimpleImageFixCallback() {
 //            @Override
 //            public void onImageReady(ImageHolder holder, int width, int height) {
@@ -108,7 +116,8 @@ public class KnowledgeItemsItemReplyAdapter extends BaseAdapter {
 //        }).into(holder.text);
 
 
-        holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).time), "-", ":"));
+//        holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).time), "-", ":"));
+        holder.time.setText(list.get(position).ctime);
 
 //        holder.reply.setOnClickListener(new View.OnClickListener() {
 //            @Override

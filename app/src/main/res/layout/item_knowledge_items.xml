@@ -82,6 +82,24 @@
                 android:layout_alignParentRight="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dm020"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:src="@drawable/knowledge_zdlf_reading_quantity" />
+
+                <TextView
+                    android:id="@+id/item_knowledge_item_lookover_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dm010"
+                    android:layout_weight="4"
+                    android:gravity="center_vertical"
+                    android:text="1000"
+                    android:textSize="@dimen/dm020" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -101,24 +119,7 @@
                     android:text="20"
                     android:textSize="@dimen/dm020" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/dm020"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:src="@drawable/knowledge_zdlf_reading_quantity" />
 
-                <TextView
-                    android:id="@+id/item_knowledge_item_lookover_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dm010"
-                    android:layout_weight="4"
-                    android:gravity="center_vertical"
-                    android:text="1000"
-                    android:textSize="@dimen/dm020" />
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>

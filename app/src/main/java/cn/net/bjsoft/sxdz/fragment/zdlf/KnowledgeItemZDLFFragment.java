@@ -40,6 +40,7 @@ import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.MyBase16;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
@@ -346,8 +347,9 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                     hostBean = knowLedgeItemBean.data;
                     knowledgeItemList.addAll(knowLedgeItemBean.data.items);
                     //TODO 接口有问题
-                    //submitReadToService();
                     setData();
+                    submitReadToService();
+
                     //LogUtil.e("获取到的条目-----------" + knowledgeItemList.get(0).avatar_url);
 //                    classifyData();
 //                    setData();
@@ -467,7 +469,9 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         }
 
         head_mark.setText(hostBean.labels);
-        RichText.from(hostBean.content).autoFix(false).into(head_content);
+        RichText.from(MyBase16.decode(hostBean.content.substring(3,hostBean.content.length()))).autoFix(false).into(head_content);
+        //head_content.setText(MyBase16.decode(hostBean.content.substring(3,hostBean.content.length())));
+
         //附件
         filesList.clear();
         //暂时没有附件
@@ -609,15 +613,15 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
 
         final KnowItemsDataItemsItemsBean newDao = new KnowItemsDataItemsItemsBean();
 
-        if (newDao.knowledge_item == null) {
-            newDao.knowledge_item = new ArrayList<>();
+        if (newDao.items == null) {
+            newDao.items = new ArrayList<>();
         }
-        newDao.knowledge_item.clear();
+        newDao.items.clear();
         newDao.userid = SPUtil.getUserId(mActivity);
         //newDao.avatar_url = SPUtil.getAvatar(mActivity);
         newDao.ctime = TimeUtils.getFormateTime(System.currentTimeMillis(), "-", ":") + "";
-        newDao.content = reply.getText().toString().trim();
-        newDao.reply_id = SPUtil.getUserId(mActivity);
+        newDao.content = "HEX"+MyBase16.encode(reply.getText().toString().trim());
+        newDao.reply_id = "";
         newDao.know_id = know_id;
         newDao.userid = SPUtil.getUserId(mActivity);
 
@@ -626,6 +630,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
 
         //sb.append("{\"data\":{");
         sb.append("{");
+
 
         sb.append("\"content\":\"");
         sb.append(newDao.content);
@@ -648,9 +653,9 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
 //        sb.append(UsersInforUtils.getInstance(mActivity).getUserInfo(SPUtil.getUserId(mActivity)).nickname);
 //        sb.append("\",");
 //
-//        sb.append("\"userid\":\"");
-//        sb.append(newDao.userid);
-//        sb.append("\"");
+        sb.append("\"userid\":\"");
+        sb.append(newDao.userid);
+        sb.append("\"");
 
         sb.append("}");
 
@@ -665,8 +670,10 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                 try {
                     JSONObject jsonObject = new JSONObject(strJson);
                     if (jsonObject.optInt("code") == 0) {
+                        JSONObject data = jsonObject.getJSONObject("data");
+                        newDao.id = data.optString("id");
                         knowledgeItemList.add(newDao);
-                        MyToast.showShort(mActivity, "评论成功");
+                        MyToast.showShort(mActivity, "评论成功"+newDao.reply_id);
                         knowledgeItemsItemAdapter.notifyDataSetChanged();
                         reply.setText("");//清除输入框
                         //mActivity.finish();

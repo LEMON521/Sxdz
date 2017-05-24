@@ -540,7 +540,7 @@ public class MineZDLFFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                MyToast.showLong(mActivity, "更新头像失败,请联系管理员");
+                MyToast.showLong(mActivity, "注销失败,请联系管理员");
                 LogUtil.e("上传失败onError========UpDateAvatar" + ex);
             }
 

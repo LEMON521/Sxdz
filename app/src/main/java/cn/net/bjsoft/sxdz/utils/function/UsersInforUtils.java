@@ -53,6 +53,7 @@ public class UsersInforUtils {
     }
 
     public UsersSingleBean getUserInfo(String id) {
-        return usersMap.get(id);
+
+        return usersMap.get(id)==null?new UsersSingleBean():usersMap.get(id);
     }
 }

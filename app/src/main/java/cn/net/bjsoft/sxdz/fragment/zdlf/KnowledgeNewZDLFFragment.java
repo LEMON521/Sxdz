@@ -39,6 +39,7 @@ import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeNewPictureBean;
 import cn.net.bjsoft.sxdz.dialog.SideRightPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.MyBase16;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
@@ -358,8 +359,8 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
         sb.append(title);
         sb.append("\",");
 
-        sb.append("\"content\":\"");
-        sb.append(discription);
+        sb.append("\"content\":\"HEX");
+        sb.append(MyBase16.encode(discription));
         sb.append("\",");
 
 
