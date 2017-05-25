@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsItemsBean;
-import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsReplayBean;
 import cn.net.bjsoft.sxdz.dialog.KnowledgeReplyPopupWindow_1;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.MyBase16;
@@ -176,10 +175,12 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
 
                 //调出popuWindow
 //
-                KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity, view, list.get(position).items.get(positionChild).reply_id);
+                KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity
+                        , view
+                        , list.get(position).items.get(positionChild).reply_id);
                 replyWindow.setOnData(new KnowledgeReplyPopupWindow_1.OnGetData() {
                     @Override
-                    public void onDataCallBack(KnowItemsDataItemsReplayBean replyListDao) {
+                    public void onDataCallBack(KnowItemsDataItemsItemsBean replyListDao) {
                         //list.get(position).items.add(replyListDao);
                         replayMessage(list, position, replyListDao, 2);
                     }
@@ -192,10 +193,12 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
                 MyToast.showShort(mActivity, "点击详情" + list.get(position).content);
                 //调出popuWindow
 //
-                KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity, view);
+                KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity
+                        , view
+                        , list.get(position).id);
                 replyWindow.setOnData(new KnowledgeReplyPopupWindow_1.OnGetData() {
                     @Override
-                    public void onDataCallBack(KnowItemsDataItemsReplayBean replyListDao) {
+                    public void onDataCallBack(KnowItemsDataItemsItemsBean replyListDao) {
                         //TODO 待修改添加回复
                         replayMessage(list, position, replyListDao, 1);
                         //list.get(position).knowledge_item.add(replyListDao);
@@ -216,12 +219,12 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
      * @param replyListDao 回复内容
      * @param type         楼主或者楼层--1,楼主,2,楼层
      */
-    private void replayMessage(final ArrayList<KnowItemsDataItemsItemsBean> replyList, final int position, KnowItemsDataItemsReplayBean replyListDao, final int type) {
+    private void replayMessage(final ArrayList<KnowItemsDataItemsItemsBean> replyList, final int position, KnowItemsDataItemsItemsBean replyListDao, final int type) {
 
-        if (replyListDao.comment_text.equals("")) {
-            MyToast.showShort(mActivity, "请输入回复内容");
-            return;
-        }
+//        if (replyListDao.content.equals("")) {
+//            MyToast.showShort(mActivity, "请输入回复内容");
+//            return;
+//        }
 
 
         //showProgressDialog();
@@ -245,18 +248,18 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
 
             case 1:
                 newDao.id = replyList.get(position).id;
-                newDao.reply_id = replyList.get(position).id;
+                newDao.reply_id = replyListDao.reply_id;
                 break;
 
             case 2:
                 //newDao.id = replyList.get(position).reply_id;
-                newDao.reply_id = replyList.get(position).reply_id;
+                newDao.reply_id = replyListDao.reply_id;
                 break;
         }
 
         newDao.know_id = replyList.get(position).know_id;
         newDao.ctime = TimeUtils.getFormateTime(System.currentTimeMillis(), "-", ":") + "";
-        newDao.content = "HEX" + MyBase16.encode(replyListDao.comment_text);
+        newDao.content = "HEX" + MyBase16.encode(replyListDao.content);
 //        newDao.reply_id = SPUtil.getUserId(mActivity);
 //        newDao.know_id = know_id;
         newDao.userid = SPUtil.getUserId(mActivity);

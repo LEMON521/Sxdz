@@ -335,10 +335,10 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
             return;
         }
 
-        if (TextUtils.isEmpty(keyowrd)) {
-            MyToast.showShort(mActivity, "请添加关键字");
-            return;
-        }
+//        if (TextUtils.isEmpty(keyowrd)) {
+//            MyToast.showShort(mActivity, "请添加关键字");
+//            return;
+//        }
 
 
         showProgressDialog();

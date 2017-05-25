@@ -14,9 +14,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsReplayBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsItemsBean;
 import cn.net.bjsoft.sxdz.utils.MyToast;
-import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 /**
  * Created by Zrzc on 2017/3/21.
@@ -110,7 +109,7 @@ public class KnowledgeReplyPopupWindow_1 implements View.OnClickListener {
     public interface OnGetData {
         //abstract ArrayList<KnowledgeBean.ItemsDataDao> cacheItemsDataList();
 
-        abstract void onDataCallBack(KnowItemsDataItemsReplayBean replyListDao);
+        abstract void onDataCallBack(KnowItemsDataItemsItemsBean replyListDao);
     }
 
     // 数据接口设置,数据源接口传入
@@ -122,20 +121,20 @@ public class KnowledgeReplyPopupWindow_1 implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 //        KnowLedgeItemBean bean = new KnowLedgeItemBean();
-        KnowItemsDataItemsReplayBean dao = new KnowItemsDataItemsReplayBean();
+        KnowItemsDataItemsItemsBean dao = new KnowItemsDataItemsItemsBean();
 
 
         //dao.description = edit.getText().toString().split(replyName + " ")[1];
-        dao.comment_text = edit.getText().toString().trim();
-        if (dao.comment_text.equals("")) {
+        dao.content = edit.getText().toString().trim();
+        if (dao.content.equals("")) {
             MyToast.showShort(activity, "请输入回复内容!");
             return;
         }
 
-        dao.name = SPUtil.getUserName(activity);
-        dao.avatar_url = SPUtil.getAvatar(activity);
-        dao.reply_to = replyTo;
-        dao.time = System.currentTimeMillis() + "";
+//        dao.name = SPUtil.getUserName(activity);
+//        dao.avatar_url = SPUtil.getAvatar(activity);
+        dao.reply_id = replyTo;
+//        dao.time = System.currentTimeMillis() + "";
 
 
         /**

@@ -15,6 +15,7 @@
 
 
         <LinearLayout
+            android:layout_marginBottom="@dimen/dm010"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -57,17 +58,18 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/item_knowledge_item_reply_descriptuon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dm010"
-                android:textColor="#333333"
-                android:textSize="@dimen/dm020" />
+
 
 
         </LinearLayout>
-
+        <TextView
+            android:id="@+id/item_knowledge_item_reply_descriptuon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dm020"
+            android:layout_marginLeft="@dimen/dm040"
+            android:textColor="#333333"
+            android:textSize="@dimen/dm020" />
         <RelativeLayout
 
             android:layout_width="match_parent"
