@@ -82,6 +82,11 @@
 
                 <!--</ScrollView>-->
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
 
                 <cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout
                     android:id="@+id/refresh_view"
@@ -103,7 +108,16 @@
 
                 </cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout>
 
-
+                    <TextView
+                        android:layout_gravity="center"
+                        android:id="@+id/knowledge_message"
+                        android:textColor="#666666"
+                        android:text="信息空空如也!"
+                        android:textSize="@dimen/dm026"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
                 <!--<FrameLayout-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="match_parent"-->

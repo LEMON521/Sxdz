@@ -131,7 +131,7 @@
                         android:id="@+id/item_list_headview_knowledge_reply_count_img"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/dm020"
+                        android:layout_marginRight="@dimen/dm010"
                         android:src="@mipmap/comment" />
                     <!--回复数-->
                     <TextView
@@ -141,6 +141,28 @@
                         android:text=""
                         android:textColor="#999999"
                         android:textSize="@dimen/dm020" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:id="@+id/item_list_headview_knowledge_top"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/item_list_headview_knowledge_top_count_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/dm020"
+                            android:src="@drawable/knowledge_zdlf_zan_n" />
+                        <!--点赞数-->
+                        <TextView
+                            android:id="@+id/item_list_headview_knowledge_top_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="#999999"
+                            android:textSize="@dimen/dm020" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </RelativeLayout>

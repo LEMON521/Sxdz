@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsTopsBean;
 
 /**
  * 中电联发---知识模块分组条目适配器
@@ -65,6 +66,8 @@ public class KnowledgeItemsAdapter extends BaseAdapter {
             tag.category = (TextView) convertView.findViewById(R.id.item_knowledge_item_category);
             tag.reply_count = (TextView) convertView.findViewById(R.id.item_knowledge_item_reply_count);
             tag.lookover_count = (TextView) convertView.findViewById(R.id.item_knowledge_item_lookover_count);
+            tag.top_count = (TextView) convertView.findViewById(R.id.item_knowledge_item_top_count);
+
             convertView.setTag(tag);
         }
         //设置数据
@@ -88,17 +91,29 @@ public class KnowledgeItemsAdapter extends BaseAdapter {
 
         holder.category.setText(list.get(position).labels);
         if (list.get(position).items != null) {
-            holder.reply_count.setText(list.get(position).items.size()+"");
+            holder.reply_count.setText(list.get(position).items.size() + "");
         } else {
             holder.reply_count.setText("0");
         }
 
-        holder.lookover_count.setText(list.get(position).views);
+        if (list.get(position).views!=null) {
+            holder.lookover_count.setText(list.get(position).views.size()+"");
+        }
+
+
+        //点赞数
+        long top_count = 0l;
+        for (KnowItemsDataItemsTopsBean top : list.get(position).tops) {
+            if (top.valid.equals("1")) {//当valid=1时,才是点赞
+                top_count++;
+            }
+        }
+        holder.top_count.setText(top_count + "");
         return convertView;
     }
 
     public static class Holder {
-        public TextView title, author, date, category, reply_count, lookover_count;//文件名称
+        public TextView title, author, date, category, reply_count, lookover_count, top_count;//文件名称
         public ImageView image;
     }
 }

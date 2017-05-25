@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemBean;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsBean;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsItemsBean;
+import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsTopsBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
@@ -89,6 +91,13 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
     private TextView head_check_count;
     //@ViewInject(R.id.item_list_headview_knowledge_reply_count)
     private TextView head_reply_count;
+    private ImageView head_top_image;
+    private TextView head_top_count;
+    private LinearLayout head_top;
+
+    private boolean top_valid = false;
+    private long top_count = 0l;
+
     private BitmapUtils bitmapUtils;
 
     private KnowItemsDataItemsBean hostBean;
@@ -132,6 +141,16 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         head_time = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_time);
         head_check_count = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_check_count);
         head_reply_count = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_reply_count);
+        head_top_image = (ImageView) headView.findViewById(R.id.item_list_headview_knowledge_top_count_img);
+        head_top_count = (TextView) headView.findViewById(R.id.item_list_headview_knowledge_top_count);
+        head_top = (LinearLayout) headView.findViewById(R.id.item_list_headview_knowledge_top);
+
+        head_top.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTops();
+            }
+        });
 
         head_files.setOnTouchListener(new View.OnTouchListener() {
             //屏蔽掉滑动事件
@@ -217,10 +236,16 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                 try {
                     JSONObject jsonObject = new JSONObject(strJson);
                     if (jsonObject.optInt("code") == 0) {
-
-                        MyToast.showShort(mActivity, "提交成功!阅读+1");
+                        LogUtil.e("提交成功!阅读+1");
+                        if (hostBean.views != null) {
+                            head_check_count.setText(hostBean.views.size() + 1 + "");
+                        } else {
+                            head_check_count.setText("1");
+                        }
+                        //MyToast.showShort(mActivity, "提交成功!阅读+1");
                     } else {
-                        MyToast.showLong(mActivity, "提交任务失败,请联系管理员");
+                        //MyToast.showLong(mActivity, "提交任务失败,请联系管理员");
+                        LogUtil.e("提交阅读失败,请联系管理员");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -462,14 +487,14 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         bitmapUtils = new BitmapUtils(mActivity, AddressUtils.img_cache_url);//初始化头像
         bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
-        if (UsersInforUtils.getInstance(mActivity).getUserInfo(hostBean.userid)!=null) {
+        if (UsersInforUtils.getInstance(mActivity).getUserInfo(hostBean.userid) != null) {
             bitmapUtils.display(head_avatar, UsersInforUtils.getInstance(mActivity).getUserInfo(hostBean.userid).avatar);
             head_name.setText(UsersInforUtils.getInstance(mActivity).getUserInfo(hostBean.userid).nickname);
 
         }
 
         head_mark.setText(hostBean.labels);
-        RichText.from(MyBase16.decode(hostBean.content.substring(3,hostBean.content.length()))).autoFix(false).into(head_content);
+        RichText.from(MyBase16.decode(hostBean.content.substring(3, hostBean.content.length()))).autoFix(false).into(head_content);
         //head_content.setText(MyBase16.decode(hostBean.content.substring(3,hostBean.content.length())));
 
         //附件
@@ -488,15 +513,136 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         //head_time.setText(TimeUtils.getTimeDifference(Long.parseLong(hostBean.time)));
         head_time.setText(hostBean.ctime);
 
-        head_check_count.setText(hostBean.views);
+        if (hostBean.views!=null) {
+            head_check_count.setText(hostBean.views.size()+1+"");
+        }
+
+
         if (hostBean.items != null) {
             head_reply_count.setText(hostBean.items.size() + "");
+        }
+
+        if (hostBean.tops != null) {
+            for (KnowItemsDataItemsTopsBean top : hostBean.tops) {
+                if (top.userid.equals(SPUtil.getUserId(mActivity))) {
+                    switch (Integer.parseInt(top.valid)) {
+                        case 1:
+                            top_valid = true;
+                            top_count++;
+                            break;
+
+                        case 0:
+                            top_valid = false;
+                            break;
+                    }
+
+                }
+            }
+
+            if (top_valid) {
+                head_top_image.setImageResource(R.drawable.knowledge_zdlf_zan_s);
+            } else {
+                head_top_image.setImageResource(R.drawable.knowledge_zdlf_zan_n);
+            }
+            head_top_count.setText(top_count + "");
         }
 
 
         knowledgeItemsItemAdapter.notifyDataSetChanged();
 
     }
+
+    private void setTops() {
+
+
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/submit";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("submit_id", "shuxin_know_top");
+
+
+        StringBuilder sb = new StringBuilder();
+
+        //sb.append("{\"data\":{");
+        sb.append("{");
+
+        sb.append("\"know_id\":\"");
+        sb.append(know_id);
+        sb.append("\",");
+
+        top_valid = !top_valid;
+        sb.append("\"valid\":\"");
+        sb.append(top_valid);
+        sb.append("\"");
+
+        sb.append("}");
+
+        params.addBodyParameter("data", sb.toString());
+
+        LogUtil.e("--------=====---------任务详情------上传点赞数量获取消息--------====--------");
+        httpPostUtils.post(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------任务详情------上传阅读数量获取消息----------------" + strJson);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(strJson);
+                    if (jsonObject.optInt("code") == 0) {
+                        LogUtil.e("-----------------点赞+1-----------------------");
+
+                        if (top_valid) {
+                            top_count = top_count + 1;
+                            head_top_image.setImageResource(R.drawable.knowledge_zdlf_zan_s);
+                        } else {
+                            top_count = top_count - 1;
+                            head_top_image.setImageResource(R.drawable.knowledge_zdlf_zan_n);
+                        }
+                        head_top_count.setText(top_count + "");
+
+                        //MyToast.showShort(mActivity, "提交成功!阅读+1");
+                    } else {
+                        MyToast.showLong(mActivity, "点赞失败,请联系管理员");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("-----------------获取点赞点赞消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取点赞消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取点赞消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取点赞消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取点赞消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取点赞消息-----------失败方法-----" + element.getMethodName());
+                }
+
+                MyToast.showShort(mActivity, "获取点赞数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+                LogUtil.e("-----------------获取点赞消息----------上传点赞数量取消------");
+            }
+
+            @Override
+            public void onFinished() {
+                LogUtil.e("-----------------获取点赞消息----------上传点赞数量完成------");
+                dismissProgressDialog();
+            }
+        });
+
+    }
+
 
     /**
      * 下载附件
@@ -571,6 +717,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
     }
 
     @Event(value = {R.id.knowledge_item_reply
+            /*, R.id.item_list_headview_knowledge_top*/
             , R.id.title_back})
     private void onClick(View view) {
         switch (view.getId()) {
@@ -579,13 +726,15 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                 break;
 
             case R.id.knowledge_item_reply:
-
-
                 replyHost();
-
-
                 imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
+
+//            case R.id.item_list_headview_knowledge_top:
+//                LogUtil.e("=============点击点赞==============");
+//                setTops();
+//                LogUtil.e("=============点击点赞==============");
+//                break;
         }
     }
 
@@ -620,7 +769,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         newDao.userid = SPUtil.getUserId(mActivity);
         //newDao.avatar_url = SPUtil.getAvatar(mActivity);
         newDao.ctime = TimeUtils.getFormateTime(System.currentTimeMillis(), "-", ":") + "";
-        newDao.content = "HEX"+MyBase16.encode(reply.getText().toString().trim());
+        newDao.content = "HEX" + MyBase16.encode(reply.getText().toString().trim());
         newDao.reply_id = "";
         newDao.know_id = know_id;
         newDao.userid = SPUtil.getUserId(mActivity);
@@ -673,7 +822,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                         JSONObject data = jsonObject.getJSONObject("data");
                         newDao.id = data.optString("id");
                         knowledgeItemList.add(newDao);
-                        MyToast.showShort(mActivity, "评论成功"+newDao.reply_id);
+                        MyToast.showShort(mActivity, "评论成功" + newDao.reply_id);
                         knowledgeItemsItemAdapter.notifyDataSetChanged();
                         reply.setText("");//清除输入框
                         //mActivity.finish();

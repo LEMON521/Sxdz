@@ -13,7 +13,10 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
+import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
+
+import static cn.net.bjsoft.sxdz.utils.UrlUtil.users_all;
 
 /**
  * Created by Zrzc on 2017/4/19.
@@ -139,5 +142,42 @@ public class HttpPostUtils {
                         }
                     }).show();
         }
+    }
+
+    /**
+     * 获取全部联系人信息
+     * @param context
+     */
+    public static void getUserInfo(final Context context){
+
+
+        LogUtil.e("联系人信息---------字符串开始-------");
+        RequestParams params = new RequestParams(users_all);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                result = "{\"users_all\":" + result + "}";
+                LogUtil.e("联系人信息---------字符串-------"+result);
+                SPUtil.setUsersAll(context, result);
+                LogUtil.e("联系人信息----------------"+SPUtil.getUsersAll(context));
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                MyToast.showLong(context, "获取联系人信息失败!");
+                LogUtil.e("联系人信息---------字符串失败-------"+ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
+
     }
 }

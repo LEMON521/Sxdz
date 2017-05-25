@@ -23,10 +23,10 @@ public class KnowItemsDataItemsBean implements Serializable {
     public String title = "";
     public String type = "";
     public String userid = "";
-    public String views = "";
+    public ArrayList<KnowItemsDataItemsTopsBean> views;//阅读
 
-    public ArrayList<KnowItemsDataItemsItemsBean> items;
-    public Object tops = "";
+    public ArrayList<KnowItemsDataItemsItemsBean> items;//评论
+    public ArrayList<KnowItemsDataItemsTopsBean> tops ;//点赞
 
     public ArrayList<MessageTaskDetailDataFilesBean> files;
 

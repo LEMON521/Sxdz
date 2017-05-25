@@ -3,19 +3,34 @@ package cn.net.bjsoft.sxdz.fragment.zdlf;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
+import com.lidroid.mutils.utils.Log;
 import com.lidroid.xutils.BitmapUtils;
 
 import org.json.JSONException;
@@ -265,7 +280,6 @@ public class MineZDLFFragment extends BaseFragment {
         appBean = GsonUtil.getAppBean(mJson);
 
 
-
 //        userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
 //
 //        if (userBean == null) {
@@ -325,8 +339,8 @@ public class MineZDLFFragment extends BaseFragment {
     private void setUserData() {
 
         LogUtil.e("头像==============" + userBean.avatar);
-        bitmapUtils.display(avatar, userBean.avatar);
-        SPUtil.setAvatar(mActivity, userBean.avatar);//缓存头像地址
+        bitmapUtils.display(avatar, SPUtil.getAvatar(mActivity));
+
         name.setText(userBean.name);
 
         if (userOrganizationBean != null) {
@@ -469,7 +483,8 @@ public class MineZDLFFragment extends BaseFragment {
                 break;
 
             case R.id.mine_zdlf_icon://更改头像
-                PhotoOrVideoUtils.doPhoto(mActivity, this, view);
+                //PhotoOrVideoUtils.doPhoto(mActivity, this, view);
+                doPhoto(this,avatar);
                 break;
 
             case R.id.mine_zdlf_positions://切换岗位
@@ -559,14 +574,19 @@ public class MineZDLFFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
-        if (uri != null) {
-            String imagePath = PhotoOrVideoUtils.getPath(mActivity, uri);
-            //upLoadFile(imagePath, "", "");
-            upLoadAvatar(imagePath);
-
+        Log.e("tag", "onActivityResult");
+        if (requestCode == REQUEST_CODE_TAKE_PHOTO) {
+            doPhoto();
+        }else if (requestCode == REQUEST_CODE_GET_PHOTO){
+            Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
+            if (uri != null) {
+                String imagePath = PhotoOrVideoUtils.getPath(mActivity, uri);
+                //upLoadFile(imagePath, "", "");
+                upLoadAvatar(imagePath);
+            }
         }
+        super.onActivityResult(requestCode, resultCode, data);
+
 
     }
 
@@ -696,6 +716,7 @@ public class MineZDLFFragment extends BaseFragment {
                     if (jsonObject.optBoolean("data")) {
                         bitmapUtils.display(avatar, SPUtil.getAvatar(mActivity));
                         MyToast.showLong(mActivity, "头像更新成功");
+                        HttpPostUtils.getUserInfo(mActivity);//更新头像
                     } else {
                         MyToast.showLong(mActivity, "更新头像失败,请联系管理员");
                     }
@@ -723,6 +744,7 @@ public class MineZDLFFragment extends BaseFragment {
 
 
     }
+
 
 
     /**
@@ -794,6 +816,149 @@ public class MineZDLFFragment extends BaseFragment {
             }
         });
 
+    }
+
+    private PopupWindow photoWindow;
+    public static int REQUEST_CODE_TAKE_PHOTO = 100;//拍照
+    public static int REQUEST_CODE_GET_PHOTO = 200;//从相片中获取照片
+
+    /**
+     * 打开相册或者相机意图，只针对图片
+     *
+     * @param fragment 调用此方法的Fragment--当Fragment为空时，onActivityResult的返回类型为Activity中的；不为空，则为Fragment中的onActivityResult方法
+     * @param v        调用此方法的View
+     */
+    public void doPhoto(final BaseFragment fragment, View v) {
+        View contentView;
+        photoWindow = null;
+        if (photoWindow == null) {
+            LayoutInflater mLayoutInflater = LayoutInflater.from(fragment.mActivity);
+            contentView = mLayoutInflater.inflate(R.layout.pop_select_photo, null);
+            photoWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            TextView paizhao = (TextView) contentView.findViewById(R.id.paizhao);
+            TextView xiangce = (TextView) contentView.findViewById(R.id.xiangce);
+            TextView quxiao = (TextView) contentView.findViewById(R.id.quxiao);
+
+            paizhao.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //打开照相机的意图
+                    takePhoto();
+                    //MyToast.showShort(context, "点击了！");
+//                    String state = Environment.getExternalStorageState();
+//                    if (state.equals(Environment.MEDIA_MOUNTED)) {
+//                        Intent i = new Intent();
+//                        i.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+//                        fragment.startActivityForResult(i, REQUEST_CODE_TAKE_PHOTO);
+//                        MyToast.showShort(getActivity(), "打开了照相机！");
+//                    } else {
+//                        Toast.makeText(getActivity(), "请确认已经插入SD卡", Toast.LENGTH_LONG).show();
+//                    }
+                    photoWindow.dismiss();
+                }
+            });
+            xiangce.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //打开相册的意图
+                    Intent intent = new Intent();
+
+                        /* 开启Pictures画面Type设定为image */
+                    intent.setType("image/*");
+                         /* 使用Intent.ACTION_GET_CONTENT这个Action */
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                        /* 取得相片后返回本画面 */
+                    fragment.startActivityForResult(intent, REQUEST_CODE_GET_PHOTO);
+                    photoWindow.dismiss();
+                }
+            });
+            quxiao.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    photoWindow.dismiss();
+                }
+            });
+        }
+
+        ColorDrawable cd = new ColorDrawable(0x000000);
+        photoWindow.setBackgroundDrawable(cd);
+        //产生背景变暗效果
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = 0.4f;
+        getActivity().getWindow().setAttributes(lp);
+
+        photoWindow.setOutsideTouchable(true);
+        photoWindow.setFocusable(true);
+        photoWindow.showAtLocation((View) v.getParent(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        photoWindow.update();
+        photoWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+
+            //在dismiss中恢复透明度
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+                lp.alpha = 1f;
+                getActivity().getWindow().setAttributes(lp);
+            }
+        });
+    }
+    private Uri photoUri;
+
+    private String picPath;
+
+    private void takePhoto() {
+        //执行拍照前，应该先判断SD卡是否存在
+        String SDState = Environment.getExternalStorageState();
+        if (SDState.equals(Environment.MEDIA_MOUNTED)) {
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//"android.media.action.IMAGE_CAPTURE"
+            /***
+             * 需要说明一下，以下操作使用照相机拍照，拍照后的图片会存放在相册中的
+             * 这里使用的这种方式有一个好处就是获取的图片是拍照后的原图
+             * 如果不实用ContentValues存放照片路径的话，拍照后获取的图片为缩略图不清晰
+             */
+            ContentValues values = new ContentValues();
+            photoUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            /**-----------------*/
+            startActivityForResult(intent, 100);
+        } else {
+            Toast.makeText(getActivity(), "内存卡不存在", Toast.LENGTH_LONG).show();
+        }
+
+
+    }
+
+    /**
+     * 选择图片后，获取图片的路径
+     */
+    private void doPhoto() {
+        Log.e("tag", "doPhoto");
+        String[] pojo = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getActivity().managedQuery(photoUri, pojo, null, null, null);
+        if (cursor != null) {
+            int columnIndex = cursor.getColumnIndexOrThrow(pojo[0]);
+            cursor.moveToFirst();
+            picPath = cursor.getString(columnIndex);
+            if (Build.VERSION.SDK_INT < 14) {
+
+                cursor.close();
+            }
+        }
+        Log.e("tag", "imagePath = " + picPath);
+        if (picPath != null && (picPath.endsWith(".png") || picPath.endsWith(".PNG") || picPath.endsWith(".jpg") || picPath.endsWith(".JPG"))) {
+            Log.e("tag", "最终选择的图片=" + picPath);
+            //MyBitmapUtils.getInstance(getActivity()).display(picture,picPath);
+            Bitmap bm = BitmapFactory.decodeFile(picPath);
+            //toRoundCorner(bm, 60);
+            //picture.setImageBitmap(toRoundCorner(bm, 60));
+            //MyBitmapUtils.getInstance(getActivity()).display(picture, picPath);
+            upLoadAvatar(picPath);
+        } else {
+            Toast.makeText(getActivity(), "选择图片文件不正确", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**

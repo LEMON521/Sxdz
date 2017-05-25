@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.IdRes;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
@@ -33,7 +35,7 @@ import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowGroupDataItemsBean;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsBean;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeBean;
-import cn.net.bjsoft.sxdz.dialog.KnowledgeSearchPopupWindow_1;
+import cn.net.bjsoft.sxdz.dialog.KnowledgeSearchPopupWindow_2;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
@@ -66,6 +68,8 @@ public class KnowledgeZDLFFragment extends BaseFragment {
     private PullableListView items;
     @ViewInject(R.id.refresh_view)
     private PullToRefreshLayout refresh_view;
+    @ViewInject(R.id.knowledge_message)
+    private TextView message;
 
 
     private ArrayList<RadioButton> radioButtons;
@@ -100,8 +104,11 @@ public class KnowledgeZDLFFragment extends BaseFragment {
     private String mSearchUrl = "";
 
     private String get_start = "0";
-    private String get_count = "0";
+    //    private String get_cache_start = "0";
+    //private String get_count = "0";
     private String group_id = "0";
+
+    private KnowledgeSearchPopupWindow_2 popupWindow_1;
 
     @Override
     public void onStart() {
@@ -112,7 +119,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
     @Override
     public void initData() {
         isFirst = true;
-
+        message.setVisibility(View.GONE);
 
         //初始化组信息
         if (groupDataList == null) {
@@ -265,6 +272,8 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                         cacheItemsDataList.clear();
                         LogUtil.e("setOnRefreshListener-----------");
                         get_start = "0";
+                        searchStr = "";
+//                        get_cache_start = get_start;
                         getItemsData();//group_id
 
                     }
@@ -280,11 +289,11 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                     public void handleMessage(Message msg) {
                         // 千万别忘了告诉控件加载完毕了哦！
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-                        if (get_start.equals(get_count)) {
-                            MyToast.showShort(mActivity,"已经没有更多的信息!");
-                        }else {
-                            getItemsData();//group_id
-                        }
+//                        if (get_start.equals(get_count)) {
+//                            MyToast.showShort(mActivity, "已经没有更多的信息!");
+//                        } else {
+                        getItemsData();//group_id
+//                        }
                         LogUtil.e("onLoadMore-----------");
 
                     }
@@ -294,6 +303,26 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 
         });
         //getItemsDataTest();
+
+        popupWindow_1 = new KnowledgeSearchPopupWindow_2(mActivity
+                , group);
+        popupWindow_1.setOnData(new KnowledgeSearchPopupWindow_2.OnGetData() {
+
+            @Override
+            public void onDataCallBack(String search) {
+                searchStr = search;
+                cacheItemsDataList.clear();
+                if (!TextUtils.isEmpty(searchStr)) {
+                    get_start = "0";
+                    cacheItemsDataList.clear();
+                    getItemsData();
+                } else {
+                    get_start = "0";
+                    cacheItemsDataList.clear();
+                    getItemsData();
+                }
+            }
+        });
         getData();
 
     }
@@ -408,6 +437,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
             tempButton.setBackgroundResource(R.drawable.function_sign_history_selector);   // 设置RadioButton的背景图片--这里为选择器
             tempButton.setButtonDrawable(android.R.color.transparent);// 设置按钮的样式//隐藏单选圆形按钮
             tempButton.setPadding(38, 20, 38, 13);                 // 设置文字距离按钮四周的距离
+            tempButton.setGravity(View.TEXT_ALIGNMENT_CENTER);
             tempButton.setText(groupDataList.get(i).name);
             tempButton.setId(i);
             radioButtons.add(tempButton);
@@ -425,11 +455,12 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                         radioButtons.get(i).setTextColor(Color.rgb(0, 93, 209));
                         group_id = groupDataList.get(i).id;
                         get_start = "0";
-                        get_count = "0";
+//                        get_count = "0";
                         itemsDataList.clear();
                         cacheItemsDataList.clear();
                         //mSearchUrl = groupDataList.get(checkedId).url;
-                        LogUtil.e("setOnCheckedChangeListener-----------");
+                        LogUtil.e("setOnCheckedChangeListener-----------" + i);
+                        searchStr = "";
                         getItemsData();//group_id
                     } else {
                         radioButtons.get(i).setTextColor(Color.rgb(0, 0, 0));
@@ -492,28 +523,22 @@ public class KnowledgeZDLFFragment extends BaseFragment {
      */
     private void getItemsData(/*String groupId*/) {
 
-//        if (!this.group_id.equals(groupId)) {//相等,同一个类别刷新或加载
-//
-//            get_start = "0";
-//            get_count = "0";
-//            this.group_id = groupId;
-//        }
-
-
-
-
         showProgressDialog();
         HttpPostUtils httpPostUtils = new HttpPostUtils();
 
         String url = SPUtil.getApiAuth(mActivity) + "/load";
-        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        LogUtil.e("url$$$$$$$$$$$$$$getItemsData$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
         RequestParams params = new RequestParams(url);
         params.addBodyParameter("source_id", "shuxin_know");
-
+//        params.addBodyParameter("query", "2");
         StringBuilder sb = new StringBuilder();
 
         //sb.append("{\"data\":{");
         sb.append("{");
+
+        sb.append("\"query\":\"");
+        sb.append(searchStr);
+        sb.append("\",");
 
         sb.append("\"start\":\"");
         sb.append(get_start);
@@ -536,7 +561,6 @@ public class KnowledgeZDLFFragment extends BaseFragment {
         params.addBodyParameter("data", sb.toString());
 
 
-
         httpPostUtils.get(mActivity, params);
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
@@ -548,13 +572,27 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                 if (itemsBean.code.equals("0")) {//获取成功
                     //LogUtil.e("获取到的条目-----------" + result);
 
-                    itemsDataList.addAll(itemsBean.data.items);
-                    cacheItemsDataList.addAll(itemsBean.data.items);
 
-                    get_start = (itemsBean.data.items.size()+Integer.parseInt(get_start))+"";
-                    get_count = itemsBean.data.count;
+                    if (itemsBean.data.items.size() > 0) {
 
-                    setItemsData();
+                        itemsDataList.addAll(itemsBean.data.items);
+                        cacheItemsDataList.addAll(itemsBean.data.items);
+
+                        get_start = (itemsBean.data.items.size() + Integer.parseInt(get_start)) + "";
+//                    get_cache_start= get_start;
+//                        get_count = itemsBean.data.count;
+                        setItemsData();
+                    } else {
+
+                        MyToast.showShort(mActivity, "已经没有更多的信息!");
+                    }
+                    if (cacheItemsDataList.size() > 0) {
+                        message.setVisibility(View.GONE);
+                    } else {
+                        message.setVisibility(View.VISIBLE);
+                    }
+
+
                 } else {
                 }
             }
@@ -582,6 +620,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
+                itemsAdapter.notifyDataSetChanged();
                 dismissProgressDialog();
             }
         });
@@ -653,25 +692,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 //                        , hint);
 //                popupWindow.setmSearchPopupWindow();
                 LogUtil.e("搜索qian的条目数==" + cacheItemsDataList.size());
-                KnowledgeSearchPopupWindow_1 popupWindow_1 = new KnowledgeSearchPopupWindow_1(mActivity
-                        , itemsDataList
-                        , searchStr
-                        , view);
-                popupWindow_1.setOnData(new KnowledgeSearchPopupWindow_1.OnGetData() {
-
-
-                    @Override
-                    public void onDataCallBack(String search, ArrayList<KnowItemsDataItemsBean> cacheItemsDataList) {
-                        searchStr = search;
-                        KnowledgeZDLFFragment.this.cacheItemsDataList.clear();
-                        KnowledgeZDLFFragment.this.cacheItemsDataList.addAll(cacheItemsDataList);
-                        if (KnowledgeZDLFFragment.this.cacheItemsDataList.size() > 0) {
-                            KnowledgeZDLFFragment.this.itemsAdapter.notifyDataSetChanged();
-                        } else {
-//                            hint.setText("未搜索到相关条目\n下拉刷新获取信息");
-                        }
-                    }
-                });
+                popupWindow_1.show(searchStr);
 
                 break;
 
