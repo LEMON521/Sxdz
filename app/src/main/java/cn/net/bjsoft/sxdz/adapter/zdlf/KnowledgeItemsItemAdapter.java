@@ -96,14 +96,13 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
             holder.ll_host = (FrameLayout) convertView.findViewById(R.id.knowledge_item_items_reply_host_ll);
             holder.ll_reply = (LinearLayout) convertView.findViewById(R.id.knowledge_item_items_reply_ll);
 
-            holder.replyList = new ArrayList<>();
-            holder.adpter = new KnowledgeItemsItemReplyAdapter(mActivity, holder.replyList);
-
 
             convertView.setTag(holder);
         } else {
             holder = (Holder) convertView.getTag();
         }
+        holder.replyList = new ArrayList<>();
+        holder.adpter = new KnowledgeItemsItemReplyAdapter(mActivity, list, position);
         final Holder finalTag = holder;
         holder.reply.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -171,13 +170,13 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int positionChild, long id) {
                 LogUtil.e("点击前数量" + list.get(position).items.size());
-                MyToast.showShort(mActivity, "点击条目" + positionChild);
+                //MyToast.showShort(mActivity, "点击条目" + positionChild);
 
                 //调出popuWindow
 //
                 KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity
                         , view
-                        , list.get(position).items.get(positionChild).reply_id);
+                        , list.get(position).items.get(positionChild));
                 replyWindow.setOnData(new KnowledgeReplyPopupWindow_1.OnGetData() {
                     @Override
                     public void onDataCallBack(KnowItemsDataItemsItemsBean replyListDao) {
@@ -190,12 +189,12 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
         holder.ll_host.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyToast.showShort(mActivity, "点击详情" + list.get(position).content);
+                //MyToast.showShort(mActivity, "点击详情" + list.get(position).content);
                 //调出popuWindow
 //
                 KnowledgeReplyPopupWindow_1 replyWindow = new KnowledgeReplyPopupWindow_1(mActivity
                         , view
-                        , list.get(position).id);
+                        , list.get(position));
                 replyWindow.setOnData(new KnowledgeReplyPopupWindow_1.OnGetData() {
                     @Override
                     public void onDataCallBack(KnowItemsDataItemsItemsBean replyListDao) {
@@ -253,7 +252,7 @@ public class KnowledgeItemsItemAdapter extends BaseAdapter {
 
             case 2:
                 //newDao.id = replyList.get(position).reply_id;
-                newDao.reply_id = replyListDao.reply_id;
+                newDao.reply_id = replyListDao.id;
                 break;
         }
 

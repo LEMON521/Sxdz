@@ -19,7 +19,6 @@ import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +26,15 @@ import java.util.List;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.home.WebActivity;
 import cn.net.bjsoft.sxdz.adapter.zdlf.WorkAdapter;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.zdlf.work.WorkBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPJpushUtil;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.RollViewPager;
-
-import static cn.net.bjsoft.sxdz.utils.UrlUtil.apps_url;
 
 /**
  * Created by Zrzc on 2017/3/16.
@@ -131,15 +130,17 @@ public class WorkFragment extends BaseFragment {
             switch (msg.what) {
                 // 对数据进行解析和封装
                 case SUCCESS:
+                    LogUtil.e("成功啦!!!!!!!");
                     classifyData();
                     setData();
-                    dismissProgressDialog();
+//                    dismissProgressDialog();
                     break;
 
                 case ERROR:
                     //
                     //test.setText("网络异常,暂时无法获取数据/n点击刷新");
                     //LogUtil.e("获取到的条目--------失败!!!---");
+
                     dismissProgressDialog();
                     break;
 
@@ -167,21 +168,22 @@ public class WorkFragment extends BaseFragment {
      * 获取数据
      */
     public void getData() {
-        if (workDatas != null) {
-            workDatas = null;
-        }
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
 
-        /**
-         * 工作模块的数据,跟mobile.josn在一个文件夹下面
-         */
-        String url = apps_url + SPUtil.getAppid(mActivity) + "/work_items.json";
-        //String url = TestAddressUtils.test_get_work_url;
+        String url = SPUtil.getApiAuth(mActivity) + "/load";
+        LogUtil.e("url$$$$$$$$$$$$$$getItemsData$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
         RequestParams params = new RequestParams(url);
-        x.http().get(params, new Callback.CommonCallback<String>() {
+        params.addBodyParameter("source_id", "shuxin_work_top");
+
+
+        httpPostUtils.get(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
-            public void onSuccess(String result) {
-                workBean = GsonUtil.getWorkBean(result);
-                if (workBean.result) {
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------获取文章条目----文章信息----------------" + strJson);
+                workBean = GsonUtil.getWorkBean(strJson);
+                if (workBean.code.equals("0")) {
                     //LogUtil.e("获取到的条目-----------" + result);
                     workDatas = workBean.data;
                     message.what = SUCCESS;
@@ -189,24 +191,102 @@ public class WorkFragment extends BaseFragment {
                     message.what = ERROR;
                 }
 
+//                itemsBean = GsonUtil.getKnowledgeItemsBean(strJson);
+//                if (itemsBean.code.equals("0")) {//获取成功
+//                    //LogUtil.e("获取到的条目-----------" + result);
+//
+//
+//                    if (itemsBean.data.items != null && itemsBean.data.items.size() > 0) {
+//
+//                        itemsDataList.addAll(itemsBean.data.items);
+//                        cacheItemsDataList.addAll(itemsBean.data.items);
+//
+//                        get_start = (itemsBean.data.items.size() + Integer.parseInt(get_start)) + "";
+////                    get_cache_start= get_start;
+////                        get_count = itemsBean.data.count;
+//                        message.setVisibility(View.GONE);
+//                        setItemsData();
+//                    } else {
+//                        message.setVisibility(View.VISIBLE);
+//                        MyToast.showShort(mActivity, "已经没有更多的信息!");
+//                    }
+
+//
+//                } else {
+//                }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                //LogUtil.e("获取到的条目--------失败!!!---" + ex);
+
+                LogUtil.e("-----------------获取条目消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取条目消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取条目消息-----------失败方法-----" + element.getMethodName());
+                }
+                MyToast.showShort(mActivity, "获取数据失败!!");
                 message.what = ERROR;
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
+            public void onCancelled(Callback.CancelledException cex) {
 
             }
 
             @Override
             public void onFinished() {
+//                itemsAdapter.notifyDataSetChanged();
                 handlerWork.sendMessage(message);
+                dismissProgressDialog();
             }
         });
+
+
+//        if (workDatas != null) {
+//            workDatas = null;
+//        }
+//
+//        /**
+//         * 工作模块的数据,跟mobile.josn在一个文件夹下面
+//         */
+//        String url = apps_url + SPUtil.getAppid(mActivity) + "/work_items.json";
+//        //String url = TestAddressUtils.test_get_work_url;
+//        RequestParams params = new RequestParams(url);
+//        x.http().get(params, new Callback.CommonCallback<String>() {
+//            @Override
+//            public void onSuccess(String result) {
+//                workBean = GsonUtil.getWorkBean(result);
+//                if (workBean.result) {
+//                    //LogUtil.e("获取到的条目-----------" + result);
+//                    workDatas = workBean.data;
+//                    message.what = SUCCESS;
+//                } else {
+//                    message.what = ERROR;
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                //LogUtil.e("获取到的条目--------失败!!!---" + ex);
+//                message.what = ERROR;
+//            }
+//
+//            @Override
+//            public void onCancelled(CancelledException cex) {
+//
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//                handlerWork.sendMessage(message);
+//            }
+//        });
     }
 
     /**
@@ -507,7 +587,7 @@ public class WorkFragment extends BaseFragment {
         }
     }
 
-    private void setPushNum(Context context){
+    private void setPushNum(Context context) {
         for (int i = 0; i < mainDaos.size(); i++) {
             if (mainDaos.get(i).tag.equals("project")) {
                 mainDaos.get(i).push_count = SPJpushUtil.getProject(context);
@@ -524,7 +604,7 @@ public class WorkFragment extends BaseFragment {
 
         for (int i = 0; i < projectDaos.size(); i++) {
             if (projectDaos.get(i).tag.equals("salereport")) {
-                projectDaos.get(i).push_count = SPJpushUtil.getSalereport(context) ;
+                projectDaos.get(i).push_count = SPJpushUtil.getSalereport(context);
             } else if (projectDaos.get(i).tag.equals("projectstat")) {
                 projectDaos.get(i).push_count = SPJpushUtil.getProjectstat(context);
             }
@@ -534,13 +614,13 @@ public class WorkFragment extends BaseFragment {
 
         for (int i = 0; i < workDaos.size(); i++) {
             if (workDaos.get(i).tag.equals("engineeringlog")) {
-                workDaos.get(i).push_count = SPJpushUtil.getEngineeringlog(context) ;
+                workDaos.get(i).push_count = SPJpushUtil.getEngineeringlog(context);
             } else if (workDaos.get(i).tag.equals("emergency")) {
                 workDaos.get(i).push_count = SPJpushUtil.getEmergency(context);
             } else if (workDaos.get(i).tag.equals("engineeringeval")) {
                 workDaos.get(i).push_count = SPJpushUtil.getEngineeringeval(context);
             } else if (workDaos.get(i).tag.equals("construction")) {
-                workDaos.get(i).push_count = SPJpushUtil.getConstruction(context) ;
+                workDaos.get(i).push_count = SPJpushUtil.getConstruction(context);
             } else if (workDaos.get(i).tag.equals("constructionteam")) {
                 workDaos.get(i).push_count = SPJpushUtil.getConstructionteam(context);
             }
@@ -550,11 +630,11 @@ public class WorkFragment extends BaseFragment {
 
         for (int i = 0; i < otherDaos.size(); i++) {
             if (otherDaos.get(i).tag.equals("weekplan")) {
-                otherDaos.get(i).push_count = SPJpushUtil.getWeekplan(context) ;
+                otherDaos.get(i).push_count = SPJpushUtil.getWeekplan(context);
             } else if (otherDaos.get(i).tag.equals("companyrun")) {
                 otherDaos.get(i).push_count = SPJpushUtil.getCompanyrun(context);
             } else if (otherDaos.get(i).tag.equals("sitemsg")) {
-                otherDaos.get(i).push_count = SPJpushUtil.getSitemsg(context) ;
+                otherDaos.get(i).push_count = SPJpushUtil.getSitemsg(context);
             }
         }
         otherWorkAdapter.notifyDataSetChanged();

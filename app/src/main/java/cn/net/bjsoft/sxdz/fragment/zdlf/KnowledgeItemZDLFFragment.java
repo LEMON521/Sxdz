@@ -513,8 +513,8 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         //head_time.setText(TimeUtils.getTimeDifference(Long.parseLong(hostBean.time)));
         head_time.setText(hostBean.ctime);
 
-        if (hostBean.views!=null) {
-            head_check_count.setText(hostBean.views.size()+1+"");
+        if (hostBean.views != null) {
+            head_check_count.setText(hostBean.views.size() + 1 + "");
         }
 
 
@@ -522,21 +522,24 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
             head_reply_count.setText(hostBean.items.size() + "");
         }
 
+        //获取点赞数量
         if (hostBean.tops != null) {
             for (KnowItemsDataItemsTopsBean top : hostBean.tops) {
                 if (top.userid.equals(SPUtil.getUserId(mActivity))) {
-                    switch (Integer.parseInt(top.valid)) {
-                        case 1:
-                            top_valid = true;
-                            top_count++;
-                            break;
-
-                        case 0:
-                            top_valid = false;
-                            break;
-                    }
-
+                    top_valid = true;
                 }
+                switch (Integer.parseInt(top.valid)) {
+                    case 1:
+
+                        top_count++;
+                        break;
+
+                    case 0:
+                        //top_valid = false;
+                        break;
+                }
+
+
             }
 
             if (top_valid) {

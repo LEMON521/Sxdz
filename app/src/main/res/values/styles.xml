@@ -1,5 +1,8 @@
 <resources>
-
+    <style name="Transparent" parent="android:Theme.Light.NoTitleBar">
+        <!--将Activity的Theme设置成透明-->
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
     <style name="TaskAddAddressListCheckboxStyle" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/task_add_address_list_checkbox_style</item>
     </style>

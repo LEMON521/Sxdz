@@ -1,6 +1,7 @@
 package cn.net.bjsoft.sxdz.adapter.function.form;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,10 +51,17 @@ public class FunctionFormAdapter extends BaseAdapter {
             viewHolder.title = (TextView) convertView
                     .findViewById(R.id.item_function_form_title);
 
+            convertView.setTag(viewHolder);// 不要忘记settag
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.title.setText(formList.get(position).name);
+        if (formList.get(position) != null) {
+            if (!TextUtils.isEmpty(formList.get(position).name)) {
+                viewHolder.title.setText(formList.get(position).name + "");
+            } else {
+                viewHolder.title.setText("未知");
+            }
+        }
 
         return convertView;
     }

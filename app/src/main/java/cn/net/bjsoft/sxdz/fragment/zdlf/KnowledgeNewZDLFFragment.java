@@ -380,7 +380,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
                 sb.append(filesAddList.get(i).file_url);
                 sb.append("\",");
 
-                sb.append("\"url\":\"");
+                sb.append("\"name\":\"");
                 sb.append(filesAddList.get(i).file_name);
                 sb.append("\",");
 
@@ -402,7 +402,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
                 sb.append(picList.get(i).url);
                 sb.append("\",");
 
-                sb.append("\"url\":\"");
+                sb.append("\"name\":\"");
                 sb.append(picList.get(i).pic_name);
                 sb.append("\",");
 

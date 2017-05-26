@@ -348,8 +348,15 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                 knowGroupBean = GsonUtil.getKnowGroupBean(strJson);
                 if (knowGroupBean.code.equals("0")) {//0的时候获取成功
                     //LogUtil.e("获取到的条目-----------" + result);
-                    groupDataList.addAll(knowGroupBean.data.items);
-                    setGroupData();
+                    if (knowGroupBean.data.items != null && knowGroupBean.data.items.size() > 0) {
+                        groupDataList.addAll(knowGroupBean.data.items);
+                        message.setVisibility(View.GONE);
+                        setGroupData();
+                    } else {
+                        message.setVisibility(View.VISIBLE);
+                        MyToast.showShort(mActivity, "没有可要展示的信息!");
+                    }
+
                 } else if (knowGroupBean.code.equals("1")) {
                     MyToast.showShort(mActivity, "获取文章分组失败");
                 }
@@ -573,7 +580,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                     //LogUtil.e("获取到的条目-----------" + result);
 
 
-                    if (itemsBean.data.items.size() > 0) {
+                    if (itemsBean.data.items != null && itemsBean.data.items.size() > 0) {
 
                         itemsDataList.addAll(itemsBean.data.items);
                         cacheItemsDataList.addAll(itemsBean.data.items);
@@ -581,15 +588,11 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                         get_start = (itemsBean.data.items.size() + Integer.parseInt(get_start)) + "";
 //                    get_cache_start= get_start;
 //                        get_count = itemsBean.data.count;
+                        message.setVisibility(View.GONE);
                         setItemsData();
                     } else {
-
-                        MyToast.showShort(mActivity, "已经没有更多的信息!");
-                    }
-                    if (cacheItemsDataList.size() > 0) {
-                        message.setVisibility(View.GONE);
-                    } else {
                         message.setVisibility(View.VISIBLE);
+                        MyToast.showShort(mActivity, "已经没有更多的信息!");
                     }
 
 

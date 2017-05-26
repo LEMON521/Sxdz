@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsItemsBean;
+import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersSingleBean;
 import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 
 /**
  * Created by Zrzc on 2017/3/21.
@@ -32,25 +34,25 @@ public class KnowledgeReplyPopupWindow_1 implements View.OnClickListener {
     private TextView name;
     private EditText edit;
 
-    private String replyTo;
+    private KnowItemsDataItemsItemsBean replyTo;
 
     // 数据接口
     OnGetData mOnGetData;
 
     public KnowledgeReplyPopupWindow_1(FragmentActivity activity
             , View view) {
-        init(activity, view, "");
+        init(activity, view, new KnowItemsDataItemsItemsBean());
     }
 
     public KnowledgeReplyPopupWindow_1(FragmentActivity activity
             , View view
-            , String replyTo) {
+            , KnowItemsDataItemsItemsBean replyTo) {
         init(activity, view, replyTo);
     }
 
     private void init(FragmentActivity activity
             , View view
-            , String replyTo) {
+            , KnowItemsDataItemsItemsBean replyTo) {
         this.activity = activity;
         this.view = view;
         this.replyTo = replyTo;
@@ -75,8 +77,10 @@ public class KnowledgeReplyPopupWindow_1 implements View.OnClickListener {
         name = (TextView) contentView.findViewById(R.id.pop_knowledge_name);
         edit = (EditText) contentView.findViewById(R.id.pop_knowledge_edit);
 
-        name.setText("回复: " + replyTo);
-
+        UsersSingleBean bean = UsersInforUtils.getInstance(activity).getUserInfo(replyTo.userid);
+        if (bean != null) {
+            name.setText("回复: " + bean.nickname);
+        }
         send.setOnClickListener(this);
 
         ColorDrawable cd = new ColorDrawable(0x000000);
@@ -133,7 +137,7 @@ public class KnowledgeReplyPopupWindow_1 implements View.OnClickListener {
 
 //        dao.name = SPUtil.getUserName(activity);
 //        dao.avatar_url = SPUtil.getAvatar(activity);
-        dao.reply_id = replyTo;
+        dao.reply_id = replyTo.id;
 //        dao.time = System.currentTimeMillis() + "";
 
 

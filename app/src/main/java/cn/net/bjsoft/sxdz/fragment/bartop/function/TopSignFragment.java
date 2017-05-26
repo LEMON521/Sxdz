@@ -156,15 +156,15 @@ public class TopSignFragment extends BaseFragment {
         fragmentTag = mBundle.getString("tag");
 
 
-        if (fragmentTag!=null){
-            LogUtil.e("==========fragmentTag==========="+fragmentTag);
+        if (fragmentTag != null) {
+            LogUtil.e("==========fragmentTag===========" + fragmentTag);
             if (fragmentTag.equals("signin")) {//底部栏创建
                 for (int i = 0; i < homepageBeen.size(); i++) {
                     if (homepageBeen.get(i).tag.equals("signin")) {
                         modulesBean.signin = homepageBeen.get(i).tag_params;
                     }
                 }
-            }else if (fragmentTag.equals("sign")){
+            } else if (fragmentTag.equals("sign")) {
                 modulesBean.signin = appBean.modules.signin;
 
             }
@@ -553,7 +553,8 @@ public class TopSignFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e("tag", "onActivityResult");
         if (requestCode == 100) {
-            doPhoto();
+            if (data != null)
+                doPhoto();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

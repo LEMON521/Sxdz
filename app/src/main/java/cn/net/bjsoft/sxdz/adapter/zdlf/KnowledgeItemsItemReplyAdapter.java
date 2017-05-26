@@ -30,12 +30,13 @@ public class KnowledgeItemsItemReplyAdapter extends BaseAdapter {
     private FragmentActivity mActivity;
     private Context context;
     private ArrayList<KnowItemsDataItemsItemsBean> list;
+    private int pPosition = 0;
 
 
-    public KnowledgeItemsItemReplyAdapter(FragmentActivity mActivity, ArrayList<KnowItemsDataItemsItemsBean> list) {
+    public KnowledgeItemsItemReplyAdapter(FragmentActivity mActivity, ArrayList<KnowItemsDataItemsItemsBean> list, int position) {
         this.mActivity = mActivity;
         this.list = list;
-
+        this.pPosition = position;
         for (KnowItemsDataItemsItemsBean dao : list) {
             //LogUtil.e("有数据===" + dao.name);
         }
@@ -45,12 +46,12 @@ public class KnowledgeItemsItemReplyAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return list.size();
+        return list.get(pPosition).items.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        return list.get(pPosition).items.get(position);
     }
 
     @Override
@@ -80,23 +81,45 @@ public class KnowledgeItemsItemReplyAdapter extends BaseAdapter {
         bitmapUtils.configDefaultLoadingImage(R.drawable.get_back_passwoed);//初始化头像
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.get_back_passwoed);//初始化头像
 
-        UsersSingleBean usersSingleBean = UsersInforUtils.getInstance(mActivity).getUserInfo(list.get(position).userid);
-        if (usersSingleBean!=null) {
+        UsersSingleBean usersSingleBean = UsersInforUtils.getInstance(mActivity).getUserInfo(list.get(pPosition).items.get(position).userid);
+        if (usersSingleBean != null) {
             bitmapUtils.display(holder.avatar, usersSingleBean.avatar);
             holder.name_main.setText(usersSingleBean.nickname);
         }
 
 
+        //找父userid
+        {
+            for (KnowItemsDataItemsItemsBean bean : list) {
+                if (bean.id.equals(list.get(pPosition).items.get(position).reply_id)) {
+                    UsersSingleBean rUsersSingleBean = UsersInforUtils.getInstance(mActivity).getUserInfo(bean.userid);
+                    if (rUsersSingleBean != null) {
+                        holder.layer_ll.setVisibility(View.VISIBLE);
+                        holder.name_layer.setText(rUsersSingleBean.nickname);
+                    }else {
+                        holder.layer_ll.setVisibility(View.GONE);
+                    }
+                }
+            }
 
-        //LogUtil.e("有数据="+position+"==" + list.get(position).name);
-        if (!list.get(position).reply_id.equals("")) {
-            holder.layer_ll.setVisibility(View.VISIBLE);
-            //holder.name_layer.setText(list.get(position).reply_id);
-        } else {
-            holder.layer_ll.setVisibility(View.GONE);
+
+
         }
 
-        holder.text.setText(MyBase16.decode(list.get(position).content.substring(3,list.get(position).content.length())));
+
+        //LogUtil.e("有数据="+position+"==" + list.get(position).name);
+//        if (!TextUtils.isEmpty(userId)) {
+//            UsersSingleBean rUsersSingleBean = UsersInforUtils.getInstance(mActivity).getUserInfo(list.get(position).userid);
+//            if (rUsersSingleBean != null) {
+//                holder.layer_ll.setVisibility(View.VISIBLE);
+//                holder.name_layer.setText(rUsersSingleBean.nickname);
+//            }
+//
+//        } else {
+//            holder.layer_ll.setVisibility(View.GONE);
+//        }
+
+        holder.text.setText(MyBase16.decode(list.get(pPosition).items.get(position).content.substring(3, list.get(pPosition).items.get(position).content.length())));
 //        RichText.from(list.get(position).comment_text).autoFix(false).fix(new SimpleImageFixCallback() {
 //            @Override
 //            public void onImageReady(ImageHolder holder, int width, int height) {
@@ -117,7 +140,7 @@ public class KnowledgeItemsItemReplyAdapter extends BaseAdapter {
 
 
 //        holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).time), "-", ":"));
-        holder.time.setText(list.get(position).ctime);
+        holder.time.setText(list.get(pPosition).items.get(position).ctime);
 
 //        holder.reply.setOnClickListener(new View.OnClickListener() {
 //            @Override
