@@ -624,7 +624,7 @@ public class MainActivity extends BaseActivity {
                     LogUtil.e("第一种方法获取的宽高" + WidgetUtils.getWidthHigh(1, mTopBar_ll)[0]);
                     LogUtil.e("第二种方法获取的宽高" + WidgetUtils.getWidthHigh(2, mTopBar_ll)[0]);
                     LogUtil.e("第三种方法获取的宽高" + WidgetUtils.getWidthHigh(3, mTopBar_ll)[0]);
-
+                    showOrHide.setImageResource(R.drawable.zhuijia);
 //                    mTopBar_ll.startAnimation(mUpAnimation);
 //                    main_content.startAnimation(mUpAnimation);
 //                    showOrHide.startAnimation(mUpAnimation);
@@ -639,6 +639,7 @@ public class MainActivity extends BaseActivity {
 //                    mTopBar_ll.startAnimation(mDownAnimation);
 //                    main_content.startAnimation(mDownAnimation);
 //                    showOrHide.startAnimation(mDownAnimation);
+                    showOrHide.setImageResource(R.drawable.shang);
                     LogUtil.e("第一种方法获取的宽高" + WidgetUtils.getWidthHigh(1, mTopBar_ll)[1]);
                     LogUtil.e("第二种方法获取的宽高" + WidgetUtils.getWidthHigh(2, mTopBar_ll)[1]);
                     LogUtil.e("第三种方法获取的宽高" + WidgetUtils.getWidthHigh(3, mTopBar_ll)[1]);

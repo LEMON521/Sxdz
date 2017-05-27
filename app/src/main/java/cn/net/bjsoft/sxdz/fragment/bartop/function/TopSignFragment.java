@@ -552,8 +552,11 @@ public class TopSignFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e("tag", "onActivityResult");
+        LogUtil.e("-----------------onActivityResult----------------" + requestCode);
+
         if (requestCode == 100) {
             if (data != null)
+                LogUtil.e("-----------------设置图片----------------" + data);
                 doPhoto();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -578,7 +581,7 @@ public class TopSignFragment extends BaseFragment {
             photoUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
             /**-----------------*/
-            startActivityForResult(intent, 100);
+            this.startActivityForResult(intent, 100);
         } else {
             Toast.makeText(getActivity(), "内存卡不存在", Toast.LENGTH_LONG).show();
         }

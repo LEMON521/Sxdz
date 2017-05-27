@@ -2,9 +2,7 @@ package cn.net.bjsoft.sxdz.activity.welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.widget.TextView;
@@ -23,24 +21,25 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.BaseActivity;
 import cn.net.bjsoft.sxdz.activity.home.MainActivity;
 import cn.net.bjsoft.sxdz.activity.login.LoginActivity;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
-import cn.net.bjsoft.sxdz.dialog.AppProgressDialog;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 import static cn.net.bjsoft.sxdz.utils.AddressUtils.http_shuxinyun_url;
 import static cn.net.bjsoft.sxdz.utils.UrlUtil.api_base;
+import static cn.net.bjsoft.sxdz.utils.UrlUtil.init_url;
 import static cn.net.bjsoft.sxdz.utils.UrlUtil.users_all;
 
 /**
  * Created by 靳宁宁 on 2017/1/3.
  */
 @ContentView(R.layout.activity_welcome)
-public class NewInitInfoActivity extends FragmentActivity {
+public class NewInitInfoActivity extends BaseActivity {
     @ViewInject(R.id.splash_progress)
     private TextView progressText;
     @ViewInject(R.id.splash_version)
@@ -49,10 +48,10 @@ public class NewInitInfoActivity extends FragmentActivity {
     private FragmentActivity mActivity;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mActivity = this;
-
+        //x.view().inject(this);
         versionText.setText("正在初始化用户数据,请稍后");
         LogUtil.e("=============================NewInitInfoActivity===============================");
         checkAppinfo();
@@ -86,8 +85,9 @@ public class NewInitInfoActivity extends FragmentActivity {
                             //将返回的json传递过去，在下一个页面将必要的参数本地化
                             intent.putExtra("json", SPUtil.getMobileJson(mActivity));
                             // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
-                            finish();
                             startActivity(intent);
+                            finish();
+
                         }
 
                     } else if (code == 0) {
@@ -143,6 +143,7 @@ public class NewInitInfoActivity extends FragmentActivity {
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                SPUtil.setUserJson(mActivity,result);
                 LogUtil.e("-----------------getMyJson----信息----------------" + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
@@ -155,8 +156,9 @@ public class NewInitInfoActivity extends FragmentActivity {
                         //将返回的json传递过去，在下一个页面将必要的参数本地化
                         intent.putExtra("json", SPUtil.getMobileJson(mActivity));
                         //LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
-                        finish();
                         startActivity(intent);
+                        finish();
+
                     }
 
 
@@ -240,8 +242,9 @@ public class NewInitInfoActivity extends FragmentActivity {
                 MyToast.showShort(mActivity, "程序初始化出错,正在重新启动程序");
                 SPUtil.setToken(mActivity, "");
                 Intent intent = new Intent(mActivity, SplashActivity.class);
-                mActivity.finish();
                 mActivity.startActivity(intent);
+                mActivity.finish();
+
 
             }
 
@@ -257,6 +260,11 @@ public class NewInitInfoActivity extends FragmentActivity {
 
     }
 
+    //private void getMobileJson()
+
+
+
+
     private AppBean appBean;
 
     /**
@@ -268,6 +276,7 @@ public class NewInitInfoActivity extends FragmentActivity {
 
         HttpPostUtils postUtils = new HttpPostUtils();
         String url = api_base + "/apps/" + SPUtil.getAppid(mActivity) + "/mobile.json";
+        String url_test = "http://192.168.1.119:8080/android/form" + "/mobile.json";
         RequestParams params = new RequestParams(url);
         postUtils.get(this, params);
         postUtils.OnCallBack(new HttpPostUtils.OnSetData() {
@@ -356,40 +365,68 @@ public class NewInitInfoActivity extends FragmentActivity {
 
             @Override
             public void onFinished() {
+                jump();
 
-                Intent intent = new Intent(mActivity, MainActivity.class);
+            }
+        });
+
+    }
+
+    /**
+     * 页面的跳转
+     */
+    private void jump() {
+
+        if (appBean.loaders.size() == 0) {
+            if (appBean.authentication) {//需要验证
+                if (SPUtil.getToken(this).equals("")) {//未登录状态
+
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    //将返回的json传递过去，在下一个页面将必要的参数本地化
+                    intent.putExtra("json", SPUtil.getMobileJson(mActivity));
+                    // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
+
+                    startActivity(intent);
+                    finish();
+                } else {//登录状态
+                    Intent intent = new Intent(this, NewInitInfoActivity.class);
+                    //将返回的json传递过去，在下一个页面将必要的参数本地化
+                    intent.putExtra("json", SPUtil.getMobileJson(mActivity));
+                    // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
+
+                    startActivity(intent);
+                    finish();
+                    //getUserData();
+                }
+
+            } else {//不需要验证
+                Intent intent = new Intent(this, MainActivity.class);
                 //将返回的json传递过去，在下一个页面将必要的参数本地化
                 intent.putExtra("json", SPUtil.getMobileJson(mActivity));
                 //LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
                 finish();
                 startActivity(intent);
             }
-        });
+        }
+        if (appBean.loaders.size() == 1) {
+            Intent intentJumpOver = new Intent(this, JumpOverActivity.class);
+            //Intent intentJumpOver = new Intent(SplashActivity.this, MainActivity.class);
+            intentJumpOver.putExtra("json", SPUtil.getMobileJson(mActivity));
+            finish();
+            startActivity(intentJumpOver);
 
-    }
-
-    private AppProgressDialog progressDialog;
-
-    public synchronized void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new AppProgressDialog();
+        } else if (appBean.loaders.size() > 1) {//跳到轮播图
+            Intent intent = new Intent(this, CarouselFigureActivity.class);
+            //将返回的json传递过去，在下一个页面将必要的参数本地化
+            intent.putExtra("json", SPUtil.getMobileJson(mActivity));
+            intent.setAction("SplashActivity");
+            //LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
+            finish();
+            startActivity(intent);
 
         }
-        progressDialog.show(this);
-    }
 
-    public void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismissDialog();
-        }
-    }
 
-    public synchronized AppProgressDialog getProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new AppProgressDialog();
-        }
-        return progressDialog;
     }
-
 
 }

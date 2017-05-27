@@ -12,6 +12,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.xutils.common.Callback;
@@ -42,6 +43,11 @@ import cn.net.bjsoft.sxdz.view.RollViewPager;
 @ContentView(R.layout.fragment_work_zdlf)
 public class WorkFragment extends BaseFragment {
 
+
+    @ViewInject(R.id.fragment_work_root)
+    private ScrollView root;//轮播图
+//    @ViewInject(R.id.fragment_work_root_text)
+//    private TextView root_text;//轮播图
     //==================轮播图================
     @ViewInject(R.id.scroll)
     private RelativeLayout scroll;//轮播图
@@ -452,7 +458,12 @@ public class WorkFragment extends BaseFragment {
             ll_other.setVisibility(View.GONE);
         }
 
-        setPushNum(getContext());
+        if (!(scrollListDaos.size() > 0 || functionListDaos.size() > 0)) {
+            root.setVisibility(View.GONE);
+        } else {
+            root.setVisibility(View.VISIBLE);
+            setPushNum(getContext());
+        }
     }
 
     //初始化轮播图-----------------------------开始--------------------------
@@ -475,6 +486,13 @@ public class WorkFragment extends BaseFragment {
             linktoUrlList.clear();
             for (int i = 0; i < scrollListDaos.size(); i++) {
                 titleList.add(scrollListDaos.get(i).file_text);
+
+                String imageUrl = scrollListDaos.get(i).image_url;
+                if (!imageUrl.startsWith("http:")) {
+                    scrollListDaos.get(i).image_url = SPUtil.getUser_ApiData(mActivity) + "/" + imageUrl;
+                }
+
+
                 imgUrlList.add(scrollListDaos.get(i).image_url);
                 linktoUrlList.add(scrollListDaos.get(i).url);
             }
@@ -588,7 +606,7 @@ public class WorkFragment extends BaseFragment {
     }
 
     private void setPushNum(Context context) {
-        if (mainDaos!=null) {
+        if (mainDaos != null) {
             for (int i = 0; i < mainDaos.size(); i++) {
                 if (mainDaos.get(i).tag.equals("project")) {
                     mainDaos.get(i).push_count = SPJpushUtil.getProject(context);
@@ -604,7 +622,7 @@ public class WorkFragment extends BaseFragment {
         }
 
 
-        if (projectDaos!=null) {
+        if (projectDaos != null) {
             for (int i = 0; i < projectDaos.size(); i++) {
                 if (projectDaos.get(i).tag.equals("salereport")) {
                     projectDaos.get(i).push_count = SPJpushUtil.getSalereport(context);
@@ -616,7 +634,7 @@ public class WorkFragment extends BaseFragment {
         }
 
 
-        if (workDaos!=null) {
+        if (workDaos != null) {
             for (int i = 0; i < workDaos.size(); i++) {
                 if (workDaos.get(i).tag.equals("engineeringlog")) {
                     workDaos.get(i).push_count = SPJpushUtil.getEngineeringlog(context);
@@ -634,7 +652,7 @@ public class WorkFragment extends BaseFragment {
         }
 
 
-        if (otherDaos!=null) {
+        if (otherDaos != null) {
             for (int i = 0; i < otherDaos.size(); i++) {
                 if (otherDaos.get(i).tag.equals("weekplan")) {
                     otherDaos.get(i).push_count = SPJpushUtil.getWeekplan(context);

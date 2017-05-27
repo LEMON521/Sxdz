@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.alibaba.sdk.android.push.CloudPushService;
-import com.alibaba.sdk.android.push.CommonCallback;
-import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
@@ -33,6 +28,7 @@ import cn.net.bjsoft.sxdz.activity.login.ForgetPasswordActivity;
 import cn.net.bjsoft.sxdz.activity.login.LoginActivity;
 import cn.net.bjsoft.sxdz.activity.login.RegisterActivity;
 import cn.net.bjsoft.sxdz.activity.welcome.NewInitInfoActivity;
+import cn.net.bjsoft.sxdz.activity.welcome.NewSplashActivity;
 import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
@@ -139,7 +135,7 @@ public class LoginFragment extends BaseFragment {
         } else {
             forget.setVisibility(View.GONE);
         }
-        if (!loginBean.passreset.equals("") && loginBean.canregister) {
+        if (loginBean.resetpassword && loginBean.canregister) {
             line.setVisibility(View.VISIBLE);
         } else {
             line.setVisibility(View.GONE);
@@ -181,37 +177,42 @@ public class LoginFragment extends BaseFragment {
                 LogUtil.e("登录结果" + strJson);
                 loginedBean = GsonUtil.getLoginedBean(strJson);
 
-                if (Integer.parseInt(loginedBean.data.userid) > 0) {//如果登录成功,那么user_id是>0的
+                if (loginedBean.code == 0) {//如果登录成功,那么user_id是>0的
                     loginedDataBean = loginedBean.data;
 
-                    SPUtil.setUserId(getContext(), loginedDataBean.userid);
-                    SPUtil.setToken(getContext(), loginedDataBean.token);
+                    SPUtil.setUserId(getActivity(), loginedDataBean.userid);
+                    SPUtil.setToken(getActivity(), loginedDataBean.token);
                     //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
-                    SPUtil.setAvatar(getContext(), loginedDataBean.avatar);
-                    SPUtil.setLoginUserName(getContext(), loginedDataBean.loginname);
-                    SPUtil.setUsers_SourceId(getContext(), loginedDataBean.source_id + "");
+                    SPUtil.setAvatar(getActivity(), loginedDataBean.avatar);
+                    SPUtil.setLoginUserName(getActivity(), loginedDataBean.loginname);
+                    SPUtil.setUsers_SourceId(getActivity(), loginedDataBean.source_id + "");
 
+                    Intent intent = new Intent(getActivity(), NewInitInfoActivity.class);
+                    //将返回的json传递过去，在下一个页面将必要的参数本地化
+                    // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
+                    startActivity(intent);
+                    getActivity().finish();
 
                     //----------------------按用户id绑定推送-------------------------
-                    String user_id = SPUtil.getUserId(getActivity());
-                    if (!TextUtils.isEmpty(user_id)) {
-                        CloudPushService pushService = PushServiceFactory.getCloudPushService();
-                        pushService.bindAccount(user_id, new CommonCallback() {
-                            @Override
-                            public void onSuccess(String s) {
-                                LogUtil.e("==============初始化绑定成功!!!===============" + s);
-                            }
-
-                            @Override
-                            public void onFailed(String s, String s1) {
-                                LogUtil.e("==============初始化绑定失败!!!===============" + s + "---原因---" + s1);
-                            }
-                        });
-                    }
+//                    String user_id = SPUtil.getUserId(getActivity());
+//                    if (!TextUtils.isEmpty(user_id)) {
+//                        CloudPushService pushService = PushServiceFactory.getCloudPushService();
+//                        pushService.bindAccount(user_id, new CommonCallback() {
+//                            @Override
+//                            public void onSuccess(String s) {
+//                                LogUtil.e("==============初始化绑定成功!!!===============" + s);
+//                            }
+//
+//                            @Override
+//                            public void onFailed(String s, String s1) {
+//                                LogUtil.e("==============初始化绑定失败!!!===============" + s + "---原因---" + s1);
+//                            }
+//                        });
+//                    }
 
 
                     LogUtil.e("登录结果");
-                    getUserData();
+//                    getUserData();
 
                 } else {
 
@@ -259,11 +260,11 @@ public class LoginFragment extends BaseFragment {
                 UserBean userBean = GsonUtil.getUserBean(strJson);
                 SPUtil.setAvatar(getActivity(), userBean.avatar);
 
-                Intent intent = new Intent(mActivity, NewInitInfoActivity.class);
+                Intent intent = new Intent(getActivity(), NewInitInfoActivity.class);
                 //将返回的json传递过去，在下一个页面将必要的参数本地化
                 // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
                 startActivity(intent);
-                mActivity.finish();
+                getActivity().finish();
                 //getOrganizationData();
             }
 
@@ -272,8 +273,8 @@ public class LoginFragment extends BaseFragment {
                 LogUtil.e("我的页面json-----错误" + ex);
                 MyToast.showShort(getActivity(), "程序初始化出错,正在重新启动程序");
                 SPUtil.setToken(getActivity(), "");
-                Intent intent = new Intent(getActivity(), SplashActivity.class);
-                getActivity().startActivity(intent);
+                Intent intent = new Intent(getActivity(), NewSplashActivity.class);
+                startActivity(intent);
                 getActivity().finish();
             }
 

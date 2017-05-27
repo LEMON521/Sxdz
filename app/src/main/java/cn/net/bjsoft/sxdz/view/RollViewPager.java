@@ -203,6 +203,7 @@ public class RollViewPager extends ViewPager {
             ImageOptions imageOptions = new ImageOptions.Builder()
                     .setFailureDrawableId(R.drawable.http_work_loading) //以资源id设置加载失败的动画
                     .setLoadingDrawableId(R.drawable.http_work_loading).build();
+
             x.image().bind(imageView, imgUrlList.get(position),imageOptions);
             //给viewpager添加一个放置了图片的view对象操作
             container.addView(view);

@@ -20,6 +20,7 @@ import cn.net.bjsoft.sxdz.activity.home.MainActivity;
 import cn.net.bjsoft.sxdz.activity.login.LoginActivity;
 import cn.net.bjsoft.sxdz.bean.DatasBean;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 @ContentView(R.layout.activity_jump_over)
 public class JumpOverActivity extends BaseActivity {
@@ -50,20 +51,20 @@ public class JumpOverActivity extends BaseActivity {
                 if (!datasBean.data.authentication) {
                     Intent i3 = new Intent(JumpOverActivity.this, MainActivity.class);
 
-                    i3.putExtra("json", json);
+                    i3.putExtra("json", SPUtil.getMobileJson(JumpOverActivity.this));
                     finish();
                     startActivity(i3);
                 } else {
                     if (datasBean.data.user.logined) {
                         Intent intent = new Intent(JumpOverActivity.this, MainActivity.class);
                         //将返回的json传递过去，在下一个页面将必要的参数本地化
-                        intent.putExtra("json", json);
+                        intent.putExtra("json", SPUtil.getMobileJson(JumpOverActivity.this));
                         // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
                         finish();
                         startActivity(intent);
                     } else {
                         Intent i = new Intent(JumpOverActivity.this, LoginActivity.class);
-                        i.putExtra("json", json);
+                        i.putExtra("json", SPUtil.getMobileJson(JumpOverActivity.this));
                         finish();
                         startActivity(i);
                     }
@@ -116,22 +117,22 @@ public class JumpOverActivity extends BaseActivity {
             if (!datasBean.data.authentication) {
                 Intent i3 = new Intent(this, MainActivity.class);
 
-                i3.putExtra("json", json);
+                i3.putExtra("json",  SPUtil.getMobileJson(this));
                 finish();
                 startActivity(i3);
             } else if (datasBean.data.user.logined) {
                 Intent i3 = new Intent(this, MainActivity.class);
-                i3.putExtra("json", json);
+                i3.putExtra("json", SPUtil.getMobileJson(this));
                 finish();
                 startActivity(i3);
             } else if (!datasBean.data.authentication) {
                 Intent i3 = new Intent(this, MainActivity.class);
-                i3.putExtra("json", json);
+                i3.putExtra("json", SPUtil.getMobileJson(this));
                 finish();
                 startActivity(i3);
             } else if (!datasBean.data.user.logined && datasBean.data.authentication) {
                 Intent i = new Intent(this, LoginActivity.class);
-                i.putExtra("json", json);
+                i.putExtra("json", SPUtil.getMobileJson(this));
                 //i.putExtra("zhuce",initModel.getLogin().getRegister_url());--注册的url已经取消
                 finish();
                 startActivity(i);
@@ -139,7 +140,7 @@ public class JumpOverActivity extends BaseActivity {
 
             } else {
                 Intent i3 = new Intent(this, MainActivity.class);
-                i3.putExtra("json", json);
+                i3.putExtra("json", SPUtil.getMobileJson(this));
                 finish();
                 startActivity(i3);
 

@@ -1,12 +1,17 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.user;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.lidroid.xutils.BitmapUtils;
 
 import org.json.JSONException;
@@ -22,7 +27,9 @@ import org.xutils.x;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.home.MainActivity;
+import cn.net.bjsoft.sxdz.activity.welcome.NewSplashActivity;
 import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
@@ -96,16 +103,108 @@ public class TopUserFragment extends BaseFragment {
                 startActivity(i);
                 SPUtil.setUserUUID(getActivity(), "");
                 getActivity().finish();
+
                 break;
 
-            case R.id.user_function3:
-                Intent intent = new Intent(getActivity(), SplashActivity.class);
-                startActivity(intent);
-                SPUtil.setUserUUID(getActivity(), "");
-                getActivity().finish();
+            case R.id.user_function3://注销
+
+//                Intent intent = new Intent(getActivity(), SplashActivity.class);
+//                startActivity(intent);
+//                SPUtil.setUserUUID(getActivity(), "");
+//                getActivity().finish();
+                new AlertDialog.Builder(mActivity).setTitle("友情提示").setMessage("确定要退出登录吗?")
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 点击“确认”后的操作
+                                logoutOnservice();//从服务器注销
+
+                            }
+                        })
+                        .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 点击“返回”后的操作,这里不设置没有任何操作
+                            }
+                        }).show();
                 break;
         }
     }
+    /**
+     * 告诉服务器__注销登录
+     */
+    private void logoutOnservice() {
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+        RequestParams params = new RequestParams(SPUtil.getLogoutApi(mActivity));
+        //params.setMultipart(true);
+        httpPostUtils.post(mActivity, params);
+
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("logoutOnservice---注销onSuccess" + strJson);
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(strJson);
+                    int code = jsonObject.optInt("code");
+                    if (code == 0) {
+
+
+                        CloudPushService pushService = PushServiceFactory.getCloudPushService();
+                        pushService.unbindAccount(new CommonCallback() {
+                            @Override
+                            public void onSuccess(String s) {
+                                LogUtil.e("推送解绑状态-----成功===" + s);
+                            }
+
+                            @Override
+                            public void onFailed(String s, String s1) {
+                                LogUtil.e("推送解绑状态-----失败===" + s + "::::::" + s1);
+                            }
+                        });
+                        SPUtil.setUserUUID(getActivity(), "");
+                        SPUtil.setUserId(getContext(), "");
+                        SPUtil.setToken(getContext(), "");
+                        SPUtil.setAvatar(getContext(), "");
+
+
+                        Intent i = new Intent(getActivity(), NewSplashActivity.class);
+                        startActivity(i);
+                        getActivity().finish();
+                    } else {
+                        MyToast.showLong(mActivity, "注销失败!");
+                        MyToast.showLong(mActivity, jsonObject.optString("msg"));
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                MyToast.showLong(mActivity, "注销失败,请联系管理员");
+                LogUtil.e("上传失败onError========UpDateAvatar" + ex);
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

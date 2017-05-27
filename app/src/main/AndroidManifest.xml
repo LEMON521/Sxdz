@@ -31,24 +31,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activity.welcome.NewInitInfoActivity"/>
+
         <!--跳过页面-->
         <activity android:name=".activity.welcome.JumpOverActivity">
 
         </activity>
         <!--轮播图页面-->
         <activity android:name=".activity.welcome.CarouselFigureActivity">
-
-        </activity>
-        <!--轮播图页面-->
-        <activity android:name=".activity.welcome.NewJumpOverActivity">
-
-        </activity>
-        <!--轮播图页面-->
-        <activity android:name=".activity.welcome.NewInitInfoActivity">
-
-        </activity>
-        <!--轮播图页面-->
-        <activity android:name=".activity.welcome.NewCarouselFigureActivity">
 
         </activity>
         <activity android:name=".activity.welcome.LinkToActivity">

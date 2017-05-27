@@ -10,6 +10,7 @@
         layout="@layout/top_title" />
 
     <ScrollView
+        android:id="@+id/fragment_work_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
@@ -286,5 +287,14 @@
 
     </ScrollView>
 
+    <TextView
+        android:id="@+id/fragment_work_root_text"
+        android:textColor="#666666"
+        android:textSize="@dimen/dm026"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="没有数据可展示"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

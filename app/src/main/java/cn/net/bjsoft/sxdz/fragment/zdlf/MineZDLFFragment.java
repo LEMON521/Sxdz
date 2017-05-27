@@ -50,7 +50,7 @@ import java.util.Map;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
-import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
+import cn.net.bjsoft.sxdz.activity.welcome.NewSplashActivity;
 import cn.net.bjsoft.sxdz.adapter.zdlf.MineZDLFFunctionAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
@@ -193,8 +193,8 @@ public class MineZDLFFragment extends BaseFragment {
         bitmapUtils.configDefaultLoadingImage(R.drawable.tab_me_n);
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.tab_me_n);
 
-
-        getUserData();
+        setUserData();
+        //getUserData();
     }
 
     /**
@@ -212,10 +212,10 @@ public class MineZDLFFragment extends BaseFragment {
             }
         }
 
-        RequestParams params = new RequestParams(appBean.api_auth + "/position");
+        RequestParams params = new RequestParams(SPUtil.getApiAuth(mActivity) + "/position");
 
         params.addBodyParameter("position_id", position);
-        LogUtil.e("position================" + appBean.api_auth + "/position" + "::::" + position);
+        LogUtil.e("position================" + SPUtil.getApiAuth(mActivity) + "/position" + "::::" + position);
 
         HttpPostUtils httpPostUtil = new HttpPostUtils();
 
@@ -338,6 +338,10 @@ public class MineZDLFFragment extends BaseFragment {
      */
     private void setUserData() {
 
+
+        userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
+        userOrganizationBean = userBean.organization;
+
         LogUtil.e("头像==============" + userBean.avatar);
         bitmapUtils.display(avatar, SPUtil.getAvatar(mActivity));
 
@@ -348,9 +352,12 @@ public class MineZDLFFragment extends BaseFragment {
             //getOrganizationData();
         }
 
-        setPickers();
+        if (userBean.organization.positions!=null){
+            setPickers();
 
-        positions.setText(userBean.organization.positions.get(userBean.organization.position_id));
+            positions.setText(userBean.organization.positions.get(userBean.organization.position_id));
+        }
+
         department.setText(userBean.organization.dept_name);
 
         addinsBeen.clear();
@@ -538,7 +545,7 @@ public class MineZDLFFragment extends BaseFragment {
                         SPUtil.setAvatar(getContext(), "");
 
 
-                        Intent i = new Intent(getActivity(), SplashActivity.class);
+                        Intent i = new Intent(getActivity(), NewSplashActivity.class);
                         startActivity(i);
                         getActivity().finish();
                     } else {
@@ -923,7 +930,7 @@ public class MineZDLFFragment extends BaseFragment {
             photoUri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
             /**-----------------*/
-            startActivityForResult(intent, 100);
+            this.startActivityForResult(intent, 100);
         } else {
             Toast.makeText(getActivity(), "内存卡不存在", Toast.LENGTH_LONG).show();
         }

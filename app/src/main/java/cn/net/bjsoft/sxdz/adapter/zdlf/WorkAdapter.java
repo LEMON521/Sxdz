@@ -81,7 +81,7 @@ public class WorkAdapter extends BaseAdapter {
             holder.work_num.setText(count + "");//注意,这里要将int类型转换为String的!!!!!!!
         }
         if (!list.get(position).image_url.startsWith("http://")) {
-            list.get(position).image_url = SPUtil.getUser_ApiData(context) + list.get(position).image_url;
+            list.get(position).image_url = SPUtil.getUser_ApiData(context) +"/"+ list.get(position).image_url;
         }
         x.image().bind(holder.work_icon, list.get(position).image_url, imageOptions);
         return convertView;
