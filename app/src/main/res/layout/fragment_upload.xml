@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <include
+        android:visibility="gone"
         android:id="@+id/include_title_upload"
         layout="@layout/top_title" />
     <!--<RelativeLayout-->

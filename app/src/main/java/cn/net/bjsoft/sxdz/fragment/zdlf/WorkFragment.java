@@ -588,56 +588,65 @@ public class WorkFragment extends BaseFragment {
     }
 
     private void setPushNum(Context context) {
-        for (int i = 0; i < mainDaos.size(); i++) {
-            if (mainDaos.get(i).tag.equals("project")) {
-                mainDaos.get(i).push_count = SPJpushUtil.getProject(context);
-            } else if (mainDaos.get(i).tag.equals("engineering")) {
-                mainDaos.get(i).push_count = SPJpushUtil.getEngineering(context);
-            } else if (mainDaos.get(i).tag.equals("contract")) {
-                mainDaos.get(i).push_count = SPJpushUtil.getContract(context);
-            } else if (mainDaos.get(i).tag.equals("marketchannel")) {
-                mainDaos.get(i).push_count = SPJpushUtil.getMarketchannel(context);
+        if (mainDaos!=null) {
+            for (int i = 0; i < mainDaos.size(); i++) {
+                if (mainDaos.get(i).tag.equals("project")) {
+                    mainDaos.get(i).push_count = SPJpushUtil.getProject(context);
+                } else if (mainDaos.get(i).tag.equals("engineering")) {
+                    mainDaos.get(i).push_count = SPJpushUtil.getEngineering(context);
+                } else if (mainDaos.get(i).tag.equals("contract")) {
+                    mainDaos.get(i).push_count = SPJpushUtil.getContract(context);
+                } else if (mainDaos.get(i).tag.equals("marketchannel")) {
+                    mainDaos.get(i).push_count = SPJpushUtil.getMarketchannel(context);
+                }
             }
+            mainWorkAdapter.notifyDataSetChanged();
         }
-        mainWorkAdapter.notifyDataSetChanged();
 
 
-        for (int i = 0; i < projectDaos.size(); i++) {
-            if (projectDaos.get(i).tag.equals("salereport")) {
-                projectDaos.get(i).push_count = SPJpushUtil.getSalereport(context);
-            } else if (projectDaos.get(i).tag.equals("projectstat")) {
-                projectDaos.get(i).push_count = SPJpushUtil.getProjectstat(context);
+        if (projectDaos!=null) {
+            for (int i = 0; i < projectDaos.size(); i++) {
+                if (projectDaos.get(i).tag.equals("salereport")) {
+                    projectDaos.get(i).push_count = SPJpushUtil.getSalereport(context);
+                } else if (projectDaos.get(i).tag.equals("projectstat")) {
+                    projectDaos.get(i).push_count = SPJpushUtil.getProjectstat(context);
+                }
             }
+            projectWorkAdapter.notifyDataSetChanged();
         }
-        projectWorkAdapter.notifyDataSetChanged();
 
 
-        for (int i = 0; i < workDaos.size(); i++) {
-            if (workDaos.get(i).tag.equals("engineeringlog")) {
-                workDaos.get(i).push_count = SPJpushUtil.getEngineeringlog(context);
-            } else if (workDaos.get(i).tag.equals("emergency")) {
-                workDaos.get(i).push_count = SPJpushUtil.getEmergency(context);
-            } else if (workDaos.get(i).tag.equals("engineeringeval")) {
-                workDaos.get(i).push_count = SPJpushUtil.getEngineeringeval(context);
-            } else if (workDaos.get(i).tag.equals("construction")) {
-                workDaos.get(i).push_count = SPJpushUtil.getConstruction(context);
-            } else if (workDaos.get(i).tag.equals("constructionteam")) {
-                workDaos.get(i).push_count = SPJpushUtil.getConstructionteam(context);
+        if (workDaos!=null) {
+            for (int i = 0; i < workDaos.size(); i++) {
+                if (workDaos.get(i).tag.equals("engineeringlog")) {
+                    workDaos.get(i).push_count = SPJpushUtil.getEngineeringlog(context);
+                } else if (workDaos.get(i).tag.equals("emergency")) {
+                    workDaos.get(i).push_count = SPJpushUtil.getEmergency(context);
+                } else if (workDaos.get(i).tag.equals("engineeringeval")) {
+                    workDaos.get(i).push_count = SPJpushUtil.getEngineeringeval(context);
+                } else if (workDaos.get(i).tag.equals("construction")) {
+                    workDaos.get(i).push_count = SPJpushUtil.getConstruction(context);
+                } else if (workDaos.get(i).tag.equals("constructionteam")) {
+                    workDaos.get(i).push_count = SPJpushUtil.getConstructionteam(context);
+                }
             }
+            workWorkAdapter.notifyDataSetChanged();
         }
-        workWorkAdapter.notifyDataSetChanged();
 
 
-        for (int i = 0; i < otherDaos.size(); i++) {
-            if (otherDaos.get(i).tag.equals("weekplan")) {
-                otherDaos.get(i).push_count = SPJpushUtil.getWeekplan(context);
-            } else if (otherDaos.get(i).tag.equals("companyrun")) {
-                otherDaos.get(i).push_count = SPJpushUtil.getCompanyrun(context);
-            } else if (otherDaos.get(i).tag.equals("sitemsg")) {
-                otherDaos.get(i).push_count = SPJpushUtil.getSitemsg(context);
+        if (otherDaos!=null) {
+            for (int i = 0; i < otherDaos.size(); i++) {
+                if (otherDaos.get(i).tag.equals("weekplan")) {
+                    otherDaos.get(i).push_count = SPJpushUtil.getWeekplan(context);
+                } else if (otherDaos.get(i).tag.equals("companyrun")) {
+                    otherDaos.get(i).push_count = SPJpushUtil.getCompanyrun(context);
+                } else if (otherDaos.get(i).tag.equals("sitemsg")) {
+                    otherDaos.get(i).push_count = SPJpushUtil.getSitemsg(context);
+                }
             }
+            otherWorkAdapter.notifyDataSetChanged();
         }
-        otherWorkAdapter.notifyDataSetChanged();
+
 
     }
 

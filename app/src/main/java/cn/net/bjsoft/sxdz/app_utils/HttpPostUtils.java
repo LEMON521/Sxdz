@@ -37,6 +37,7 @@ public class HttpPostUtils {
                 int code = jsonObject.optInt("code");
                 if (code == 1) {//请求失败
                     if (jsonObject.optString("msg").equals("unauthorized")) {
+                        LogUtil.e("code = 1------msg==="+jsonObject.optString("msg").equals("unauthorized"));
                         callBackUnauthorized(mActivity);
                     }
 

@@ -7,4 +7,9 @@ import java.io.Serializable;
  */
 
 public class LoadersBean implements Serializable {
+    public String description = "";
+    public String imgurl = "";
+    public String jumpto = "";
+    public String linkto = "";
+    public String text = "";
 }

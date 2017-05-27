@@ -41,6 +41,26 @@ public class SPUtil {
      * position_id----
      * 设置   --   position_id = "position_id"缓存
      */
+    public static void setUser_ApiData(Context context, String api_data) {
+        SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ALL, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("api_data", api_data);
+        editor.commit();
+    }
+
+    /**
+     * source_id ----source_id--获取
+     * 获取  --  source_id = "source_id"缓存
+     */
+    public static String getUser_ApiData(Context context) {
+        SharedPreferences preferences = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ALL, Context.MODE_PRIVATE);
+        return preferences.getString("api_data", "");
+    }
+
+    /**
+     * position_id----
+     * 设置   --   position_id = "position_id"缓存
+     */
     public static void setUsers_PositionId(Context context, String position_id) {
         SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(Constants.USER_KEY_USER_ALL, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();

@@ -9,7 +9,9 @@ import android.content.Context;
  */
 public class UrlUtil {
 
-    public final static String init_url = "http://api.shuxinyun.com/apps/4895081593118139245/mobile.json";
+    public final static String init_url = "http://api.shuxinyun.com/apps/1/mobile.json";
+
+    public final static String api_base = "http://api.shuxinyun.com/";
 
     public final static String apps_url = "http://api.shuxinyun.com/apps/";
 

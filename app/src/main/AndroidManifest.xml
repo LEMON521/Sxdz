@@ -23,7 +23,7 @@
 
         <!--缓冲页面-->
         <activity
-            android:name=".activity.welcome.SplashActivity"
+            android:name=".activity.welcome.NewSplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,6 +37,18 @@
         </activity>
         <!--轮播图页面-->
         <activity android:name=".activity.welcome.CarouselFigureActivity">
+
+        </activity>
+        <!--轮播图页面-->
+        <activity android:name=".activity.welcome.NewJumpOverActivity">
+
+        </activity>
+        <!--轮播图页面-->
+        <activity android:name=".activity.welcome.NewInitInfoActivity">
+
+        </activity>
+        <!--轮播图页面-->
+        <activity android:name=".activity.welcome.NewCarouselFigureActivity">
 
         </activity>
         <activity android:name=".activity.welcome.LinkToActivity">
@@ -55,9 +67,10 @@
         <!--找回密码页面-->
         <activity android:name=".activity.login.RegisterActivity"></activity>
 
+        <!--android:theme="@style/Transparent"透明主题-->
         <!--主页面-->
         <activity
-            android:theme="@style/Transparent"
+
             android:name=".activity.home.MainActivity"
             android:screenOrientation="portrait">
 

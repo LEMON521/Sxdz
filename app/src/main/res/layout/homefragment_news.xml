@@ -6,6 +6,7 @@
     android:background="#EAEAEA"
     android:orientation="vertical">
     <include
+        android:visibility="gone"
         android:id="@+id/include_title_news"
         layout="@layout/top_title" />
     <!--<RelativeLayout-->

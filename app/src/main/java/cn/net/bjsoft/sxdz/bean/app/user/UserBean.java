@@ -10,6 +10,8 @@ import java.util.ArrayList;
 public class UserBean implements Serializable {
     public ArrayList<UserAddinsBean> addins;
     public String avatar = "";//头像
+    public String appid = "";//用户所在的app
+
     public boolean calendar = false;
     public boolean check = false;
     public boolean email = false;

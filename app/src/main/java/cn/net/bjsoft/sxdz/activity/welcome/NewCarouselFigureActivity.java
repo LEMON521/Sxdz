@@ -30,7 +30,7 @@ import cn.net.bjsoft.sxdz.utils.SPUtil;
 /**
  * 轮播图展示
  */
-public class CarouselFigureActivity extends BaseActivity {
+public class NewCarouselFigureActivity extends BaseActivity {
 
     @ViewInject(R.id.viewpager)
     ViewPager viewpager;
@@ -161,7 +161,7 @@ public class CarouselFigureActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.taste:
                 if (!TextUtils.isEmpty(SPUtil.getToken(this))) {
-                    Intent i3 = new Intent(this, MainActivity.class);
+                    Intent i3 = new Intent(this, NewInitInfoActivity.class);
                     i3.putExtra("json", json);
                     startActivity(i3);
                 } else {
@@ -170,7 +170,7 @@ public class CarouselFigureActivity extends BaseActivity {
                         i.putExtra("json", json);
                         startActivity(i);
                     } else {
-                        Intent i3 = new Intent(this, MainActivity.class);
+                        Intent i3 = new Intent(this, NewInitInfoActivity.class);
                         i3.putExtra("json", json);
                         startActivity(i3);
                     }

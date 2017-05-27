@@ -25,6 +25,8 @@ import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
@@ -51,7 +53,7 @@ import cn.net.bjsoft.sxdz.utils.function.ReadFile;
 import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 
 import static cn.net.bjsoft.sxdz.utils.AddressUtils.http_shuxinyun_url;
-import static cn.net.bjsoft.sxdz.utils.UrlUtil.init_url;
+import static cn.net.bjsoft.sxdz.utils.UrlUtil.api_base;
 import static cn.net.bjsoft.sxdz.utils.UrlUtil.users_all;
 
 /**
@@ -435,8 +437,8 @@ public class SplashActivity extends BaseActivity {
 
         LogUtil.e("初始化数据了=================" + SPJpushUtil.getSignin(this));
 
-        getDataFromService();
-        //getDataFromFile();
+        //getDataFromService();
+        getDataFromFile();
         //getUsersInfo();
 
 
@@ -449,16 +451,16 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 result = "{\"users_all\":" + result + "}";
-                LogUtil.e("联系人信息---------字符串-------"+result);
+                LogUtil.e("联系人信息---------字符串-------" + result);
                 SPUtil.setUsersAll(SplashActivity.this, result);
-                LogUtil.e("联系人信息----------------"+SPUtil.getUsersAll(SplashActivity.this));
+                LogUtil.e("联系人信息----------------" + SPUtil.getUsersAll(SplashActivity.this));
 
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 MyToast.showLong(context, "获取联系人信息失败!");
-                LogUtil.e("联系人信息---------字符串失败-------"+ex);
+                LogUtil.e("联系人信息---------字符串失败-------" + ex);
             }
 
             @Override
@@ -508,6 +510,10 @@ public class SplashActivity extends BaseActivity {
         SPUtil.setResetPasswordUrl(SplashActivity.this, appBean.login.passreset);
         SPUtil.setLogoutApi(SplashActivity.this, appBean.login.logoutapi);
         SPUtil.setApiUser(SplashActivity.this, appBean.api_user);
+//        String api_data = appBean.api_auth;
+//        api_data = api_data.replace("data", "");
+//        SPUtil.setUser_ApiData(SplashActivity.this, api_data);
+        SPUtil.setUser_ApiData(SplashActivity.this, appBean.api_data);
 //        SPUtil.setHomepageBean(SplashActivity.this, appBean.homepage.toString());
 //
 //        LogUtil.e("-----@@@@@@-----getHomepageBean------%%%%%%%%%----"+SPUtil.getHomepageBean(mActivity));
@@ -539,7 +545,8 @@ public class SplashActivity extends BaseActivity {
     private void getDataFromService() {
 
         HttpPostUtils postUtils = new HttpPostUtils();
-        RequestParams params = new RequestParams(init_url);
+        String url = api_base + "/apps/" + SPUtil.getAppid(SplashActivity.this) + "/mobile.json";
+        RequestParams params = new RequestParams(url);
         postUtils.get(this, params);
         postUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
@@ -552,6 +559,7 @@ public class SplashActivity extends BaseActivity {
                 SPUtil.setResetPasswordUrl(SplashActivity.this, appBean.login.passreset);
                 SPUtil.setLogoutApi(SplashActivity.this, appBean.login.logoutapi);
                 SPUtil.setApiUser(SplashActivity.this, appBean.api_user);
+                SPUtil.setUser_ApiData(SplashActivity.this, appBean.api_data);
 
 
                 //----------------------按用户id绑定推送-------------------------
@@ -611,8 +619,11 @@ public class SplashActivity extends BaseActivity {
         httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
+                LogUtil.e("----------用户信息----------" + strJson);
                 SPUtil.setUserJson(mActivity, strJson);//缓存用户信息
                 getOrganizationData();
+
+
             }
 
             @Override
@@ -632,6 +643,7 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
+
             }
         });
     }
@@ -653,13 +665,28 @@ public class SplashActivity extends BaseActivity {
                 SPUtil.setUserOrganizationJson(mActivity, strJson);//缓存公司架构信息
                 //LogUtil.e("我的页面json");
 //                LogUtil.e("公司架构==========="+SPUtil.getUserOrganizationJson(mActivity));
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                //将返回的json传递过去，在下一个页面将必要的参数本地化
-                LogUtil.e("----------getMobileJson-----------" + SPUtil.getMobileJson(mActivity));
-                intent.putExtra("json", SPUtil.getMobileJson(mActivity));
-                // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
-                finish();
-                startActivity(intent);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(strJson);
+                    String appid = jsonObject.optString("appid");
+
+                    if (!TextUtils.isEmpty(appid) && !appid.equals(SPUtil.getAppid(SplashActivity.this))) {
+                        SPUtil.setAppid(SplashActivity.this, appid);
+                        getDataFromService();
+                    } else {
+                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                        //将返回的json传递过去，在下一个页面将必要的参数本地化
+                        LogUtil.e("----------getMobileJson-----------" + SPUtil.getMobileJson(mActivity));
+                        intent.putExtra("json", SPUtil.getMobileJson(mActivity));
+                        // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
+                        finish();
+                        startActivity(intent);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
@@ -738,6 +765,71 @@ public class SplashActivity extends BaseActivity {
 //        });
 //    }
 
+    private void checkApp() {
+        showProgressDialog();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/check";
+        LogUtil.e("url$$$$$$$$$$$$$$getItemsData$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("token", SPUtil.getToken(SplashActivity.this));
+
+
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                LogUtil.e("-----------------checkApp----信息----------------" + result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    int code = jsonObject.optInt("code");
+                    if (code == 1) {//请求失败
+                        if (jsonObject.optString("msg").equals("unauthorized")) {
+                            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                            //将返回的json传递过去，在下一个页面将必要的参数本地化
+                            intent.putExtra("json", SPUtil.getMobileJson(mActivity));
+                            // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
+                            finish();
+                            startActivity(intent);
+                        }
+
+                    } else if (code == 0) {
+                        SPUtil.setUserId(SplashActivity.this, jsonObject.optString("data"));
+                        getUserData();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                LogUtil.e("-----------------获取条目消息----------失败------" + ex.getLocalizedMessage());
+                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex.getMessage());
+                LogUtil.e("-----------------获取条目消息----------失败------" + ex.getCause());
+                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex.getStackTrace());
+                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex);
+                ex.printStackTrace();
+                StackTraceElement[] elements = ex.getStackTrace();
+                for (StackTraceElement element : elements) {
+                    LogUtil.e("-----------------获取条目消息-----------失败方法-----" + element.getMethodName());
+                }
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
+
+    }
 
     /**
      * 页面的跳转
@@ -755,7 +847,8 @@ public class SplashActivity extends BaseActivity {
                     finish();
                     startActivity(intent);
                 } else {//登录状态
-                    getUserData();
+                    checkApp();
+                    //getUserData();
                 }
 
             } else {//不需要验证

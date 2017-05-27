@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.zdlf.work.WorkBean;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 /**
  * 中电联发---work页面的功能列表适配器
@@ -77,7 +78,10 @@ public class WorkAdapter extends BaseAdapter {
             holder.work_num.setVisibility(View.INVISIBLE);
         } else {
             holder.work_num.setVisibility(View.VISIBLE);
-            holder.work_num.setText(count + "");//注意,这里要讲int类型转换为String的!!!!!!!
+            holder.work_num.setText(count + "");//注意,这里要将int类型转换为String的!!!!!!!
+        }
+        if (!list.get(position).image_url.startsWith("http://")) {
+            list.get(position).image_url = SPUtil.getUser_ApiData(context) + list.get(position).image_url;
         }
         x.image().bind(holder.work_icon, list.get(position).image_url, imageOptions);
         return convertView;

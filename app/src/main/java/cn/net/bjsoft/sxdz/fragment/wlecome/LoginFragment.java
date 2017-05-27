@@ -32,6 +32,7 @@ import cn.net.bjsoft.sxdz.activity.home.bartop.UserActivity;
 import cn.net.bjsoft.sxdz.activity.login.ForgetPasswordActivity;
 import cn.net.bjsoft.sxdz.activity.login.LoginActivity;
 import cn.net.bjsoft.sxdz.activity.login.RegisterActivity;
+import cn.net.bjsoft.sxdz.activity.welcome.NewInitInfoActivity;
 import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
@@ -258,7 +259,12 @@ public class LoginFragment extends BaseFragment {
                 UserBean userBean = GsonUtil.getUserBean(strJson);
                 SPUtil.setAvatar(getActivity(), userBean.avatar);
 
-                getOrganizationData();
+                Intent intent = new Intent(mActivity, NewInitInfoActivity.class);
+                //将返回的json传递过去，在下一个页面将必要的参数本地化
+                // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
+                startActivity(intent);
+                mActivity.finish();
+                //getOrganizationData();
             }
 
             @Override

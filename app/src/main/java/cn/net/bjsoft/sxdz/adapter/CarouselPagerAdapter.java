@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.welcome.LinkToActivity;
-import cn.net.bjsoft.sxdz.bean.DatasBean;
+import cn.net.bjsoft.sxdz.bean.app.LoadersBean;
 
 /**
  * 轮播图
@@ -24,10 +24,10 @@ import cn.net.bjsoft.sxdz.bean.DatasBean;
 public class CarouselPagerAdapter extends PagerAdapter {
     private Context mContext;
     private LayoutInflater inflater;
-    private ArrayList<DatasBean.LoadersDao> imgStr=new ArrayList<DatasBean.LoadersDao>();//如果图片是从网上获取
+    private ArrayList<LoadersBean> imgStr=new ArrayList<LoadersBean>();//如果图片是从网上获取
     private ArrayList<View> mViewArrayList = new ArrayList<View>();
 
-    public CarouselPagerAdapter(Context mContext, ArrayList<DatasBean.LoadersDao> imgStr) {
+    public CarouselPagerAdapter(Context mContext, ArrayList<LoadersBean> imgStr) {
         this.mContext = mContext;
         if (imgStr!=null&&imgStr.size()!=0){
             for (int i = 0; i < imgStr.size(); i++) {
