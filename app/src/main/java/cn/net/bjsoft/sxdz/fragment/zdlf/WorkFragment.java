@@ -187,7 +187,7 @@ public class WorkFragment extends BaseFragment {
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
-                LogUtil.e("-----------------获取文章条目----文章信息----------------" + strJson);
+                LogUtil.e("-----------------获取工作条目条目----工作模块信息----------------" + strJson);
                 workBean = GsonUtil.getWorkBean(strJson);
                 if (workBean.code.equals("0")) {
                     //LogUtil.e("获取到的条目-----------" + result);

@@ -13,7 +13,6 @@ import org.xutils.view.annotation.ContentView;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
-import cn.net.bjsoft.sxdz.activity.home.MainActivity;
 import cn.net.bjsoft.sxdz.activity.login.LoginActivity;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.AppBean;
@@ -238,57 +237,6 @@ public class NewSplashActivity extends BaseActivity {
     }
 
 
-    /**
-     * 页面的跳转
-     */
-    private void jump() {
 
-        if (appBean.loaders.size() == 0) {
-            if (appBean.authentication) {//需要验证
-                if (SPUtil.getToken(this).equals("")) {//未登录状态
-
-                    Intent intent = new Intent(NewSplashActivity.this, LoginActivity.class);
-                    //将返回的json传递过去，在下一个页面将必要的参数本地化
-                    intent.putExtra("json", SPUtil.getMobileJson(mActivity));
-                    // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
-                    finish();
-                    startActivity(intent);
-                } else {//登录状态
-                    //checkApp();
-                    //getUserData();
-                    Intent intent = new Intent(NewSplashActivity.this, NewSplashActivity.class);
-                    //将返回的json传递过去，在下一个页面将必要的参数本地化
-                    intent.putExtra("json", SPUtil.getMobileJson(mActivity));
-                    // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
-                    finish();
-                    startActivity(intent);
-                }
-
-            } else {//不需要验证
-                Intent intent = new Intent(NewSplashActivity.this, MainActivity.class);
-                //将返回的json传递过去，在下一个页面将必要的参数本地化
-                intent.putExtra("json", SPUtil.getMobileJson(mActivity));
-                //LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
-                finish();
-                startActivity(intent);
-            }
-        }
-        if (appBean.loaders.size() == 1) {
-            Intent intentJumpOver = new Intent(NewSplashActivity.this, JumpOverActivity.class);
-            //Intent intentJumpOver = new Intent(SplashActivity.this, MainActivity.class);
-            intentJumpOver.putExtra("json", SPUtil.getMobileJson(mActivity));
-            finish();
-            startActivity(intentJumpOver);
-
-        } else if (appBean.loaders.size() > 1) {//跳到轮播图
-            Intent intent = new Intent(NewSplashActivity.this, CarouselFigureActivity.class);
-            //将返回的json传递过去，在下一个页面将必要的参数本地化
-            intent.putExtra("json", SPUtil.getMobileJson(mActivity));
-            intent.setAction("SplashActivity");
-            //LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
-            finish();
-            startActivity(intent);
-        }
-    }
 
 }

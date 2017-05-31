@@ -12,7 +12,7 @@ import org.xutils.common.util.LogUtil;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
+import cn.net.bjsoft.sxdz.activity.welcome.NewSplashActivity;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 
@@ -129,7 +129,7 @@ public class HttpPostUtils {
                             SPUtil.setAvatar(activity, "");
 
 
-                            Intent i = new Intent(activity, SplashActivity.class);
+                            Intent i = new Intent(activity, NewSplashActivity.class);
                             activity.startActivity(i);
                             //activity.finish();
 

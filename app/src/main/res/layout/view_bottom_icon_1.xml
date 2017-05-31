@@ -122,6 +122,7 @@
         android:layout_gravity="center">
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/view_bottom_num"
             android:layout_width="@dimen/dm024"
             android:layout_height="@dimen/dm024"

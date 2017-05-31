@@ -357,7 +357,7 @@ public class MineAddressListFragment extends BaseFragment {
 
         addressBean = GsonUtil.getAddressBean(SPUtil.getUserOrganizationJson(mActivity));
 
-         LogUtil.e("==================组织架构信息========================" + SPUtil.getUserOrganizationJson(mActivity));
+        LogUtil.e("==================组织架构信息========================" + SPUtil.getUserOrganizationJson(mActivity));
 
         if (addressBean == null) {//如果为空,就return
             MyToast.showShort(mActivity, "获取通讯录信息失败!");
@@ -564,7 +564,7 @@ public class MineAddressListFragment extends BaseFragment {
                             bean.name = addressPositionsBean.employee.name;
 //                            bean.employee_id = addressPositionsBean.employee_id;
                             bean.company_id = addressDeptsBean.company_id;
-                            LogUtil.e("添加子节点=======bean.id=====" + bean.name+"::"+addressPositionsBean.type);
+                            LogUtil.e("添加子节点=======bean.id=====" + bean.name + "::" + addressPositionsBean.type);
                             if (addressPositionsBean.type.equals("1")) {
                                 addressDeptsBean.children.add(bean);
                             }
@@ -660,7 +660,7 @@ public class MineAddressListFragment extends BaseFragment {
 
                     if (node.getCompanysBean().deptsBean != null) {
                         //MyToast.showShort(mActivity,"点击了");
-                        if (node.getCompanysBean().deptsBean.positionsBean!=null) {//有联系人再判断是否有号码
+                        if (node.getCompanysBean().deptsBean.positionsBean != null) {//有联系人再判断是否有号码
                             if (TextUtils.isEmpty(node.getCompanysBean().deptsBean.positionsBean.employee.phone)) {
                                 MyToast.showShort(mActivity, "该联系人没有设置电话号码!");
                             } else {

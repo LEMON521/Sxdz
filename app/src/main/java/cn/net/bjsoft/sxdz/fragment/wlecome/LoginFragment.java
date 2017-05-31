@@ -179,21 +179,23 @@ public class LoginFragment extends BaseFragment {
 
                 if (loginedBean.code == 0) {//如果登录成功,那么user_id是>0的
                     loginedDataBean = loginedBean.data;
+                    if (Long.parseLong(loginedDataBean.userid) > 0) {
 
-                    SPUtil.setUserId(getActivity(), loginedDataBean.userid);
-                    SPUtil.setToken(getActivity(), loginedDataBean.token);
-                    //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
-                    SPUtil.setAvatar(getActivity(), loginedDataBean.avatar);
-                    SPUtil.setLoginUserName(getActivity(), loginedDataBean.loginname);
-                    SPUtil.setUsers_SourceId(getActivity(), loginedDataBean.source_id + "");
 
-                    Intent intent = new Intent(getActivity(), NewInitInfoActivity.class);
-                    //将返回的json传递过去，在下一个页面将必要的参数本地化
-                    // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
-                    startActivity(intent);
-                    getActivity().finish();
+                        SPUtil.setUserId(getActivity(), loginedDataBean.userid);
+                        SPUtil.setToken(getActivity(), loginedDataBean.token);
+                        //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
+                        SPUtil.setAvatar(getActivity(), loginedDataBean.avatar);
+                        SPUtil.setLoginUserName(getActivity(), loginedDataBean.loginname);
+                        SPUtil.setUsers_SourceId(getActivity(), loginedDataBean.source_id + "");
 
-                    //----------------------按用户id绑定推送-------------------------
+                        Intent intent = new Intent(getActivity(), NewInitInfoActivity.class);
+                        //将返回的json传递过去，在下一个页面将必要的参数本地化
+                        // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
+                        startActivity(intent);
+                        getActivity().finish();
+
+                        //----------------------按用户id绑定推送-------------------------
 //                    String user_id = SPUtil.getUserId(getActivity());
 //                    if (!TextUtils.isEmpty(user_id)) {
 //                        CloudPushService pushService = PushServiceFactory.getCloudPushService();
@@ -211,8 +213,13 @@ public class LoginFragment extends BaseFragment {
 //                    }
 
 
-                    LogUtil.e("登录结果");
+                        LogUtil.e("登录结果");
 //                    getUserData();
+                    } else {
+                        MyToast.showLong(getActivity(), "登录失败,用户名或密码错误");
+                        passEdit.setText("");
+                    }
+
 
                 } else {
 

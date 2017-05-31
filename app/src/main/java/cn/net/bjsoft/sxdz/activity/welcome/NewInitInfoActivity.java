@@ -32,7 +32,6 @@ import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 import static cn.net.bjsoft.sxdz.utils.AddressUtils.http_shuxinyun_url;
 import static cn.net.bjsoft.sxdz.utils.UrlUtil.api_base;
-import static cn.net.bjsoft.sxdz.utils.UrlUtil.init_url;
 import static cn.net.bjsoft.sxdz.utils.UrlUtil.users_all;
 
 /**
@@ -148,16 +147,21 @@ public class NewInitInfoActivity extends BaseActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String appid = jsonObject.optString("appid");
+                    LogUtil.e("----------appid-----------"+(!TextUtils.isEmpty(appid) && appid.equals(SPUtil.getAppid(mActivity)))+"::sppid=="+appid);
+                    LogUtil.e("-----------------appid----信息----------------" + appid+"::SPUtil.getAppid=="+SPUtil.getAppid(mActivity));
                     if (!TextUtils.isEmpty(appid) && !appid.equals(SPUtil.getAppid(mActivity))) {
                         SPUtil.setAppid(mActivity, appid);
                         getMobileJson();
+
                     } else {
-                        Intent intent = new Intent(mActivity, MainActivity.class);
-                        //将返回的json传递过去，在下一个页面将必要的参数本地化
-                        intent.putExtra("json", SPUtil.getMobileJson(mActivity));
-                        //LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
-                        startActivity(intent);
-                        finish();
+                        getOrganizationData();
+                        getUsersInfo();
+//                        Intent intent = new Intent(mActivity, MainActivity.class);
+//                        //将返回的json传递过去，在下一个页面将必要的参数本地化
+//                        intent.putExtra("json", SPUtil.getMobileJson(mActivity));
+//                        //LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
+//                        startActivity(intent);
+//                        finish();
 
                     }
 
@@ -273,7 +277,7 @@ public class NewInitInfoActivity extends BaseActivity {
 
     private void getMobileJson() {
 
-
+        LogUtil.e("------------------getMobileJson---------------------");
         HttpPostUtils postUtils = new HttpPostUtils();
         String url = api_base + "/apps/" + SPUtil.getAppid(mActivity) + "/mobile.json";
         String url_test = "http://192.168.1.119:8080/android/form" + "/mobile.json";
@@ -376,7 +380,7 @@ public class NewInitInfoActivity extends BaseActivity {
      * 页面的跳转
      */
     private void jump() {
-
+        appBean = GsonUtil.getAppBean(SPUtil.getMobileJson(this));
         if (appBean.loaders.size() == 0) {
             if (appBean.authentication) {//需要验证
                 if (SPUtil.getToken(this).equals("")) {//未登录状态
@@ -389,7 +393,7 @@ public class NewInitInfoActivity extends BaseActivity {
                     startActivity(intent);
                     finish();
                 } else {//登录状态
-                    Intent intent = new Intent(this, NewInitInfoActivity.class);
+                    Intent intent = new Intent(this, MainActivity.class);
                     //将返回的json传递过去，在下一个页面将必要的参数本地化
                     intent.putExtra("json", SPUtil.getMobileJson(mActivity));
                     // LogUtil.e("datasBean.data.loaders.size()" +datasBean.data.loaders.size());
