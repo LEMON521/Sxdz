@@ -172,7 +172,7 @@ public class BottomIconView_2 extends LinearLayout {
         this.mode = mode;
         this.icon = icon;
 
-        int iconRes = context.getResources().getIdentifier(icon + "_n", "mipmap", context.getPackageName());
+        int iconRes = context.getResources().getIdentifier(icon.trim() + "_n", "mipmap", context.getPackageName());
 
         //没有指定排列方式
         if (mode.equals("")) {
@@ -331,7 +331,7 @@ public class BottomIconView_2 extends LinearLayout {
      */
 //    topIv.setImageResource(context.getResources().getIdentifier("aid_btn_new", "mipmap", context.getPackageName()));
     public void setDefaultImage(String url) {
-        int iconRes = context.getResources().getIdentifier(icon + "_n", "mipmap", context.getPackageName());
+        int iconRes = context.getResources().getIdentifier(icon.trim() + "_n", "mipmap", context.getPackageName());
         if (mode.equals("")) {
             mode = "top";
         }
@@ -406,7 +406,7 @@ public class BottomIconView_2 extends LinearLayout {
      */
 //    topIv.setImageResource(context.getResources().getIdentifier("aid_btn_new", "mipmap", context.getPackageName()));
     public void setClickImage(String url) {
-        int iconRes = context.getResources().getIdentifier(icon + "_s", "mipmap", context.getPackageName());
+        int iconRes = context.getResources().getIdentifier(icon.trim() + "_s", "mipmap", context.getPackageName());
         if (mode.equals("")) {
             mode = "top";
         }

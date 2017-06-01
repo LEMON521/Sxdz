@@ -62,20 +62,20 @@ public class TreeAddressZDLFAdapter<T> extends TreeListViewAdapter<T> {
         }
 
 
-        if (node.getCompanysBean().deptsBean != null) {//空的话为公司
+        if (node.getAddressDeptsBean() != null) {//空的话为公司
 
-            if (node.getCompanysBean().deptsBean.positionsBean != null) {//空的话为部门
+            if (node.getAddressDeptsBean().positionsBean != null) {//空的话为部门
                 viewHolder.parent_ll.setVisibility(View.GONE);
                 viewHolder.child_ll.setVisibility(View.VISIBLE);
                 String avatar_url = "";
-                if (node.getCompanysBean().deptsBean.positionsBean.employee.user != null) {
+                if (node.getAddressDeptsBean().positionsBean.employee.user != null) {
                     //防止后端给的数据是残疾的--要判空
-                    avatar_url = node.getCompanysBean().deptsBean.positionsBean.employee.user.avatar;
+                    avatar_url = node.getAddressDeptsBean().positionsBean.employee.user.avatar;
                 }
                 bitmapUtils.display(viewHolder.child_icon, avatar_url);
                 //x.image().bind(viewHolder.child_icon, node.getAvatar_url());
                 viewHolder.child_name.setText(node.getName());
-                viewHolder.child_num.setText(node.getCompanysBean().deptsBean.positionsBean.employee.phone);
+                viewHolder.child_num.setText(node.getAddressDeptsBean().positionsBean.employee.phone);
 
             }
             else {

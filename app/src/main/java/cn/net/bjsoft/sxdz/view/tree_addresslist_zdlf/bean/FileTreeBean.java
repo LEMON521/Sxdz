@@ -1,41 +1,42 @@
 package cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean;
 
-import cn.net.bjsoft.sxdz.bean.app.user.address.AddressCompanysBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
 
 public class FileTreeBean {
     @TreeNodeId
-    private Long _id;
+    private String _id;
     @TreeNodePid
-    private Long parentId;
+    private String parentId;
     @TreeNodeName
     private String name;
-    @TreeNodeAddressCompanysBean
-    private AddressCompanysBean companysBean;
+
+    @TreeNodeAddressDeptsBean
+    private AddressDeptsBean addressDeptsBean;
 
 
 
-    public FileTreeBean(Long _id, Long parentId, String name, AddressCompanysBean companysBean) {
+    public FileTreeBean(String _id, String parentId, String name, AddressDeptsBean addressDeptsBean) {
         super();
         this._id = _id;
         this.parentId = parentId;
         this.name = name;
-        this.companysBean = companysBean;
+        this.addressDeptsBean = addressDeptsBean;
     }
 
 
-    public Long get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(Long _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 
-    public Long getParentId() {
+    public String getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
     }
 
@@ -46,12 +47,12 @@ public class FileTreeBean {
     public void setName(String name) {
         this.name = name;
     }
-    public AddressCompanysBean getCompanysBean() {
-        return companysBean;
+
+    public AddressDeptsBean getAddressDeptsBean() {
+        return addressDeptsBean;
     }
 
-    public void setCompanysBean(AddressCompanysBean companysBean) {
-        this.companysBean = companysBean;
+    public void setAddressDeptsBean(AddressDeptsBean addressDeptsBean) {
+        this.addressDeptsBean = addressDeptsBean;
     }
-
 }

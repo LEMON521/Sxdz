@@ -1,13 +1,14 @@
 package cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper;
 
+import org.xutils.common.util.LogUtil;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.bean.app.user.address.AddressCompanysBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
-import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeAddressCompanysBean;
+import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeAddressDeptsBean;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeId;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodeName;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.TreeNodePid;
@@ -82,37 +83,40 @@ public class TreeHelper {
         TreeNode node = null;
 
         for (T t : datas) {
-            Long id = -1l;
-            Long pId = -1l;
+            String id = "";
+            String pId = "";
             String name = null;
-            AddressCompanysBean companysBean = null;
+            AddressDeptsBean addressDeptsBean = null;
 
             Class<? extends Object> clazz = t.getClass();
             Field[] declaredFields = clazz.getDeclaredFields();
             for (Field f : declaredFields) {
                 if (f.getAnnotation(TreeNodeId.class) != null) {
                     f.setAccessible(true);
-                    id = (Long) f.get(t);
+                    id = (String) f.get(t);
+                    LogUtil.e("==========UnderlingId=========" + id);
                 }
                 if (f.getAnnotation(TreeNodePid.class) != null) {
                     f.setAccessible(true);
-                    pId = (Long) f.get(t);
+                    pId = (String) f.get(t);
+                    LogUtil.e("==========UnderlingpId=========" + pId);
                 }
                 if (f.getAnnotation(TreeNodeName.class) != null) {
                     f.setAccessible(true);
                     name = (String) f.get(t);
+                    LogUtil.e("==========UnderlingPosition====name=====" + name);
                 }
-                if (f.getAnnotation(TreeNodeAddressCompanysBean.class) != null) {
+                if (f.getAnnotation(TreeNodeAddressDeptsBean.class) != null) {
                     f.setAccessible(true);
-                    companysBean = (AddressCompanysBean) f.get(t);
+                    addressDeptsBean = (AddressDeptsBean) f.get(t);
+                    LogUtil.e("==========AddressDeptsBean====name=====" + addressDeptsBean);
                 }
 
-
-                if (id != -1 && pId != -1 && name != null) {
+                if (id != "" && pId != "" && name != null) {
                     break;
                 }
             }
-            node = new TreeNode(id, pId, name,companysBean);
+            node = new TreeNode(id, pId, name, addressDeptsBean);
             nodes.add(node);
         }
 
@@ -123,10 +127,21 @@ public class TreeHelper {
             TreeNode n = nodes.get(i);
             for (int j = i + 1; j < nodes.size(); j++) {
                 TreeNode m = nodes.get(j);
-                if (m.getpId() == n.getId()) {
+
+                LogUtil.e(m.toString());
+                LogUtil.e(m.toString());
+
+                LogUtil.e(m.getpId());
+                LogUtil.e(m.getId());
+
+                LogUtil.e(n.getpId());
+                LogUtil.e(n.getId());
+
+
+                if (m.getpId().equals(n.getId())) {
                     n.getChildren().add(m);
                     m.setParent(n);
-                } else if (m.getId() == n.getpId()) {
+                } else if (m.getId().equals(n.getpId())) {
                     m.getChildren().add(n);
                     n.setParent(m);
                 }

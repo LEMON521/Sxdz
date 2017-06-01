@@ -3,15 +3,15 @@ package cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.net.bjsoft.sxdz.bean.app.user.address.AddressCompanysBean;
+import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
 
 public class TreeNode {
 
-    private Long id;
+    private String id;
     /**
      * 根节点pId为0
      */
-    private Long pId = 0l;
+    private String pId;
 
 
     //显示样式
@@ -40,17 +40,15 @@ public class TreeNode {
     private TreeNode parent;
 
 
+    private AddressDeptsBean addressDeptsBean;
 
 
-    private AddressCompanysBean companysBean;
-
-
-    public TreeNode(Long id, Long pId, String name,AddressCompanysBean companysBean) {
+    public TreeNode(String id, String pId, String name, AddressDeptsBean addressDeptsBean) {
         super();
         this.id = id;
         this.pId = pId;
         this.name = name;
-        this.companysBean = companysBean;
+        this.addressDeptsBean = addressDeptsBean;
 
     }
 
@@ -63,19 +61,19 @@ public class TreeNode {
         this.icon = icon;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getpId() {
+    public String getpId() {
         return pId;
     }
 
-    public void setpId(Long pId) {
+    public void setpId(String pId) {
         this.pId = pId;
     }
 
@@ -111,12 +109,12 @@ public class TreeNode {
         this.name = name;
     }
 
-    public AddressCompanysBean getCompanysBean() {
-        return companysBean;
+    public AddressDeptsBean getAddressDeptsBean() {
+        return addressDeptsBean;
     }
 
-    public void setCompanysBean(AddressCompanysBean companysBean) {
-        this.companysBean = companysBean;
+    public void setAddressDeptsBean(AddressDeptsBean addressDeptsBean) {
+        this.addressDeptsBean = addressDeptsBean;
     }
 
     /**

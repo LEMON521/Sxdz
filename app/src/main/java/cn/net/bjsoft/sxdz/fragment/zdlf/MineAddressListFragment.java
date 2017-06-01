@@ -86,8 +86,8 @@ public class MineAddressListFragment extends BaseFragment {
 
     private ArrayList<AddressDeptsBean> list_deptsBean;
     private ArrayList<AddressDeptsBean> format_deptsBean;//格式化岗位集合
-    private ArrayList<AddressDeptsBean> list_head_deptsBean;//总公司
-    private ArrayList<AddressDeptsBean> list_branch_deptsBean;//分公司
+    private ArrayList<AddressDeptsBean> list_deptsBean_head;//总公司
+    private ArrayList<AddressDeptsBean> list_deptsBean_branch;//分公司
     private ArrayList<AddressDeptsBean> list_change_deptsBean;
 
 
@@ -112,15 +112,15 @@ public class MineAddressListFragment extends BaseFragment {
     private void initList() {
 
 
-        if (list_head_deptsBean == null) {
-            list_head_deptsBean = new ArrayList<>();
+        if (list_deptsBean_head == null) {
+            list_deptsBean_head = new ArrayList<>();
         }
-        list_head_deptsBean.clear();
+        list_deptsBean_head.clear();
 
-        if (list_branch_deptsBean == null) {
-            list_branch_deptsBean = new ArrayList<>();
+        if (list_deptsBean_branch == null) {
+            list_deptsBean_branch = new ArrayList<>();
         }
-        list_branch_deptsBean.clear();
+        list_deptsBean_branch.clear();
 
 
         if (list_change_deptsBean == null) {
@@ -379,23 +379,82 @@ public class MineAddressListFragment extends BaseFragment {
 
         getDepts(list_deptsBean, list_deptsBean.get(0).company_id);
 
-        getDeptsToCompany(format_deptsBean);
+        getHeadDepts();
+        getBranchDepts();
+//        getDeptsToCompany(format_deptsBean);
+//
+//        getHeadCompanys(format_companysBean_all);
+//
+//        getBranchCompanys(format_companysBean_all);
 
-        LogUtil.e("$$$$$$$$--------fileBeanDatas_head-----------$$$$$$$$");
-        for (AddressCompanysBean bean : format_companysBean_all) {
-            LogUtil.e(bean.name + ":=id=:" + bean.id + ":=pId=:" + bean.pId + ":==:" + (bean.deptsBean != null) + ":=company_id=:" + bean.company_id + ":==:" + (bean.deptsBean.positionsBean != null));
+
+    }
+
+    private void getHeadDepts() {
+        String company_id = format_companysBean_list.get(0).id;
+
+        AddressCompanysBean companysBean = format_companysBean_list.get(0);
+
+        fileBeanDatas_head.add(new FileTreeBean(companysBean.id
+                , "head"
+                , companysBean.name
+                , null));
+
+        for (AddressDeptsBean addressDeptsBean : format_deptsBean) {
+            if (company_id.equals(addressDeptsBean.company_id)) {
+                fileBeanDatas_head.add(new FileTreeBean(addressDeptsBean.id
+                        , addressDeptsBean.pId
+                        , addressDeptsBean.name
+                        , addressDeptsBean));
+            }
         }
 
-        getHeadCompanys(format_companysBean_all);
 
-        getBranchCompanys(format_companysBean_all);
+    }
 
-        LogUtil.e("==========fileBeanDatas_head==========");
-        for (FileTreeBean bean : fileBeanDatas_branch) {
-            LogUtil.e(bean.getName() + ":==:" + bean.get_id() + ":==:" + bean.getParentId() + ":==:" + (bean.getCompanysBean() != null) + ":==:");
+    private void getBranchDepts() {
+        String company_id = "";
+
+        for (int i = 1; i < format_companysBean_list.size(); i++) {
+            company_id = format_companysBean_list.get(i).id;
+            AddressCompanysBean companysBean = format_companysBean_list.get(i);
+
+            fileBeanDatas_branch.add(new FileTreeBean(companysBean.id
+                    , "head"
+                    , companysBean.name
+                    , null));
+
+            getFormateDepts(company_id, list_deptsBean, companysBean.id);
+//            for (AddressDeptsBean addressDeptsBean : format_deptsBean) {
+//
+//                if (company_id.equals(addressDeptsBean.company_id)) {
+//                    fileBeanDatas_branch.add(new FileTreeBean(addressDeptsBean.id
+//                            , addressDeptsBean.pId
+//                            , addressDeptsBean.name
+//                            , addressDeptsBean));
+//                }
+//            }
         }
 
 
+    }
+
+    private void getFormateDepts(String company_id, ArrayList<AddressDeptsBean> deptsBean, String pid) {
+
+        for (AddressDeptsBean addressDeptsBean : deptsBean) {
+            addressDeptsBean.pId = pid;
+            if (addressDeptsBean.company_id.equals(company_id)) {
+                fileBeanDatas_branch.add(new FileTreeBean(addressDeptsBean.id
+                        , addressDeptsBean.pId
+                        , addressDeptsBean.name
+                        , addressDeptsBean));
+            }
+            if (addressDeptsBean.children != null && addressDeptsBean.children.size() > 0) {
+                getFormateDepts(company_id, addressDeptsBean.children, addressDeptsBean.id);
+            }
+
+
+        }
     }
 
     public void getHeadCompany(ArrayList<AddressCompanysBean> companysBean) {
@@ -423,7 +482,12 @@ public class MineAddressListFragment extends BaseFragment {
         for (AddressDeptsBean bean : deptsBean) {
             AddressCompanysBean companysBean = new AddressCompanysBean();
             companysBean.id = bean.id;
-            companysBean.pId = bean.pId;
+            if (bean.positionsBean == null) {
+                companysBean.pId = bean.company_id;
+            } else {
+                companysBean.pId = bean.pId;
+            }
+
             companysBean.deptsBean = bean;
             companysBean.name = bean.name;
             companysBean.company_id = bean.company_id;
@@ -437,67 +501,71 @@ public class MineAddressListFragment extends BaseFragment {
      *
      * @param companysBean
      */
-    public void getHeadCompanys(ArrayList<AddressCompanysBean> companysBean) {
-
-        for (AddressCompanysBean bean : companysBean) {
-            if (list_companysBean_head.size() > 0) {
-
-                if (list_companysBean_head.get(0).id.equals(bean.company_id)) {
-                    list_companysBean_head.add(bean);
-                }
-            }
-
-        }
-        for (AddressCompanysBean bean : list_companysBean_head) {
-
-//            if (bean.deptsBean != null) {
-//                FileTreeBean treeBean = new FileTreeBean(Long.parseLong(bean.deptsBean.id)
-//                        , Long.parseLong(bean.deptsBean.pId)
-//                        , bean.deptsBean.name
-//                        , bean);
-//                fileBeanDatas_head.add(treeBean);
-//            } else {
-            FileTreeBean treeBean = new FileTreeBean(Long.parseLong(bean.id)
-                    , Long.parseLong(bean.pId)
-                    , bean.name
-                    , bean);
-            fileBeanDatas_head.add(treeBean);
+//    public void getHeadCompanys(ArrayList<AddressCompanysBean> companysBean) {
+//
+//        for (AddressCompanysBean bean : companysBean) {
+//            if (list_companysBean_head.size() > 0) {
+//
+//                if (list_companysBean_head.get(0).id.equals(bean.company_id)) {
+//                    list_companysBean_head.add(bean);
+//                }
 //            }
+//
+//        }
+//        for (AddressCompanysBean bean : list_companysBean_head) {
+//
+////            if (bean.deptsBean != null) {
+////                FileTreeBean treeBean = new FileTreeBean(Long.parseLong(bean.deptsBean.id)
+////                        , Long.parseLong(bean.deptsBean.pId)
+////                        , bean.deptsBean.name
+////                        , bean);
+////                fileBeanDatas_head.add(treeBean);
+////            } else {
+//            FileTreeBean treeBean = new FileTreeBean(Long.parseLong(bean.id)
+//                    , Long.parseLong(bean.pId)
+//                    , bean.name
+//                    , bean);
+//            fileBeanDatas_head.add(treeBean);
+////            }
+//
+//        }
 
-        }
 
+//    }
 
-    }
-
-    public void getBranchCompanys(ArrayList<AddressCompanysBean> companysBean) {
-
-        for (AddressCompanysBean bean : companysBean) {
-            if (list_companysBean_branch.size() > 0) {
-                if (list_companysBean_branch.get(0).id.equals(bean.company_id)) {
-                    list_companysBean_branch.add(bean);
-                }
-            }
-
-        }
-        for (AddressCompanysBean bean : list_companysBean_branch) {
-
-            if (bean.deptsBean != null) {
-                FileTreeBean treeBean = new FileTreeBean(Long.parseLong(bean.deptsBean.id)
-                        , Long.parseLong(bean.company_id)//这里暂时这样写//------这是一个大坑,bug
-                        , bean.deptsBean.name
-                        , bean);
-                fileBeanDatas_branch.add(treeBean);
-            } else {
-                FileTreeBean treeBean = new FileTreeBean(Long.parseLong(bean.id)
-                        , Long.parseLong(bean.company_id)//这里暂时这样写//------这是一个大坑,bug
-                        , bean.name
-                        , bean);
-                fileBeanDatas_branch.add(treeBean);
-            }
-
-        }
-
-    }
+//    public void getBranchCompanys(ArrayList<AddressCompanysBean> companysBean) {
+//
+//        for (AddressCompanysBean bean : companysBean) {
+//            if (list_companysBean_branch.size() > 0) {
+//                if (list_companysBean_branch.get(0).id.equals(bean.company_id)) {
+//                    list_companysBean_branch.add(bean);
+//                }
+//            }
+//
+//        }
+//        for (AddressCompanysBean bean : list_companysBean_branch) {
+//            FileTreeBean treeBean = new FileTreeBean(Long.parseLong(bean.id)
+//                    , Long.parseLong(bean.pId)
+//                    , bean.name
+//                    , bean);
+//            fileBeanDatas_head.add(treeBean);
+////            if (bean.deptsBean != null) {
+////                FileTreeBean treeBean = new FileTreeBean(Long.parseLong(bean.deptsBean.id)
+////                        , Long.parseLong(bean.company_id)//这里暂时这样写//------这是一个大坑,bug
+////                        , bean.deptsBean.name
+////                        , bean);
+////                fileBeanDatas_branch.add(treeBean);
+////            } else {
+////                FileTreeBean treeBean = new FileTreeBean(Long.parseLong(bean.id)
+////                        , Long.parseLong(bean.company_id)//这里暂时这样写//------这是一个大坑,bug
+////                        , bean.name
+////                        , bean);
+////                fileBeanDatas_branch.add(treeBean);
+////            }
+//
+//        }
+//
+//    }
 
 
     /**
@@ -597,59 +665,59 @@ public class MineAddressListFragment extends BaseFragment {
 
     //初始化树形结构---------------------------开始----------------------------
 
-    private void setTreeHeadDatas(ArrayList<AddressCompanysBean> companys, ArrayList<AddressCompanysBean> children) {
-
-        for (AddressCompanysBean bean : companys) {
-            for (AddressCompanysBean children_bean : children) {
-                //LogUtil.e("children_bean==" + children_bean.deptsBean.name + "::" + children_bean.deptsBean.id + "::" + children_bean.deptsBean.pId);
-                if (bean.company_id.equals(children_bean.company_id)) {
-                    if (children_bean.deptsBean != null) {
-                        LogUtil.e("bean.deptsBean != null==" + bean.name);
-
-                        FileTreeBean treeBean = new FileTreeBean(Long.parseLong(children_bean.deptsBean.id)
-                                , Long.parseLong(children_bean.deptsBean.pId)
-                                , children_bean.deptsBean.name
-                                , children_bean);
-                        fileBeanDatas_head.add(treeBean);
-                    } else {
-                        LogUtil.e("为空添加==" + children_bean.name);
-                        FileTreeBean treeBean = new FileTreeBean(Long.parseLong(children_bean.id)
-                                , Long.parseLong(children_bean.pId)
-                                , children_bean.name
-                                , children_bean);
-                        fileBeanDatas_head.add(treeBean);
-                    }
-                }
-            }
-        }
-    }
-
-
-    private void setTreeBranchDatas(ArrayList<AddressCompanysBean> companys, ArrayList<AddressCompanysBean> children) {
-        for (AddressCompanysBean bean : companys) {
-            for (AddressCompanysBean children_bean : children) {
-                if (bean.company_id.equals(children_bean.company_id)) {
-                    if (children_bean.deptsBean != null) {
-                        FileTreeBean treeBean = new FileTreeBean(Long.parseLong(children_bean.id)
-                                , Long.parseLong(children_bean.deptsBean.pId)
-                                , children_bean.deptsBean.name
-                                , children_bean);
-                        fileBeanDatas_branch.add(treeBean);
-                    } else {
-                        FileTreeBean treeBean = new FileTreeBean(Long.parseLong(children_bean.id)
-                                , Long.parseLong(children_bean.pId)
-                                , children_bean.name
-                                , children_bean);
-                        fileBeanDatas_branch.add(treeBean);
-                    }
-                }
-            }
-        }
-    }
+//    private void setTreeHeadDatas(ArrayList<AddressCompanysBean> companys, ArrayList<AddressCompanysBean> children) {
+//
+//        for (AddressCompanysBean bean : companys) {
+//            for (AddressCompanysBean children_bean : children) {
+//                //LogUtil.e("children_bean==" + children_bean.deptsBean.name + "::" + children_bean.deptsBean.id + "::" + children_bean.deptsBean.pId);
+//                if (bean.company_id.equals(children_bean.company_id)) {
+//                    if (children_bean.deptsBean != null) {
+//                        LogUtil.e("bean.deptsBean != null==" + bean.name);
+//
+//                        FileTreeBean treeBean = new FileTreeBean(Long.parseLong(children_bean.deptsBean.id)
+//                                , Long.parseLong(children_bean.deptsBean.pId)
+//                                , children_bean.deptsBean.name
+//                                , children_bean);
+//                        fileBeanDatas_head.add(treeBean);
+//                    } else {
+//                        LogUtil.e("为空添加==" + children_bean.name);
+//                        FileTreeBean treeBean = new FileTreeBean(Long.parseLong(children_bean.id)
+//                                , Long.parseLong(children_bean.pId)
+//                                , children_bean.name
+//                                , children_bean);
+//                        fileBeanDatas_head.add(treeBean);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//
+//    private void setTreeBranchDatas(ArrayList<AddressCompanysBean> companys, ArrayList<AddressCompanysBean> children) {
+//        for (AddressCompanysBean bean : companys) {
+//            for (AddressCompanysBean children_bean : children) {
+//                if (bean.company_id.equals(children_bean.company_id)) {
+//                    if (children_bean.deptsBean != null) {
+//                        FileTreeBean treeBean = new FileTreeBean(Long.parseLong(children_bean.id)
+//                                , Long.parseLong(children_bean.deptsBean.pId)
+//                                , children_bean.deptsBean.name
+//                                , children_bean);
+//                        fileBeanDatas_branch.add(treeBean);
+//                    } else {
+//                        FileTreeBean treeBean = new FileTreeBean(Long.parseLong(children_bean.id)
+//                                , Long.parseLong(children_bean.pId)
+//                                , children_bean.name
+//                                , children_bean);
+//                        fileBeanDatas_branch.add(treeBean);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
     private void setTreeView() {
-
+        showProgressDialog();
         try {
             mAdapter = new TreeAddressZDLFAdapter<FileTreeBean>(treeView, mActivity, fileBeanDatas, 1);
             treeView.setAdapter(mAdapter);
@@ -658,13 +726,13 @@ public class MineAddressListFragment extends BaseFragment {
                 @Override
                 public void onClick(TreeNode node, int position) {
 
-                    if (node.getCompanysBean().deptsBean != null) {
+                    if (node.getAddressDeptsBean() != null) {
                         //MyToast.showShort(mActivity,"点击了");
-                        if (node.getCompanysBean().deptsBean.positionsBean != null) {//有联系人再判断是否有号码
-                            if (TextUtils.isEmpty(node.getCompanysBean().deptsBean.positionsBean.employee.phone)) {
+                        if (node.getAddressDeptsBean().positionsBean != null) {//有联系人再判断是否有号码
+                            if (TextUtils.isEmpty(node.getAddressDeptsBean().positionsBean.employee.phone)) {
                                 MyToast.showShort(mActivity, "该联系人没有设置电话号码!");
                             } else {
-                                DialingPopupWindow window = new DialingPopupWindow(mActivity, address_change, node.getCompanysBean().deptsBean.positionsBean.employee.phone);
+                                DialingPopupWindow window = new DialingPopupWindow(mActivity, address_change, node.getAddressDeptsBean().positionsBean.employee.phone);
                             }
                         }
                     }
