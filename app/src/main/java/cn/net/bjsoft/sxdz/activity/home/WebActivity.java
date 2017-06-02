@@ -38,6 +38,7 @@ public class WebActivity extends BaseActivity {
 
     private String url = "";
     private String titleStr = "";
+    private String userid = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +46,11 @@ public class WebActivity extends BaseActivity {
 //        titles.setVisibility(View.GONE);
         back.setVisibility(View.VISIBLE);
         url = getIntent().getStringExtra("url");
+        userid = getIntent().getStringExtra("userid");
         LogUtil.e("底部栏url为=====" + url);
         titleStr = getIntent().getStringExtra("title");
         url = url + "?"
+                + "&userid=" + userid
                 + "&token=" + SPUtil.getToken(this)
                 + "&appid=" + SPUtil.getAppid(this)
                 + "&secret=" + SPUtil.getSecret(this);

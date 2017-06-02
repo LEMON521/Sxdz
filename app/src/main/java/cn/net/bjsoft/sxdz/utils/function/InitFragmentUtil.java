@@ -17,7 +17,7 @@ import cn.net.bjsoft.sxdz.fragment.barbotton.BottonScanFragment;
 import cn.net.bjsoft.sxdz.fragment.barbotton.BottonUploadFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.community.TopCommunityFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.community.TopDisabuseFragment;
-import cn.net.bjsoft.sxdz.fragment.bartop.community.TopHelpFragment;
+import cn.net.bjsoft.sxdz.fragment.bartop.community.TopHelpNewFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.community.TopLiveFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.community.TopProposalFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.function.TopPayFragment;
@@ -32,6 +32,7 @@ import cn.net.bjsoft.sxdz.fragment.bartop.user.TopUserFragment;
 import cn.net.bjsoft.sxdz.fragment.ylyd.BottonFormYuLongYaDongFragment;
 import cn.net.bjsoft.sxdz.fragment.ylyd.BottonMineYuLongYaDongFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.KnowledgeZDLFFragment;
+import cn.net.bjsoft.sxdz.fragment.zdlf.MineAddressListFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.MineZDLFFragment;
 import cn.net.bjsoft.sxdz.fragment.zdlf.WorkFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
@@ -76,7 +77,9 @@ public class InitFragmentUtil {
                     if ((!mBottonList.get(i).tag.equals(""))/*||homepageList.get(i).linkto != null*/) {
                         if (mBottonList.get(i).tag.equals("message")) {
                             fragment = new TopMessageFragment();
-                        } else if (mBottonList.get(i).tag.equals("workflow")) {
+                        } else if (mBottonList.get(i).tag.equals("communication")) {//通讯录
+                            fragment = new MineAddressListFragment();
+                        }else if (mBottonList.get(i).tag.equals("workflow")) {
                             fragment = new TopApproveFragment();
                         } else if (mBottonList.get(i).tag.equals("signin")) {
                             fragment = new TopSignFragment();
@@ -184,7 +187,8 @@ public class InitFragmentUtil {
             addFragment2List("live", new TopLiveFragment());
         }
         if (mToolBarBean.knowledge) {
-            addFragment2List("help", new TopHelpFragment());
+//            addFragment2List("help", new TopHelpFragment());//旧的--已弃用
+            addFragment2List("help", new TopHelpNewFragment());
         }
         if (mToolBarBean.proposal) {
             addFragment2List("proposal", new TopProposalFragment());

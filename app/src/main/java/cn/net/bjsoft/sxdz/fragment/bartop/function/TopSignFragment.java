@@ -1,5 +1,6 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.function;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -553,11 +554,15 @@ public class TopSignFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e("tag", "onActivityResult");
         LogUtil.e("-----------------onActivityResult----------------" + requestCode);
-
         if (requestCode == 100) {
-            if (data != null)
-                LogUtil.e("-----------------设置图片----------------" + data);
+            if (resultCode== Activity.RESULT_OK) {
                 doPhoto();
+//                if (data != null) {
+//                    if (data.getData() != null) {
+//
+//                    }
+//                }
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

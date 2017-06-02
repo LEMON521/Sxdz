@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
+import cn.net.bjsoft.sxdz.activity.home.WebActivity;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressCompanysBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressDeptsBean;
@@ -41,6 +43,9 @@ import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper.TreeNode;
  */
 @ContentView(R.layout.fragment_address_list)
 public class MineAddressListFragment extends BaseFragment {
+
+    @ViewInject(R.id.top_root)
+    private FrameLayout top_root;
     @ViewInject(R.id.title_back)
     private ImageView title_back;
     @ViewInject(R.id.title_title)
@@ -98,10 +103,18 @@ public class MineAddressListFragment extends BaseFragment {
     private HashMap<String, AddressDeptsBean> map;//过滤重复联系人的中间集合
 
 
+    private String tag = "";
+
     @Override
     public void initData() {
         title_back.setVisibility(View.VISIBLE);
         title.setText("通讯录");
+
+        tag = getArguments().getString("tag");
+
+        if (!TextUtils.isEmpty(tag) && tag.equals("communication")) {
+            top_root.setVisibility(View.GONE);
+        }
         //setTreeView();
         //organization_url = getArguments().getBundle("organization_url").getString("organization_url");
         initList();
@@ -363,11 +376,22 @@ public class MineAddressListFragment extends BaseFragment {
             MyToast.showShort(mActivity, "获取通讯录信息失败!");
             return;
         }
+        if (addressBean.companys != null) {
+            list_companysBean.add(addressBean.companys);
+        }
 
-        list_companysBean.add(addressBean.companys);
-        list_deptsBean.addAll(addressBean.depts);
-        list_positionsBean.add(addressBean.positions);
-        list_employeesBean.addAll(addressBean.employees);
+        if (addressBean.depts != null) {
+            list_deptsBean.addAll(addressBean.depts);
+        }
+
+        if (addressBean.positions != null) {
+            list_positionsBean.add(addressBean.positions);
+        }
+
+        if (addressBean.employees != null) {
+            list_employeesBean.addAll(addressBean.employees);
+        }
+
 
         //公司
         getFormatCompany(list_companysBean, "0");
@@ -375,11 +399,18 @@ public class MineAddressListFragment extends BaseFragment {
         getBranchCompany(format_companysBean_list);
 
         //岗位
-        getPositions(list_positionsBean, list_positionsBean.get(0).dept_id);
+        if (list_positionsBean.size() > 0) {
+            getPositions(list_positionsBean, list_positionsBean.get(0).dept_id);
+        }
 
-        getDepts(list_deptsBean, list_deptsBean.get(0).company_id);
+        if (list_deptsBean.size() > 0) {
+            getDepts(list_deptsBean, list_deptsBean.get(0).company_id);
+        }
 
-        getHeadDepts();
+        if (format_companysBean_list.size() > 0) {
+            getHeadDepts();
+        }
+
         getBranchDepts();
 //        getDeptsToCompany(format_deptsBean);
 //
@@ -390,6 +421,9 @@ public class MineAddressListFragment extends BaseFragment {
 
     }
 
+    /**
+     * 排列总公司
+     */
     private void getHeadDepts() {
         String company_id = format_companysBean_list.get(0).id;
 
@@ -412,6 +446,9 @@ public class MineAddressListFragment extends BaseFragment {
 
     }
 
+    /**
+     * 排列分公司
+     */
     private void getBranchDepts() {
         String company_id = "";
 
@@ -423,7 +460,9 @@ public class MineAddressListFragment extends BaseFragment {
                     , "head"
                     , companysBean.name
                     , null));
-
+            ceng = true;
+            lie = 0;
+            shendu = list_deptsBean.get(0).id;
             getFormateDepts(company_id, list_deptsBean, companysBean.id);
 //            for (AddressDeptsBean addressDeptsBean : format_deptsBean) {
 //
@@ -439,17 +478,34 @@ public class MineAddressListFragment extends BaseFragment {
 
     }
 
-    private void getFormateDepts(String company_id, ArrayList<AddressDeptsBean> deptsBean, String pid) {
+    private boolean ceng = true;
+    private int lie = 0;
 
+    private String shendu = "";
+
+    private void getFormateDepts(String company_id, ArrayList<AddressDeptsBean> deptsBean, String pid) {
+        lie++;
         for (AddressDeptsBean addressDeptsBean : deptsBean) {
             addressDeptsBean.pId = pid;
             if (addressDeptsBean.company_id.equals(company_id)) {
+                if (shendu.equals(pid))
+                    addressDeptsBean.pId = company_id;
+//                if (ceng) {
+//                    addressDeptsBean.pId = company_id;
+//                    if (lie == 1)
+//                        ceng = true;
+//                    if (lie == 2)
+//                        ceng = false;
+//                    //isfirst = false;
+//                }
                 fileBeanDatas_branch.add(new FileTreeBean(addressDeptsBean.id
                         , addressDeptsBean.pId
                         , addressDeptsBean.name
                         , addressDeptsBean));
+
             }
             if (addressDeptsBean.children != null && addressDeptsBean.children.size() > 0) {
+
                 getFormateDepts(company_id, addressDeptsBean.children, addressDeptsBean.id);
             }
 
@@ -729,11 +785,34 @@ public class MineAddressListFragment extends BaseFragment {
                     if (node.getAddressDeptsBean() != null) {
                         //MyToast.showShort(mActivity,"点击了");
                         if (node.getAddressDeptsBean().positionsBean != null) {//有联系人再判断是否有号码
-                            if (TextUtils.isEmpty(node.getAddressDeptsBean().positionsBean.employee.phone)) {
-                                MyToast.showShort(mActivity, "该联系人没有设置电话号码!");
+                            if (!TextUtils.isEmpty(tag) && tag.equals("communication")) {
+                                if (node.getAddressDeptsBean().positionsBean.employee != null) {//判断雇员
+                                    if (node.getAddressDeptsBean().positionsBean.employee.user != null) {//判断雇员的user字段
+                                        if (!TextUtils.isEmpty(node.getAddressDeptsBean().positionsBean.employee.user.id)) {//判断雇员的user中的id字段
+                                            Intent intent = new Intent(mActivity, WebActivity.class);
+                                            intent.putExtra("url", getArguments().get("url").toString());//TODO ---这里填上要链接的网页
+                                            intent.putExtra("title", "通讯");
+                                            intent.putExtra("userid", node.getAddressDeptsBean().positionsBean.employee.user.id);
+                                            startActivity(intent);
+                                        } else {
+                                            MyToast.showShort(mActivity, "没有该人员信息,请联系管理员-user.id");
+                                        }
+                                    } else {
+                                        MyToast.showShort(mActivity, "没有该人员信息,请联系管理员-user");
+                                    }
+                                } else {
+                                    MyToast.showShort(mActivity, "没有该人员信息,请联系管理员-employee");
+                                }
+
+
                             } else {
-                                DialingPopupWindow window = new DialingPopupWindow(mActivity, address_change, node.getAddressDeptsBean().positionsBean.employee.phone);
+                                if (TextUtils.isEmpty(node.getAddressDeptsBean().positionsBean.employee.phone)) {
+                                    MyToast.showShort(mActivity, "该联系人没有设置电话号码!");
+                                } else {
+                                    DialingPopupWindow window = new DialingPopupWindow(mActivity, address_change, node.getAddressDeptsBean().positionsBean.employee.phone);
+                                }
                             }
+
                         }
                     }
 

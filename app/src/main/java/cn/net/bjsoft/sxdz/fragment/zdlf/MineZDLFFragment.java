@@ -1,5 +1,6 @@
 package cn.net.bjsoft.sxdz.fragment.zdlf;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -95,6 +97,9 @@ public class MineZDLFFragment extends BaseFragment {
     @ViewInject(R.id.mine_zdlf_company)
     private TextView company;
 
+    @ViewInject(R.id.mine_zdlf_address_list)
+    private LinearLayout address_list;
+
     @ViewInject(R.id.mine_zdlf_department)
     private TextView department;
     @ViewInject(R.id.mine_zdlf_positions)
@@ -131,7 +136,6 @@ public class MineZDLFFragment extends BaseFragment {
     @Override
     public void initData() {
         title.setText("我的");
-
 
         if (pikersKey == null) {
             pikersKey = new ArrayList<>();
@@ -277,7 +281,7 @@ public class MineZDLFFragment extends BaseFragment {
     private void getUserData() {
         showProgressDialog();
 
-        appBean = GsonUtil.getAppBean(mJson);
+        //appBean = GsonUtil.getAppBean(SPUtil.getMobileJson(mActivity));
 
 
 //        userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
@@ -337,7 +341,10 @@ public class MineZDLFFragment extends BaseFragment {
      * 设置用户数据
      */
     private void setUserData() {
-
+        appBean = GsonUtil.getAppBean(SPUtil.getMobileJson(mActivity));
+        if (appBean.appid.equals("4661544566214097502")) {
+            address_list.setVisibility(View.GONE);
+        }
 
         userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
         userOrganizationBean = userBean.organization;
@@ -352,7 +359,7 @@ public class MineZDLFFragment extends BaseFragment {
             //getOrganizationData();
         }
 
-        if (userBean.organization.positions!=null){
+        if (userBean.organization.positions != null) {
             setPickers();
 
             positions.setText(userBean.organization.positions.get(userBean.organization.position_id));
@@ -491,7 +498,7 @@ public class MineZDLFFragment extends BaseFragment {
 
             case R.id.mine_zdlf_icon://更改头像
                 //PhotoOrVideoUtils.doPhoto(mActivity, this, view);
-                doPhoto(this,avatar);
+                doPhoto(this, avatar);
                 break;
 
             case R.id.mine_zdlf_positions://切换岗位
@@ -583,8 +590,16 @@ public class MineZDLFFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e("tag", "onActivityResult");
         if (requestCode == REQUEST_CODE_TAKE_PHOTO) {
-            doPhoto();
-        }else if (requestCode == REQUEST_CODE_GET_PHOTO){
+            if (resultCode== Activity.RESULT_OK) {
+                doPhoto();
+//                if (data != null) {
+//                    if (data.getData() != null) {
+//
+//                    }
+//                }
+            }
+
+        } else if (requestCode == REQUEST_CODE_GET_PHOTO) {
             Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
             if (uri != null) {
                 String imagePath = PhotoOrVideoUtils.getPath(mActivity, uri);

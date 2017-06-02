@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:padding="@dimen/dm005"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout
+            android:id="@+id/refresh_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/refresh_head" />
+            <!-- 支持所有实现Pullable接口的View -->
+
+            <cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView
+                android:paddingLeft="@dimen/dm010"
+                android:paddingRight="@dimen/dm010"
+                android:id="@+id/knowledge_items"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:divider="@color/gray"
+                android:dividerHeight="1dp" />
+
+            <include layout="@layout/load_more" />
+
+        </cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout>
+
+        <TextView
+            android:id="@+id/knowledge_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="信息空空如也!"
+            android:textColor="#666666"
+            android:textSize="@dimen/dm026" />
+    </FrameLayout>
+</LinearLayout>

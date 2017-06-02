@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsBean;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsDataItemsTopsBean;
+import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 /**
  * 中电联发---知识模块分组条目适配器
@@ -74,6 +75,9 @@ public class KnowledgeItemsAdapter extends BaseAdapter {
         Holder holder = (Holder) convertView.getTag();
         if (list.get(position).logo != null && !list.get(position).logo.equals("")) {
             holder.image.setVisibility(View.VISIBLE);
+            if (!list.get(position).logo.startsWith("http://")) {
+                list.get(position).logo = SPUtil.getUser_ApiData(context) +"/"+ list.get(position).logo;
+            }
             x.image().bind(holder.image, list.get(position).logo, imageOptions);
             //LogUtil.e("图片路径--"+list.get(position).image_url);
         } else {

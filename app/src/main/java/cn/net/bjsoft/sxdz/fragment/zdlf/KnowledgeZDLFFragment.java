@@ -588,8 +588,8 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                         get_start = (itemsBean.data.items.size() + Integer.parseInt(get_start)) + "";
 //                    get_cache_start= get_start;
 //                        get_count = itemsBean.data.count;
-                        message.setVisibility(View.GONE);
-                        setItemsData();
+                        //message.setVisibility(View.GONE);
+
                     } else {
                         message.setVisibility(View.VISIBLE);
                         MyToast.showShort(mActivity, "已经没有更多的信息!");
@@ -623,7 +623,8 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
-                itemsAdapter.notifyDataSetChanged();
+                setItemsData();
+                //itemsAdapter.notifyDataSetChanged();
                 dismissProgressDialog();
             }
         });
@@ -671,11 +672,13 @@ public class KnowledgeZDLFFragment extends BaseFragment {
         LogUtil.e("获取条目数---高度为" + Utility.getListViewHeightBasedOnChildren(items));
         if (cacheItemsDataList.size() > 0) {
 //            hint.setVisibility(View.GONE);
+            message.setVisibility(View.GONE);
+            itemsAdapter.notifyDataSetChanged();
         } else {
 //            hint.setVisibility(View.VISIBLE);
+            message.setVisibility(View.VISIBLE);
 //            hint.setText("没有数据,点击刷新");
         }
-        itemsAdapter.notifyDataSetChanged();
 
         //Utility.setListViewHeightBasedOnChildren(items);
 
