@@ -136,7 +136,7 @@ public class NewSplashActivity extends BaseActivity {
                 SPUtil.setUser_ApiData(mActivity, appBean.api_data);
 
 
-                LogUtil.e("----######------getMobileJson-----====------" + strJson);
+                //LogUtil.e("----######------getMobileJson-----====------" + strJson);
                 SPUtil.setMobileJson(mActivity, strJson);
 
                 if (appBean.authentication) {

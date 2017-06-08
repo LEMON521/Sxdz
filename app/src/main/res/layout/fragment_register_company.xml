@@ -60,8 +60,10 @@
                 android:textSize="@dimen/dm028" />
 
             <ImageView
+                android:background="#999999"
+                android:layout_marginLeft="10dp"
                 android:id="@+id/register_company_iv_line"
-                android:layout_width="2dp"
+                android:layout_width="1dp"
                 android:layout_height="15dp"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/register_company_text_code"
@@ -76,6 +78,7 @@
                 android:layout_toRightOf="@+id/register_company_iv_line"
                 android:background="@null"
                 android:hint="请输入营业执照号"
+                android:singleLine="true"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/dm028" />
         </RelativeLayout>
@@ -101,63 +104,67 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="8dp"
                 android:text="请上传营业执照" />
+
             <RelativeLayout
                 android:id="@+id/regiest_company_rl_front"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="50dp"
                 android:layout_width="@dimen/dm200"
                 android:layout_height="@dimen/dm150"
-                android:layout_centerHorizontal="true">
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="50dp">
+
                 <ImageView
                     android:id="@+id/regiest_company_iv_front"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/common_photo"
                     android:layout_centerHorizontal="true"
-                    android:background="#ffffff"/>
+                    android:adjustViewBounds="true"
+                    android:background="#ffffff"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/common_photo" />
+
                 <ImageView
                     android:id="@+id/regiest_company_iv_front_delete"
                     android:layout_width="@dimen/dm030"
                     android:layout_height="@dimen/dm030"
+                    android:layout_alignParentRight="true"
                     android:layout_marginRight="3dp"
                     android:layout_marginTop="2dp"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/common_close"/>
+                    android:src="@drawable/common_close" />
 
             </RelativeLayout>
+
             <TextView
-                android:layout_centerHorizontal="true"
                 android:id="@+id/regiest_company_tv_front"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/regiest_company_rl_front"
+                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:text="营业执照" />
         </RelativeLayout>
-            <!--正面-->
-            <!--<ImageView-->
-                <!--android:id="@+id/regiest_company_iv_front"-->
-                <!--android:layout_width="100dp"-->
-                <!--android:layout_height="70dp"-->
-                <!--android:layout_marginLeft="30dp"-->
-                <!--android:layout_marginTop="50dp"-->
-                <!--android:src="@drawable/common_photo" />-->
-            <!--&lt;!&ndash;反面&ndash;&gt;-->
-            <!--<ImageView-->
-            <!--android:id="@+id/regiest_humen_iv_back"-->
-            <!--android:layout_width="100dp"-->
-            <!--android:layout_height="70dp"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginEnd="30dp"-->
-            <!--android:layout_marginRight="30dp"-->
-            <!--android:layout_marginTop="50dp"-->
-            <!--android:src="@drawable/common_photo" />-->
+        <!--正面-->
+        <!--<ImageView-->
+        <!--android:id="@+id/regiest_company_iv_front"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginTop="50dp"-->
+        <!--android:src="@drawable/common_photo" />-->
+        <!--&lt;!&ndash;反面&ndash;&gt;-->
+        <!--<ImageView-->
+        <!--android:id="@+id/regiest_humen_iv_back"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginEnd="30dp"-->
+        <!--android:layout_marginRight="30dp"-->
+        <!--android:layout_marginTop="50dp"-->
+        <!--android:src="@drawable/common_photo" />-->
 
         <!--<TextView-->
         <!--android:id="@+id/regiest_company_tv_front"-->
@@ -170,20 +177,19 @@
         <!--android:gravity="center"-->
         <!--android:text="营业执照" />-->
 
-            <!--<TextView-->
-            <!--android:id="@+id/regiest_humen_tv_back"-->
-            <!--android:layout_width="100dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_below="@+id/regiest_humen_iv_back"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginLeft="30dp"-->
-            <!--android:layout_marginRight="30dp"-->
-            <!--android:layout_marginTop="15dp"-->
-            <!--android:gravity="center"-->
-            <!--android:text="身份证反面" />-->
-
+        <!--<TextView-->
+        <!--android:id="@+id/regiest_humen_tv_back"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_below="@+id/regiest_humen_iv_back"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginRight="30dp"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:gravity="center"-->
+        <!--android:text="身份证反面" />-->
 
 
         <!--企业邮箱-->
@@ -210,8 +216,10 @@
                 android:textSize="@dimen/dm028" />
 
             <ImageView
+                android:background="#999999"
+                android:layout_marginLeft="10dp"
+                android:layout_width="1dp"
                 android:id="@+id/register_company_iv_emile_line"
-                android:layout_width="2dp"
                 android:layout_height="15dp"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/register_company_text_emile"
@@ -226,6 +234,7 @@
                 android:layout_toRightOf="@+id/register_company_iv_emile_line"
                 android:background="@null"
                 android:hint="请输入电子邮箱"
+                android:singleLine="true"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/dm028" />
         </RelativeLayout>
@@ -252,8 +261,10 @@
                 android:textSize="@dimen/dm028" />
 
             <ImageView
+                android:background="#999999"
+                android:layout_marginLeft="10dp"
                 android:id="@+id/register_company_iv_organization_line"
-                android:layout_width="2dp"
+                android:layout_width="1dp"
                 android:layout_height="15dp"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/register_company_text_organization_code"
@@ -268,6 +279,7 @@
                 android:layout_toRightOf="@+id/register_company_iv_organization_line"
                 android:background="@null"
                 android:hint="请输入企业名称"
+                android:singleLine="true"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/dm028" />
         </RelativeLayout>

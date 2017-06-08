@@ -337,7 +337,7 @@ public class CommunityActivity extends BaseActivity {
             if (v.getTag().toString().equals(mFragmentsList.get(i).getArguments().get("tag").toString())) {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.community_content, mFragmentsList.get(i), "COMMUNITY")
+                        .replace(R.id.community_content, mFragmentsList.get(i), mFragmentsList.get(i).getArguments().get("tag").toString())
                         .commit();
             }
         }

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
+    <RelativeLayout
         android:padding="@dimen/dm005"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -34,12 +34,21 @@
 
         <TextView
             android:id="@+id/knowledge_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="信息空空如也!"
             android:textColor="#666666"
             android:textSize="@dimen/dm026" />
-    </FrameLayout>
+
+        <ImageView
+            android:id="@+id/add"
+            android:layout_width="@dimen/dm100"
+            android:layout_height="@dimen/dm100"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="50dp"
+            android:src="@drawable/aid_btn_new" />
+    </RelativeLayout>
 </LinearLayout>

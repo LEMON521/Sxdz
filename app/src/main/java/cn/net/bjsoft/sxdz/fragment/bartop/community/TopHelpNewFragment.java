@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.xutils.common.Callback;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.EmptyActivity;
+import cn.net.bjsoft.sxdz.activity.home.bartop.message.KnowledgeNewZDLFActivity;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemsAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowItemsBean;
@@ -45,6 +47,10 @@ public class TopHelpNewFragment extends BaseFragment {
     @ViewInject(R.id.knowledge_message)
     private TextView message;
 
+    @ViewInject(R.id.add)
+    private ImageView add;
+
+
     private KnowItemsBean itemsBean;//文章条目
     private ArrayList<KnowItemsDataItemsBean> itemsDataList;
     private ArrayList<KnowItemsDataItemsBean> cacheItemsDataList;
@@ -52,8 +58,10 @@ public class TopHelpNewFragment extends BaseFragment {
 
     private String get_start = "0";
 
-    public void initData() {
+    private String type = "";
 
+    public void initData() {
+        type = getArguments().getString("type");
         //初始化条目信息
 
         if (cacheItemsDataList == null) {
@@ -168,7 +176,7 @@ public class TopHelpNewFragment extends BaseFragment {
 
         sb.append("\"type\":\"");
 //        sb.append(group_id);
-        sb.append("");
+        sb.append(type);
         sb.append("\"");
 
         sb.append("}");
@@ -265,11 +273,20 @@ public class TopHelpNewFragment extends BaseFragment {
     private void setData() {
     }
 
-    @Event(value = {R.id.community_help_back})
+    @Event(value = {R.id.community_help_back
+            , R.id.add})
     private void helpOnclick(View view) {
         switch (view.getId()) {
             case R.id.community_help_back:
                 getActivity().finish();
+                break;
+
+            case R.id.add:
+                //MyToast.showShort(mActivity, "走,去发帖!");
+                Intent intent = new Intent(mActivity, KnowledgeNewZDLFActivity.class);
+                intent.putExtra("fragment_name", "KnowledgeNewZDLFFragment");
+                startActivity(intent);
+
                 break;
         }
     }

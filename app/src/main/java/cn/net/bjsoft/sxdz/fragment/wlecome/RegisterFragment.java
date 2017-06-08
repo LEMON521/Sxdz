@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.zzhoujay.richtext.RichText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,10 +30,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.home.WebActivity;
 import cn.net.bjsoft.sxdz.activity.login.RegisterActivity;
+import cn.net.bjsoft.sxdz.bean.app.AppBean;
+import cn.net.bjsoft.sxdz.bean.app.LoginBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
 import cn.net.bjsoft.sxdz.utils.Constants;
+import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.MyBase16;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 
@@ -45,10 +55,16 @@ public class RegisterFragment extends BaseFragment {
     @ViewInject(R.id.register_sendcode)
     private Button btn_code;//发送验证码按钮
 
+    @ViewInject(R.id.register_rl_code)
+    private RelativeLayout rl_code;
+
     @ViewInject(R.id.register_rb_humen)
     private RadioButton rBtn_humen;//个人按钮
     @ViewInject(R.id.register_rb_company)
     private RadioButton rBtn_company;//企业按钮
+
+    @ViewInject(R.id.register_ll_info)
+    private LinearLayout ll_info;
 
     @ViewInject(R.id.register_txt_agreement)
     private TextView tv_agreement;//服务使用协议
@@ -56,11 +72,17 @@ public class RegisterFragment extends BaseFragment {
     private TextView tv_privacy;//隐私条款
 
     @ViewInject(R.id.register_editer_summary)
-    private EditText editor_summary;//个人功能简介
+    private TextView editor_summary;//个人功能简介
 
     @ViewInject(R.id.register_btn_next)
     private Button btn_next;//下一步
 
+    private AppBean appBean;
+    private LoginBean loginBean;
+
+
+    private String url = "";
+    private boolean isCode = true;
 
     private boolean submitLock = false;//验证码发送控制器
     private Activity context;
@@ -91,6 +113,36 @@ public class RegisterFragment extends BaseFragment {
     @Override
     public void initData() {
         context = getActivity();
+        appBean = GsonUtil.getAppBean(SPUtil.getMobileJson(mActivity));
+
+
+        if (appBean != null) {
+            loginBean = appBean.login;
+            if (loginBean != null) {
+                if (!TextUtils.isEmpty(loginBean.mobilecheck)) {
+                    if (loginBean.mobilecheck.equals("0")) {
+                        isCode = false;
+                        btn_code.setVisibility(View.GONE);
+                        rl_code.setVisibility(View.GONE);
+                    }
+                }
+                // serviceurl与privateurl都为空，整个这一个区域都不显示
+                if (TextUtils.isEmpty(loginBean.serviceurl) && TextUtils.isEmpty(loginBean.privateurl)) {
+                    ll_info.setVisibility(View.GONE);
+                }
+            }
+
+            if (!TextUtils.isEmpty(appBean.description)) {
+
+                url = MyBase16.decode(appBean.description.substring(3, appBean.description.length()));
+                RichText.from(url).autoFix(false).into(editor_summary);
+
+            }
+
+
+        }
+
+
     }
 
     @Event(value = {R.id.register_back, R.id.register_sendcode, R.id.register_rb_humen,
@@ -124,35 +176,57 @@ public class RegisterFragment extends BaseFragment {
                 break;
 
             case R.id.register_txt_agreement://服务使用协议
-                MyToast.showShort(getActivity(), "服务使用协议");
+
+                if (!TextUtils.isEmpty(loginBean.serviceurl)) {
+                    Intent webIntent = new Intent(getActivity(), WebActivity.class);
+                    webIntent.putExtra("url", loginBean.serviceurl);
+                } else {
+                    MyToast.showShort(getActivity(), "暂时未指定服务使用协议");
+                }
                 break;
 
             case R.id.register_txt_privacyClause://隐私条款
-                MyToast.showShort(getActivity(), "隐私条款");
+                if (!TextUtils.isEmpty(loginBean.privateurl)) {
+                    Intent webIntent = new Intent(getActivity(), WebActivity.class);
+                    webIntent.putExtra("url", loginBean.privateurl);
+                } else {
+                    MyToast.showShort(getActivity(), "暂时未指定隐私条款");
+                }
                 break;
 
             case R.id.register_btn_next://下一步
-                if (editor_user.getText().toString().isEmpty() || editor_code.getText().toString().isEmpty()) {
-                    MyToast.showShort(context, "手机号或验证码为空");
+
+                if (isCode) {//走验证码
+                    if (editor_user.getText().toString().isEmpty() || editor_code.getText().toString().isEmpty()) {
+                        MyToast.showShort(context, "手机号或验证码为空");
+                        return;
+                    } else {
+                        validateCode();//检查验证码}
+                    }
                 } else {
-                    //validateCode();//真正开发时用到的
-                    if (editor_code.getText().toString().trim().equals("111111")) {
+
+                    if (editor_user.getText().toString().trim().isEmpty()) {
+                        MyToast.showShort(context, "手机号或验证码为空");
+                        return;
+                    } else {
                         Intent intent = new Intent(getActivity(), RegisterActivity.class);
                         if (rBtn_humen.isChecked()) {
                             //个人注册
+                            intent.putExtra("username", editor_user.getText().toString().trim());
                             intent.putExtra("function", "register_humen");
                         } else if (rBtn_company.isChecked()) {
                             //企业注册
+                            intent.putExtra("username", editor_user.getText().toString().trim());
                             intent.putExtra("function", "register_company");
                         }
                         startActivity(intent);
-                        //getActivity().finish();
-                    }else {
-                        MyToast.showShort(context, "验证码错误");
                     }
+
                 }
+
                 break;
         }
+
     }
 
     /**
@@ -161,6 +235,7 @@ public class RegisterFragment extends BaseFragment {
      * @param mobiles
      * @return
      */
+
     public static boolean isMobileNO(String mobiles) {
         Pattern p = Pattern
                 .compile("^((13\\d|15\\d|17[3678]|18\\d|14[57])\\d{8})|170[0125789]\\d{7}$");
@@ -277,9 +352,11 @@ public class RegisterFragment extends BaseFragment {
                             Intent intent = new Intent(getActivity(), RegisterActivity.class);
                             if (rBtn_humen.isChecked()) {
                                 //个人注册
+                                intent.putExtra("username", editor_user.getText().toString().trim());
                                 intent.putExtra("function", "register_humen");
                             } else if (rBtn_company.isChecked()) {
                                 //企业注册
+                                intent.putExtra("username", editor_user.getText().toString().trim());
                                 intent.putExtra("function", "register_company");
                             }
                             startActivity(intent);

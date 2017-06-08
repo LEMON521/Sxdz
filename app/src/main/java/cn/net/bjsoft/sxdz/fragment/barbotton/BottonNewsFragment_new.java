@@ -45,7 +45,7 @@ public class BottonNewsFragment_new extends BaseFragment  {
 
 
     private NewsItemsBean mNewsItemBean;
-    public FragmentNewsAdapter mNewsAdapter;
+    private FragmentNewsAdapter mNewsAdapter;
     private ArrayList<NewsItemsBean.NewsData> mListNewsDatas = new ArrayList<NewsItemsBean.NewsData>();
 
     private PostJsonBean postJsonBean;

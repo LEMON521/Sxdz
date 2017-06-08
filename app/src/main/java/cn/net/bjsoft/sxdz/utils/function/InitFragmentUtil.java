@@ -12,14 +12,11 @@ import cn.net.bjsoft.sxdz.bean.app.ToolbarBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.fragment.WebViewFragment;
 import cn.net.bjsoft.sxdz.fragment.barbotton.BottonMineFragment;
-import cn.net.bjsoft.sxdz.fragment.barbotton.BottonNewsFragment;
 import cn.net.bjsoft.sxdz.fragment.barbotton.BottonScanFragment;
 import cn.net.bjsoft.sxdz.fragment.barbotton.BottonUploadFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.community.TopCommunityFragment;
-import cn.net.bjsoft.sxdz.fragment.bartop.community.TopDisabuseFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.community.TopHelpNewFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.community.TopLiveFragment;
-import cn.net.bjsoft.sxdz.fragment.bartop.community.TopProposalFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.function.TopPayFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.function.TopPhotoFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.function.TopScanFragment;
@@ -95,7 +92,9 @@ public class InitFragmentUtil {
                         } else if (mBottonList.get(i).tag.equals("upload")) {
                             fragment = new BottonUploadFragment();//上传
                         } else if (mBottonList.get(i).tag.equals("article")) {
-                            fragment = new BottonNewsFragment();//新闻页面
+                            //fragment = new BottonNewsFragment();//新闻页面
+                            fragment = new TopHelpNewFragment();//新闻页面
+                            bundle.putString("type","news");
                         } else if (mBottonList.get(i).tag.equals("form")) {
                             fragment = new WebViewFragment();
                         } else if (mBottonList.get(i).tag.equals("workflow")) {
@@ -188,13 +187,26 @@ public class InitFragmentUtil {
         }
         if (mToolBarBean.knowledge) {
 //            addFragment2List("help", new TopHelpFragment());//旧的--已弃用
-            addFragment2List("help", new TopHelpNewFragment());
+            BaseFragment baseFragment = new TopHelpNewFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("type","help");
+            baseFragment.setArguments(bundle);
+            addFragment2List("help", baseFragment);
+
         }
-        if (mToolBarBean.proposal) {
-            addFragment2List("proposal", new TopProposalFragment());
+        if (mToolBarBean.proposal) {//建议
+            BaseFragment baseFragment = new TopHelpNewFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("type","proposal");
+            baseFragment.setArguments(bundle);
+            addFragment2List("proposal", baseFragment);
         }
-        if (mToolBarBean.bug) {
-            addFragment2List("disabuse", new TopDisabuseFragment());
+        if (mToolBarBean.bug) {//报错
+            BaseFragment baseFragment = new TopHelpNewFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("type","disabuse");
+            baseFragment.setArguments(bundle);
+            addFragment2List("disabuse", baseFragment);
         }
         //社区模块，暂时没有后台数据控制
         if (mToolBarBean.community) {

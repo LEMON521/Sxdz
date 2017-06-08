@@ -32,6 +32,7 @@ public class RegisterActivity extends BaseActivity {
         bundle.putString("json", "");
 
         function = getIntent().getStringExtra("function");
+        bundle.putString("username", getIntent().getStringExtra("username"));
 
         //LogUtil.e("RegisterActivity中@@@@@@@"+"getActivity()::"+this+"/n"+"getContext()::"+getBaseContext());
         if (function.equals("register")) {

@@ -69,7 +69,7 @@
                 android:src="@drawable/login_vertival_line" />
 
             <EditText
-                android:text="13666666666"
+                android:singleLine="true"
                 android:id="@+id/register_user_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,6 +78,7 @@
                 android:layout_toRightOf="@+id/register_user_line"
                 android:background="@null"
                 android:hint="@string/phonenumber"
+                android:text="13666666666"
                 android:textSize="@dimen/dm028" />
 
             <Button
@@ -92,6 +93,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/register_rl_code"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="30dp"
@@ -120,7 +122,7 @@
                 android:src="@drawable/login_vertival_line" />
 
             <EditText
-                android:text="111111"
+                android:singleLine="true"
                 android:id="@+id/register_editer_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,10 +131,12 @@
                 android:layout_toRightOf="@+id/register_iv_line"
                 android:background="@null"
                 android:hint="@string/yanzhengma"
+                android:text="111111"
                 android:textSize="@dimen/dm028" />
         </RelativeLayout>
 
         <RelativeLayout
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="30dp"
@@ -170,7 +174,9 @@
             </RadioGroup>
         </RelativeLayout>
 
+
         <LinearLayout
+            android:id="@+id/register_ll_info"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="30dp"
@@ -231,7 +237,7 @@
             android:paddingRight="5dp"
             android:paddingTop="3dp">
 
-            <EditText
+            <TextView
                 android:id="@+id/register_editer_summary"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -239,7 +245,8 @@
                 android:gravity="start"
                 android:hint="个人功能简介"
                 android:textColorHint="@color/gray"
-                android:textSize="@dimen/dm028" />
+                android:textSize="@dimen/dm028"
+                android:visibility="visible" />
         </RelativeLayout>
 
         <Button
