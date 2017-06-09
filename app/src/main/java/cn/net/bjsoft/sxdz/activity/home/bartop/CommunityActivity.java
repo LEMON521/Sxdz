@@ -342,7 +342,7 @@ public class CommunityActivity extends BaseActivity {
             }
         }
         setDefault();
-        switch (v.getId()) {
+        switch (v.getId()) {//推送数字根据后台获取的为准,app不作处理
 
             case R.id.community_live:
                 title.setText("直播");
@@ -353,29 +353,29 @@ public class CommunityActivity extends BaseActivity {
                 title.setText("帮助");
                 help_icon.setImageResource(R.drawable.aid_tab_btn_help_s);
                 help_text.setTextColor(getResources().getColor(R.color.blue));
-                help_num.setText("");
-                help_num.setVisibility(View.INVISIBLE);
+//                help_num.setText("");
+//                help_num.setVisibility(View.INVISIBLE);
                 break;
             case R.id.community_proposal:
                 title.setText("建议");
                 proposal_icon.setImageResource(R.drawable.aid_tab_btn_adcise_s);
                 proposal_text.setTextColor(getResources().getColor(R.color.blue));
-                proposal_num.setText("");
-                proposal_num.setVisibility(View.INVISIBLE);
+//                proposal_num.setText("");
+//                proposal_num.setVisibility(View.INVISIBLE);
                 break;
             case R.id.community_disabuse:
                 title.setText("报错");
                 disabuse_icon.setImageResource(R.drawable.aid_tab_btn_bug_s);
                 disabuse_text.setTextColor(getResources().getColor(R.color.blue));
-                disabuse_num.setText("");
-                disabuse_num.setVisibility(View.INVISIBLE);
+//                disabuse_num.setText("");
+//                disabuse_num.setVisibility(View.INVISIBLE);
                 break;
             case R.id.community_community:
                 title.setText("社区");
                 community_icon.setImageResource(R.drawable.aid_tab_btn_live_s);
                 community_text.setTextColor(getResources().getColor(R.color.blue));
-                community_num.setText("");
-                community_num.setVisibility(View.INVISIBLE);
+//                community_num.setText("");
+//                community_num.setVisibility(View.INVISIBLE);
                 break;
         }
     }

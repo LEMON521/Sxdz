@@ -61,7 +61,15 @@ public class TopHelpNewFragment extends BaseFragment {
     private String type = "";
 
     public void initData() {
-        type = getArguments().getString("type");
+
+        type = getTag();
+        get_start = "0";
+        if (type.equals("article")){
+            type = "news";
+
+        }
+
+        //type = getArguments().getString("type");
         //初始化条目信息
 
         if (cacheItemsDataList == null) {
