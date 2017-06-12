@@ -29,7 +29,7 @@ import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
 
 /**
- * 我执行的审批
+ * 我执行的审批--已改成我发起的审批
  * Created by Zrzc on 2017/3/9.
  */
 @ContentView(R.layout.fragment_approve_approval)
@@ -50,6 +50,8 @@ public class TopApproveWorkingFragment extends BaseFragment {
     private PostJsonBean pushWorkingBean;
     private String get_start = "0";
     private String get_count = "0";
+
+    private String type = "";
 
     private void initList(){
         pushWorkingBean = new PostJsonBean();
@@ -83,6 +85,9 @@ public class TopApproveWorkingFragment extends BaseFragment {
 
     @Override
     public void initData() {
+
+        type = getTag();
+
         initList();
         /**
          * 刷新///加载     的操作
@@ -142,7 +147,10 @@ public class TopApproveWorkingFragment extends BaseFragment {
         String url = SPUtil.getApiAuth(mActivity) + "/load";
         LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
         RequestParams params = new RequestParams(url);
-        params.addBodyParameter("source_id", "workflow_working");
+
+        //workflow_finished
+        //workflow_joined
+        params.addBodyParameter("source_id", type);
 
         pushWorkingBean.start = get_start;//设置开始查询
         pushWorkingBean.limit = "10";

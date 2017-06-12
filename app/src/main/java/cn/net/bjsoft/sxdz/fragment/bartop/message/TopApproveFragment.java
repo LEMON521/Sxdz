@@ -15,8 +15,6 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.home.bartop.message.ApproveNewActivity;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.TopApproveApplyFragment_new;
-import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.TopApproveFinishedFragment;
-import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.TopApproveJoinedFragment;
 import cn.net.bjsoft.sxdz.fragment.bartop.message.approve.TopApproveWorkingFragment;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 
@@ -95,15 +93,15 @@ public class TopApproveFragment extends BaseFragment {
 
         switch (view.getId()) {
             case R.id.approve_apply:
-                fragment = new TopApproveApplyFragment_new();
-                fragmentTag = "approve_apply";
+                fragment = new TopApproveWorkingFragment();
+                fragmentTag = "workflow_apply";
                 setBackgroundDefult();
                 setBackgroundChack((TextView) view);
                 //MyToast.showShort(mActivity, "待我审批");
                 break;
             case R.id.approve_working:
-                fragment = new TopApproveWorkingFragment();
-                fragmentTag = "approve_working";
+                fragment = new TopApproveApplyFragment_new();
+                fragmentTag = "workflow_working";
                 setBackgroundDefult();
                 setBackgroundChack((TextView) view);
                 //MyToast.showShort(mActivity, "审批中");
@@ -111,16 +109,18 @@ public class TopApproveFragment extends BaseFragment {
 
 
             case R.id.approve_joined:
-                fragment = new TopApproveJoinedFragment();
-                fragmentTag = "approve_joined";
+                fragment = new TopApproveWorkingFragment();
+                //fragment = new TopApproveJoinedFragment();
+                fragmentTag = "workflow_joined";
                 setBackgroundDefult();
                 setBackgroundChack((TextView) view);
                 //MyToast.showShort(mActivity, "历史审批");
                 break;
 
             case R.id.approve_finished:
-                fragment = new TopApproveFinishedFragment();
-                fragmentTag = "approve_finished";
+                //fragment = new TopApproveFinishedFragment();
+                fragment = new TopApproveWorkingFragment();
+                fragmentTag = "workflow_finished";
                 setBackgroundDefult();
                 setBackgroundChack((TextView) view);
                 //MyToast.showShort(mActivity, "历史审批");

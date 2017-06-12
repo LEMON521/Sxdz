@@ -34,7 +34,7 @@ import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
 
 /**
- * 我发起的审批
+ * 我发起的审批--已改成需我审批
  * Created by Zrzc on 2017/3/9.
  */
 @ContentView(R.layout.fragment_approve_wait)
@@ -204,7 +204,8 @@ public class TopApproveApplyFragment_new extends BaseFragment {
         String url = SPUtil.getApiAuth(mActivity) + "/load";
         LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
         RequestParams params = new RequestParams(url);
-        params.addBodyParameter("source_id", "workflow_apply");
+        params.addBodyParameter("source_id", "workflow_working");
+
 
         pushApplyBean.start = get_start;//设置开始查询
         pushApplyBean.limit = "10";

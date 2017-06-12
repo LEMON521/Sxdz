@@ -66,6 +66,8 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
     private TextView title;
     @ViewInject(R.id.knowledge_item_items)
     private ListView lv_items;
+    @ViewInject(R.id.root_reply)
+    private LinearLayout root_reply;
     @ViewInject(R.id.knowledge_item_edite)
     private EditText reply;
 
@@ -95,6 +97,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
     private TextView head_top_count;
     private LinearLayout head_top;
 
+
     private boolean top_valid = false;
     private long top_count = 0l;
 
@@ -117,6 +120,8 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
 
     private String know_id = "";
 
+    private String isEditor = "false";
+
     @Override
     public void initData() {
         title_back.setVisibility(View.VISIBLE);
@@ -125,6 +130,12 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         Bundle bundle = getArguments().getBundle("knowledge_item_bundle");
         know_id = bundle.getString("know_id");
         LogUtil.e("-----------------bundle.getString(\"know_id\");---------" + know_id);
+        isEditor = bundle.getString("isEditor");
+        if (isEditor.equals("true")) {
+            root_reply.setVisibility(View.VISIBLE);
+        } else if (isEditor.equals("false")) {
+            root_reply.setVisibility(View.GONE);
+        }
 
 
         //软键盘管理器
@@ -182,7 +193,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         }
         knowledgeItemList.clear();
         if (knowledgeItemsItemAdapter == null) {
-            knowledgeItemsItemAdapter = new KnowledgeItemsItemAdapter(mActivity, knowledgeItemList);
+            knowledgeItemsItemAdapter = new KnowledgeItemsItemAdapter(mActivity, knowledgeItemList,isEditor);
         }
 
 

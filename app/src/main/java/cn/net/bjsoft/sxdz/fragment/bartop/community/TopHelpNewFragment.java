@@ -59,14 +59,24 @@ public class TopHelpNewFragment extends BaseFragment {
     private String get_start = "0";
 
     private String type = "";
+    private String isEditor = "false";//是否可编辑-可回复
 
     public void initData() {
-
         type = getTag();
         get_start = "0";
-        if (type.equals("article")){
+        if (type.equals("article")) {
             type = "news";
-
+            add.setVisibility(View.VISIBLE);
+            isEditor = "true";
+        } else if (type.equals("help")) {
+            add.setVisibility(View.VISIBLE);
+            isEditor = "true";
+        } else if (type.equals("proposal")) {
+            add.setVisibility(View.GONE);
+            isEditor = "false";
+        } else if (type.equals("disabuse")) {
+            add.setVisibility(View.GONE);
+            isEditor = "false";
         }
 
         //type = getArguments().getString("type");
@@ -93,8 +103,10 @@ public class TopHelpNewFragment extends BaseFragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("know_id", itemsDataList.get(position).id);
+                bundle.putString("isEditor",isEditor);
                 intent.putExtra("knowledge_item_bundle", bundle);
                 intent.putExtra("fragment_name", "knowledge_item");
+
                 startActivity(intent);
             }
         });

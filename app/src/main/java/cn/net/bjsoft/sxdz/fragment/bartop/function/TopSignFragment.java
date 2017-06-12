@@ -460,6 +460,12 @@ public class TopSignFragment extends BaseFragment {
                     JSONObject jsonObject = new JSONObject(strJson);
                     if (jsonObject.optInt("code") == 0) {
                         MyToast.showLong(mActivity, "签到成功");
+
+                        picture.setImageResource(R.drawable.past_bg);
+                        sign_image_url = "";
+
+
+
                         initDataLast();
                     } else {
                         MyToast.showLong(mActivity, "签到失败");
