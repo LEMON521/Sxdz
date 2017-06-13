@@ -71,6 +71,7 @@ public class TopApproveWorkingFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(mActivity, WebViewApproveActivity.class);
                 //目前还没有跳转字段
+                intent.putExtra("type", "workflow");
                 intent.putExtra("url", dataItemsBeenList.get(position).url);
                 intent.putExtra("id", dataItemsBeenList.get(position).id);
                 intent.putExtra("title", dataItemsBeenList.get(position).title);

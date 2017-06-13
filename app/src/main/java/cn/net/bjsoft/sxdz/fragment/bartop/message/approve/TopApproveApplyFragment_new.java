@@ -174,6 +174,7 @@ public class TopApproveApplyFragment_new extends BaseFragment {
                 if (!formate_list.get(position).id.equals("-1")) {
                     Intent intent = new Intent(mActivity, WebViewApproveActivity.class);
                     //目前还没有跳转字段
+                    intent.putExtra("type", "workflow");
                     intent.putExtra("url", formate_list.get(position).url);
                     intent.putExtra("id", formate_list.get(position).id);
                     intent.putExtra("title", formate_list.get(position).title);

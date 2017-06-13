@@ -166,8 +166,8 @@ public class LoginFragment extends BaseFragment {
         //showProgressDialog();
         HttpPostUtils postUtils = new HttpPostUtils();
         RequestParams params = new RequestParams(loginBean.loginapi);
-        params.addBodyParameter("username", userEdit.getText().toString());
-        params.addBodyParameter("password", MDUtil.MD5(passEdit.getText().toString()));
+        params.addBodyParameter("username", userEdit.getText().toString().trim());
+        params.addBodyParameter("password", MDUtil.MD5(passEdit.getText().toString().trim()));
 
 
         postUtils.post(getActivity(), params);

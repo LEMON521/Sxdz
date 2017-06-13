@@ -41,6 +41,7 @@ public class WebViewApproveActivity extends BaseActivity {
     private String url = "";
     private String id = "";
     private String titleStr = "";
+    private String type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +52,17 @@ public class WebViewApproveActivity extends BaseActivity {
         id = getIntent().getStringExtra("id");
         //LogUtil.e("底部栏url为=====" + url);
         titleStr = getIntent().getStringExtra("title");
-
+        type = getIntent().getStringExtra("type");
         if (titleStr != null && !titleStr.equals("")) {
             title.setText(titleStr);
         }
 
         if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(id)) {
-            url = url + "?"
+            url = url /*+ "?"*/
                     + "&token=" + SPUtil.getToken(this)
                     + "&appid=" + SPUtil.getAppid(this)
                     + "&secret=" + SPUtil.getSecret(this)
+                   /* + "&type=" + type*/
                     + "&id=" + id;
             setWebview();
         } else {

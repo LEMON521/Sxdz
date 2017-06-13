@@ -1,7 +1,6 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message.task;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -18,7 +17,7 @@ import org.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.home.bartop.message.TaskDetailActivity;
+import cn.net.bjsoft.sxdz.activity.home.bartop.message.WebViewApproveActivity;
 import cn.net.bjsoft.sxdz.adapter.message.task.TaskAllZDLFAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
@@ -90,14 +89,25 @@ public class TopTaskAllFragment extends BaseFragment {
 //                Intent intent = new Intent(mActivity, TaskDetailActivity.class);
 //                intent.putExtra("fragment_name", "task_detail");
 //                mActivity.startActivity(intent);
-
-                Intent intent = new Intent(mActivity, TaskDetailActivity.class);
-                intent.putExtra("fragment_name", "task_detail");
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("isEdited", !tasksAllDao.get(position).finished);
-                bundle.putString("task_id", tasksAllDao.get(position).id);
-                intent.putExtra("isEdited", bundle);
+                Intent intent = new Intent(mActivity, WebViewApproveActivity.class);
+                //目前还没有跳转字段
+                intent.putExtra("type", "workflow");
+                intent.putExtra("url", tasksAllDao.get(position).url);
+                intent.putExtra("id", tasksAllDao.get(position).id);
+                intent.putExtra("title", tasksAllDao.get(position).title);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("task_id", formate_list.get(position).id);
+//                intent.putExtra("isEdited", bundle);
                 mActivity.startActivity(intent);
+
+                    //跳转到原生页面,已弃用
+//                Intent intent = new Intent(mActivity, TaskDetailActivity.class);
+//                intent.putExtra("fragment_name", "task_detail");
+//                Bundle bundle = new Bundle();
+//                bundle.putBoolean("isEdited", !tasksAllDao.get(position).finished);
+//                bundle.putString("task_id", tasksAllDao.get(position).id);
+//                intent.putExtra("isEdited", bundle);
+//                mActivity.startActivity(intent);
             }
         });
 

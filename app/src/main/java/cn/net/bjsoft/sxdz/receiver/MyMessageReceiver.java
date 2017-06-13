@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.alibaba.sdk.android.push.MessageReceiver;
 import com.alibaba.sdk.android.push.notification.AdvancedCustomPushNotification;
@@ -42,7 +41,7 @@ public class MyMessageReceiver extends MessageReceiver {
         notification.setServerOptionFirst(false);//设置服务端配置优先
         notification.setBuildWhenAppInForeground(true);//设置当推送到达时如果应用处于前台不创建通知
         boolean res = CustomNotificationBuilder.getInstance().setCustomNotification(2, notification);//注册该通知,并设置ID为2
-        Toast.makeText(context, "自定义通知样式" + res + ", id:" + 2, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "自定义通知样式" + res + ", id:" + 2, Toast.LENGTH_SHORT).show();
 
         //PushServiceFactory.getCloudPushService().clearNotifications();
 

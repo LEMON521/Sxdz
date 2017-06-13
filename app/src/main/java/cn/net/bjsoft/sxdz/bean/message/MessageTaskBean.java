@@ -48,7 +48,7 @@ public class MessageTaskBean implements Serializable {
         //        public boolean isOverdue = false;//是否过期
 //        public int type = 0;//0发起人---要执行的任务,1执行人----看任务
         public int is_executant = 0;//0发起人---要执行的任务,1执行人----看任务
-
+        public String url = "";
 
         public String ctime = "";
         public String description = "";

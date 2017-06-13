@@ -166,6 +166,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                 Intent intent = new Intent(mActivity, EmptyActivity.class);
 
                 Bundle bundle = new Bundle();
+                bundle.putString("isEditor", "true");
                 bundle.putString("know_id", itemsDataList.get(position).id);
                 intent.putExtra("knowledge_item_bundle", bundle);
                 intent.putExtra("fragment_name", "knowledge_item");

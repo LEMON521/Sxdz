@@ -47,17 +47,16 @@ public class WebActivity extends BaseActivity {
         back.setVisibility(View.VISIBLE);
         url = getIntent().getStringExtra("url");
         userid = getIntent().getStringExtra("userid");
-        LogUtil.e("底部栏url为=====" + url);
         titleStr = getIntent().getStringExtra("title");
         url = url + "?"
-                + "&userid=" + userid
+                + "&id=" + userid
                 + "&token=" + SPUtil.getToken(this)
                 + "&appid=" + SPUtil.getAppid(this)
                 + "&secret=" + SPUtil.getSecret(this);
         if (titleStr != null && !titleStr.equals("")) {
             title.setText(titleStr);
         }
-
+        LogUtil.e("网页链接为----url"+url);
         setWebview();
     }
 
