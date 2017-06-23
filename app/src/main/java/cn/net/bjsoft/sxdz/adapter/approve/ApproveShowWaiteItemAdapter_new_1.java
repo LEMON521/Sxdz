@@ -106,6 +106,9 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
 
             holder.type_2.setText(list.get(position).wf_name);
 
+            if (list.get(position).ctime.startsWith("/Date(")){
+                formateDates(list.get(position));
+            }
             holder.time.setText(TimeUtils.getTimeDifference(Long.parseLong(list.get(position).ctime)));
             /**
              * 将list的数据设置到控件中
@@ -115,6 +118,13 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    private void formateDates(MessageApproveDataItemsBean bean){
+        String time = bean.ctime;
+        time = time.replace("/Date(", "");
+        time = time.replace(")/", "");
+        bean.ctime = time;
     }
 
     public static class Holder {

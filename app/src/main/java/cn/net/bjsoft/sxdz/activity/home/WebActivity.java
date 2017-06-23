@@ -48,7 +48,12 @@ public class WebActivity extends BaseActivity {
         url = getIntent().getStringExtra("url");
         userid = getIntent().getStringExtra("userid");
         titleStr = getIntent().getStringExtra("title");
-        url = url + "?"
+
+        if (!url.contains("?")) {
+            url = url + "?";
+        }
+
+        url = url
                 + "&id=" + userid
                 + "&token=" + SPUtil.getToken(this)
                 + "&appid=" + SPUtil.getAppid(this)
@@ -56,7 +61,7 @@ public class WebActivity extends BaseActivity {
         if (titleStr != null && !titleStr.equals("")) {
             title.setText(titleStr);
         }
-        LogUtil.e("网页链接为----url"+url);
+        LogUtil.e("网页链接为----url" + url);
         setWebview();
     }
 

@@ -172,6 +172,13 @@ public class TopTaskDoingFragment extends BaseFragment {
 
         getData();
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        get_start = "0";
+        tasksDoingDao.clear();
+        getData();
+    }
 
     private void getData() {
         showProgressDialog();

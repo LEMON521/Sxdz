@@ -179,6 +179,14 @@ public class TopTaskDoneFragment extends BaseFragment {
         getData();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        get_start = "0";
+        tasksDoneDao.clear();
+        getData();
+    }
+
     private void getData() {
         showProgressDialog();
         HttpPostUtils httpPostUtils = new HttpPostUtils();

@@ -140,6 +140,14 @@ public class TopApproveWorkingFragment extends BaseFragment {
         getData();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        get_start = "0";
+        dataItemsBeenList.clear();
+        getData();
+
+    }
 
     private void getData() {
         showProgressDialog();

@@ -198,6 +198,16 @@ public class TopApproveApplyFragment_new extends BaseFragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        get_start = "0";
+        list.clear();
+        datas.clear();
+        getData();
+    }
+
     private void getData() {
         showProgressDialog();
         HttpPostUtils httpPostUtils = new HttpPostUtils();
