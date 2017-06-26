@@ -1,6 +1,5 @@
 package cn.net.bjsoft.sxdz.fragment.bartop.message;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -18,7 +17,6 @@ import org.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.home.WebActivity;
 import cn.net.bjsoft.sxdz.adapter.MessageMessageAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
@@ -80,15 +78,17 @@ public class TopMessageFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (!dataDaos.get(position).link_url.equals("")) {
-                    Intent intent = new Intent();
-                    //intent.setClass(getActivity(), MessageListItemActivity.class);
-                    intent.setClass(getActivity(), WebActivity.class);
-                    intent.putExtra("url", dataDaos.get(position).link_url);
-                    intent.putExtra("title", dataDaos.get(position).name);
-                    //intent.putExtra("json", mJson);
-                    getContext().startActivity(intent);
-                }
+                //暂时不需要跳转
+
+//                if (!dataDaos.get(position).link_url.equals("")) {
+//                    Intent intent = new Intent();
+//                    //intent.setClass(getActivity(), MessageListItemActivity.class);
+//                    intent.setClass(getActivity(), WebActivity.class);
+//                    intent.putExtra("url", dataDaos.get(position).link_url);
+//                    intent.putExtra("title", dataDaos.get(position).name);
+//                    //intent.putExtra("json", mJson);
+//                    getContext().startActivity(intent);
+//                }
 
             }
         });

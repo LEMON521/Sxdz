@@ -163,7 +163,7 @@ public class TopTaskMyPublishFragment extends BaseFragment {
                 }
             }
         });
-        getData();
+        //getData();
     }
     @Override
     public void onStart() {

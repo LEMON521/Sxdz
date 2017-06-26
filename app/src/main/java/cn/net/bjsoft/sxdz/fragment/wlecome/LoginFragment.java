@@ -143,10 +143,10 @@ public class LoginFragment extends BaseFragment {
 //        login_title.setText(datasBean.data.title);
 //
         //方便开发，讲数据填充到EditorText中
-        userEdit.setText("jinningning@bjsoft.net.cn");
+//        userEdit.setText("jinningning@bjsoft.net.cn");
 //        userEdit.setText("shuxd@bjsoft.net.cn");
         //userEdit.setText("pengdeqiang@bjsoft.net.cn");
-        passEdit.setText("111111");
+//        passEdit.setText("111111");
         //title.setVisibility(View.GONE);
         //zhuce = getIntent().getStringExtra("zhuce");--没有url，暂时屏蔽
     }

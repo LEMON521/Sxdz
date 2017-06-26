@@ -121,7 +121,7 @@ public class TopApproveApplyFragment_new extends BaseFragment {
             }
 
         });
-        getData();
+        //getData();
         //test();
         //getListData();
         //setListAdapter();

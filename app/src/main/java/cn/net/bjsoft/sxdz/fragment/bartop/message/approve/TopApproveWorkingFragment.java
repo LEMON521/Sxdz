@@ -137,7 +137,7 @@ public class TopApproveWorkingFragment extends BaseFragment {
         });
 
 
-        getData();
+        //getData();
     }
 
     @Override

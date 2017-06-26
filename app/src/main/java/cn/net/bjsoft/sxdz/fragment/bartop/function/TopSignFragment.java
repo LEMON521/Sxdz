@@ -398,6 +398,7 @@ public class TopSignFragment extends BaseFragment {
 
         if (mAmapLocation == null) {
             MyToast.showShort(mActivity, "获取位置失败,请打开权限并重启软件");
+            dismissProgressDialog();
             return;
         }
 

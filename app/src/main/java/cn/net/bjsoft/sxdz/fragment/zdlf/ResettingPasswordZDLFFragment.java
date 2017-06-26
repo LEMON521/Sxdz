@@ -19,7 +19,7 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.welcome.SplashActivity;
+import cn.net.bjsoft.sxdz.activity.welcome.NewSplashActivity;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.MD5;
 import cn.net.bjsoft.sxdz.utils.MyToast;
@@ -122,7 +122,7 @@ public class ResettingPasswordZDLFFragment extends BaseFragment {
                         //SPUtil.setUserUUID(mActivity, jsonObject.optString("uuid", ""));
                         MyToast.showShort(getActivity(), "修改密码成功！请重新登录!");
                         SPUtil.setToken(mActivity, "");
-                        Intent i = new Intent(getActivity(), SplashActivity.class);
+                        Intent i = new Intent(getActivity(), NewSplashActivity.class);
                         startActivity(i);
                         getActivity().finish();
                     } else {

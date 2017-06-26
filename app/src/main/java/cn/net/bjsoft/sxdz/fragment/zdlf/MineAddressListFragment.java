@@ -34,6 +34,7 @@ import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
+import cn.net.bjsoft.sxdz.utils.function.CheckPermission;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.bean.FileTreeBean;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper.TreeAddressZDLFAdapter;
 import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper.TreeNode;
@@ -673,6 +674,7 @@ public class MineAddressListFragment extends BaseFragment {
             //向部门添加联系人
 //            map = new HashMap<>();
 
+            int index = 0;
             for (AddressPositionsBean addressPositionsBean : format_positionsBean) {
 
                 if (addressPositionsBean.dept_id.equals(addressDeptsBean.id)) {
@@ -690,7 +692,9 @@ public class MineAddressListFragment extends BaseFragment {
                             bean.company_id = addressDeptsBean.company_id;
                             LogUtil.e("添加子节点=======bean.id=====" + bean.name + "::" + addressPositionsBean.type);
                             if (addressPositionsBean.type.equals("1")) {
-                                addressDeptsBean.children.add(bean);
+                                //保证部门下面的岗位在已有岗位的前面
+                                addressDeptsBean.children.add(index, bean);
+                                index++;
                             }
                         }
                     }
@@ -795,13 +799,13 @@ public class MineAddressListFragment extends BaseFragment {
                                             intent.putExtra("userid", node.getAddressDeptsBean().positionsBean.employee.user.id);
                                             startActivity(intent);
                                         } else {
-                                            MyToast.showShort(mActivity, "没有该人员信息,请联系管理员-user.id");
+                                            MyToast.showShort(mActivity, "没有该人员信息,请联系管理员");
                                         }
                                     } else {
-                                        MyToast.showShort(mActivity, "没有该人员信息,请联系管理员-user");
+                                        MyToast.showShort(mActivity, "没有该人员信息,请联系管理员");
                                     }
                                 } else {
-                                    MyToast.showShort(mActivity, "没有该人员信息,请联系管理员-employee");
+                                    MyToast.showShort(mActivity, "没有该人员信息,请联系管理员");
                                 }
 
 
@@ -809,7 +813,12 @@ public class MineAddressListFragment extends BaseFragment {
                                 if (TextUtils.isEmpty(node.getAddressDeptsBean().positionsBean.employee.phone)) {
                                     MyToast.showShort(mActivity, "该联系人没有设置电话号码!");
                                 } else {
-                                    DialingPopupWindow window = new DialingPopupWindow(mActivity, address_change, node.getAddressDeptsBean().positionsBean.employee.phone);
+                                    if (CheckPermission.checkCallPhone(null, mActivity)) {
+
+                                        new DialingPopupWindow(mActivity, address_change, node.getAddressDeptsBean().positionsBean.employee.phone);
+                                    } else {
+                                        MyToast.showShort(mActivity, "请打开拨打电话号码的权限再重新拨打电话!");
+                                    }
                                 }
                             }
 
@@ -824,6 +833,7 @@ public class MineAddressListFragment extends BaseFragment {
         }
         dismissProgressDialog();
     }
+
 
     //初始化树形结构---------------------------结束----------------------------
 }

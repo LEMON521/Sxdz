@@ -488,44 +488,6 @@ public class KnowledgeZDLFFragment extends BaseFragment {
 //        }
     }
 
-    private void getItemsDataTest() {
-        String s = "{\n" +
-                "    \"code\": 0,\n" +
-                "    \"data\": {\n" +
-                "        \"count\": 14,\n" +
-                "        \"items\": [\n" +
-                "            {\n" +
-                "                \"abstract\": \"\",\n" +
-                "                \"author\": \"舒新东\",\n" +
-                "                \"company_id\": \"1\",\n" +
-                "                \"content\": \"我是个个个别地区经济的发展前景广阔前景广阔前景广阔前景看好？这么多天津滨海国际会展中心举行的记者招待会上说。\",\n" +
-                "                \"ctime\": \"2017-05-23 13:54:08\",\n" +
-                "                \"data_from\": \"0\",\n" +
-                "                \"id\": \"4924215211958823737\",\n" +
-                "                \"items\": [],\n" +
-                "                \"labels\": \"测试施工\",\n" +
-                "                \"logo\": \"\",\n" +
-                "                \"title\": \"发帖测试\",\n" +
-                "                \"tops\": [],\n" +
-                "                \"type\": \"5694166458358860202\",\n" +
-                "                \"userid\": \"10001\",\n" +
-                "                \"views\": \"0\"\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    }\n" +
-                "}";
-
-        itemsBean = GsonUtil.getKnowledgeItemsBean(s);
-        if (itemsBean.code.equals("0")) {//获取成功
-            //LogUtil.e("获取到的条目-----------" + result);
-
-            itemsDataList.addAll(itemsBean.data.items);
-            cacheItemsDataList.addAll(itemsBean.data.items);
-            setItemsData();
-        } else {
-        }
-    }
-
     /**
      * 获取条目数据
      */

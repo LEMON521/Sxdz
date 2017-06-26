@@ -176,7 +176,7 @@ public class TopTaskDoneFragment extends BaseFragment {
             }
         });
 
-        getData();
+        //getData();
     }
 
     @Override

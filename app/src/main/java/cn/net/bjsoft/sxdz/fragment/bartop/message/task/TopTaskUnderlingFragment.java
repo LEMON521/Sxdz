@@ -72,7 +72,7 @@ public class TopTaskUnderlingFragment extends BaseFragment {
         //getUserInfos();
     }
 
-    private void userOrganizationData(){
+    private void userOrganizationData() {
 
         userBean = GsonUtil.getUserBean(SPUtil.getUserJson(mActivity));
         position_id = userBean.organization.position_id;
@@ -104,8 +104,6 @@ public class TopTaskUnderlingFragment extends BaseFragment {
             MyToast.showLong(mActivity, "获取组织架构信息失败!");
         }
     }
-
-
 
 
     private void initList() {
@@ -259,6 +257,7 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
     /**
      * 截取
+     *
      * @param childrens
      */
     private void getBufferPosition(ArrayList<AddressPositionsBean> childrens) {
@@ -268,8 +267,9 @@ public class TopTaskUnderlingFragment extends BaseFragment {
 
 
             if (bean.id.equals(position_id)) {
-                buffer_positionsBeanList.add(bean);
-                LogUtil.e("--------bean---------"+bean.children.size());
+                if (bean.children != null)//不包含自己,只包含子节点
+                    buffer_positionsBeanList.addAll(bean.children);
+                LogUtil.e("--------bean---------" + bean.children.size());
                 return;
             } else {
                 if (bean.children != null && bean.children.size() > 0) {
@@ -298,20 +298,23 @@ public class TopTaskUnderlingFragment extends BaseFragment {
                     bean.employee = employee;
                 }
             }
-            LogUtil.e("========bean.name========"+bean.name);
-            LogUtil.e("========bean.children.size()========"+bean.children.size());
+            LogUtil.e("========bean.name========" + bean.name);
+            LogUtil.e("========bean.children.size()========" + bean.children.size());
             formate_positionsBeanList.add(bean);
             if (bean.children != null && bean.children.size() > 0) {
                 getPositions(bean.children, bean.id);
             }
-            LogUtil.e("========formate_positionsBeanList.size()========"+formate_positionsBeanList.size());
+            LogUtil.e("========formate_positionsBeanList.size()========" + formate_positionsBeanList.size());
         }
 
     }
 
 
+    /**
+     * 将排列好的部门信息,格式化成我们需要的数据类型
+     */
     private void getFormatePositions() {
-        LogUtil.e("========formate_positionsBeanList.size()========"+formate_positionsBeanList.size());
+        LogUtil.e("========formate_positionsBeanList.size()========" + formate_positionsBeanList.size());
         for (AddressPositionsBean positionsBean : formate_positionsBeanList) {
             if (positionsBean.employee != null) {
                 LogUtil.e("------------------岗位信息====" + positionsBean.name + "::" + positionsBean.id + "::" + positionsBean.pId + "::" + positionsBean.employee.name);

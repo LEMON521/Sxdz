@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
+import com.zzhoujay.richtext.RichText;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersSingleBean;
 import cn.net.bjsoft.sxdz.bean.message.MessageMessageBean;
 import cn.net.bjsoft.sxdz.utils.AddressUtils;
+import cn.net.bjsoft.sxdz.utils.MyBase16;
 import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.view.CircleImageView;
 
@@ -82,9 +84,14 @@ public class MessageMessageAdapter extends BaseAdapter {
             //holder.time.setText(TimeUtils.getFormateTime(Long.parseLong(list.get(position).showtime), "-", ":"));
             holder.time.setText(list.get(position).showtime);//返回什么用什么---时间
         }
-        holder.dis.setText(list.get(position).message);
+//        holder.dis.setText(list.get(position).message);
 
-
+        //要防止后台数据长度为---0的时候
+        if (list.get(position).message.startsWith("HEX")) {
+            RichText.from(MyBase16.decode(list.get(position).message.substring(3, list.get(position).message.length()))).autoFix(false).into(holder.dis);
+        } else {
+            holder.dis.setText(list.get(position).message);
+        }
         bitmapUtils.display(holder.avatar, user.avatar);
 
         return convertView;

@@ -126,7 +126,12 @@
         android:gravity="center_vertical"
         android:orientation="vertical">
         <!--android:layout_height="@dimen/dm090"-->
+
+        <!--android:paddingBottom="@dimen/dm015"-->
+        <!--android:paddingTop="@dimen/dm015"-->
         <LinearLayout
+
+            android:id="@+id/main_top_ll_ll"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dm080"
             android:background="#ffffff"

@@ -170,7 +170,7 @@ public class TopTaskDoingFragment extends BaseFragment {
         });
 
 
-        getData();
+        //getData();
     }
     @Override
     public void onStart() {

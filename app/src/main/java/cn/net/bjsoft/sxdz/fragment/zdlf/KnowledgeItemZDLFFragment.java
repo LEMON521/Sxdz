@@ -193,7 +193,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         }
         knowledgeItemList.clear();
         if (knowledgeItemsItemAdapter == null) {
-            knowledgeItemsItemAdapter = new KnowledgeItemsItemAdapter(mActivity, knowledgeItemList,isEditor);
+            knowledgeItemsItemAdapter = new KnowledgeItemsItemAdapter(mActivity, knowledgeItemList, isEditor);
         }
 
 
@@ -294,52 +294,6 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
 
     }
 
-    private void getDataTest() {
-        String s = "{\n" +
-                "    \"code\": 0,\n" +
-                "    \"data\": {\n" +
-                "        \"abstract\": \"\",\n" +
-                "        \"author\": \"靳宁宁\",\n" +
-                "        \"company_id\": \"1\",\n" +
-                "        \"content\": \"类别测试\",\n" +
-                "        \"ctime\": \"2017-05-23 11:44:58\",\n" +
-                "        \"data_from\": \"0\",\n" +
-                "        \"id\": \"4832050501307687649\",\n" +
-                "        \"items\": [\n" +
-                "            {\n" +
-                "                \"content\": \"HEXe6b58be8af95e6b58be8af95e6b58be8af95\",\n" +
-                "                \"ctime\": \"2017-05-23 13:37:07\",\n" +
-                "                \"id\": \"5285106344045222613\",\n" +
-                "                \"know_id\": \"4832050501307687649\",\n" +
-                "                \"reply_id\": \"0\",\n" +
-                "                \"sort_index\": \"6\",\n" +
-                "                \"title\": \"测试测试\",\n" +
-                "                \"userid\": \"12341\"\n" +
-                "            }\n" +
-                "        ],\n" +
-                "        \"labels\": \"人事测试\",\n" +
-                "        \"logo\": \"\",\n" +
-                "        \"title\": \"测试类别\",\n" +
-                "        \"tops\": [],\n" +
-                "        \"type\": \"5371321317339812859\",\n" +
-                "        \"userid\": \"12341\",\n" +
-                "        \"views\": \"0\"\n" +
-                "    }\n" +
-                "}";
-        knowLedgeItemBean = GsonUtil.getKnowledgeItemsItemBean(s);
-        if (knowLedgeItemBean.code.equals("0")) {
-
-            hostBean = knowLedgeItemBean.data;
-            knowledgeItemList.addAll(knowLedgeItemBean.data.items);
-            submitReadToService();
-            setData();
-            //LogUtil.e("获取到的条目-----------" + knowledgeItemList.get(0).avatar_url);
-//                    classifyData();
-//                    setData();
-        } else {
-        }
-    }
-
     /**
      * 获取分组数据
      */
@@ -392,24 +346,6 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                 } else {
                 }
 
-
-//                functionFormBean = GsonUtil.getFunctionFormBean(strJson);
-//
-//                if (functionFormBean.code.equals("0")) {
-//                    if (functionFormBean.data.items != null) {
-//
-//                        formBeanList.addAll(functionFormBean.data.items);
-//                        functionFormAdapter.notifyDataSetChanged();
-//                        if (formBeanList.size() > 0) {
-//                            form_info.setVisibility(View.GONE);
-//                        } else {
-//                            form_info.setVisibility(View.VISIBLE);
-//                        }
-//                    } else {
-//                        form_info.setVisibility(View.VISIBLE);
-//                    }
-//
-//                }
             }
 
             @Override
@@ -438,41 +374,6 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
                 dismissProgressDialog();
             }
         });
-
-
-//
-//        RequestParams params = new RequestParams(TestAddressUtils.test_get_knowledge_item_url);
-//        x.http().get(params, new Callback.CommonCallback<String>() {
-//            @Override
-//            public void onSuccess(String result) {
-//                //LogUtil.e("获取到的条目-----------" + result);
-//                knowLedgeItemBean = GsonUtil.getKnowledgeItemsItemBean(result);
-//                if (knowLedgeItemBean.result) {
-//                    hostBean = knowLedgeItemBean.data.host;
-//                    knowledgeItemList.addAll(knowLedgeItemBean.data.knowledge_item);
-//                    setData();
-//                    //LogUtil.e("获取到的条目-----------" + knowledgeItemList.get(0).avatar_url);
-////                    classifyData();
-////                    setData();
-//                } else {
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable ex, boolean isOnCallback) {
-//                LogUtil.e("获取到的条目--------失败!!!---" + ex);
-//            }
-//
-//            @Override
-//            public void onCancelled(CancelledException cex) {
-//            }
-//
-//            @Override
-//            public void onFinished() {
-//                dismissProgressDialog();
-//            }
-//        });
     }
 
 

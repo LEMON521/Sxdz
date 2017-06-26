@@ -62,6 +62,8 @@ public class TopAddTaskFragment extends BaseFragment {
     private EditText new_name;
     @ViewInject(R.id.fragment_task_new_data)
     private EditText new_data;
+    @ViewInject(R.id.fragment_task_new_message)
+    private EditText new_message;
     @ViewInject(R.id.fragment_task_new_discription)
     private EditText new_discription;
     @ViewInject(R.id.fragment_task_new_files)
@@ -168,6 +170,10 @@ public class TopAddTaskFragment extends BaseFragment {
 
     @Override
     public void initData() {
+
+        //添加附件暂时不需要
+        new_files.setVisibility(View.GONE);
+
         title.setText("新建任务");
         back.setVisibility(View.VISIBLE);
 
@@ -328,10 +334,10 @@ public class TopAddTaskFragment extends BaseFragment {
     private void submit2Service() {
 
 
-
         String title = new_name.getText().toString().trim();
         Long subTime = System.currentTimeMillis();
         String time = new_data.getText().toString().trim();
+        String message = new_message.getText().toString().trim();
         String discription = new_discription.getText().toString().trim();
         String classify = new_classify.getText().toString().trim();
         String leave = new_leave.getText().toString().trim();
@@ -377,23 +383,23 @@ public class TopAddTaskFragment extends BaseFragment {
         MessageTaskPushAddBean pushData = new MessageTaskPushAddBean();
 
         pushData.title = title;
+        pushData.message = message;
         pushData.description = discription;
-        pushData.starttime = TimeUtils.getFormateTime(subTime,"-",":");
-        pushData.limittime = TimeUtils.getFormateTime(Long.parseLong(TimeUtils.getDateStamp(time,"-")),"-",":");
+        pushData.starttime = TimeUtils.getFormateTime(subTime, "-", ":");
+        pushData.limittime = TimeUtils.getFormateTime(Long.parseLong(TimeUtils.getDateStamp(time, "-")), "-", ":");
         pushData.priority = leave;
 
-        for (int i = 0;i<filesAddList.size();i++){
+        for (int i = 0; i < filesAddList.size(); i++) {
             MessageTaskDetailDataFilesBean filesBean = new MessageTaskDetailDataFilesBean();
             filesBean.title = filesAddList.get(i).file_name;
             filesBean.url = filesAddList.get(i).file_url;
-            filesBean.ctime = TimeUtils.getFormateTime(subTime,"-",":");
+            filesBean.ctime = TimeUtils.getFormateTime(subTime, "-", ":");
 
             pushData.files.add(filesBean);
         }
 
         //联系人暂时未添加
-        for (int i = 0;i<humenList.size();i++){
-
+        for (int i = 0; i < humenList.size(); i++) {
 
 
 
@@ -421,7 +427,7 @@ public class TopAddTaskFragment extends BaseFragment {
                     JSONObject jsonObject = new JSONObject(strJson);
                     if (jsonObject.optInt("code") == 0) {
 
-                        MyToast.showShort(mActivity,"提交成功!");
+                        MyToast.showShort(mActivity, "提交成功!");
 
                     } else {
                         MyToast.showLong(mActivity, "提交任务失败,请联系管理员");

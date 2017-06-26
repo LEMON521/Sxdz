@@ -84,6 +84,10 @@ public class MainActivity extends BaseActivity {
 
     @ViewInject(R.id.main_top_ll)
     private LinearLayout mTopBar_ll;
+
+    @ViewInject(R.id.main_top_ll_ll)
+    private LinearLayout mTopBar_ll_ll;
+
     //顶部栏
     @ViewInject(R.id.community)
     private FrameLayout community;
@@ -247,7 +251,7 @@ public class MainActivity extends BaseActivity {
 
         UsersInforUtils inforUtils = UsersInforUtils.getInstance(this);
         UsersSingleBean bean = inforUtils.getUserInfo("10001");
-        LogUtil.e("联系人信息--------------------"+bean.nickname+"::"+bean.avatar);
+        LogUtil.e("联系人信息--------------------" + bean.nickname + "::" + bean.avatar);
 
         dismissProgressDialog();
     }
@@ -261,7 +265,6 @@ public class MainActivity extends BaseActivity {
         LogUtil.e("main==onStart");
         setUserIcon();
         getPushCount(this);
-
 
 
         setBottomBarNum(this);
@@ -437,7 +440,7 @@ public class MainActivity extends BaseActivity {
             params.setMargins(0, 2, 0, 2);
             //给View绑定Tag的时候用创建Fragment时指定的Tag，这样就避免点击图标而导致找不到与Fragment相同的tag了
             bottomView = new BottomIconView_2(this, mBottonFragmentList.get(homepageNum).getArguments().getString("tag"));
-            bottomView.setModeView(homepageBean.get(homepageNum).icon_position, homepageBean.get(homepageNum).text, homepageBean.get(homepageNum).icon_selected, homepageBean.get(homepageNum).icon_default,homepageBean.get(homepageNum).icon);
+            bottomView.setModeView(homepageBean.get(homepageNum).icon_position, homepageBean.get(homepageNum).text, homepageBean.get(homepageNum).icon_selected, homepageBean.get(homepageNum).icon_default, homepageBean.get(homepageNum).icon);
             LogUtil.e("添加了新图标" + bottomView.toString());
             bottomView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -611,27 +614,36 @@ public class MainActivity extends BaseActivity {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
     @Event(value = {R.id.main_show_hide})
     private void onAnimationClick(View v) {
+
+        int hight = WidgetUtils.getWidthHigh(1, mTopBar_ll)[0];
+        LogUtil.e("------------------获取的宽高" + WidgetUtils.getWidthHigh(1, mTopBar_ll)[0]);
         switch (v.getId()) {
             case R.id.main_show_hide:
                 if (mTopBarIsShow) {//点击之后隐藏
+                    mTopBar_ll.setAnimation(mHideAnimation);
+                    mTopBar_ll_ll.setVisibility(View.GONE);
+                    mTopBar_ll.clearAnimation();
 //                    ObjectAnimator.ofFloat(showOrHide, "TranslationY",-20)
 //                            .setDuration(500).start();
-                    ObjectAnimator.ofFloat(mTopBar_ll, "TranslationY", -WidgetUtils.getWidthHigh(1, mTopBar_ll)[0])
-                            .setDuration(500).start();
+//                    ObjectAnimator.ofFloat(mTopBar_ll, "TranslationY", -hight)
+//                            .setDuration(500).start();
 //                    ObjectAnimator.ofFloat(main_content, "TranslationY", -WidgetUtils.getWidthHigh(1, mTopBar_ll)[0])
 //                            .setDuration(500).start();
 
-                    LogUtil.e("第一种方法获取的宽高" + WidgetUtils.getWidthHigh(1, mTopBar_ll)[0]);
-                    LogUtil.e("第二种方法获取的宽高" + WidgetUtils.getWidthHigh(2, mTopBar_ll)[0]);
-                    LogUtil.e("第三种方法获取的宽高" + WidgetUtils.getWidthHigh(3, mTopBar_ll)[0]);
+                    LogUtil.e("第一种方法获取的宽高" + WidgetUtils.getWidthHigh(1, mTopBar_ll_ll)[0]);
+                    LogUtil.e("第二种方法获取的宽高" + WidgetUtils.getWidthHigh(1, mTopBar_ll)[0]);
+                    LogUtil.e("第三种方法获取的宽高" + WidgetUtils.getWidthHigh(3, mTopBar_ll_ll)[0]);
                     showOrHide.setImageResource(R.drawable.zhuijia);
 //                    mTopBar_ll.startAnimation(mUpAnimation);
 //                    main_content.startAnimation(mUpAnimation);
 //                    showOrHide.startAnimation(mUpAnimation);
                     mTopBarIsShow = false;
                 } else {//点击之后显示
-                    ObjectAnimator.ofFloat(mTopBar_ll, "TranslationY", 0)
-                            .setDuration(500).start();
+                    mTopBar_ll_ll.setVisibility(View.VISIBLE);
+                    mTopBar_ll.setAnimation(mShowAnimation);
+                    mTopBar_ll.clearAnimation();
+//                    ObjectAnimator.ofFloat(mTopBar_ll, "TranslationY", 0)
+//                            .setDuration(500).start();
 //                    ObjectAnimator.ofFloat(main_content, "TranslationY", 0)
 //                            .setDuration(500).start();
 //                    ObjectAnimator.ofFloat(showOrHide, "TranslationY",0)
@@ -640,9 +652,9 @@ public class MainActivity extends BaseActivity {
 //                    main_content.startAnimation(mDownAnimation);
 //                    showOrHide.startAnimation(mDownAnimation);
                     showOrHide.setImageResource(R.drawable.shang);
-                    LogUtil.e("第一种方法获取的宽高" + WidgetUtils.getWidthHigh(1, mTopBar_ll)[1]);
-                    LogUtil.e("第二种方法获取的宽高" + WidgetUtils.getWidthHigh(2, mTopBar_ll)[1]);
-                    LogUtil.e("第三种方法获取的宽高" + WidgetUtils.getWidthHigh(3, mTopBar_ll)[1]);
+                    LogUtil.e("第一种方法获取的宽高" + WidgetUtils.getWidthHigh(1, mTopBar_ll_ll)[0]);
+                    LogUtil.e("第二种方法获取的宽高" + WidgetUtils.getWidthHigh(1, mTopBar_ll)[0]);
+                    LogUtil.e("第三种方法获取的宽高" + WidgetUtils.getWidthHigh(3, mTopBar_ll_ll)[0]);
                     mTopBarIsShow = true;
                 }
                 break;
@@ -1053,7 +1065,7 @@ public class MainActivity extends BaseActivity {
                 SPJpushUtil.setPayment(this, 0);
                 LogUtil.e("=======里面============payment======================" + SPJpushUtil.getPayment(this));
             }
-        }else {
+        } else {
             SPJpushUtil.setPayment(this, 0);
         }
         if (!toolbarBean.message) {
@@ -1253,7 +1265,6 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         LogUtil.e("main==onDestroy");
-
 
 
         if (null != mLocationClient) {

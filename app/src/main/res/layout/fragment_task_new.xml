@@ -119,12 +119,28 @@
 
 
                 <EditText
+                    android:padding="@dimen/dm005"
+                    android:background="@color/background"
+                    android:id="@+id/fragment_task_new_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dm175"
+                    android:gravity="top"
+                    android:hint="撰写您的任务描述"
+                    android:lineSpacingExtra="@dimen/dm008"
+                    android:maxHeight="@dimen/dm175"
+                    android:textColor="#333333"
+                    android:textColorHint="#999999"
+                    android:textSize="@dimen/dm024" />
+
+                <EditText
+                    android:padding="@dimen/dm005"
+                    android:layout_marginTop="@dimen/dm010"
                     android:id="@+id/fragment_task_new_discription"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dm175"
-                    android:background="@null"
+                    android:background="@color/background"
                     android:gravity="top"
-                    android:hint="撰写您的任务描述"
+                    android:hint="撰写您的任务备注"
                     android:lineSpacingExtra="@dimen/dm008"
                     android:maxHeight="@dimen/dm175"
                     android:textColor="#333333"

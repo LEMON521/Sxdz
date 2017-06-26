@@ -355,7 +355,7 @@ public class MineZDLFFragment extends BaseFragment {
         name.setText(userBean.name);
 
         if (userOrganizationBean != null) {
-            company.setText(userOrganizationBean.root_company_name + "");//+""是为了防止userOrganizationBean为空
+            company.setText(userOrganizationBean.company_name + "");//+""是为了防止userOrganizationBean为空
             //getOrganizationData();
         }
 

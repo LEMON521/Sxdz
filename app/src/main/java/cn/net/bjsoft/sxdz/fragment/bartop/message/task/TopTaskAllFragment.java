@@ -175,7 +175,7 @@ public class TopTaskAllFragment extends BaseFragment {
                 }
             }
         });
-        getData();
+        //getData();
     }
 
     @Override

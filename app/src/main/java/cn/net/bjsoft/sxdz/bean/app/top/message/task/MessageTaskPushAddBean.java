@@ -3,6 +3,8 @@ package cn.net.bjsoft.sxdz.bean.app.top.message.task;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import cn.net.bjsoft.sxdz.utils.MyBase16;
+
 /**
  * Created by Zrzc on 2017/5/12.
  */
@@ -47,7 +49,7 @@ public class MessageTaskPushAddBean implements Serializable {
         sb.append("\",");
 
         sb.append("\"message\":\"");
-        sb.append(message);
+        sb.append("HEX"+ MyBase16.encode(message));
         sb.append("\",");
 
         sb.append("\"priority\":\"");
@@ -55,7 +57,7 @@ public class MessageTaskPushAddBean implements Serializable {
         sb.append("\",");
 
         sb.append("\"description\":\"");
-        sb.append(description);
+        sb.append("HEX"+ MyBase16.encode(description));
         sb.append("\",");
 
 
