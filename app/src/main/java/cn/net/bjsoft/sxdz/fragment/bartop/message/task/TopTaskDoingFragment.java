@@ -22,14 +22,18 @@ import cn.net.bjsoft.sxdz.activity.home.bartop.message.WebViewApproveActivity;
 import cn.net.bjsoft.sxdz.adapter.message.task.TaskAllZDLFAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.push_json_bean.PostJsonBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailTypesBean;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
 import cn.net.bjsoft.sxdz.dialog.TaskSearchPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
+import cn.net.bjsoft.sxdz.utils.function.ReadFile;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullToRefreshLayout;
 import cn.net.bjsoft.sxdz.view.pull_to_refresh.PullableListView;
+
+import static cn.net.bjsoft.sxdz.utils.UrlUtil.api_base;
 
 /**
  * 进行中任务列表
@@ -61,6 +65,10 @@ public class TopTaskDoingFragment extends BaseFragment {
     private TaskSearchPopupWindow window;
 
 
+    String type_url = "";
+    private ArrayList<String> typeStrList;
+    private ArrayList<String> levleStrList;
+
     @Override
     public void initData() {
         pushDoingBean = new PostJsonBean();
@@ -75,6 +83,21 @@ public class TopTaskDoingFragment extends BaseFragment {
             tasksDoingDao = new ArrayList<>();
         } else {
             tasksDoingDao.clear();
+        }
+
+        /**
+         * 分类---性质侧拉框相关
+         */
+        if (typeStrList == null) {
+            typeStrList = new ArrayList<>();
+        } else {
+            typeStrList.clear();
+        }
+
+        if (levleStrList == null) {
+            levleStrList = new ArrayList<>();
+        } else {
+            levleStrList.clear();
         }
 
         if (taskAdapter == null) {
@@ -159,17 +182,13 @@ public class TopTaskDoingFragment extends BaseFragment {
          */
         window.setOnData(new TaskSearchPopupWindow.OnGetData() {
             @Override
-            public void onDataCallBack(String strJson) {
-                taskBean = GsonUtil.getMessageTaskBean(strJson);
-                if (taskBean.code.equals("0")) {
-//                    tasksAllDao.clear();
-//                    tasksAllDao.addAll(taskBean.data.task_list);
-                    taskAdapter.notifyDataSetChanged();
-                }
+            public void onDataCallBack(String startStr, String endStr, String typeStr, String levleStr) {
+
             }
         });
 
-
+        type_url = api_base + "/apps/" + SPUtil.getAppid(mActivity) + "/task_type.json";
+        getTypes();
         //getData();
     }
     @Override
@@ -179,6 +198,55 @@ public class TopTaskDoingFragment extends BaseFragment {
         tasksDoingDao.clear();
         getData();
     }
+
+    /**
+     * 获取任务类别
+     */
+    private void getTypes() {
+        showProgressDialog();
+
+
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+        httpPostUtils.get(mActivity, new RequestParams(type_url));
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                //result = "{\"code\":1,\"data\":null,\"msg\":\"unauthorized\"}";
+                MessageTaskDetailTypesBean typesBean = GsonUtil.getMessageTaskDetailTypesBean(strJson);
+                //typeStrList.clear();
+                if (typesBean.code.equals("0")) {
+                    levleStrList.clear();
+                    levleStrList.add("一般");
+                    levleStrList.add("重要");
+                    levleStrList.add("非常重要");
+                    typeStrList.clear();
+                    for (MessageTaskDetailTypesBean.MessageTaskDetailTypesTypeDataBean type : typesBean.data.types) {
+                        typeStrList.add(type.type);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                dismissProgressDialog();
+                //当服务器没有类别文件时,就加载app本地的
+                type_url = ReadFile.getFromAssets(mActivity, "json/task_type.json");
+                getTypes();
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
+    }
+
 
     private void getData() {
         showProgressDialog();
@@ -280,7 +348,7 @@ public class TopTaskDoingFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.fragment_task_list_all_search:
 
-                window.showWindow(taskQueryDao);
+                window.showWindow(typeStrList,levleStrList);
 
                 break;
         }

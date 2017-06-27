@@ -30,6 +30,13 @@ public class MessageTaskBean implements Serializable {
 
     public class TaskQueryTypeDao implements Serializable {
         public String type = "";
+
+        public TaskQueryTypeDao() {
+        }
+
+        public TaskQueryTypeDao(String type) {
+            this.type = type;
+        }
     }
 
     public class TaskQueryLevelDao implements Serializable {

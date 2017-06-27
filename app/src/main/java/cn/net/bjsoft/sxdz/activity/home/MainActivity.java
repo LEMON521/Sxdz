@@ -620,9 +620,9 @@ public class MainActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.main_show_hide:
                 if (mTopBarIsShow) {//点击之后隐藏
-                    mTopBar_ll.setAnimation(mHideAnimation);
+//                    mTopBar_ll.setAnimation(mHideAnimation);
                     mTopBar_ll_ll.setVisibility(View.GONE);
-                    mTopBar_ll.clearAnimation();
+//                    mTopBar_ll.clearAnimation();
 //                    ObjectAnimator.ofFloat(showOrHide, "TranslationY",-20)
 //                            .setDuration(500).start();
 //                    ObjectAnimator.ofFloat(mTopBar_ll, "TranslationY", -hight)
@@ -640,8 +640,8 @@ public class MainActivity extends BaseActivity {
                     mTopBarIsShow = false;
                 } else {//点击之后显示
                     mTopBar_ll_ll.setVisibility(View.VISIBLE);
-                    mTopBar_ll.setAnimation(mShowAnimation);
-                    mTopBar_ll.clearAnimation();
+//                    mTopBar_ll.setAnimation(mShowAnimation);
+//                    mTopBar_ll.clearAnimation();
 //                    ObjectAnimator.ofFloat(mTopBar_ll, "TranslationY", 0)
 //                            .setDuration(500).start();
 //                    ObjectAnimator.ofFloat(main_content, "TranslationY", 0)
@@ -933,12 +933,13 @@ public class MainActivity extends BaseActivity {
         mUpAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+//                mTopBar_ll_ll.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-
+                mTopBar_ll_ll.setVisibility(View.GONE);
+//                mTopBar_ll.clearAnimation();
 //                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT);
 //                params.setMargins(0,-85,0,0);
 //                main_content.setLayoutParams(params);
@@ -960,11 +961,13 @@ public class MainActivity extends BaseActivity {
         mDownAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                mTopBar_ll_ll.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
+//                mTopBar_ll.clearAnimation();
+//                mTopBar_ll.setVisibility(View.VISIBLE);
 //                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT);
 //                params.setMargins(0,0,0,0);
 //                main_content.setLayoutParams(params);

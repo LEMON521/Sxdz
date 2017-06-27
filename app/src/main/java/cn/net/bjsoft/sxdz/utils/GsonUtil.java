@@ -16,6 +16,7 @@ import cn.net.bjsoft.sxdz.bean.app.function.sign.SignUserLastBean;
 import cn.net.bjsoft.sxdz.bean.app.logined.LoginedBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.approve.MessageApproveBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailBeanNew;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailTypesBean;
 import cn.net.bjsoft.sxdz.bean.app.user.UserBean;
 import cn.net.bjsoft.sxdz.bean.app.user.address.AddressBean;
 import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersAllBean;
@@ -203,6 +204,15 @@ public class GsonUtil {
      */
     public static MessageTaskBean getMessageTaskBean(String json){
         return getGson().fromJson(json , MessageTaskBean.class);
+    }
+
+    /**
+     * 中电联发信息模块-任务--模块json
+     * @param json
+     * @return
+     */
+    public static MessageTaskDetailTypesBean getMessageTaskDetailTypesBean(String json){
+        return getGson().fromJson(json , MessageTaskDetailTypesBean.class);
     }
 
 

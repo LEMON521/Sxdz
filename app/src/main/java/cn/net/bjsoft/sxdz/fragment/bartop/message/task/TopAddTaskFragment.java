@@ -32,18 +32,22 @@ import cn.net.bjsoft.sxdz.adapter.message.task.TaskAddAddressListAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemHeadFilesListAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataFilesBean;
-import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataUsersBean;
+import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailTypesBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskPushAddBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.dialog.PickerDialog;
 import cn.net.bjsoft.sxdz.dialog.SideRightPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.utils.GsonUtil;
 import cn.net.bjsoft.sxdz.utils.MyToast;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
+import cn.net.bjsoft.sxdz.utils.function.ReadFile;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
 import cn.net.bjsoft.sxdz.view.tree_task_add_addresslist.bean.TreeTaskAddAddressListBean;
+
+import static cn.net.bjsoft.sxdz.utils.UrlUtil.api_base;
 
 /**
  * Created by Zrzc on 2017/4/6.
@@ -83,6 +87,7 @@ public class TopAddTaskFragment extends BaseFragment {
     @ViewInject(R.id.fragment_task_new_submit)
     private TextView new_submit;
 
+    String type_url = "";
     private SideRightPopupWindow typePopupWindow;
     private ArrayList<String> typeStrList;
     private SideRightPopupWindow levelPopupWindow;
@@ -128,13 +133,13 @@ public class TopAddTaskFragment extends BaseFragment {
                 /**
                  * 从后台获取类别,现在
                  */
-                typeStrList.clear();//先清空
-                typeStrList.add("生活");
-                typeStrList.add("体育");
-                typeStrList.add("音乐");
-                typeStrList.add("近期热门");
-                typeStrList.add("科技");
-                typeStrList.add("健身");
+//                typeStrList.clear();//先清空
+//                typeStrList.add("生活");
+//                typeStrList.add("体育");
+//                typeStrList.add("音乐");
+//                typeStrList.add("近期热门");
+//                typeStrList.add("科技");
+//                typeStrList.add("健身");
 
                 typePopupWindow.showWindow(typeStrList);
                 break;
@@ -158,7 +163,7 @@ public class TopAddTaskFragment extends BaseFragment {
 
                 break;
             case R.id.fragment_task_new_submit://提交
-                MyToast.showShort(mActivity, "提交任务到服务器");
+                //MyToast.showShort(mActivity, "提交任务到服务器");
 
                 submit2Service();
 
@@ -210,7 +215,7 @@ public class TopAddTaskFragment extends BaseFragment {
         new_humens.setAdapter(adapter);
         //联系人相关结束
         /**
-         * 分类---性质侧拉狂相关
+         * 分类---性质侧拉框相关
          */
         if (typeStrList == null) {
             typeStrList = new ArrayList<>();
@@ -285,6 +290,53 @@ public class TopAddTaskFragment extends BaseFragment {
 
         new_files.setOnItemClickListener(itemClickListener);
         new_files.setOnTouchListener(onTouchListener);
+
+        type_url = api_base + "/apps/" + SPUtil.getAppid(mActivity) + "/task_type.json";
+        getTypes();
+    }
+
+    /**
+     * 获取任务类别
+     */
+    private void getTypes() {
+        showProgressDialog();
+
+
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+        httpPostUtils.get(mActivity, new RequestParams(type_url));
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                //result = "{\"code\":1,\"data\":null,\"msg\":\"unauthorized\"}";
+                MessageTaskDetailTypesBean typesBean =  GsonUtil.getMessageTaskDetailTypesBean(strJson);
+                typeStrList.clear();
+                if (typesBean.code.equals("0")) {
+                    for (MessageTaskDetailTypesBean.MessageTaskDetailTypesTypeDataBean type : typesBean.data.types) {
+                        typeStrList.add(type.type);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                dismissProgressDialog();
+                //当服务器没有类别文件时,就加载app本地的
+                type_url = ReadFile.getFromAssets(mActivity, "json/task_type.json");
+                getTypes();
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
     }
 
     @Override
@@ -295,23 +347,35 @@ public class TopAddTaskFragment extends BaseFragment {
             if (requestCode == ADD_ADDRESS_LIST) {
                 //获取到选择的联系人
                 Bundle bundle = data.getExtras();
-                nodeId.addAll(bundle.getStringArrayList("nodeId"));
-                nodeAvatar.addAll(bundle.getStringArrayList("nodeAvatar"));
-                nodeName.addAll(bundle.getStringArrayList("nodeName"));
-                nodeDepartment.addAll(bundle.getStringArrayList("nodeDepartment"));
+//                nodeId.addAll(bundle.getStringArrayList("nodeId"));
+//                nodeAvatar.addAll(bundle.getStringArrayList("nodeAvatar"));
+//                nodeName.addAll(bundle.getStringArrayList("nodeName"));
+//                nodeDepartment.addAll(bundle.getStringArrayList("nodeDepartment"));
+
+                String userId = bundle.getString("nodeId");
+                String userAvatar = bundle.getString("nodeAvatar");
+                String userName = bundle.getString("nodeName");
+                String userDepartment = bundle.getString("nodeDepartment");
                 TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
-                for (int i = 0; i < nodeId.size(); i++) {
-                    TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
-                    dao.id = nodeId.get(i);
-                    dao.avatar = nodeAvatar.get(i);
-                    dao.name = nodeName.get(i);
-                    dao.department = nodeDepartment.get(i);
-                    humenList.add(dao);
-                }
-                nodeId.clear();
-                nodeAvatar.clear();
-                nodeName.clear();
-                nodeDepartment.clear();
+                TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
+                dao.id = userId;
+                dao.avatar = userAvatar;
+                dao.name = userName;
+                dao.department = userDepartment;
+                humenList.add(dao);
+
+//                for (int i = 0; i < nodeId.size(); i++) {
+//                    TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
+//                    dao.id = nodeId.get(i);
+//                    dao.avatar = nodeAvatar.get(i);
+//                    dao.name = nodeName.get(i);
+//                    dao.department = nodeDepartment.get(i);
+//                    humenList.add(dao);
+//                }
+//                nodeId.clear();
+//                nodeAvatar.clear();
+//                nodeName.clear();
+//                nodeDepartment.clear();
                 adapter.notifyDataSetChanged();
                 Utility.setListViewHeightBasedOnChildren(new_humens);
 
@@ -383,6 +447,7 @@ public class TopAddTaskFragment extends BaseFragment {
         MessageTaskPushAddBean pushData = new MessageTaskPushAddBean();
 
         pushData.title = title;
+        pushData.type = classify;//类别
         pushData.message = message;
         pushData.description = discription;
         pushData.starttime = TimeUtils.getFormateTime(subTime, "-", ":");
@@ -400,18 +465,15 @@ public class TopAddTaskFragment extends BaseFragment {
 
         //联系人暂时未添加
         for (int i = 0; i < humenList.size(); i++) {
-
-
-
+            pushData.userIds.add(humenList.get(i).id.replace(".0", ""));
         }
-
-        MessageTaskDetailDataUsersBean user = new MessageTaskDetailDataUsersBean();
-        user.id = "12341";
-        user.userid = "12341";
-        MessageTaskDetailDataUsersBean user1 = new MessageTaskDetailDataUsersBean();
-        user1.userid = "10001";
-        pushData.users.add(user);
-        pushData.users.add(user1);
+//        MessageTaskDetailDataUsersBean user = new MessageTaskDetailDataUsersBean();
+//        user.id = "12341";
+//        user.userid = "12341";
+//        MessageTaskDetailDataUsersBean user1 = new MessageTaskDetailDataUsersBean();
+//        user1.userid = "10001";
+//        pushData.users.add(user);
+//        pushData.users.add(user1);
         pushData.id = "";//新建任务---id应该为空
         params.addBodyParameter("data", pushData.toString());
 

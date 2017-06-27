@@ -45,6 +45,7 @@ import cn.net.bjsoft.sxdz.view.tree_addresslist_zdlf.helper.TreeNode;
 @ContentView(R.layout.fragment_address_list)
 public class MineAddressListFragment extends BaseFragment {
 
+
     @ViewInject(R.id.top_root)
     private FrameLayout top_root;
     @ViewInject(R.id.title_back)
@@ -111,9 +112,14 @@ public class MineAddressListFragment extends BaseFragment {
         title_back.setVisibility(View.VISIBLE);
         title.setText("通讯录");
 
-        tag = getArguments().getString("tag");
+        tag = getArguments().getString("tag");//根据bundle获取打开来源
 
-        if (!TextUtils.isEmpty(tag) && tag.equals("communication")) {
+        if (TextUtils.isEmpty(tag)) {
+            tag = getTag();//根据fragment的tag来获取打开来源
+            if (tag.equals("TopAddTaskAddressListFragment")) {
+                top_root.setVisibility(View.GONE);
+            }
+        } else if (!TextUtils.isEmpty(tag) && tag.equals("communication")) {
             top_root.setVisibility(View.GONE);
         }
         //setTreeView();
@@ -789,27 +795,7 @@ public class MineAddressListFragment extends BaseFragment {
                     if (node.getAddressDeptsBean() != null) {
                         //MyToast.showShort(mActivity,"点击了");
                         if (node.getAddressDeptsBean().positionsBean != null) {//有联系人再判断是否有号码
-                            if (!TextUtils.isEmpty(tag) && tag.equals("communication")) {
-                                if (node.getAddressDeptsBean().positionsBean.employee != null) {//判断雇员
-                                    if (node.getAddressDeptsBean().positionsBean.employee.user != null) {//判断雇员的user字段
-                                        if (!TextUtils.isEmpty(node.getAddressDeptsBean().positionsBean.employee.user.id)) {//判断雇员的user中的id字段
-                                            Intent intent = new Intent(mActivity, WebActivity.class);
-                                            intent.putExtra("url", getArguments().get("url").toString());//TODO ---这里填上要链接的网页
-                                            intent.putExtra("title", "通讯");
-                                            intent.putExtra("userid", node.getAddressDeptsBean().positionsBean.employee.user.id);
-                                            startActivity(intent);
-                                        } else {
-                                            MyToast.showShort(mActivity, "没有该人员信息,请联系管理员");
-                                        }
-                                    } else {
-                                        MyToast.showShort(mActivity, "没有该人员信息,请联系管理员");
-                                    }
-                                } else {
-                                    MyToast.showShort(mActivity, "没有该人员信息,请联系管理员");
-                                }
-
-
-                            } else {
+                            if (!TextUtils.isEmpty(tag) && tag.equals("addressList")) {
                                 if (TextUtils.isEmpty(node.getAddressDeptsBean().positionsBean.employee.phone)) {
                                     MyToast.showShort(mActivity, "该联系人没有设置电话号码!");
                                 } else {
@@ -820,11 +806,37 @@ public class MineAddressListFragment extends BaseFragment {
                                         MyToast.showShort(mActivity, "请打开拨打电话号码的权限再重新拨打电话!");
                                     }
                                 }
+                            } else {
+                                if (node.getAddressDeptsBean().positionsBean.employee != null) {//判断雇员
+                                    if (node.getAddressDeptsBean().positionsBean.employee.user != null) {//判断雇员的user字段
+                                        if (!TextUtils.isEmpty(node.getAddressDeptsBean().positionsBean.employee.user.id)) {//判断雇员的user中的id字段
+                                            if (!TextUtils.isEmpty(tag) && tag.equals("communication")) {
+                                                Intent intent = new Intent(mActivity, WebActivity.class);
+                                                intent.putExtra("url", getArguments().get("url").toString());//TODO ---这里填上要链接的网页
+                                                intent.putExtra("title", "通讯");
+                                                intent.putExtra("userid", node.getAddressDeptsBean().positionsBean.employee.user.id);
+                                                startActivity(intent);
+                                            } else if (!TextUtils.isEmpty(tag) && tag.equals("TopAddTaskAddressListFragment")) {
+                                                Intent intent = new Intent();
+                                                Bundle bundle = new Bundle();
+                                                bundle.putString("nodeId", node.getAddressDeptsBean().positionsBean.employee.user.id);
+                                                bundle.putString("nodeAvatar", node.getAddressDeptsBean().positionsBean.employee.user.avatar);
+                                                bundle.putString("nodeName", node.getAddressDeptsBean().positionsBean.employee.user.nickname);
+                                                bundle.putString("nodeDepartment", node.getAddressDeptsBean().name);
+                                                intent.putExtras(bundle);
+                                                mActivity.setResult(1000, intent);
+                                                mActivity.finish();
+                                            }
+                                        } else {
+                                            MyToast.showShort(mActivity, "没有该人员信息,请联系管理员");
+                                        }
+                                    } else {
+                                        MyToast.showShort(mActivity, "没有该人员信息,请联系管理员");
+                                    }
+                                }
                             }
-
                         }
                     }
-
                 }
             });
 

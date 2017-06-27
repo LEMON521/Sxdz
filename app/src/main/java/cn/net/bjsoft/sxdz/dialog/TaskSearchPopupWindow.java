@@ -2,6 +2,7 @@ package cn.net.bjsoft.sxdz.dialog;
 
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import org.xutils.common.Callback;
-import org.xutils.common.util.LogUtil;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
-
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
 import cn.net.bjsoft.sxdz.utils.MyToast;
-import cn.net.bjsoft.sxdz.utils.function.TestAddressUtils;
 
 /**
  * Created by Zrzc on 2017/3/21.
@@ -38,8 +33,8 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
     private View mRootView;
     private LayoutInflater mInflater;
 
-    private MessageTaskBean taskBean;
-    private MessageTaskBean.TaskQueryDao taskQueryDao;
+    //    private MessageTaskBean taskBean;
+//    private MessageTaskBean.TaskQueryDao taskQueryDao;
     private String time_start = "";
     private String time_end = "";
     private ArrayList<MessageTaskBean.TaskQueryTypeDao> typeList;
@@ -83,35 +78,13 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 //        InitUI();
 //    }
 
-    public void showWindow(MessageTaskBean.TaskQueryDao taskQueryDao) {
-        if (taskQueryDao==null) {
-            MyToast.showLong(mActivity,"请先设置查询分类数据!");
+    public void showWindow(ArrayList<String> taskTypes, ArrayList<String> taskLevels) {
+        if (taskTypes == null) {
+            MyToast.showLong(mActivity, "请先设置查询分类数据!");
             return;
         }
-        this.typeList = taskQueryDao.type_list;
-        this.levelList = taskQueryDao.level_list;
-        this.startStr = taskQueryDao.time_start;
-        this.endStr = taskQueryDao.time_end;
-        if (typeStrList == null) {
-            typeStrList = new ArrayList<>();
-        }
-        typeStrList.clear();
-        if (levelStrList == null) {
-            levelStrList = new ArrayList<>();
-        }
-        levelStrList.clear();
-        if (typeList != null) {
-            for (MessageTaskBean.TaskQueryTypeDao dao : typeList) {
-                typeStrList.add(dao.type);
-            }
-        }
-
-        if (levelList != null) {
-
-            for (MessageTaskBean.TaskQueryLevelDao dao : levelList) {
-                levelStrList.add(dao.level);
-            }
-        }
+        typeStrList = taskTypes;
+        levelStrList = taskLevels;
 
         InitData();
         InitUI();
@@ -244,7 +217,33 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
                 break;
 
             case R.id.pop_task_search_zdlf_submit:
-                getDataFromService();
+                String startStr = start.getText().toString().trim();
+                String endStr = end.getText().toString().trim();
+                String typeStr = type.getText().toString().trim();
+                String levleStr = level.getText().toString().trim();
+
+                if (TextUtils.isEmpty(startStr)) {
+                    MyToast.showShort(mActivity, "请选择开始时间");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(endStr)) {
+                    MyToast.showShort(mActivity, "请选择结束时间");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(typeStr)) {
+                    MyToast.showShort(mActivity, "请选择任务类别");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(levleStr)) {
+                    MyToast.showShort(mActivity, "请选择任务等级");
+                    return;
+                }
+
+                mOnGetData.onDataCallBack(startStr, endStr, typeStr, levleStr);
+                mSearchPopupWindow.dismiss();
                 break;
 
             case R.id.pop_task_search_zdlf_reset:
@@ -262,7 +261,7 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
     public interface OnGetData {
         //abstract ArrayList<KnowledgeBean.ItemsDataDao> cacheItemsDataList();
 
-        abstract void onDataCallBack(String strJson);
+        abstract void onDataCallBack(String startStr, String endStr, String typeStr, String levleStr);
     }
 
     // 数据接口设置,数据源接口传入
@@ -270,55 +269,5 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         mOnGetData = sd;
     }
 
-    /**
-     * 查询服务器,获取列表信息
-     */
-    private void getDataFromService() {
-        showProgressDialog();
-        RequestParams params = new RequestParams(TestAddressUtils.test_get_message_task_list_url);
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                mOnGetData.onDataCallBack(result);
-                // LogUtil.e("搜索后的条目数==@@@@"+this.cacheItemsDataList.size());
 
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                LogUtil.e("获取到的条目--------失败!!!---" + ex);
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-            }
-
-            @Override
-            public void onFinished() {
-                dismissProgressDialog();
-                mSearchPopupWindow.dismiss();
-            }
-        });
-    }
-
-
-    public synchronized void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new AppProgressDialog();
-        }
-        progressDialog.show(mActivity);
-    }
-
-    public void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismissDialog();
-        }
-    }
-
-    public synchronized AppProgressDialog getProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new AppProgressDialog();
-        }
-        return progressDialog;
-    }
 }
