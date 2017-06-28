@@ -75,6 +75,8 @@ public class TreeMessageTaskUnderlingAdapter<T> extends TreeMessageTaskUnderling
 
         if (node.getPositionsBean().employee != null) {//---------------防止空岗
             viewHolder.label.setText(node.getPositionsBean().employee.name);
+        }else {
+            viewHolder.label.setText("没有员工");
         }
 //        if (node.getTask_num() != null&&!node.getTask_num().equals("")) {
 //            if (!(Integer.parseInt(node.getTask_num()) < 1)) {

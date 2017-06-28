@@ -1,6 +1,10 @@
 package cn.net.bjsoft.sxdz.activity.home;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -13,6 +17,10 @@ import org.xutils.common.util.LogUtil;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
@@ -40,10 +48,14 @@ public class WebActivity extends BaseActivity {
     private String titleStr = "";
     private String userid = "";
 
+
+    private OpenFileWebChromeClient mOpenFileWebChromeClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        titles.setVisibility(View.GONE);
+        mOpenFileWebChromeClient = new OpenFileWebChromeClient(this);
         back.setVisibility(View.VISIBLE);
         url = getIntent().getStringExtra("url");
         userid = getIntent().getStringExtra("userid");
@@ -54,7 +66,7 @@ public class WebActivity extends BaseActivity {
         }
 
         url = url
-                + "&id=" + userid
+                + "&id=" + userid.replace(".0", "")
                 + "&token=" + SPUtil.getToken(this)
                 + "&appid=" + SPUtil.getAppid(this)
                 + "&secret=" + SPUtil.getSecret(this);
@@ -66,15 +78,16 @@ public class WebActivity extends BaseActivity {
     }
 
     public void setWebview() {
+        web.setWebChromeClient(this.mOpenFileWebChromeClient);
         web.getSettings().setSupportZoom(true);
         web.getSettings().setUseWideViewPort(true);
         web.getSettings().setJavaScriptEnabled(true);
 
         web.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-//        web.getSettings().setAllowFileAccess(true);
-//        web.getSettings().setAppCacheEnabled(true);
-//        //web.getSettings().setPluginsEnabled(true);
-//        web.getSettings().setSaveFormData(false);
+        web.getSettings().setAllowFileAccess(true);
+        web.getSettings().setAppCacheEnabled(true);
+//        web.getSettings().setPluginsEnabled(true);
+        web.getSettings().setSaveFormData(true);
         web.getSettings().setDomStorageEnabled(true);//DOM Storage
         //web.refreshPlugins(true);
 //        web.getSettings().setLoadsImagesAutomatically(true);
@@ -88,6 +101,27 @@ public class WebActivity extends BaseActivity {
 //        web.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY); // 取消滚动条
 //        web.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         //web.loadUrl(url);
+
+       // enablecrossdomain();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            web.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        } else {
+            try {
+                Class<?> clazz = web.getSettings().getClass();
+                Method method = clazz.getMethod("setAllowUniversalAccessFromFileURLs", boolean.class);
+                if (method != null) {
+                    method.invoke(web.getSettings(), true);
+                }
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
 
         web.loadUrl(url);// 加载出传入的URL
         web.setWebViewClient(new WebViewClient() {
@@ -123,4 +157,82 @@ public class WebActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == OpenFileWebChromeClient.REQUEST_FILE_PICKER) {
+            if (mOpenFileWebChromeClient.mFilePathCallback != null) {
+                Uri result = intent == null || resultCode != Activity.RESULT_OK ? null
+                        : intent.getData();
+                if (result != null) {
+                    String path = MediaUtility.getPath(getApplicationContext(),
+                            result);
+                    Uri uri = Uri.fromFile(new File(path));
+                    mOpenFileWebChromeClient.mFilePathCallback
+                            .onReceiveValue(uri);
+                } else {
+                    mOpenFileWebChromeClient.mFilePathCallback
+                            .onReceiveValue(null);
+                }
+            }
+            if (mOpenFileWebChromeClient.mFilePathCallbacks != null) {
+                Uri result = intent == null || resultCode != Activity.RESULT_OK ? null
+                        : intent.getData();
+                if (result != null) {
+                    String path = MediaUtility.getPath(getApplicationContext(),
+                            result);
+                    Uri uri = Uri.fromFile(new File(path));
+                    mOpenFileWebChromeClient.mFilePathCallbacks
+                            .onReceiveValue(new Uri[]{uri});
+                } else {
+                    mOpenFileWebChromeClient.mFilePathCallbacks
+                            .onReceiveValue(null);
+                }
+            }
+
+            mOpenFileWebChromeClient.mFilePathCallback = null;
+            mOpenFileWebChromeClient.mFilePathCallbacks = null;
+        }
+    }
+
+
+//    public void enablecrossdomain() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            try {
+//                Field webviewclassic_field = WebView.class.getDeclaredField("mProvider");
+//                webviewclassic_field.setAccessible(true);
+//                Object webviewclassic = webviewclassic_field.get(this);
+//                Field webviewcore_field = webviewclassic.getClass().getDeclaredField("mWebViewCore");
+//                webviewcore_field.setAccessible(true);
+//                Object mWebViewCore = webviewcore_field.get(webviewclassic);
+//                Field nativeclass_field = webviewclassic.getClass().getDeclaredField("mNativeClass");
+//                nativeclass_field.setAccessible(true);
+//                Object mNativeClass = nativeclass_field.get(webviewclassic);
+//
+//                Method method = mWebViewCore.getClass().getDeclaredMethod("nativeRegisterURLSchemeAsLocal", new Class[]{int.class, String.class});
+//                method.setAccessible(true);
+//                method.invoke(mWebViewCore, mNativeClass, "http");
+//                method.invoke(mWebViewCore, mNativeClass, "https");
+//            } catch (Exception e) {
+//                LogUtil.e("enablecrossdomain error");
+//                e.printStackTrace();
+//            }
+//        } else {
+//            try {
+//                Field field = WebView.class.getDeclaredField("mWebViewCore");
+//                field.setAccessible(true);
+//                Object webviewcore = field.get(this);
+//                Method method = webviewcore.getClass().getDeclaredMethod("nativeRegisterURLSchemeAsLocal", String.class);
+//                method.setAccessible(true);
+//                method.invoke(webviewcore, "http");
+//                method.invoke(webviewcore, "https");
+//            } catch (Exception e) {
+//                LogUtil.e("enablecrossdomain error");
+//                e.printStackTrace();
+//            }
+//        }
+//
+//
+//    }
+
 }

@@ -377,7 +377,7 @@ public class MineAddressListFragment extends BaseFragment {
 
         addressBean = GsonUtil.getAddressBean(SPUtil.getUserOrganizationJson(mActivity));
 
-        LogUtil.e("==================组织架构信息========================" + SPUtil.getUserOrganizationJson(mActivity));
+        //LogUtil.e("==================组织架构信息========================" + SPUtil.getUserOrganizationJson(mActivity));
 
         if (addressBean == null) {//如果为空,就return
             MyToast.showShort(mActivity, "获取通讯录信息失败!");

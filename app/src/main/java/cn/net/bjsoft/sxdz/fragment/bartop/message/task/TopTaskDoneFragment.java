@@ -60,6 +60,10 @@ public class TopTaskDoneFragment extends BaseFragment {
     private String get_start = "0";
     private String get_count = "0";
     private String source_id = "";
+    private String start_Str = "";
+    private String end_Str = "";
+    private String type_Str = "";
+    private String levle_Str = "";
 
     private MessageTaskBean.TaskQueryDao taskQueryDao;
     private TaskSearchPopupWindow window;
@@ -151,6 +155,10 @@ public class TopTaskDoneFragment extends BaseFragment {
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                         get_start = "0";
                         //tasksAllDao.clear();
+                        start_Str = "";
+                        end_Str = "";
+                        type_Str = "";
+                        levle_Str = "";
                         tasksDoneDao.clear();
                         LogUtil.e("setOnRefreshListener-----------");
                         getData();
@@ -192,6 +200,13 @@ public class TopTaskDoneFragment extends BaseFragment {
             @Override
             public void onDataCallBack(String startStr, String endStr, String typeStr, String levleStr) {
 
+
+                start_Str = startStr;
+                end_Str = endStr;
+                type_Str = typeStr;
+                levle_Str = levleStr;
+                tasksDoneDao.clear();
+                getData();
             }
         });
 
@@ -237,10 +252,13 @@ public class TopTaskDoneFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                dismissProgressDialog();
                 //当服务器没有类别文件时,就加载app本地的
-                type_url = ReadFile.getFromAssets(mActivity, "json/task_type.json");
-                getTypes();
+                if(!(typeStrList.size()>0)){
+                    dismissProgressDialog();
+                    type_url = ReadFile.getFromAssets(mActivity, "json/task_type.json");
+                    getTypes();
+                }
+
             }
 
             @Override
@@ -267,6 +285,11 @@ public class TopTaskDoneFragment extends BaseFragment {
 
         pushDoneBean.start = get_start;//设置开始查询
         pushDoneBean.limit = "10";
+        pushDoneBean.data.source_id = SPUtil.getUsers_SourceId(mActivity);
+        pushDoneBean.data.start_time = start_Str;
+        pushDoneBean.data.limit_time = end_Str;
+        pushDoneBean.data.task_type = type_Str;
+        pushDoneBean.data.task_priority = levle_Str;
         params.addBodyParameter("data", pushDoneBean.toString());
         LogUtil.e("-------------------------bean.toString()" + pushDoneBean.toString());
         httpPostUtils.get(mActivity, params);
@@ -340,7 +363,8 @@ public class TopTaskDoneFragment extends BaseFragment {
             }
         }
     }
-//    private void sortData(){
+
+    //    private void sortData(){
 //        for (MessageTaskBean.TasksAllDao dao :tasksAllDao){
 //            //
 //            if (dao.state==1){

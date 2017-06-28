@@ -181,7 +181,7 @@ public class WorkFragment extends BaseFragment {
         LogUtil.e("url$$$$$$$$$$$$$$getItemsData$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
         RequestParams params = new RequestParams(url);
         params.addBodyParameter("source_id", "shuxin_work_top");
-
+        LogUtil.e("获取工作条目条目============params"+params.toString());
 
         httpPostUtils.get(mActivity, params);
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {

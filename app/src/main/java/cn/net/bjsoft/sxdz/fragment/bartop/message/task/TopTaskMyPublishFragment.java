@@ -58,6 +58,10 @@ public class TopTaskMyPublishFragment extends BaseFragment {
 
     private String get_start = "0";
     private String get_count = "0";
+    private String start_Str = "";
+    private String end_Str = "";
+    private String type_Str = "";
+    private String levle_Str = "";
 
     String type_url = "";
     private ArrayList<String> typeStrList;
@@ -134,6 +138,10 @@ public class TopTaskMyPublishFragment extends BaseFragment {
                         // 千万别忘了告诉控件刷新完毕了哦！
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                         get_start = "0";
+                        start_Str = "";
+                        end_Str = "";
+                        type_Str = "";
+                        levle_Str = "";
                         tasksAllDao.clear();
                         LogUtil.e("setOnRefreshListener-----------");
                         getData();
@@ -176,7 +184,12 @@ public class TopTaskMyPublishFragment extends BaseFragment {
         window.setOnData(new TaskSearchPopupWindow.OnGetData() {
             @Override
             public void onDataCallBack(String startStr, String endStr, String typeStr, String levleStr) {
-
+                start_Str = startStr;
+                end_Str = endStr;
+                type_Str = typeStr;
+                levle_Str = levleStr;
+                tasksAllDao.clear();
+                getData();
             }
         });
         //getData();
@@ -221,10 +234,12 @@ public class TopTaskMyPublishFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                dismissProgressDialog();
                 //当服务器没有类别文件时,就加载app本地的
-                type_url = ReadFile.getFromAssets(mActivity, "json/task_type.json");
-                getTypes();
+                if (!(typeStrList.size() > 0)) {
+                    dismissProgressDialog();
+                    type_url = ReadFile.getFromAssets(mActivity, "json/task_type.json");
+                    getTypes();
+                }
             }
 
             @Override
@@ -253,6 +268,10 @@ public class TopTaskMyPublishFragment extends BaseFragment {
         pushMyPublishBean.start = get_start;//设置开始查询
         pushMyPublishBean.limit = "10";
         pushMyPublishBean.data.source_id = SPUtil.getUsers_SourceId(mActivity);
+        pushMyPublishBean.data.start_time = start_Str;
+        pushMyPublishBean.data.limit_time = end_Str;
+        pushMyPublishBean.data.task_type = type_Str;
+        pushMyPublishBean.data.task_priority = levle_Str;
         params.addBodyParameter("data", pushMyPublishBean.toString());
         LogUtil.e("-------------------------bean.toString()" + pushMyPublishBean.toString());
         httpPostUtils.get(mActivity, params);
@@ -333,7 +352,7 @@ public class TopTaskMyPublishFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.fragment_task_list_all_search:
 
-                window.showWindow(typeStrList,levleStrList);
+                window.showWindow(typeStrList, levleStrList);
 
                 break;
 

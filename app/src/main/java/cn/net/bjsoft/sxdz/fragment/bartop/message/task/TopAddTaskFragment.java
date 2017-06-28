@@ -13,6 +13,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jzxiang.pickerview.TimePickerDialog;
+import com.jzxiang.pickerview.data.Type;
+import com.jzxiang.pickerview.listener.OnDateSetListener;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -35,7 +39,6 @@ import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataFilesBe
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailTypesBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskPushAddBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
-import cn.net.bjsoft.sxdz.dialog.PickerDialog;
 import cn.net.bjsoft.sxdz.dialog.SideRightPopupWindow;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
@@ -53,7 +56,7 @@ import static cn.net.bjsoft.sxdz.utils.UrlUtil.api_base;
  * Created by Zrzc on 2017/4/6.
  */
 @ContentView(R.layout.fragment_task_new)
-public class TopAddTaskFragment extends BaseFragment {
+public class TopAddTaskFragment extends BaseFragment implements OnDateSetListener {
     @ViewInject(R.id.title_title)
     private TextView title;
     @ViewInject(R.id.title_back)
@@ -113,6 +116,10 @@ public class TopAddTaskFragment extends BaseFragment {
     private static final int ADD_ADDRESS_LIST = 1000;
 
 
+    //时间选择器
+    //https://github.com/JZXiang/TimePickerDialog/blob/master/sample/src/main/java/com/jzxiang/pickerview/sample/MainActivity.java
+    private TimePickerDialog mDialogAll;
+
     @Event(value = {R.id.title_back
             , R.id.fragment_task_new_data
             , R.id.fragment_task_new_classify_show
@@ -127,7 +134,8 @@ public class TopAddTaskFragment extends BaseFragment {
                 mActivity.finish();
                 break;
             case R.id.fragment_task_new_data://设置时间
-                PickerDialog.showDatePickerDialog(mActivity, new_data, "-");
+                //PickerDialog.showDatePickerDialog(mActivity, new_data, "-");
+                mDialogAll.show(mActivity.getSupportFragmentManager(), "all");
                 break;
             case R.id.fragment_task_new_classify_show://设置任务分类
                 /**
@@ -291,8 +299,38 @@ public class TopAddTaskFragment extends BaseFragment {
         new_files.setOnItemClickListener(itemClickListener);
         new_files.setOnTouchListener(onTouchListener);
 
+        long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
+        mDialogAll = new TimePickerDialog.Builder()
+                .setCallBack(this)
+                .setCancelStringId("取消")
+                .setSureStringId("确定")
+                .setTitleStringId("选择时间")
+                .setYearText("年")
+                .setMonthText("月")
+                .setDayText("日")
+                .setHourText("时")
+                .setMinuteText("分")
+                .setCyclic(false)
+                /*.setMinMillseconds(System.currentTimeMillis())*/
+                .setMaxMillseconds(System.currentTimeMillis() + tenYears)
+                .setCurrentMillseconds(System.currentTimeMillis())
+                .setThemeColor(mActivity.getResources().getColor(R.color.blue))
+                .setType(Type.ALL)
+                .setWheelItemTextNormalColor(mActivity.getResources().getColor(R.color.timetimepicker_default_text_color))
+                .setWheelItemTextSelectorColor(mActivity.getResources().getColor(R.color.light_blue))
+                .setWheelItemTextSize(12)
+                .build();
+
         type_url = api_base + "/apps/" + SPUtil.getAppid(mActivity) + "/task_type.json";
         getTypes();
+    }
+
+    @Override
+    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+//        LogUtil.e(timePickerView.getCurrentMillSeconds()+timePickerView.getArguments().toString()+"");
+//        LogUtil.e(millseconds+"");
+//        LogUtil.e("获取到了时间");
+        new_data.setText(TimeUtils.getFormateTime(millseconds, "-", ":"));
     }
 
     /**
@@ -308,7 +346,7 @@ public class TopAddTaskFragment extends BaseFragment {
             @Override
             public void onSuccess(String strJson) {
                 //result = "{\"code\":1,\"data\":null,\"msg\":\"unauthorized\"}";
-                MessageTaskDetailTypesBean typesBean =  GsonUtil.getMessageTaskDetailTypesBean(strJson);
+                MessageTaskDetailTypesBean typesBean = GsonUtil.getMessageTaskDetailTypesBean(strJson);
                 typeStrList.clear();
                 if (typesBean.code.equals("0")) {
                     for (MessageTaskDetailTypesBean.MessageTaskDetailTypesTypeDataBean type : typesBean.data.types) {
@@ -451,7 +489,8 @@ public class TopAddTaskFragment extends BaseFragment {
         pushData.message = message;
         pushData.description = discription;
         pushData.starttime = TimeUtils.getFormateTime(subTime, "-", ":");
-        pushData.limittime = TimeUtils.getFormateTime(Long.parseLong(TimeUtils.getDateStamp(time, "-")), "-", ":");
+//        pushData.limittime = TimeUtils.getFormateTime(Long.parseLong(TimeUtils.getDateStamp(time, "-")), "-", ":");
+        pushData.limittime = time;
         pushData.priority = leave;
 
         for (int i = 0; i < filesAddList.size(); i++) {

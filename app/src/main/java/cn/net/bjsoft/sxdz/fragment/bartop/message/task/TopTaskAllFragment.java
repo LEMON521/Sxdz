@@ -65,6 +65,11 @@ public class TopTaskAllFragment extends BaseFragment {
     private String get_count = "0";
     private String source_id = "";
 
+    private String start_Str = "";
+    private String end_Str = "";
+    private String type_Str = "";
+    private String levle_Str = "";
+
     String type_url = "";
     private ArrayList<String> typeStrList;
     private ArrayList<String> levleStrList;
@@ -123,7 +128,7 @@ public class TopTaskAllFragment extends BaseFragment {
 //                intent.putExtra("isEdited", bundle);
                 mActivity.startActivity(intent);
 
-                    //跳转到原生页面,已弃用
+                //跳转到原生页面,已弃用
 //                Intent intent = new Intent(mActivity, TaskDetailActivity.class);
 //                intent.putExtra("fragment_name", "task_detail");
 //                Bundle bundle = new Bundle();
@@ -147,13 +152,13 @@ public class TopTaskAllFragment extends BaseFragment {
                     public void handleMessage(Message msg) {
                         // 千万别忘了告诉控件刷新完毕了哦！
                         pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
-
-                        pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                         get_start = "0";
-                        //tasksAllDao.clear();
+                        start_Str = "";
+                        end_Str = "";
+                        type_Str = "";
+                        levle_Str = "";
                         tasksAllDao.clear();
                         tasksCacheAllDao.clear();
-                        LogUtil.e("setOnRefreshListener-----------");
                         getData();
 
                     }
@@ -170,12 +175,12 @@ public class TopTaskAllFragment extends BaseFragment {
                     public void handleMessage(Message msg) {
                         // 千万别忘了告诉控件加载完毕了哦！
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-                        if (!get_start.equals(get_count)){
+                        if (!get_start.equals(get_count)) {
                             pushAllBean.start = get_start;//设置开始查询
                             LogUtil.e("onLoadMore-----------");
                             getData();
-                        }else {
-                            MyToast.showShort(mActivity,"已经没有更多的消息了!");
+                        } else {
+                            MyToast.showShort(mActivity, "已经没有更多的消息了!");
                             dismissProgressDialog();
                         }
                     }
@@ -185,12 +190,18 @@ public class TopTaskAllFragment extends BaseFragment {
 
         });
 
-        window = new TaskSearchPopupWindow(mActivity,root_view);
+        window = new TaskSearchPopupWindow(mActivity, root_view);
 
         window.setOnData(new TaskSearchPopupWindow.OnGetData() {
             @Override
             public void onDataCallBack(String startStr, String endStr, String typeStr, String levleStr) {
 
+                start_Str = startStr;
+                end_Str = endStr;
+                type_Str = typeStr;
+                levle_Str = levleStr;
+                tasksAllDao.clear();
+                getData();
             }
         });
 
@@ -238,10 +249,13 @@ public class TopTaskAllFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                dismissProgressDialog();
+
                 //当服务器没有类别文件时,就加载app本地的
-                type_url = ReadFile.getFromAssets(mActivity, "json/task_type.json");
-                getTypes();
+                if (!(typeStrList.size() > 0)) {
+                    dismissProgressDialog();
+                    type_url = ReadFile.getFromAssets(mActivity, "json/task_type.json");
+                    getTypes();
+                }
             }
 
             @Override
@@ -269,8 +283,12 @@ public class TopTaskAllFragment extends BaseFragment {
         pushAllBean.start = get_start;//设置开始查询
         pushAllBean.limit = "10";
         pushAllBean.data.source_id = SPUtil.getUsers_SourceId(mActivity);
+        pushAllBean.data.start_time = start_Str;
+        pushAllBean.data.limit_time = end_Str;
+        pushAllBean.data.task_type = type_Str;
+        pushAllBean.data.task_priority = levle_Str;
         params.addBodyParameter("data", pushAllBean.toString());
-        LogUtil.e("-------------------------bean.toString()"+pushAllBean.toString());
+        LogUtil.e("-------------------------bean.toString()" + pushAllBean.toString());
         httpPostUtils.get(mActivity, params);
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
@@ -347,7 +365,7 @@ public class TopTaskAllFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.fragment_task_list_all_search:
 
-                window.showWindow(typeStrList,levleStrList);
+                window.showWindow(typeStrList, levleStrList);
 
                 break;
         }

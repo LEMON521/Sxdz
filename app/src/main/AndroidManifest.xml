@@ -17,8 +17,8 @@
         <!---->
         <!--android:screenOrientation="portrait"-->
         <!--android:configChanges="orientation|keyboardHidden|screenSize"-->
-        
-        <receiver android:name=".receiver.ALiPushType3Receiver"/>
+
+        <receiver android:name=".receiver.ALiPushType3Receiver" />
 
 
         <!--缓冲页面-->
@@ -32,31 +32,47 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.welcome.NewInitInfoActivity"/>
+        <activity
+            android:name=".activity.welcome.NewInitInfoActivity"
+            android:screenOrientation="portrait" />
 
         <!--跳过页面-->
-        <activity android:name=".activity.welcome.JumpOverActivity">
+        <activity
+            android:name=".activity.welcome.JumpOverActivity"
+            android:screenOrientation="portrait">
 
         </activity>
         <!--轮播图页面-->
-        <activity android:name=".activity.welcome.CarouselFigureActivity">
+        <activity
+            android:name=".activity.welcome.CarouselFigureActivity"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".activity.welcome.LinkToActivity">
+        <activity
+            android:name=".activity.welcome.LinkToActivity"
+            android:screenOrientation="portrait">
 
         </activity>
         <!--登录页面-->
-        <activity android:name=".activity.login.LoginActivity">
+        <activity
+            android:name=".activity.login.LoginActivity"
+            android:screenOrientation="portrait">
 
         </activity>
         <!--找回密码页面-->
-        <activity android:name=".activity.login.ForgetPasswordActivity"></activity>
+        <activity
+            android:name=".activity.login.ForgetPasswordActivity"
+            android:screenOrientation="portrait"></activity>
 
         <!--裕隆亚东找回密码-->
-        <activity android:name=".activity.ylyd.ShowYLYDActivity" />
+        <activity
+            android:name=".activity.ylyd.ShowYLYDActivity"
+            android:screenOrientation="portrait" />
 
         <!--找回密码页面-->
-        <activity android:name=".activity.login.RegisterActivity"></activity>
+        <activity
+            android:name=".activity.login.RegisterActivity"
+            android:screenOrientation="portrait"></activity>
 
         <!--android:theme="@style/Transparent"透明主题-->
         <!--主页面-->
@@ -68,42 +84,86 @@
         </activity>
 
         <!--加载网页-->
-        <activity android:name=".activity.home.WebActivity" />
+        <activity
+            android:name=".activity.home.WebActivity"
+            android:screenOrientation="portrait" />
         <!--扫码测试-->
-        <activity android:name=".externaltools.zbar.CaptureActivity">
+        <activity
+            android:name=".externaltools.zbar.CaptureActivity"
+            android:screenOrientation="portrait">
 
         </activity>
         <!--扫码结果-->
-        <activity android:name=".activity.home.barbotton.ScanResultActivity">
+        <activity
+            android:name=".activity.home.barbotton.ScanResultActivity"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".activity.home.barbotton.NewsItemActivity">
+        <activity
+            android:name=".activity.home.barbotton.NewsItemActivity"
+            android:screenOrientation="portrait">
 
         </activity>
         <!--TopBar-->
         <!--帮助页面-->
-        <activity android:name=".activity.home.bartop.CommunityActivity"></activity>
-        <activity android:name=".activity.home.bartop.proposal.NewProposalActivity"></activity>
-        <activity android:name=".activity.home.bartop.disabuse.NewDisabuseActivity"></activity>
-        <activity android:name=".activity.home.bartop.disabuse.HelpItemActivity"></activity>
+        <activity
+            android:name=".activity.home.bartop.CommunityActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.proposal.NewProposalActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.disabuse.NewDisabuseActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.disabuse.HelpItemActivity"
+            android:screenOrientation="portrait"></activity>
         <!--功能页面-->
-        <activity android:name=".activity.home.bartop.FunctionActivity"></activity>
-        <activity android:name=".activity.home.bartop.video.PhotoActivity"></activity>
-        <activity android:name=".activity.home.bartop.video.AddTaskActivity"></activity>
-        <activity android:name=".activity.home.bartop.function.SignHistoryActivity"></activity>
+        <activity
+            android:name=".activity.home.bartop.FunctionActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.video.PhotoActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.video.AddTaskActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.function.SignHistoryActivity"
+            android:screenOrientation="portrait"></activity>
         <!--消息页面-->
-        <activity android:name=".activity.home.bartop.MessageActivity"></activity>
-        <activity android:name=".activity.home.bartop.message.MessageListItemActivity"></activity>
-        <activity android:name=".activity.home.bartop.message.ApproveNewActivity"></activity>
-        <activity android:name=".activity.home.bartop.message.ApproveNewParticularActivity"></activity>
-        <activity android:name=".fragment.bartop.message.task.TopTaskUnderlingDetailActivity"/>
-        <activity android:name=".activity.home.bartop.message.WebViewApproveActivity"/>
+        <activity
+            android:name=".activity.home.bartop.MessageActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.message.MessageListItemActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.message.ApproveNewActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.message.ApproveNewParticularActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".fragment.bartop.message.task.TopTaskUnderlingDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.bartop.message.WebViewApproveActivity"
+            android:screenOrientation="portrait" />
         <!--用户页面-->
-        <activity android:name=".activity.home.bartop.UserActivity"></activity>
+        <activity
+            android:name=".activity.home.bartop.UserActivity"
+            android:screenOrientation="portrait"></activity>
         <!--搜索页面-->
-        <activity android:name=".activity.home.bartop.SearchActivity"></activity>
-        <activity android:name=".activity.home.bartop.search.SpeechSearchActivity"></activity>
-        <activity android:name=".activity.home.bartop.search.SearchResultActivity"></activity>
+        <activity
+            android:name=".activity.home.bartop.SearchActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.search.SpeechSearchActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.home.bartop.search.SearchResultActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
@@ -111,15 +171,27 @@
             android:screenOrientation="behind"></activity>
 
         <!--各类页面的集合显示-->
-        <activity android:name=".activity.EmptyActivity" />
+        <activity
+            android:name=".activity.EmptyActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.home.bartop.message.TaskNewActivity" />
-        <activity android:name=".activity.home.bartop.message.TaskDetailActivity" />
-        <activity android:name=".activity.home.bartop.message.KnowledgeNewZDLFActivity" />
+        <activity
+            android:name=".activity.home.bartop.message.TaskNewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.bartop.message.TaskDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.bartop.message.KnowledgeNewZDLFActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".test.PullableListViewActivity" />
+        <activity
+            android:name=".test.PullableListViewActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.home.function.form.FunctionFormActivity"/>
+        <activity
+            android:name=".activity.home.function.form.FunctionFormActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.JPushService"></service>
 
@@ -294,7 +366,7 @@
         <uses-permission android:name="android.permission.REORDER_TASKS" />
         <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-        <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+        <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
         <!-- Push SDK 相关组件，required-->
         <!-- 消息接收服务 -->
@@ -308,71 +380,80 @@
                 <action android:name="com.alibaba.sdk.android.push.NOTIFY_ACTION" />
             </intent-filter>
         </service>
-        <service android:name="com.alibaba.sdk.android.push.channel.CheckService"
+        <service
+            android:name="com.alibaba.sdk.android.push.channel.CheckService"
             android:process=":channel">
             <intent-filter>
                 <action android:name="com.alibaba.sdk.android.push.CHECK_SERVICE" />
             </intent-filter>
         </service>
-        <service android:name="com.taobao.accs.ChannelService"
-            android:exported="true" android:process=":channel">
+        <service
+            android:name="com.taobao.accs.ChannelService"
+            android:exported="true"
+            android:process=":channel">
             <intent-filter>
-                <action android:name="com.taobao.accs.intent.action.SERVICE"/>
+                <action android:name="com.taobao.accs.intent.action.SERVICE" />
             </intent-filter>
         </service>
         <service
             android:name="com.taobao.accs.ChannelService$KernelService"
             android:exported="false"
-            android:process=":channel" >
-        </service>
-        <service android:name="com.taobao.accs.data.MsgDistributeService"
+            android:process=":channel"></service>
+        <service
+            android:name="com.taobao.accs.data.MsgDistributeService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.taobao.accs.intent.action.RECEIVE" />
             </intent-filter>
         </service>
-        <receiver android:name="com.taobao.accs.EventReceiver"
+
+        <receiver
+            android:name="com.taobao.accs.EventReceiver"
             android:process=":channel">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.taobao.accs.ServiceReceiver"
+        <receiver
+            android:name="com.taobao.accs.ServiceReceiver"
             android:process=":channel">
             <intent-filter>
-                <action android:name="com.taobao.accs.intent.action.COMMAND"/>
+                <action android:name="com.taobao.accs.intent.action.COMMAND" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.taobao.accs.intent.action.START_FROM_AGOO"/>
+                <action android:name="com.taobao.accs.intent.action.START_FROM_AGOO" />
             </intent-filter>
         </receiver>
-        <service android:name="org.android.agoo.accs.AgooService"
-            android:exported="true" >
+
+        <service
+            android:name="org.android.agoo.accs.AgooService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.taobao.accs.intent.action.RECEIVE" />
             </intent-filter>
         </service>
-        <service android:name="com.alibaba.sdk.android.push.AliyunPushIntentService"
-            android:exported="true"
-            >
+        <service
+            android:name="com.alibaba.sdk.android.push.AliyunPushIntentService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.alibaba.sdk.android.push.RECEIVE" />
             </intent-filter>
         </service>
+
         <receiver
             android:name="com.taobao.agoo.AgooCommondReceiver"
-            android:process=":channel"
-            android:exported="true" >
+            android:exported="true"
+            android:process=":channel">
             <intent-filter>
                 <action android:name="${applicationId}.intent.action.COMMAND" />
             </intent-filter>

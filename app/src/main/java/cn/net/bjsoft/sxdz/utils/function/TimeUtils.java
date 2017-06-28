@@ -88,8 +88,8 @@ public class TimeUtils {
                 + "dd HH"
                 + timeDecollator
                 + "mm"
-                + timeDecollator
-                + "ss");
+                /*+ timeDecollator
+                + "ss"*/);
         //SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.format(time);
     }

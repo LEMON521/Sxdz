@@ -13,17 +13,22 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.jzxiang.pickerview.TimePickerDialog;
+import com.jzxiang.pickerview.data.Type;
+import com.jzxiang.pickerview.listener.OnDateSetListener;
+
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.bean.message.MessageTaskBean;
 import cn.net.bjsoft.sxdz.utils.MyToast;
+import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 
 /**
  * Created by Zrzc on 2017/3/21.
  */
 
-public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnClickListener {
+public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnClickListener, OnDateSetListener {
     private AppProgressDialog progressDialog;
 
     private PopupWindow mSearchPopupWindow;
@@ -58,6 +63,12 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
     private ListPopupWindow levelPopupWindow;
     private ArrayList<String> typeStrList;
     private ArrayList<String> levelStrList;
+
+    //时间选择器
+    //https://github.com/JZXiang/TimePickerDialog/blob/master/sample/src/main/java/com/jzxiang/pickerview/sample/MainActivity.java
+    private TimePickerDialog mDialogAll;
+    private OnDateSetListener listener;
+    private boolean isStart = true;
 
     public TaskSearchPopupWindow(FragmentActivity activity
             , View view) {
@@ -138,6 +149,28 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         submit = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_submit);
         reset = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_reset);
 
+        long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
+        mDialogAll = new TimePickerDialog.Builder()
+                .setCallBack(this)
+                .setCancelStringId("取消")
+                .setSureStringId("确定")
+                .setTitleStringId("选择时间")
+                .setYearText("年")
+                .setMonthText("月")
+                .setDayText("日")
+                .setHourText("时")
+                .setMinuteText("分")
+                .setCyclic(false)
+                /*.setMinMillseconds(System.currentTimeMillis())*/
+                .setMaxMillseconds(System.currentTimeMillis() + tenYears)
+                .setCurrentMillseconds(System.currentTimeMillis())
+                .setThemeColor(mActivity.getResources().getColor(R.color.blue))
+                .setType(Type.ALL)
+                .setWheelItemTextNormalColor(mActivity.getResources().getColor(R.color.timetimepicker_default_text_color))
+                .setWheelItemTextSelectorColor(mActivity.getResources().getColor(R.color.light_blue))
+                .setWheelItemTextSize(12)
+                .build();
+
 //        if (typeList.size() > 0) {
 //            type.setText(typeList.get(0).type);
 //        }
@@ -209,11 +242,18 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
                 break;
 
             case R.id.pop_task_search_zdlf_time_start:
-                PickerDialog.showDatePickerDialog(mActivity, start, "-");
+//                DateTimePickDialogUtil dateTimePicKDialog = new DateTimePickDialogUtil(
+//                        mActivity, initEndDateTime);
+//                dateTimePicKDialog.dateTimePicKDialog(endDateTime);
+                //PickerDialog.showDatePickerDialog(mActivity, start, "-");
+                isStart = true;
+                mDialogAll.show(mActivity.getSupportFragmentManager(), "all");
                 break;
 
             case R.id.pop_task_search_zdlf_time_end:
-                PickerDialog.showDatePickerDialog(mActivity, end, "-");
+                //PickerDialog.showDatePickerDialog(mActivity, end, "-");
+                isStart = false;
+                mDialogAll.show(mActivity.getSupportFragmentManager(), "all");
                 break;
 
             case R.id.pop_task_search_zdlf_submit:
@@ -270,4 +310,15 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
     }
 
 
+    @Override
+    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+//        LogUtil.e(timePickerView.getCurrentMillSeconds()+timePickerView.getArguments().toString()+"");
+//        LogUtil.e(millseconds+"");
+//        LogUtil.e("获取到了时间");
+        if (isStart) {
+            start.setText(TimeUtils.getFormateTime(millseconds, "-", ":"));
+        } else {
+            end.setText(TimeUtils.getFormateTime(millseconds, "-", ":"));
+        }
+    }
 }

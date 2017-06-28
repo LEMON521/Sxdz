@@ -112,8 +112,8 @@ public class RollViewPager extends ViewPager {
 
             @Override
             public void onPageSelected(int arg0) {
-                //选中界面的时候去修改配套文字
-                top_news_title.setText(titleList.get(arg0));
+                //TODO 选中界面的时候去修改配套文字
+                //top_news_title.setText(titleList.get(arg0));
 
                 for (int i = 0; i < dotList.size(); i++) {
                     if (i == arg0) {
@@ -141,7 +141,8 @@ public class RollViewPager extends ViewPager {
     //titleList图片的配套文字，top_news_title显示图片的控件
     public void initTitle(List<String> titleList, TextView top_news_title) {
         if (top_news_title != null && titleList != null && titleList.size() > 0) {
-            top_news_title.setText(titleList.get(0));
+            //TODO 需求中不需要显示轮播图信息
+            //top_news_title.setText(titleList.get(0));
         }
         this.titleList = titleList;
         this.top_news_title = top_news_title;

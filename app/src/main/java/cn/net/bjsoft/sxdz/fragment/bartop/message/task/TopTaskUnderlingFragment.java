@@ -316,14 +316,14 @@ public class TopTaskUnderlingFragment extends BaseFragment {
     private void getFormatePositions() {
         LogUtil.e("========formate_positionsBeanList.size()========" + formate_positionsBeanList.size());
         for (AddressPositionsBean positionsBean : formate_positionsBeanList) {
-            if (positionsBean.employee != null) {
-                LogUtil.e("------------------岗位信息====" + positionsBean.name + "::" + positionsBean.id + "::" + positionsBean.pId + "::" + positionsBean.employee.name);
+//            if (positionsBean.employee != null) {
+//                LogUtil.e("------------------岗位信息====" + positionsBean.name + "::" + positionsBean.id + "::" + positionsBean.pId + "::" + positionsBean.employee.name);
                 fileBean = new FileMessageTaskUnderlingBean(
                         positionsBean.id
                         , positionsBean.pId
                         , positionsBean);
                 fileBeanList.add(fileBean);
-            }
+//            }
         }
 
 //        for (FileMessageTaskUnderlingBean bean : fileBeanList) {

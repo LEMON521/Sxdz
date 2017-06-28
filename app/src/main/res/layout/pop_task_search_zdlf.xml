@@ -139,6 +139,7 @@
                     android:textSize="@dimen/dm024" />
 
                 <EditText
+                    android:paddingRight="@dimen/dm045"
                     android:gravity="center_vertical"
                     android:id="@+id/pop_task_search_zdlf_time_start"
                     android:layout_width="wrap_content"
@@ -162,12 +163,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="任务分类:"
+                    android:text="结束时间:"
                     android:textColor="#666666"
                     android:textSize="@dimen/dm024"
                     android:visibility="invisible" />
 
                 <EditText
+                    android:paddingRight="@dimen/dm045"
                     android:gravity="center_vertical"
                     android:id="@+id/pop_task_search_zdlf_time_end"
                     android:layout_width="wrap_content"

@@ -66,7 +66,7 @@ public class MessageTaskPushAddBean implements Serializable {
         sb.append("HEX" + MyBase16.encode(description));
         sb.append("\",");
 
-
+        files = null;//暂时不需要上传附件
         if (files != null) {
             sb.append("\"files\":[");
             for (int i = 0; i < files.size(); i++) {
