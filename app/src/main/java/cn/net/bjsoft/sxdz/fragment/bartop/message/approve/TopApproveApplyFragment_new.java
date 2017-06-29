@@ -63,7 +63,6 @@ public class TopApproveApplyFragment_new extends BaseFragment {
     private ApproveShowWaiteItemAdapter_new_1 adapter;
 
     private String get_start = "0";
-    private String get_count = "0";
 
     private MessageApproveBean messageApproveBean;
 
@@ -106,47 +105,14 @@ public class TopApproveApplyFragment_new extends BaseFragment {
                     public void handleMessage(Message msg) {
                         // 千万别忘了告诉控件加载完毕了哦！
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-                        if (!get_start.equals(get_count)) {
-                            pushApplyBean.start = get_start;//设置开始查询
-                            LogUtil.e("onLoadMore-----------");
-                            getData();
-                        } else {
-                            MyToast.showLong(mActivity, "已经没有更多的消息了!");
-                            dismissProgressDialog();
-                        }
-                        LogUtil.e("onLoadMore-----------");
+                        pushApplyBean.start = get_start;//设置开始查询
+                        getData();
                     }
                 }.sendEmptyMessageDelayed(0, 500);
 
             }
 
         });
-        //getData();
-        //test();
-        //getListData();
-        //setListAdapter();
-    }
-
-    private void test() {
-        String s = "{\"code\":0,\"data\":{\"count\":7,\"items\":[{\"id\":\"4658686682444083413\",\"title\":\"综合行政费用报销舒新东\",\"wf_id\":\"baoxiao\",\"wf_name\":\"费用报销\",\"wf_type\":\"综合行政\",\"userid\":10001,\"ctime\":\"\\/Date(1493257553519)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493703320503)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"初审\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":1,\"reject\":true,\"edit\":false}]},{\"id\":\"4681582354848769442\",\"title\":\"综合行政费用报销舒新东\",\"wf_id\":\"baoxiao\",\"wf_name\":\"费用报销\",\"wf_type\":\"综合行政\",\"userid\":10001,\"ctime\":\"\\/Date(1493703247407)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493703247464)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"初审\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":1,\"reject\":false,\"edit\":false}]},{\"id\":\"4940935902148911191\",\"title\":\"舒新东发起的报销申请\",\"wf_id\":\"baoxiao\",\"wf_name\":\"费用报销\",\"wf_type\":\"综合行政\",\"userid\":10001,\"ctime\":\"\\/Date(1491798201000)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493272863886)\\/\",\"node_id\":3,\"description\":null,\"node_name\":\"记账\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":1,\"reject\":true,\"edit\":false}]},{\"id\":\"5500507181100263467\",\"title\":\"项目管理等级变更审批许慧玲\",\"wf_id\":\"dengjibiangeng\",\"wf_name\":\"等级变更审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493810270234)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493810270313)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"10001\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]},{\"id\":\"4684978392075617072\",\"title\":\"项目管理立项审批舒新东\",\"wf_id\":\"lixiangshenpi\",\"wf_name\":\"立项审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493801487008)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493801487097)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"11003\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]},{\"id\":\"5259334455050929590\",\"title\":\"项目管理立项审批舒新东\",\"wf_id\":\"lixiangshenpi\",\"wf_name\":\"立项审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493801385053)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493801385133)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"11003\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]},{\"id\":\"5599153418535202739\",\"title\":\"项目管理立项审批舒新东\",\"wf_id\":\"lixiangshenpi\",\"wf_name\":\"立项审批\",\"wf_type\":\"项目管理\",\"userid\":10001,\"ctime\":\"\\/Date(1493800429982)\\/\",\"finished\":false,\"node_time\":\"\\/Date(1493800430058)\\/\",\"node_id\":1,\"description\":null,\"node_name\":\"确定参与人\",\"node_users\":[{\"position\":false,\"id\":\"11003\",\"type\":2,\"reject\":false,\"edit\":true},{\"position\":false,\"id\":\"12336\",\"type\":2,\"reject\":false,\"edit\":true}]}]},\"msg\":null}\n";
-
-        messageApproveBean = GsonUtil.getMessageApproveBean(s);
-        if (messageApproveBean.code.equals("0")) {
-            list.addAll(messageApproveBean.data.items);
-            get_start = list.size() + "";//设置开始查询
-            get_count = messageApproveBean.data.count + "";
-
-            formateDatas();//格式化信息
-
-            groupingDatas();//将数据分组
-            //taskAdapter.notifyDataSetChanged();
-            if (get_count.equals("0")) {
-                MyToast.showLong(mActivity, "没有任何消息可查看!");
-            }
-        } else {
-            MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);
-        }
-
     }
 
 
@@ -178,9 +144,6 @@ public class TopApproveApplyFragment_new extends BaseFragment {
                     intent.putExtra("url", formate_list.get(position).url);
                     intent.putExtra("id", formate_list.get(position).id);
                     intent.putExtra("title", formate_list.get(position).title);
-//                Bundle bundle = new Bundle();
-//                bundle.putString("task_id", formate_list.get(position).id);
-//                intent.putExtra("isEdited", bundle);
                     mActivity.startActivity(intent);
                 }
             }
@@ -229,16 +192,17 @@ public class TopApproveApplyFragment_new extends BaseFragment {
                 LogUtil.e("-----------------获取我发起的审批消息----------------" + strJson);
                 messageApproveBean = GsonUtil.getMessageApproveBean(strJson);
                 if (messageApproveBean.code.equals("0")) {
-                    list.addAll(messageApproveBean.data.items);
-                    get_start = list.size() + "";//设置开始查询
-                    get_count = messageApproveBean.data.count + "";
-
-                    formateDatas();//格式化信息
-
-                    groupingDatas();//将数据分组
-                    //taskAdapter.notifyDataSetChanged();
-                    if (get_count.equals("0")) {
-                        MyToast.showLong(mActivity, "没有任何消息可查看!");
+                    if (messageApproveBean.data.items != null) {
+                        if (messageApproveBean.data.count.equals("0")) {
+                            MyToast.showLong(mActivity, "没有任何消息可查看!");
+                        } else if (!(messageApproveBean.data.items.size() > 0)) {
+                            list.addAll(messageApproveBean.data.items);
+                            get_start = list.size() + "";//设置开始查询
+                            formateDatas();
+                            groupingDatas();
+                        } else {
+                            MyToast.showLong(mActivity, "没有任何消息可查看!");
+                        }
                     }
                 } else {
                     MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);

@@ -102,6 +102,7 @@
                 <EditText
                     android:singleLine="true"
                     android:id="@+id/user_edit"
+                    android:textColorHint="#666666"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -135,6 +136,7 @@
                     android:src="@drawable/get_back_user" />
 
                 <EditText
+                    android:textColorHint="#666666"
                     android:id="@+id/pass_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

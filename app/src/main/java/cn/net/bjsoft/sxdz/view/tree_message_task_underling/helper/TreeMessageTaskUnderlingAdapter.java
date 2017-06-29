@@ -64,7 +64,7 @@ public class TreeMessageTaskUnderlingAdapter<T> extends TreeMessageTaskUnderling
                 if (node.getPositionsBean().employee != null) {
                     Intent intent = new Intent(context, TopTaskUnderlingDetailActivity.class);
                     intent.putExtra("source_id", node.getPositionsBean().employee.source_id);
-                    LogUtil.e("intent---source_id---"+intent.getStringExtra(""));
+                    LogUtil.e("intent---source_id---"+intent.getStringExtra("source_id"));
                     context.startActivity(intent);
                 } else {
                     MyToast.showShort(context, "该岗位没有联系人!");

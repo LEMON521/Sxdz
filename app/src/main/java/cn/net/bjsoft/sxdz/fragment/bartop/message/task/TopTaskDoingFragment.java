@@ -274,7 +274,7 @@ public class TopTaskDoingFragment extends BaseFragment {
 
         pushDoingBean.start = get_start;//设置开始查询
         pushDoingBean.limit = "10";
-        pushDoingBean.data.source_id = SPUtil.getUsers_SourceId(mActivity);
+//        pushDoingBean.data.source_id = SPUtil.getUsers_SourceId(mActivity);
         pushDoingBean.data.start_time = start_Str;
         pushDoingBean.data.limit_time = end_Str;
         pushDoingBean.data.task_type = type_Str;

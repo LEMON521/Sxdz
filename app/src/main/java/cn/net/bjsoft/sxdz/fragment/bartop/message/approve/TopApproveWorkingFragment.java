@@ -41,22 +41,19 @@ public class TopApproveWorkingFragment extends BaseFragment {
     private PullToRefreshLayout refresh_view;
 
 
-
-
     private MessageApproveBean messageApproveBean;
     private ArrayList<MessageApproveDataItemsBean> dataItemsBeenList;
     private ApproveShowApprovalItemAdapter approvalAdapter;
 
     private PostJsonBean pushWorkingBean;
     private String get_start = "0";
-    private String get_count = "0";
 
     private String type = "";
 
-    private void initList(){
+    private void initList() {
         pushWorkingBean = new PostJsonBean();
 
-        if (dataItemsBeenList==null) {
+        if (dataItemsBeenList == null) {
             dataItemsBeenList = new ArrayList<>();
         }
         dataItemsBeenList.clear();
@@ -120,15 +117,8 @@ public class TopApproveWorkingFragment extends BaseFragment {
                     public void handleMessage(Message msg) {
                         // 千万别忘了告诉控件加载完毕了哦！
                         pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-                        if (!get_start.equals(get_count)) {
-                            pushWorkingBean.start = get_start;//设置开始查询
-                            LogUtil.e("onLoadMore-----------");
-                            getData();
-                        } else {
-                            MyToast.showLong(mActivity, "已经没有更多的消息了!");
-                            dismissProgressDialog();
-                        }
-                        LogUtil.e("onLoadMore-----------");
+                        pushWorkingBean.start = get_start;//设置开始查询
+                        getData();
                     }
                 }.sendEmptyMessageDelayed(0, 500);
 
@@ -173,15 +163,16 @@ public class TopApproveWorkingFragment extends BaseFragment {
                 messageApproveBean = GsonUtil.getMessageApproveBean(strJson);
                 if (messageApproveBean.code.equals("0")) {//数据正确
                     formateDatas(messageApproveBean.data.items);//格式化信息
-                    dataItemsBeenList.addAll(messageApproveBean.data.items);
-
-                    get_start = dataItemsBeenList.size() + "";//设置开始查询
-                    get_count = messageApproveBean.data.count + "";
-
-                    approvalAdapter.notifyDataSetChanged();
-
-                    if (get_count.equals("0")) {
-                        MyToast.showLong(mActivity, "没有任何消息可查看!");
+                    if (messageApproveBean.data.items != null) {
+                        if (messageApproveBean.data.count.equals("0")) {
+                            MyToast.showLong(mActivity, "没有任何消息可查看!");
+                        } else if (!(messageApproveBean.data.items.size() > 0)) {
+                            dataItemsBeenList.addAll(messageApproveBean.data.items);
+                            get_start = dataItemsBeenList.size() + "";//设置开始查询
+                            approvalAdapter.notifyDataSetChanged();
+                        } else {
+                            MyToast.showLong(mActivity, "没有任何消息可查看!");
+                        }
                     }
                 } else {
                     MyToast.showLong(mActivity, "获取消息失败-"/*+taskBean.msg*/);

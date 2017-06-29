@@ -21,7 +21,7 @@
 
 
             <TextView
-                android:id="@+id/fragment_task_underling_detail_done"
+                android:id="@+id/fragment_task_underling_detail_doing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/approve_left_shixin"
@@ -30,13 +30,13 @@
                 android:paddingLeft="@dimen/dm030"
                 android:paddingRight="@dimen/dm030"
                 android:paddingTop="@dimen/dm010"
-                android:text="已完成"
+                android:text="未完成"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dm024" />
 
 
             <TextView
-                android:id="@+id/fragment_task_underling_detail_doing"
+                android:id="@+id/fragment_task_underling_detail_done"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/approve_right_shixin"
@@ -45,7 +45,7 @@
                 android:paddingLeft="@dimen/dm030"
                 android:paddingRight="@dimen/dm030"
                 android:paddingTop="@dimen/dm010"
-                android:text="未完成"
+                android:text="已完成"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dm024" />
         </LinearLayout>

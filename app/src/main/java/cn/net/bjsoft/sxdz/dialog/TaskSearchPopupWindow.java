@@ -262,23 +262,8 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
                 String typeStr = type.getText().toString().trim();
                 String levleStr = level.getText().toString().trim();
 
-                if (TextUtils.isEmpty(startStr)) {
-                    MyToast.showShort(mActivity, "请选择开始时间");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(endStr)) {
-                    MyToast.showShort(mActivity, "请选择结束时间");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(typeStr)) {
-                    MyToast.showShort(mActivity, "请选择任务类别");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(levleStr)) {
-                    MyToast.showShort(mActivity, "请选择任务等级");
+                if (TextUtils.isEmpty(startStr) && TextUtils.isEmpty(endStr) && TextUtils.isEmpty(typeStr) && TextUtils.isEmpty(levleStr)) {
+                    MyToast.showShort(mActivity, "请至少选择一个查询条件");
                     return;
                 }
 

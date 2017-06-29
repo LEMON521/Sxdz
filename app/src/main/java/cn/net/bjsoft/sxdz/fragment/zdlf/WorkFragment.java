@@ -4,15 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Handler;
-import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.xutils.common.Callback;
@@ -22,11 +19,11 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.net.bjsoft.sxdz.R;
-import cn.net.bjsoft.sxdz.activity.home.WebActivity;
-import cn.net.bjsoft.sxdz.adapter.zdlf.WorkAdapter;
+import cn.net.bjsoft.sxdz.adapter.WorkListAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.zdlf.work.WorkBean;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
@@ -44,54 +41,22 @@ import cn.net.bjsoft.sxdz.view.RollViewPager;
 public class WorkFragment extends BaseFragment {
 
 
-    @ViewInject(R.id.fragment_work_root)
-    private ScrollView root;//轮播图
-//    @ViewInject(R.id.fragment_work_root_text)
-//    private TextView root_text;//轮播图
-    //==================轮播图================
-    @ViewInject(R.id.scroll)
+    //    @ViewInject(R.id.fragment_work_root)
+//    private ScrollView root;//轮播图
+//    @ViewInject(R.id.scroll)
     private RelativeLayout scroll;//轮播图
 
 
-    //放置顶部轮播图所在的线性布局
-    @ViewInject(R.id.top_viewpager)
+    @ViewInject(R.id.fragment_work_functions)
+    private ListView functionListView;
+
+    private View headView;
+    //    @ViewInject(R.id.top_viewpager)
     private LinearLayout top_viewpager;
-    //安放轮播图文字的TextView
-    @ViewInject(R.id.top_title)
+    //    @ViewInject(R.id.top_title)
     private TextView top_title;
-    //放置轮播图点对应的线性布局
-    @ViewInject(R.id.dots_ll)
+    //    @ViewInject(R.id.dots_ll)
     private LinearLayout dots_ll;//标题
-
-
-    //==================应用==================
-    @ViewInject(R.id.ll_application_main)
-    private LinearLayout ll_main;//主要应用
-    @ViewInject(R.id.tv_application_main)
-    private TextView tv_main;//主要应用
-    @ViewInject(R.id.gv_application_main)
-    private GridView gv_main;
-
-    @ViewInject(R.id.ll_application_project)
-    private LinearLayout ll_project;//项目应用
-    @ViewInject(R.id.tv_application_project)
-    private TextView tv_project;//项目应用
-    @ViewInject(R.id.gv_application_project)
-    private GridView gv_project;
-
-    @ViewInject(R.id.ll_application_work)
-    private LinearLayout ll_work;//工程应用
-    @ViewInject(R.id.tv_application_work)
-    private TextView tv_work;//工程应用
-    @ViewInject(R.id.gv_application_work)
-    private GridView gv_work;
-
-    @ViewInject(R.id.ll_application_other)
-    private LinearLayout ll_other;//其他应用
-    @ViewInject(R.id.tv_application_other)
-    private TextView tv_other;//其他应用
-    @ViewInject(R.id.gv_application_other)
-    private GridView gv_other;
 
     //数据类声明
     private WorkBean workBean;
@@ -108,67 +73,63 @@ public class WorkFragment extends BaseFragment {
     //存放点对应view对象的集合
     private List<ImageView> viewList = new ArrayList<ImageView>();
 
-
-    private ArrayList<WorkBean.FunctionListDao> mainDaos;
-    private ArrayList<WorkBean.FunctionListDao> projectDaos;
-    private ArrayList<WorkBean.FunctionListDao> workDaos;
-    private ArrayList<WorkBean.FunctionListDao> otherDaos;
-
-    private WorkAdapter mainWorkAdapter;
-    private WorkAdapter projectWorkAdapter;
-    private WorkAdapter workWorkAdapter;
-    private WorkAdapter otherWorkAdapter;
-
-    private AdapterView.OnItemClickListener itemClickListener;
-    private Intent intent;
+    private ArrayList<ArrayList<WorkBean.FunctionListDao>> fomateFunctionList;
+    private WorkListAdapter workListAdapter;
 
     private PushCountReceiver pushCountReceiver;
 
-    protected static final int SUCCESS = 1;
-    protected static final int ERROR = -1;
-    private Message message = null;
-    /**
-     * 向主线程发送消息的Handler
-     */
-    private Handler handlerWork = new Handler() {
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                // 对数据进行解析和封装
-                case SUCCESS:
-                    LogUtil.e("成功啦!!!!!!!");
-                    classifyData();
-                    setData();
-//                    dismissProgressDialog();
-                    break;
-
-                case ERROR:
-                    //
-                    //test.setText("网络异常,暂时无法获取数据/n点击刷新");
-                    //LogUtil.e("获取到的条目--------失败!!!---");
-
-                    dismissProgressDialog();
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-    };
-
+    View.OnTouchListener touchListener;
 
     @Override
     public void initData() {
-        if (message != null) {
-            message = null;
-        }
+        touchListener = new View.OnTouchListener() {
+            //屏蔽掉滑动事件
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        };
+        headView = View.inflate(mActivity, R.layout.head_work, null);
+        top_viewpager = (LinearLayout) headView.findViewById(R.id.top_viewpager);
+        top_title = (TextView) headView.findViewById(R.id.top_title);
+        dots_ll = (LinearLayout) headView.findViewById(R.id.dots_ll);
+        functionListView.addHeaderView(headView);//向listView增加head的时候,必须在ListView设置Adapter之前增加
 
-        showProgressDialog();
-        message = new Message();
+        functionListView.setOnTouchListener(touchListener);
+
+        if (fomateFunctionList == null) {
+            fomateFunctionList = new ArrayList<>();
+        }
+        fomateFunctionList.clear();
+
+        if (workListAdapter == null) {
+            workListAdapter = new WorkListAdapter(mActivity, fomateFunctionList);
+        }
+        functionListView.setAdapter(workListAdapter);
+
+
         getData();
+        //getDataTest();
     }
 
+    private void getDataTest() {
+        String s = "{\"code\":0,\"data\":{\"scroll_list\":[{\"id\":\"4718687404520726880\",\"file_text\":\"项目管理\",\"image_url\":\"Data/biip/upload/shuxin_work/4718687404520726880/image.jpg\",\"file_url\":\"http://api.shuxinyun.com/apps/preview.html?link_id=4669731623632737806\\u0026link_from=4895081593118139245\"},{\"id\":\"5633795284552484528\",\"file_text\":\"工程管理\",\"image_url\":\"Data/biip/upload/shuxin_work/5633795284552484528/image.jpg\",\"file_url\":\"http://api.shuxinyun.com/apps/preview.html?link_id=5120509048687776460\\u0026link_from=4895081593118139245\"},{\"id\":\"5495462057710350840\",\"file_text\":\"紧急情况\",\"image_url\":\"Data/biip/upload/shuxin_work/5495462057710350840/image.jpg\",\"file_url\":\"http://api.shuxinyun.com/apps/preview.html?link_id=app_eng_emergent_list\\u0026link_from=4895081593118139245\"}],\"function_list\":[{\"id\":\"4718687404520726880\",\"image_url\":\"Data/biip/upload/shuxin_work/4718687404520726880/logo.png\",\"name\":\"项目管理\",\"url\":\"http://api.shuxinyun.com/apps/preview.html?link_id=4669731623632737806\\u0026link_from=4895081593118139245\",\"tag\":\"project\",\"type\":\"主要应用\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5633795284552484528\",\"image_url\":\"Data/biip/upload/shuxin_work/5633795284552484528/logo.png\",\"name\":\"工程管理\",\"url\":\"http://api.shuxinyun.com/apps/preview.html?link_id=5120509048687776460\\u0026link_from=4895081593118139245\",\"tag\":\"engineering\",\"type\":\"主要应用\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5545422878315850041\",\"image_url\":\"Data/biip/upload/shuxin_work/5545422878315850041/logo.png\",\"name\":\"合同管理\",\"url\":\"\",\"tag\":\"contract\",\"type\":\"主要应用\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5428721251690695045\",\"image_url\":\"Data/biip/upload/shuxin_work/5428721251690695045/logo.png\",\"name\":\"市场通道\",\"url\":\"\",\"tag\":\"marketchannel\",\"type\":\"主要应用\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5416837067164988810\",\"image_url\":\"\",\"name\":\"测试应用\",\"url\":\"\",\"tag\":\"\",\"type\":\"主要应用\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5231771961045026914\",\"image_url\":\"Data/biip/upload/shuxin_work/5231771961045026914/logo.png\",\"name\":\"销售日报\",\"url\":\"\",\"tag\":\"salereport\",\"type\":\"项目管理\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5181108271404766184\",\"image_url\":\"Data/biip/upload/shuxin_work/5181108271404766184/logo.png\",\"name\":\"项目统计\",\"url\":\"\",\"tag\":\"projectstat\",\"type\":\"项目管理\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5261989518824174736\",\"image_url\":\"Data/biip/upload/shuxin_work/5261989518824174736/logo.png\",\"name\":\"工程日志\",\"url\":\"\",\"tag\":\"engineeringlog\",\"type\":\"项目管理\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5495462057710350840\",\"image_url\":\"Data/biip/upload/shuxin_work/5495462057710350840/logo.png\",\"name\":\"紧急情况\",\"url\":\"http://api.shuxinyun.com/apps/preview.html?link_id=app_eng_emergent_list\\u0026link_from=4895081593118139245\",\"tag\":\"emergency\",\"type\":\"日常工作\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"4842215491303777131\",\"image_url\":\"Data/biip/upload/shuxin_work/4842215491303777131/logo.png\",\"name\":\"工程评价\",\"url\":\"http://www.shuxin.net/api/nifty_demo/zdlf_app_grade_list.html\",\"tag\":\"engineeringeval\",\"type\":\"日常工作\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5474230569426966940\",\"image_url\":\"Data/biip/upload/shuxin_work/5474230569426966940/logo.png\",\"name\":\"施工能力\",\"url\":\"\",\"tag\":\"construction\",\"type\":\"日常工作\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"4615012956894582442\",\"image_url\":\"Data/biip/upload/shuxin_work/4615012956894582442/logo.png\",\"name\":\"施工队\",\"url\":\"\",\"tag\":\"\",\"type\":\"日常工作\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5723025381860387850\",\"image_url\":\"Data/biip/upload/shuxin_work/5723025381860387850/logo.png\",\"name\":\"周计划\",\"url\":\"\",\"tag\":\"weekplan\",\"type\":\"其他应用\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"5260828991081055753\",\"image_url\":\"Data/biip/upload/shuxin_work/5260828991081055753/logo.png\",\"name\":\"公司运营\",\"url\":\"\",\"tag\":\"companyrun\",\"type\":\"其他应用\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"4853777795985575160\",\"image_url\":\"Data/biip/upload/shuxin_work/4853777795985575160/logo.png\",\"name\":\"站内信\",\"url\":\"\",\"tag\":\"sitemsg\",\"type\":\"其他应用\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"},{\"id\":\"4774332732467809032\",\"image_url\":\"\",\"name\":\"测试\",\"url\":\"\",\"tag\":\"\",\"type\":\"测试添加\",\"type_icon\":\"\",\"type_url\":\"\",\"push_count\":\"0\"}]},\"msg\":\"\"}";
+        workBean = GsonUtil.getWorkBean(s);
+        if (workBean.code.equals("0")) {
+            //LogUtil.e("获取到的条目-----------" + result);
+            workDatas = workBean.data;
+            classifyData();
+            setData();
+        } else {
+            MyToast.showShort(mActivity, "获取数据失败!");
+        }
+    }
 
     /**
      * 获取数据
@@ -181,7 +142,7 @@ public class WorkFragment extends BaseFragment {
         LogUtil.e("url$$$$$$$$$$$$$$getItemsData$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
         RequestParams params = new RequestParams(url);
         params.addBodyParameter("source_id", "shuxin_work_top");
-        LogUtil.e("获取工作条目条目============params"+params.toString());
+        LogUtil.e("获取工作条目条目============params" + params.toString());
 
         httpPostUtils.get(mActivity, params);
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
@@ -192,51 +153,21 @@ public class WorkFragment extends BaseFragment {
                 if (workBean.code.equals("0")) {
                     //LogUtil.e("获取到的条目-----------" + result);
                     workDatas = workBean.data;
-                    message.what = SUCCESS;
+                    classifyData();
+                    setData();
                 } else {
-                    message.what = ERROR;
+                    MyToast.showShort(mActivity, "获取数据失败!");
                 }
-
-//                itemsBean = GsonUtil.getKnowledgeItemsBean(strJson);
-//                if (itemsBean.code.equals("0")) {//获取成功
-//                    //LogUtil.e("获取到的条目-----------" + result);
-//
-//
-//                    if (itemsBean.data.items != null && itemsBean.data.items.size() > 0) {
-//
-//                        itemsDataList.addAll(itemsBean.data.items);
-//                        cacheItemsDataList.addAll(itemsBean.data.items);
-//
-//                        get_start = (itemsBean.data.items.size() + Integer.parseInt(get_start)) + "";
-////                    get_cache_start= get_start;
-////                        get_count = itemsBean.data.count;
-//                        message.setVisibility(View.GONE);
-//                        setItemsData();
-//                    } else {
-//                        message.setVisibility(View.VISIBLE);
-//                        MyToast.showShort(mActivity, "已经没有更多的信息!");
-//                    }
-
-//
-//                } else {
-//                }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
-                LogUtil.e("-----------------获取条目消息----------失败------" + ex.getLocalizedMessage());
-                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex.getMessage());
-                LogUtil.e("-----------------获取条目消息----------失败------" + ex.getCause());
-                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex.getStackTrace());
-                LogUtil.e("-----------------获取条目消息-----------失败-----" + ex);
                 ex.printStackTrace();
                 StackTraceElement[] elements = ex.getStackTrace();
                 for (StackTraceElement element : elements) {
                     LogUtil.e("-----------------获取条目消息-----------失败方法-----" + element.getMethodName());
                 }
                 MyToast.showShort(mActivity, "获取数据失败!!");
-                message.what = ERROR;
             }
 
             @Override
@@ -246,53 +177,9 @@ public class WorkFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
-//                itemsAdapter.notifyDataSetChanged();
-                handlerWork.sendMessage(message);
                 dismissProgressDialog();
             }
         });
-
-
-//        if (workDatas != null) {
-//            workDatas = null;
-//        }
-//
-//        /**
-//         * 工作模块的数据,跟mobile.josn在一个文件夹下面
-//         */
-//        String url = apps_url + SPUtil.getAppid(mActivity) + "/work_items.json";
-//        //String url = TestAddressUtils.test_get_work_url;
-//        RequestParams params = new RequestParams(url);
-//        x.http().get(params, new Callback.CommonCallback<String>() {
-//            @Override
-//            public void onSuccess(String result) {
-//                workBean = GsonUtil.getWorkBean(result);
-//                if (workBean.result) {
-//                    //LogUtil.e("获取到的条目-----------" + result);
-//                    workDatas = workBean.data;
-//                    message.what = SUCCESS;
-//                } else {
-//                    message.what = ERROR;
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable ex, boolean isOnCallback) {
-//                //LogUtil.e("获取到的条目--------失败!!!---" + ex);
-//                message.what = ERROR;
-//            }
-//
-//            @Override
-//            public void onCancelled(CancelledException cex) {
-//
-//            }
-//
-//            @Override
-//            public void onFinished() {
-//                handlerWork.sendMessage(message);
-//            }
-//        });
     }
 
     /**
@@ -310,105 +197,29 @@ public class WorkFragment extends BaseFragment {
         }
         scrollListDaos.clear();
 
-        intent = new Intent(mActivity, WebActivity.class);
-        itemClickListener = new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //LogUtil.e("parent" + parent.toString() + "::position" + position+"++parent.getId()"+parent.getId());
-                String title = "";
-                String url = "";
-                switch (parent.getId()) {
-                    case R.id.gv_application_main:
-                        title = mainDaos.get(position).name;
-                        url = mainDaos.get(position).url;
-                        break;
-                    case R.id.gv_application_project:
-                        url = projectDaos.get(position).url;
-                        title = projectDaos.get(position).name;
-                        break;
-                    case R.id.gv_application_work:
-                        url = workDaos.get(position).url;
-                        title = workDaos.get(position).name;
-                        break;
-                    case R.id.gv_application_other:
-                        url = otherDaos.get(position).url;
-                        title = otherDaos.get(position).name;
-                        break;
-                }
-                intent.putExtra("url", url);
-                intent.putExtra("title", title);
-                startActivity(intent);
-            }
-        };
+        functionListDaos = workDatas.function_list;
 
-        //主要应用
-        if (mainDaos == null) {
-            mainDaos = new ArrayList<>();
-        }
-        mainDaos.clear();
-        if (mainWorkAdapter == null) {
-            mainWorkAdapter = new WorkAdapter(mActivity, mainDaos);
-        }
-        gv_main.setAdapter(mainWorkAdapter);
-        gv_main.setOnItemClickListener(itemClickListener);
-
-
-        //项目相关
-        if (projectDaos == null) {
-            projectDaos = new ArrayList<>();
-        }
-        projectDaos.clear();
-        if (projectWorkAdapter == null) {
-            projectWorkAdapter = new WorkAdapter(mActivity, projectDaos);
-        }
-        gv_project.setAdapter(projectWorkAdapter);
-        gv_project.setOnItemClickListener(itemClickListener);
-
-
-        //工作相关
-        if (workDaos == null) {
-            workDaos = new ArrayList<>();
-        }
-        workDaos.clear();
-        if (workWorkAdapter == null) {
-            workWorkAdapter = new WorkAdapter(mActivity, workDaos);
-        }
-        gv_work.setAdapter(workWorkAdapter);
-        gv_work.setOnItemClickListener(itemClickListener);
-
-
-        //其他相关
-        if (otherDaos == null) {
-            otherDaos = new ArrayList<>();
-        }
-        otherDaos.clear();
-        if (otherWorkAdapter == null) {
-            otherWorkAdapter = new WorkAdapter(mActivity, otherDaos);
-        }
-        gv_other.setAdapter(otherWorkAdapter);
-        gv_other.setOnItemClickListener(itemClickListener);
-        //=============初始化完毕
-
-        //============添加数据
-        //向功能列表添加数据
-        functionListDaos.addAll(workDatas.function_list);
-        //开始分类
-        for (WorkBean.FunctionListDao function : functionListDaos) {
-            if (function.type.equals("主要应用")) {
-                mainDaos.add(function);
-            } else if (function.type.equals("项目管理")) {
-                projectDaos.add(function);
-            } else if (function.type.equals("日常工作")) {
-                workDaos.add(function);
-            } else if (function.type.equals("其他应用")) {
-                otherDaos.add(function);
+        HashMap<String, ArrayList<WorkBean.FunctionListDao>> map = new HashMap<>();
+        ArrayList<String> listString = new ArrayList<>();
+        for (WorkBean.FunctionListDao dao : functionListDaos) {
+            if (!map.containsKey(dao.type)) {
+                ArrayList<WorkBean.FunctionListDao> list = new ArrayList<>();
+                list.add(dao);
+                map.put(dao.type, list);
+                listString.add(dao.type);//map的put方法会把key的顺序打乱,list不会打乱
             } else {
-
+                map.get(dao.type).add(dao);
             }
+        }
 
+        for (int i = 0; i < map.size(); i++) {
+            fomateFunctionList.add(map.get(listString.get(i)));
         }
 
 
+        Utility.setListViewHeightBasedOnChildren(functionListView);
+        workListAdapter.notifyDataSetChanged();
+        setPushNum(mActivity);
         //功能数据分类完毕
 
         //向轮播图添加数据
@@ -423,54 +234,21 @@ public class WorkFragment extends BaseFragment {
 
         setRollViewPage();
 
-        if (mainDaos.size() > 0) {
-            ll_main.setVisibility(View.VISIBLE);
-            tv_main.setText(mainDaos.get(0).type);
-            Utility.setGridViewHeightBasedOnChildren(gv_main, 4);
-        } else {
-            ll_main.setVisibility(View.GONE);
-        }
 
+//        if (!(scrollListDaos.size() > 0 || functionListDaos.size() > 0)) {
+//            root.setVisibility(View.GONE);
+//        } else {
+//            root.setVisibility(View.VISIBLE);
+//            setPushNum(getContext());
+//        }
 
-        if (projectDaos.size() > 0) {
-            ll_project.setVisibility(View.VISIBLE);
-            tv_project.setText(projectDaos.get(0).type);
-            Utility.setGridViewHeightBasedOnChildren(gv_project, 4);
-        } else {
-            ll_project.setVisibility(View.GONE);
-        }
-
-
-        if (workDaos.size() > 0) {
-            ll_work.setVisibility(View.VISIBLE);
-            tv_work.setText(workDaos.get(0).type);
-            Utility.setGridViewHeightBasedOnChildren(gv_work, 4);
-        } else {
-            ll_work.setVisibility(View.GONE);
-        }
-
-
-        if (otherDaos.size() > 0) {
-            ll_other.setVisibility(View.VISIBLE);
-            tv_other.setText(otherDaos.get(0).type);
-            Utility.setGridViewHeightBasedOnChildren(gv_other, 4);
-        } else {
-            ll_other.setVisibility(View.GONE);
-        }
-
-        if (!(scrollListDaos.size() > 0 || functionListDaos.size() > 0)) {
-            root.setVisibility(View.GONE);
-        } else {
-            root.setVisibility(View.VISIBLE);
-            setPushNum(getContext());
-        }
     }
 
     //初始化轮播图-----------------------------开始--------------------------
     private void setRollViewPage() {
         //判断当前的轮播图中是否有数据，有数据做后续操作
         if (scrollListDaos.size() > 0) {
-            scroll.setVisibility(View.VISIBLE);
+//            scroll.setVisibility(View.VISIBLE);
             //通过顶部轮播图的数据填充界面
             RollViewPager rollViewPager = new RollViewPager(mActivity, viewList,
                     new RollViewPager.OnViewClickListener() {
@@ -518,7 +296,7 @@ public class WorkFragment extends BaseFragment {
 //				lv_item_news.addHeaderView(layout_roll_view);
 //			}
         } else {
-            scroll.setVisibility(View.GONE);
+//            scroll.setVisibility(View.GONE);
         }
         dismissProgressDialog();
     }
@@ -592,80 +370,46 @@ public class WorkFragment extends BaseFragment {
              * 只需要改数据适配器的   集合的内容(刷新)---便可刷新GridView
              */
             LogUtil.e("工作模块获取到了推送数据==============");
-//            private ArrayList<WorkBean.FunctionListDao> mainDaos;
-//            private ArrayList<WorkBean.FunctionListDao> projectDaos;
-//            private ArrayList<WorkBean.FunctionListDao> workDaos;
-//            private ArrayList<WorkBean.FunctionListDao> otherDaos;
-//            private WorkAdapter mainWorkAdapter;
-//            private WorkAdapter projectWorkAdapter;
-//            private WorkAdapter workWorkAdapter;
-//            private WorkAdapter otherWorkAdapter;
             setPushNum(context);
 
         }
     }
 
     private void setPushNum(Context context) {
-        if (mainDaos != null) {
-            for (int i = 0; i < mainDaos.size(); i++) {
-                if (mainDaos.get(i).tag.equals("project")) {
-                    mainDaos.get(i).push_count = SPJpushUtil.getProject(context);
-                } else if (mainDaos.get(i).tag.equals("engineering")) {
-                    mainDaos.get(i).push_count = SPJpushUtil.getEngineering(context);
-                } else if (mainDaos.get(i).tag.equals("contract")) {
-                    mainDaos.get(i).push_count = SPJpushUtil.getContract(context);
-                } else if (mainDaos.get(i).tag.equals("marketchannel")) {
-                    mainDaos.get(i).push_count = SPJpushUtil.getMarketchannel(context);
+        for (ArrayList<WorkBean.FunctionListDao> list : fomateFunctionList) {
+            for (WorkBean.FunctionListDao dao : list) {
+                if (dao.tag.equals("project")) {
+                    dao.push_count = SPJpushUtil.getProject(context);
+                } else if (dao.tag.equals("engineering")) {
+                    dao.push_count = SPJpushUtil.getEngineering(context);
+                } else if (dao.tag.equals("contract")) {
+                    dao.push_count = SPJpushUtil.getContract(context);
+                } else if (dao.tag.equals("marketchannel")) {
+                    dao.push_count = SPJpushUtil.getMarketchannel(context);
+                } else if (dao.tag.equals("salereport")) {
+                    dao.push_count = SPJpushUtil.getSalereport(context);
+                } else if (dao.tag.equals("projectstat")) {
+                    dao.push_count = SPJpushUtil.getProjectstat(context);
+                } else if (dao.tag.equals("engineeringlog")) {
+                    dao.push_count = SPJpushUtil.getEngineeringlog(context);
+                } else if (dao.tag.equals("emergency")) {
+                    dao.push_count = SPJpushUtil.getEmergency(context);
+                } else if (dao.tag.equals("engineeringeval")) {
+                    dao.push_count = SPJpushUtil.getEngineeringeval(context);
+                } else if (dao.tag.equals("construction")) {
+                    dao.push_count = SPJpushUtil.getConstruction(context);
+                } else if (dao.tag.equals("constructionteam")) {
+                    dao.push_count = SPJpushUtil.getConstructionteam(context);
+                } else if (dao.tag.equals("weekplan")) {
+                    dao.push_count = SPJpushUtil.getWeekplan(context);
+                } else if (dao.tag.equals("companyrun")) {
+                    dao.push_count = SPJpushUtil.getCompanyrun(context);
+                } else if (dao.tag.equals("sitemsg")) {
+                    dao.push_count = SPJpushUtil.getSitemsg(context);
                 }
             }
-            mainWorkAdapter.notifyDataSetChanged();
         }
-
-
-        if (projectDaos != null) {
-            for (int i = 0; i < projectDaos.size(); i++) {
-                if (projectDaos.get(i).tag.equals("salereport")) {
-                    projectDaos.get(i).push_count = SPJpushUtil.getSalereport(context);
-                } else if (projectDaos.get(i).tag.equals("projectstat")) {
-                    projectDaos.get(i).push_count = SPJpushUtil.getProjectstat(context);
-                }
-            }
-            projectWorkAdapter.notifyDataSetChanged();
-        }
-
-
-        if (workDaos != null) {
-            for (int i = 0; i < workDaos.size(); i++) {
-                if (workDaos.get(i).tag.equals("engineeringlog")) {
-                    workDaos.get(i).push_count = SPJpushUtil.getEngineeringlog(context);
-                } else if (workDaos.get(i).tag.equals("emergency")) {
-                    workDaos.get(i).push_count = SPJpushUtil.getEmergency(context);
-                } else if (workDaos.get(i).tag.equals("engineeringeval")) {
-                    workDaos.get(i).push_count = SPJpushUtil.getEngineeringeval(context);
-                } else if (workDaos.get(i).tag.equals("construction")) {
-                    workDaos.get(i).push_count = SPJpushUtil.getConstruction(context);
-                } else if (workDaos.get(i).tag.equals("constructionteam")) {
-                    workDaos.get(i).push_count = SPJpushUtil.getConstructionteam(context);
-                }
-            }
-            workWorkAdapter.notifyDataSetChanged();
-        }
-
-
-        if (otherDaos != null) {
-            for (int i = 0; i < otherDaos.size(); i++) {
-                if (otherDaos.get(i).tag.equals("weekplan")) {
-                    otherDaos.get(i).push_count = SPJpushUtil.getWeekplan(context);
-                } else if (otherDaos.get(i).tag.equals("companyrun")) {
-                    otherDaos.get(i).push_count = SPJpushUtil.getCompanyrun(context);
-                } else if (otherDaos.get(i).tag.equals("sitemsg")) {
-                    otherDaos.get(i).push_count = SPJpushUtil.getSitemsg(context);
-                }
-            }
-            otherWorkAdapter.notifyDataSetChanged();
-        }
-
-
+        workListAdapter.notifyDataSetChanged();
     }
 
 

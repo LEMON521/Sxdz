@@ -269,20 +269,32 @@ public class MineAddressListFragment extends BaseFragment {
         childNameList.clear();
         childNumList.clear();
 //        LogUtil.e("获取到联系人数据-----------" + list_employeesBean.size());
-        for (AddressEmployeesBean bean : list_employeesBean) {//以防后台给的数据是残疾的
-            if (bean.user != null) {
-                childAvatarList.add(bean.user.avatar);
-            } else {
-                AddressEmployeesUserBean userBean = new AddressEmployeesUserBean();
-                childAvatarList.add(userBean.avatar);
+        for (FileTreeBean fileBeanData : fileBeanDatas) {
+
+            if (fileBeanData.getAddressDeptsBean() != null) {
+                if (fileBeanData.getAddressDeptsBean().positionsBean != null) {
+                    AddressEmployeesBean employeesBean = fileBeanData.getAddressDeptsBean().positionsBean.employee;
+                    if (employeesBean.user != null) {
+                        childAvatarList.add(employeesBean.user.avatar);
+                    } else {
+                        AddressEmployeesUserBean userBean = new AddressEmployeesUserBean();
+                        childAvatarList.add(userBean.avatar);
+                    }
+                    childNameList.add(employeesBean.name);
+                    childNumList.add(employeesBean.phone);
+                }
             }
-            childNameList.add(bean.name);
-            childNumList.add(bean.phone);
+
+
         }
+//        for (AddressEmployeesBean bean : list_employeesBean) {//以防后台给的数据是残疾的
+//
+//        }
 
 
         Intent searchIntent = new Intent(mActivity, EmptyActivity.class);
         Bundle bundle = new Bundle();
+
         bundle.putStringArrayList("address_list_avatar", childAvatarList);
         bundle.putStringArrayList("address_list_name", childNameList);
         bundle.putStringArrayList("address_list_num", childNumList);

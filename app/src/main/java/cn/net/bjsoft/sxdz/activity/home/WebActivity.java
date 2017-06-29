@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -64,9 +65,13 @@ public class WebActivity extends BaseActivity {
         if (!url.contains("?")) {
             url = url + "?";
         }
-
+        if (!TextUtils.isEmpty(userid)) {
+            userid.replace(".0", "");
+        }else {
+            userid = "";
+        }
         url = url
-                + "&id=" + userid.replace(".0", "")
+                + "&id=" + userid
                 + "&token=" + SPUtil.getToken(this)
                 + "&appid=" + SPUtil.getAppid(this)
                 + "&secret=" + SPUtil.getSecret(this);
@@ -102,7 +107,7 @@ public class WebActivity extends BaseActivity {
 //        web.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         //web.loadUrl(url);
 
-       // enablecrossdomain();
+        // enablecrossdomain();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             web.getSettings().setAllowUniversalAccessFromFileURLs(true);

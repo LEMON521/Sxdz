@@ -74,7 +74,7 @@
                 android:paddingBottom="@dimen/dm030"
                 android:paddingLeft="@dimen/dm020"
                 android:paddingRight="@dimen/dm020"
-                android:paddingTop="@dimen/dm030">
+                android:paddingTop="@dimen/dm028">
 
 
                 <TextView

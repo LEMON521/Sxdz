@@ -4,8 +4,8 @@
     <string name="serverurl">http://biip.shuxin.net/api/data/biip/android/update_sxdz.json</string>
     <string name="login">登录Login</string>
     <string name="sure">确定</string>
-    <string name="usernumber">请输入账号Account</string>
-    <string name="password">请输入密码Password</string>
+    <string name="usernumber">请输入账号</string>
+    <string name="password">请输入密码</string>
     <string name="register">快速注册</string>
     <string name="forget">忘记密码</string>
     <string name="getpassword">找回密码</string>

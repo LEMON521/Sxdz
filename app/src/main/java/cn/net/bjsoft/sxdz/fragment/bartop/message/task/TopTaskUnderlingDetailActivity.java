@@ -47,7 +47,7 @@ public class TopTaskUnderlingDetailActivity extends BaseActivity {
         LogUtil.e("source_id--------------"+source_id);
         title.setText("下属任务");
         back.setVisibility(View.VISIBLE);
-        taskChange(done);
+        taskChange(doing);
 
     }
 
@@ -79,10 +79,10 @@ public class TopTaskUnderlingDetailActivity extends BaseActivity {
 
         {//先把全部设置成默认的样式
             done.setTextColor(Color.parseColor("#999999"));
-            done.setBackgroundResource(R.drawable.approve_left_kongxin);
+            done.setBackgroundResource(R.drawable.approve_right_kongxin);
 
             doing.setTextColor(Color.parseColor("#999999"));
-            doing.setBackgroundResource(R.drawable.approve_right_kongxin);
+            doing.setBackgroundResource(R.drawable.approve_left_kongxin);
         }
 
         BaseFragment fragment = null;
@@ -91,7 +91,7 @@ public class TopTaskUnderlingDetailActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.fragment_task_underling_detail_done:
                 done.setTextColor(Color.parseColor("#FFFFFF"));
-                done.setBackgroundResource(R.drawable.approve_left_shixin);
+                done.setBackgroundResource(R.drawable.approve_right_shixin);
                 fragment = new TopTaskDoneFragment();
                 tag = "TopTaskDoneFragment";
                 //getData();
@@ -99,7 +99,7 @@ public class TopTaskUnderlingDetailActivity extends BaseActivity {
 
             case R.id.fragment_task_underling_detail_doing:
                 doing.setTextColor(Color.parseColor("#FFFFFF"));
-                doing.setBackgroundResource(R.drawable.approve_right_shixin);
+                doing.setBackgroundResource(R.drawable.approve_left_shixin);
                 fragment = new TopTaskDoingFragment();
                 tag = "TopTaskDoingFragment";
                 //getData();

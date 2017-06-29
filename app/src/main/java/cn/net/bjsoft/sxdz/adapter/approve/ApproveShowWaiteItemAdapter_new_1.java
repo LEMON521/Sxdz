@@ -36,7 +36,7 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
         this.context = context;
         this.list = list;
         imageOptions = new ImageOptions.Builder()
-                .setFailureDrawableId(R.drawable.examination_and_approval_zdlf_contract_approval) //以资源id设置加载失败的动画
+                .setFailureDrawableId(R.drawable.http_loading_image) //以资源id设置加载失败的动画
                 .setLoadingDrawableId(R.drawable.http_loading_image).build();
         //this.type = type;
     }

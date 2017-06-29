@@ -82,6 +82,8 @@ public class TopTaskDoneFragment extends BaseFragment {
 
         if (!TextUtils.isEmpty(source_id)) {
             pushDoneBean.data.source_id = source_id;
+        }else {
+            pushDoneBean.data.source_id  = SPUtil.getUsers_SourceId(mActivity);
         }
 
 //        if (tasksAllDao == null) {
@@ -285,7 +287,7 @@ public class TopTaskDoneFragment extends BaseFragment {
 
         pushDoneBean.start = get_start;//设置开始查询
         pushDoneBean.limit = "10";
-        pushDoneBean.data.source_id = SPUtil.getUsers_SourceId(mActivity);
+//        pushDoneBean.data.source_id = SPUtil.getUsers_SourceId(mActivity);
         pushDoneBean.data.start_time = start_Str;
         pushDoneBean.data.limit_time = end_Str;
         pushDoneBean.data.task_type = type_Str;

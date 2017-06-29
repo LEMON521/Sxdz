@@ -310,7 +310,7 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
                 .setDayText("日")
                 .setHourText("时")
                 .setMinuteText("分")
-                .setCyclic(false)
+                .setCyclic(true)
                 /*.setMinMillseconds(System.currentTimeMillis())*/
                 .setMaxMillseconds(System.currentTimeMillis() + tenYears)
                 .setCurrentMillseconds(System.currentTimeMillis())
