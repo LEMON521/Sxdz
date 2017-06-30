@@ -44,7 +44,12 @@ public class WebViewFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         text = getArguments().getString("text");
         url = getArguments().getString("url");
-        url = url + "?"
+
+        if (!url.contains("?")) {
+            url = url + "?";
+        }
+
+        url = url
                 + "&token=" + SPUtil.getToken(getContext())
                 + "&appid=" + SPUtil.getAppid(getContext())
                 + "&secret=" + SPUtil.getSecret(getContext());
@@ -91,9 +96,17 @@ public class WebViewFragment extends BaseFragment {
     }
 
     public void setWebview() {
-        wv_home.getSettings().setSupportZoom(false);
-        wv_home.getSettings().setUseWideViewPort(false);
+        wv_home.getSettings().setSupportZoom(true);
+        wv_home.getSettings().setUseWideViewPort(true);
         wv_home.getSettings().setJavaScriptEnabled(true);
+
+        wv_home.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        wv_home.getSettings().setAllowFileAccess(true);
+        wv_home.getSettings().setAppCacheEnabled(true);
+//        web.getSettings().setPluginsEnabled(true);
+        wv_home.getSettings().setSaveFormData(true);
+        wv_home.getSettings().setDomStorageEnabled(true);//DOM Storage
+
         wv_home.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY); // 取消滚动条
         wv_home.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         wv_home.loadUrl(url);

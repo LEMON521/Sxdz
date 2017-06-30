@@ -346,6 +346,7 @@ public class NewInitInfoActivity extends BaseActivity {
     private void getUsersInfo() {
         LogUtil.e("联系人信息---------字符串开始-------");
         RequestParams params = new RequestParams(users_all);
+        LogUtil.e("联系人信息url-----"+params.toString());
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
