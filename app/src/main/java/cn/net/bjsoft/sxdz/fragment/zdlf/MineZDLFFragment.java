@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -590,7 +591,7 @@ public class MineZDLFFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e("tag", "onActivityResult");
         if (requestCode == REQUEST_CODE_TAKE_PHOTO) {
-            if (resultCode== Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 doPhoto();
 //                if (data != null) {
 //                    if (data.getData() != null) {
@@ -768,7 +769,6 @@ public class MineZDLFFragment extends BaseFragment {
     }
 
 
-
     /**
      * 上传动作
      *
@@ -866,6 +866,13 @@ public class MineZDLFFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     //打开照相机的意图
+                    PackageManager pm = mActivity.getPackageManager();
+                    boolean permission = (PackageManager.PERMISSION_GRANTED ==
+                            pm.checkPermission("android.permission.CAMERA", "cn.net.bjsoft.sxdz"));
+                    if (!permission) {
+                        MyToast.showLong(mActivity, "没有拍摄权限,请在移动设备设置中添加拍摄权限");
+                        return;
+                    }
                     takePhoto();
                     //MyToast.showShort(context, "点击了！");
 //                    String state = Environment.getExternalStorageState();
@@ -926,6 +933,7 @@ public class MineZDLFFragment extends BaseFragment {
             }
         });
     }
+
     private Uri photoUri;
 
     private String picPath;
