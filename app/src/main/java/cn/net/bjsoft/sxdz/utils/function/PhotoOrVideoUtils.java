@@ -35,7 +35,6 @@ import java.util.Locale;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
-import cn.net.bjsoft.sxdz.utils.MyToast;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -133,7 +132,7 @@ public class PhotoOrVideoUtils {
                         } else {
                             getFragment().startActivityForResult(i, REQUEST_CODE_TAKE_PHOTO);
                         }
-                        MyToast.showShort(getActivity(), "打开了照相机！");
+//                        MyToast.showShort(getActivity(), "打开了照相机！");
                     } else {
                         Toast.makeText(getActivity(), "请确认已经插入SD卡", Toast.LENGTH_LONG).show();
                     }

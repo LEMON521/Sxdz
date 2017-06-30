@@ -77,10 +77,10 @@ public class TopTaskDoingFragment extends BaseFragment {
     public void initData() {
         pushDoingBean = new PostJsonBean();
         source_id = getArguments().getString("source_id");
-        if (!TextUtils.isEmpty(source_id)){
+        if (!TextUtils.isEmpty(source_id)) {
             pushDoingBean.data.source_id = source_id;
-        }else {
-            pushDoingBean.data.source_id  = SPUtil.getUsers_SourceId(mActivity);
+        } else {
+            pushDoingBean.data.source_id = SPUtil.getUsers_SourceId(mActivity);
         }
 
         if (tasksDoingDao == null) {
@@ -204,6 +204,7 @@ public class TopTaskDoingFragment extends BaseFragment {
         getTypes();
         //getData();
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -242,7 +243,7 @@ public class TopTaskDoingFragment extends BaseFragment {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 //当服务器没有类别文件时,就加载app本地的
-                if(!(typeStrList.size()>0)){
+                if (!(typeStrList.size() > 0)) {
                     dismissProgressDialog();
                     type_url = ReadFile.getFromAssets(mActivity, "json/task_type.json");
                     getTypes();
@@ -369,7 +370,7 @@ public class TopTaskDoingFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.fragment_task_list_all_search:
 
-                window.showWindow(typeStrList,levleStrList);
+                window.showWindow(typeStrList, levleStrList, start_Str, end_Str, type_Str, levle_Str);
 
                 break;
         }

@@ -67,8 +67,10 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
 
     @ViewInject(R.id.fragment_task_new_name)
     private EditText new_name;
-    @ViewInject(R.id.fragment_task_new_data)
-    private EditText new_data;
+    @ViewInject(R.id.fragment_task_new_data_start)
+    private EditText new_data_start;
+    @ViewInject(R.id.fragment_task_new_data_end)
+    private EditText new_data_end;
     @ViewInject(R.id.fragment_task_new_message)
     private EditText new_message;
     @ViewInject(R.id.fragment_task_new_discription)
@@ -89,6 +91,8 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
     private ListView new_humens;
     @ViewInject(R.id.fragment_task_new_submit)
     private TextView new_submit;
+
+    private boolean isStart = true;
 
     String type_url = "";
     private SideRightPopupWindow typePopupWindow;
@@ -121,7 +125,8 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
     private TimePickerDialog mDialogAll;
 
     @Event(value = {R.id.title_back
-            , R.id.fragment_task_new_data
+            , R.id.fragment_task_new_data_start
+            , R.id.fragment_task_new_data_end
             , R.id.fragment_task_new_classify_show
             , R.id.fragment_task_new_level_show
             , R.id.fragment_task_new_add_humen
@@ -133,9 +138,15 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
             case R.id.title_back://返回
                 mActivity.finish();
                 break;
-            case R.id.fragment_task_new_data://设置时间
+            case R.id.fragment_task_new_data_start://设置时间
                 //PickerDialog.showDatePickerDialog(mActivity, new_data, "-");
                 mDialogAll.show(mActivity.getSupportFragmentManager(), "all");
+                isStart = true;
+                break;
+            case R.id.fragment_task_new_data_end://设置时间
+                //PickerDialog.showDatePickerDialog(mActivity, new_data, "-");
+                mDialogAll.show(mActivity.getSupportFragmentManager(), "all");
+                isStart = false;
                 break;
             case R.id.fragment_task_new_classify_show://设置任务分类
                 /**
@@ -157,9 +168,10 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
                  */
 
                 levelStrList.clear();
+                levelStrList.add("一般");
                 levelStrList.add("重要");
                 levelStrList.add("非常重要");
-                levelStrList.add("一般");
+
 
                 levelPopupWindow.showWindow(levelStrList);
                 break;
@@ -299,7 +311,7 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
         new_files.setOnItemClickListener(itemClickListener);
         new_files.setOnTouchListener(onTouchListener);
 
-        long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
+        long tenYears = 30L * 365 * 1000 * 60 * 60 * 24L;
         mDialogAll = new TimePickerDialog.Builder()
                 .setCallBack(this)
                 .setCancelStringId("取消")
@@ -310,8 +322,8 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
                 .setDayText("日")
                 .setHourText("时")
                 .setMinuteText("分")
-                .setCyclic(true)
-                /*.setMinMillseconds(System.currentTimeMillis())*/
+                .setCyclic(false)
+                .setMinMillseconds(System.currentTimeMillis())
                 .setMaxMillseconds(System.currentTimeMillis() + tenYears)
                 .setCurrentMillseconds(System.currentTimeMillis())
                 .setThemeColor(mActivity.getResources().getColor(R.color.blue))
@@ -330,7 +342,12 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
 //        LogUtil.e(timePickerView.getCurrentMillSeconds()+timePickerView.getArguments().toString()+"");
 //        LogUtil.e(millseconds+"");
 //        LogUtil.e("获取到了时间");
-        new_data.setText(TimeUtils.getFormateTime(millseconds, "-", ":"));
+        if (isStart) {
+            new_data_start.setText(TimeUtils.getFormateTime(millseconds, "-", ":"));
+        } else {
+            new_data_end.setText(TimeUtils.getFormateTime(millseconds, "-", ":"));
+        }
+
     }
 
     /**
@@ -394,13 +411,32 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
                 String userAvatar = bundle.getString("nodeAvatar");
                 String userName = bundle.getString("nodeName");
                 String userDepartment = bundle.getString("nodeDepartment");
-                TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
-                TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
-                dao.id = userId;
-                dao.avatar = userAvatar;
-                dao.name = userName;
-                dao.department = userDepartment;
-                humenList.add(dao);
+
+                //去除重复联系人
+                if (humenList.size() > 0) {
+                    for (TreeTaskAddAddressListBean.TreeTaskAddAddressListDao listDao : humenList) {
+                        if (!userId.equals(listDao.id)) {
+                            TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
+                            TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
+                            dao.id = userId;
+                            dao.avatar = userAvatar;
+                            dao.name = userName;
+                            dao.department = userDepartment;
+                            humenList.add(dao);
+                        } else {
+                            MyToast.showLong(mActivity, "已添加(" + userName + ")为任务执行人,请重新添加");
+                        }
+                    }
+                } else {
+                    TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
+                    TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
+                    dao.id = userId;
+                    dao.avatar = userAvatar;
+                    dao.name = userName;
+                    dao.department = userDepartment;
+                    humenList.add(dao);
+                }
+
 
 //                for (int i = 0; i < nodeId.size(); i++) {
 //                    TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
@@ -437,8 +473,9 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
 
 
         String title = new_name.getText().toString().trim();
-        Long subTime = System.currentTimeMillis();
-        String time = new_data.getText().toString().trim();
+//        Long subTime = System.currentTimeMillis();
+        String time_start = new_data_start.getText().toString().trim();
+        String time_end = new_data_end.getText().toString().trim();
         String message = new_message.getText().toString().trim();
         String discription = new_discription.getText().toString().trim();
         String classify = new_classify.getText().toString().trim();
@@ -449,8 +486,23 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
             return;
         }
 
-        if (TextUtils.isEmpty(time)) {
+        if (TextUtils.isEmpty(time_start)) {
+            MyToast.showShort(mActivity, "请添加开始时间");
+            return;
+        } else if (!(Long.parseLong(TimeUtils.getTimeStamp(time_start, "-", ":")) - System.currentTimeMillis() > 0)) {
+            MyToast.showShort(mActivity, "任务开始时间必须大于当前时间!请重新选择时间!");
+            return;
+        }
+        if (TextUtils.isEmpty(time_end)) {
             MyToast.showShort(mActivity, "请添加截止时间");
+            return;
+        } else if (!(Long.parseLong(TimeUtils.getTimeStamp(time_end, "-", ":")) - System.currentTimeMillis() > 0)) {
+            MyToast.showShort(mActivity, "任务截止时间必须大于当前时间!请重新选择时间!");
+            return;
+        }
+
+        if (!((Long.parseLong(TimeUtils.getTimeStamp(time_end, "-", ":")) - Long.parseLong(TimeUtils.getTimeStamp(time_start, "-", ":"))) > 0)) {
+            MyToast.showShort(mActivity, "任务截止时间必须大于任务开始时间!请重新选择时间!");
             return;
         }
 
@@ -488,16 +540,16 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
         pushData.type = classify;//类别
         pushData.message = message;
         pushData.description = discription;
-        pushData.starttime = TimeUtils.getFormateTime(subTime, "-", ":");
+        pushData.starttime = time_start;
 //        pushData.limittime = TimeUtils.getFormateTime(Long.parseLong(TimeUtils.getDateStamp(time, "-")), "-", ":");
-        pushData.limittime = time;
+        pushData.limittime = time_end;
         pushData.priority = leave;
 
         for (int i = 0; i < filesAddList.size(); i++) {
             MessageTaskDetailDataFilesBean filesBean = new MessageTaskDetailDataFilesBean();
             filesBean.title = filesAddList.get(i).file_name;
             filesBean.url = filesAddList.get(i).file_url;
-            filesBean.ctime = TimeUtils.getFormateTime(subTime, "-", ":");
+            filesBean.ctime = TimeUtils.getFormateTime(System.currentTimeMillis(), "-", ":");
 
             pushData.files.add(filesBean);
         }

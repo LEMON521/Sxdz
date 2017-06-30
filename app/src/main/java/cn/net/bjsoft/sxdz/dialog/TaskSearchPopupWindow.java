@@ -2,7 +2,6 @@ package cn.net.bjsoft.sxdz.dialog;
 
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +54,8 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
     private EditText start, end;
     private String startStr = "";
     private String endStr = "";
+    private String typeStr = "";
+    private String levelStr = "";
 
     // 数据接口
     OnGetData mOnGetData;
@@ -89,13 +90,22 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
 //        InitUI();
 //    }
 
-    public void showWindow(ArrayList<String> taskTypes, ArrayList<String> taskLevels) {
+    //    private String startStr = "";
+//    private String endStr = "";
+//    private String typeStr = "";
+//    private String levelStr = "";
+    public void showWindow(ArrayList<String> taskTypes, ArrayList<String> taskLevels
+            , String startStr, String endStr, String typeStr, String levelStr) {
         if (taskTypes == null) {
             MyToast.showLong(mActivity, "请先设置查询分类数据!");
             return;
         }
-        typeStrList = taskTypes;
-        levelStrList = taskLevels;
+        this.typeStrList = taskTypes;
+        this.levelStrList = taskLevels;
+        this.startStr = startStr;
+        this.endStr = endStr;
+        this.typeStr = typeStr;
+        this.levelStr = levelStr;
 
         InitData();
         InitUI();
@@ -149,7 +159,7 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         submit = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_submit);
         reset = (TextView) mRootView.findViewById(R.id.pop_task_search_zdlf_reset);
 
-        long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
+        long tenYears = 30L * 365 * 1000 * 60 * 60 * 24L;
         mDialogAll = new TimePickerDialog.Builder()
                 .setCallBack(this)
                 .setCancelStringId("取消")
@@ -189,6 +199,10 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
         submit.setOnClickListener(this);
         reset.setOnClickListener(this);
 
+        type.setText(typeStr);
+        level.setText(levelStr);
+        start.setText(startStr);
+        end.setText(endStr);
 
         typePopupWindow = new ListPopupWindow(mActivity, view);
         typePopupWindow.setOnData(new ListPopupWindow.OnGetData() {
@@ -262,10 +276,11 @@ public class TaskSearchPopupWindow/* extends PopupWindow*/ implements View.OnCli
                 String typeStr = type.getText().toString().trim();
                 String levleStr = level.getText().toString().trim();
 
-                if (TextUtils.isEmpty(startStr) && TextUtils.isEmpty(endStr) && TextUtils.isEmpty(typeStr) && TextUtils.isEmpty(levleStr)) {
-                    MyToast.showShort(mActivity, "请至少选择一个查询条件");
-                    return;
-                }
+                //不让判断了
+//                if (TextUtils.isEmpty(startStr) && TextUtils.isEmpty(endStr) && TextUtils.isEmpty(typeStr) && TextUtils.isEmpty(levleStr)) {
+//                    MyToast.showShort(mActivity, "请至少选择一个查询条件");
+//                    return;
+//                }
 
                 mOnGetData.onDataCallBack(startStr, endStr, typeStr, levleStr);
                 mSearchPopupWindow.dismiss();

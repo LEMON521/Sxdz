@@ -352,7 +352,7 @@ public class TopTaskMyPublishFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.fragment_task_list_all_search:
 
-                window.showWindow(typeStrList, levleStrList);
+                window.showWindow(typeStrList, levleStrList, start_Str, end_Str, type_Str, levle_Str);
 
                 break;
 
