@@ -117,14 +117,10 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
                 /**
                  * 从后台获取类别,现在
                  */
-
-
                 rightPopupWindow.showWindow(typeStrList);
                 break;
             case R.id.knowledge_new_submit://发表,推送数据到服务器上
                 submitToService();
-
-
                 break;
         }
     }
@@ -197,10 +193,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
                             selectType = REQUEST_CODE_FILES;
                             PhotoOrVideoUtils.doFiles(mActivity, fragment);
                         } else {
-
                         }
-
-
                         break;
                 }
             }
@@ -373,7 +366,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
         sb.append("\"files\":[");
         if (filesAddList.size() > 0) {
-            for (int i = 0;i<filesAddList.size();i++) {
+            for (int i = 0; i < filesAddList.size(); i++) {
                 sb.append("{");
 
                 sb.append("\"url\":\"");
@@ -385,7 +378,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
                 sb.append("\",");
 
                 sb.append("}");
-                if (i!=(filesAddList.size()-1)){
+                if (i != (filesAddList.size() - 1)) {
                     sb.append("},");
                 }
             }
@@ -395,7 +388,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
         sb.append("\"images\":[");
         if (picList.size() > 0) {
-            for (int i = 0;i<picList.size();i++) {
+            for (int i = 0; i < picList.size(); i++) {
                 sb.append("{");
 
                 sb.append("\"url\":\"");
@@ -407,7 +400,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
                 sb.append("\",");
 
                 sb.append("}");
-                if (i!=(picList.size()-1)){
+                if (i != (picList.size() - 1)) {
                     sb.append("},");
                 }
             }

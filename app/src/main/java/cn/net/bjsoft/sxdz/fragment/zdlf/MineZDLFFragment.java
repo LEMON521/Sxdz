@@ -593,24 +593,16 @@ public class MineZDLFFragment extends BaseFragment {
         if (requestCode == REQUEST_CODE_TAKE_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 doPhoto();
-//                if (data != null) {
-//                    if (data.getData() != null) {
-//
-//                    }
-//                }
             }
 
         } else if (requestCode == REQUEST_CODE_GET_PHOTO) {
             Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
             if (uri != null) {
                 String imagePath = PhotoOrVideoUtils.getPath(mActivity, uri);
-                //upLoadFile(imagePath, "", "");
                 upLoadAvatar(imagePath);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-
-
     }
 
     /**
@@ -982,9 +974,9 @@ public class MineZDLFFragment extends BaseFragment {
             Log.e("tag", "最终选择的图片=" + picPath);
             //MyBitmapUtils.getInstance(getActivity()).display(picture,picPath);
             Bitmap bm = BitmapFactory.decodeFile(picPath);
-            //toRoundCorner(bm, 60);
-            //picture.setImageBitmap(toRoundCorner(bm, 60));
-            //MyBitmapUtils.getInstance(getActivity()).display(picture, picPath);
+                //toRoundCorner(bm, 60);
+                //picture.setImageBitmap(toRoundCorner(bm, 60));
+                //MyBitmapUtils.getInstance(getActivity()).display(picture, picPath);
             upLoadAvatar(picPath);
         } else {
             Toast.makeText(getActivity(), "选择图片文件不正确", Toast.LENGTH_LONG).show();
