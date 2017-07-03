@@ -355,12 +355,15 @@ public class PhotoOrVideoUtils {
                         bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
                         //imageView.setImageBitmap(bitmap);// 将图片显示在ImageView里
                         FileOutputStream b = null;
-                        File file = new File(BASE_PATH);
-                        file.mkdirs();// 创建文件夹
                         fileName = getSavePath() + name;
+                        File file = new File(getSavePath());
+                        boolean m = file.mkdirs();// 创建文件夹
+
+
                         try {
                             LogUtil.e("保存文件地址-------@@@@@@@@@@@@@@------------"+fileName);
-                            b = new FileOutputStream(fileName);
+                            b = new FileOutputStream(fileName);//这里应该是文件名,而不是一个文件夹的名称
+//                            LogUtil.e("保存文件地址-------+++++++------------"+b);
                             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件--参数100，即压缩品质为100%
                             //TODO 获取文件的URI  Uri uri = Uri.parse("file:///sdcard/img.png");
                             uri = Uri.fromFile(new File(fileName));

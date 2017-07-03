@@ -60,6 +60,7 @@ public class WebViewFragment extends BaseFragment {
                 back.setVisibility(View.GONE);
             }
         }
+//        url = "https://www.baidu.com/";
         //url= UrlUtil.getUrl(url,getActivity());
         Log.e("tag", url);
 
