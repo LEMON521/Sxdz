@@ -414,17 +414,21 @@ public class TopAddTaskFragment extends BaseFragment implements OnDateSetListene
 
                 //去除重复联系人
                 if (humenList.size() > 0) {
-                    for (TreeTaskAddAddressListBean.TreeTaskAddAddressListDao listDao : humenList) {
-                        if (!userId.equals(listDao.id)) {
-                            TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
-                            TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
-                            dao.id = userId;
-                            dao.avatar = userAvatar;
-                            dao.name = userName;
-                            dao.department = userDepartment;
-                            humenList.add(dao);
+                    for (int i = 0; i < humenList.size(); i++) {
+                        if (!userId.equals(humenList.get(i).id)) {
+                            if (i ==humenList.size()-1){//当都比对完的时候,没有重复的,就添加一条新的,
+                                TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
+                                TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
+                                dao.id = userId;
+                                dao.avatar = userAvatar;
+                                dao.name = userName;
+                                dao.department = userDepartment;
+                                humenList.add(dao);//
+                                break;//跳出循环,避免ConcurrentModificationException异常
+                            }
                         } else {
                             MyToast.showLong(mActivity, "已添加(" + userName + ")为任务执行人,请重新添加");
+                            break;//跳出循环,防止到最后一个节点重复添加
                         }
                     }
                 } else {
