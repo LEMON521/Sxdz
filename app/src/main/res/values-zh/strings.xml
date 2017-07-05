@@ -1,7 +1,14 @@
 <resources>
+    <string name="sping_approve_leave">选择</string>
+    <string name="text_size">26sp</string>
+    <string name="sping_sign_history">选择</string>
+
     <string name="app_name">舒心定制</string>
     <string name="search_hint">舒心定制企业文化</string>
     <string name="serverurl">http://biip.shuxin.net/api/data/biip/android/update_sxdz.json</string>
+    <string name="test_get_approve_url">http://192.168.1.119:8080/android/approve/get_approve.json</string>
+    <string name="test_get_approve_items_url">http://192.168.1.119:8080/android/approve/get_approve_items.json</string>
+    <string name="test_serverurl">http://192.168.1.119:8080/android/update_sxdz.json</string>
     <string name="login">登录Login</string>
     <string name="sure">确定</string>
     <string name="usernumber">请输入账号</string>
@@ -14,26 +21,34 @@
     <string name="setpassword">请设置密码</string>
     <string name="sendyanzhnegma">发送验证码</string>
     <string name="mine">我的Mine</string>
-    //验证码
+    <!--//验证码-->
     <string name="smssdk_receive_msg"><Data>&lt;font color=#ACACAC>%s&lt;/font>秒</Data></string>
 
     <string name="linkto">网页</string>
     <string name="scan_result">扫码结果</string>
     <string name="personal">个人</string>
-    toolbar_news
+    <!--toolbar_news-->
     <string name="toolbar_news">新闻News</string>
     <string name="scan_tips">对准二维码到框内即可扫描</string>
     <string name="scan">扫一扫Scaning</string>
     <string name="toobar_upload">上传Upload</string>
-    toobar_upload
+    <!--toobar_upload-->
     <string name="pay">支付</string>
     <string name="video">拍照</string>
     <string name="past">签到</string>
+    <!--社区-->
     <string name="community_live">直播</string>
     <string name="community_community">社区</string>
     <string name="community_proposal">建议</string>
     <string name="community_help">帮助</string>
     <string name="community_disabuse">解惑</string>
+    <!--消息 Message-->
+    <string name="message_message">消息</string>
+    <string name="message_task">任务</string>
+    <string name="message_client">客户</string>
+    <string name="message_approve">审批</string>
+    <string name="message_approve_new">新建审批</string>
+
 
     <string name="speech_search">语言输入</string>
 
@@ -202,4 +217,5 @@
     <string name="error_network">网络连接异常,初始化失败 请检查网络！</string>
     <string name="logining">程序在后台执行, 请查看日志！</string>
     <string name="setting_su">设置成功</string>
+
 </resources>

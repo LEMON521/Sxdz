@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
@@ -48,7 +47,7 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
             viewHolder = new ViewHolder();
             viewHolder.parent_ll = (LinearLayout) convertView
                     .findViewById(R.id.item_address_list_parent);
-            viewHolder.child_ll = (RelativeLayout) convertView
+            viewHolder.child_ll = (LinearLayout) convertView
                     .findViewById(R.id.item_address_list_child);
             viewHolder.parent_icon = (ImageView) convertView
                     .findViewById(R.id.item_address_list_parent_icon);
@@ -110,7 +109,7 @@ public class AddressListTreeAdapter<T> extends TreeListViewAdapter<T> {
         public ImageView parent_icon;
         public TextView parent_label;
 
-        public RelativeLayout child_ll;
+        public LinearLayout child_ll;
         public CircleImageView child_icon;
         public TextView child_name, child_num;
 
