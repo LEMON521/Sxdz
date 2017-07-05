@@ -50,6 +50,9 @@ public class WorkFragment extends BaseFragment {
     @ViewInject(R.id.fragment_work_functions)
     private ListView functionListView;
 
+    @ViewInject(R.id.fragment_work_root_text)
+    private TextView root_text;
+
     private View headView;
     //    @ViewInject(R.id.top_viewpager)
     private LinearLayout top_viewpager;
@@ -155,7 +158,9 @@ public class WorkFragment extends BaseFragment {
                     workDatas = workBean.data;
                     classifyData();
                     setData();
+                    root_text.setVisibility(View.GONE);
                 } else {
+                    root_text.setVisibility(View.VISIBLE);
                     MyToast.showShort(mActivity, "获取数据失败!");
                 }
             }
@@ -168,6 +173,8 @@ public class WorkFragment extends BaseFragment {
                     LogUtil.e("-----------------获取条目消息-----------失败方法-----" + element.getMethodName());
                 }
                 MyToast.showShort(mActivity, "获取数据失败!!");
+                functionListView.removeHeaderView(headView);
+                root_text.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -296,6 +303,7 @@ public class WorkFragment extends BaseFragment {
 //				lv_item_news.addHeaderView(layout_roll_view);
 //			}
         } else {
+            functionListView.removeHeaderView(headView);
 //            scroll.setVisibility(View.GONE);
         }
         dismissProgressDialog();

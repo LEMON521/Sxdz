@@ -10,7 +10,7 @@
 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
+        android:layout_weight="9"
         android:orientation="vertical">
 
         <TextView
@@ -18,7 +18,7 @@
             android:id="@+id/approve_approval_mater"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="去医院看病"
+            android:text=""
             android:textSize="@dimen/dm026" />
 
         <TextView
@@ -27,21 +27,21 @@
             android:id="@+id/approve_approval_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2017/03/09"
+            android:text=""
             android:textSize="@dimen/dm022" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="3">
 
         <TextView
             android:gravity="end"
             android:id="@+id/approve_approval_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="审批中"
+            android:text=""
             android:textColor="#F67F00"
             android:textSize="@dimen/dm026" />
     </LinearLayout>

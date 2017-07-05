@@ -6,40 +6,42 @@
     android:orientation="vertical">
 
     <include
-        android:visibility="gone"
-        layout="@layout/top_title" />
+        layout="@layout/top_title"
+        android:visibility="gone" />
 
-    <ScrollView
-        android:id="@+id/fragment_work_root"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-
-            android:id="@+id/root_ll"
-            android:layout_width="wrap_content"
+        <ScrollView
+            android:id="@+id/fragment_work_root"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:scrollbars="none">
 
+            <LinearLayout
 
+                android:id="@+id/root_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <ListView
-                android:id="@+id/fragment_work_functions"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></ListView>
-        </LinearLayout>
+                <ListView
+                    android:id="@+id/fragment_work_functions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></ListView>
+            </LinearLayout>
 
-    </ScrollView>
+        </ScrollView>
 
-    <!--<TextView-->
-        <!--android:id="@+id/fragment_work_root_text"-->
-        <!--android:textColor="#666666"-->
-        <!--android:textSize="@dimen/dm026"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:text="没有数据可展示"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-
+        <TextView
+            android:id="@+id/fragment_work_root_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="没有数据可展示"
+            android:textColor="#666666"
+            android:textSize="@dimen/dm026" />
+    </FrameLayout>
 </LinearLayout>
