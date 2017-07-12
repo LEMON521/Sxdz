@@ -104,6 +104,8 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
     private KnowGroupBean knowGroupBean;//知识分类实体
     private ArrayList<KnowGroupDataItemsBean> groupDataList;//分组所在集合
 
+    private String knowledge_type = "";
+
 
     @Event(value = {R.id.title_back
             , R.id.knowledge_new_type
@@ -132,6 +134,12 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
         back.setVisibility(View.VISIBLE);
 
         fragment = this;
+        knowledge_type = getArguments().getString("knowledge_type");
+
+        if (knowledge_type != null) {
+            new_type_show.setText(knowledge_type);
+        }
+        //knowledge_type = getActivity().getIntent().getStringExtra("knowledge_type");
 
         //初始化组信息
         if (groupDataList == null) {
@@ -328,6 +336,21 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
             return;
         }
 
+        if (groupDataList.size() > 0) {
+            for (KnowGroupDataItemsBean bean : groupDataList) {
+                if (bean.name.equals(type)) {
+                    type = bean.id;
+                    break;
+                }
+            }
+        } else {
+            groupDataList.clear();
+            getGroupData();
+            new_type_show.setText("");
+            MyToast.showShort(mActivity, "获取任务分类错误,请重新提交!");
+            return;
+        }
+
 //        if (TextUtils.isEmpty(keyowrd)) {
 //            MyToast.showShort(mActivity, "请添加关键字");
 //            return;
@@ -357,16 +380,9 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
         sb.append("\",");
 
 
-        for (KnowGroupDataItemsBean bean : groupDataList) {
-            if (bean.name.equals(type)) {
-                type = bean.id;
-                break;
-            }
-        }
-
         sb.append("\"files\":[");
         if (filesAddList.size() > 0) {
-            for (int i = 0; i < filesAddList.size(); i++) {
+            for (int i = 0; i < filesAddList.size() - 1; i++) {
                 sb.append("{");
 
                 sb.append("\"url\":\"");
@@ -375,11 +391,13 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
                 sb.append("\"name\":\"");
                 sb.append(filesAddList.get(i).file_name);
-                sb.append("\",");
+                sb.append("\"");
 
-                sb.append("}");
-                if (i != (filesAddList.size() - 1)) {
+
+                if (i != (filesAddList.size() - 2)) {
                     sb.append("},");
+                } else {
+                    sb.append("}");
                 }
             }
         }
@@ -388,7 +406,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
         sb.append("\"images\":[");
         if (picList.size() > 0) {
-            for (int i = 0; i < picList.size(); i++) {
+            for (int i = 0; i < picList.size() - 1; i++) {
                 sb.append("{");
 
                 sb.append("\"url\":\"");
@@ -397,11 +415,12 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
                 sb.append("\"name\":\"");
                 sb.append(picList.get(i).pic_name);
-                sb.append("\",");
+                sb.append("\"");
 
-                sb.append("}");
-                if (i != (picList.size() - 1)) {
+                if (i != (picList.size() - 2)) {
                     sb.append("},");
+                } else {
+                    sb.append("}");
                 }
             }
         }

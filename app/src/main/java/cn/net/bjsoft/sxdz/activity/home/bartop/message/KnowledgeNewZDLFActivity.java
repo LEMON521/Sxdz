@@ -24,6 +24,7 @@ public class KnowledgeNewZDLFActivity extends BaseActivity {
         BaseFragment fragment = new KnowledgeNewZDLFFragment();
         Bundle bundle = new Bundle();
         bundle.putString("json", "");
+        bundle.putString("knowledge_type", getIntent().getStringExtra("knowledge_type"));
         fragment.setArguments(bundle);
 
 

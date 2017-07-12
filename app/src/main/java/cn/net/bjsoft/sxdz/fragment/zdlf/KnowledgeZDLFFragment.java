@@ -72,6 +72,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
     private TextView message;
 
 
+    private String knowledge_type = "";//知识类型,用于发布新知识的时候传递数据
     private ArrayList<RadioButton> radioButtons;
 
 
@@ -113,7 +114,13 @@ public class KnowledgeZDLFFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        //search_edit.setText("");
+        if (groupDataList.size()>0){
+            get_start = "0";
+            itemsDataList.clear();
+            cacheItemsDataList.clear();
+            searchStr = "";
+            getItemsData();
+        }
     }
 
     @Override
@@ -324,8 +331,8 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                 }
             }
         });
-        getData();
 
+        getData();
     }
 
 
@@ -462,6 +469,7 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                     if (i == checkedId) {
                         radioButtons.get(i).setTextColor(Color.rgb(0, 93, 209));
                         group_id = groupDataList.get(i).id;
+                        knowledge_type = groupDataList.get(i).name;
                         get_start = "0";
 //                        get_count = "0";
                         itemsDataList.clear();
@@ -669,6 +677,9 @@ public class KnowledgeZDLFFragment extends BaseFragment {
                 //MyToast.showShort(mActivity, "走,去发帖!");
                 Intent intent = new Intent(mActivity, KnowledgeNewZDLFActivity.class);
                 intent.putExtra("fragment_name", "KnowledgeNewZDLFFragment");
+                intent.putExtra("knowledge_type", knowledge_type);
+
+
                 startActivity(intent);
 
                 break;

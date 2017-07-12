@@ -369,8 +369,9 @@ public class MineZDLFFragment extends BaseFragment {
         department.setText(userBean.organization.dept_name);
 
         addinsBeen.clear();
-        addinsBeen.addAll(userBean.addins);
-        LogUtil.e("gangwei 功能=========" + addinsBeen.size() + "");
+        if (userBean.addins!=null) {//防止数据是null的
+            addinsBeen.addAll(userBean.addins);
+        }
         addinsAdapter.notifyDataSetChanged();
         Utility.setListViewHeightBasedOnChildren(function);
     }
