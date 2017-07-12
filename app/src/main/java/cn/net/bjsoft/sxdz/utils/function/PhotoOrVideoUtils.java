@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -35,6 +36,7 @@ import java.util.Locale;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.fragment.BaseFragment;
+import cn.net.bjsoft.sxdz.utils.MyToast;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -121,6 +123,24 @@ public class PhotoOrVideoUtils {
                 public void onClick(View v) {
                     //打开照相机的意图
                     //MyToast.showShort(context, "点击了！");
+                    if (getFragment() == null) {
+                        PackageManager pm = getActivity().getPackageManager();
+                        boolean permission = (PackageManager.PERMISSION_GRANTED ==
+                                pm.checkPermission("android.permission.CAMERA", "cn.net.bjsoft.sxdz"));
+                        if (!permission) {
+                            MyToast.showLong(getActivity(), "没有拍摄权限,请在移动设备设置中添加拍摄权限");
+                            return;
+                        }
+                    } else {
+                        PackageManager pm = getFragment().getActivity().getPackageManager();
+                        boolean permission = (PackageManager.PERMISSION_GRANTED ==
+                                pm.checkPermission("android.permission.CAMERA", "cn.net.bjsoft.sxdz"));
+                        if (!permission) {
+                            MyToast.showLong(getFragment().getActivity(), "没有拍摄权限,请在移动设备设置中添加拍摄权限");
+                            return;
+                        }
+                    }
+
                     String state = Environment.getExternalStorageState();
                     if (state.equals(Environment.MEDIA_MOUNTED)) {
                         Intent i = new Intent();
@@ -145,13 +165,13 @@ public class PhotoOrVideoUtils {
 
                     //打开相册的意图
                     Intent intent = new Intent();
-
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
                     if (getAndroidOSVersion() < 19) {
                         /* 开启Pictures画面Type设定为image */
                         intent.setType("image/*");
+
                          /* 使用Intent.ACTION_GET_CONTENT这个Action */
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
                         /* 取得相片后返回本画面 */
                         if (getFragment() == null) {
                             getActivity().startActivityForResult(intent, REQUEST_CODE_GET_PHOTO);
@@ -159,8 +179,8 @@ public class PhotoOrVideoUtils {
                             getFragment().startActivityForResult(intent, REQUEST_CODE_GET_PHOTO);
                         }
                     } else {
-                        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                         intent.setType("image/*"); // Or 'image/ jpeg '
+
                         if (getFragment() == null) {
                             getActivity().startActivityForResult(intent, REQUEST_CODE_GET_PHOTO);
                         } else {
@@ -361,7 +381,7 @@ public class PhotoOrVideoUtils {
 
 
                         try {
-                            LogUtil.e("保存文件地址-------@@@@@@@@@@@@@@------------"+fileName);
+                            LogUtil.e("保存文件地址-------@@@@@@@@@@@@@@------------" + fileName);
                             b = new FileOutputStream(fileName);//这里应该是文件名,而不是一个文件夹的名称
 //                            LogUtil.e("保存文件地址-------+++++++------------"+b);
                             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件--参数100，即压缩品质为100%
