@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.xutils.common.Callback;
 import org.xutils.common.util.LogUtil;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -25,6 +27,7 @@ import java.lang.reflect.Method;
 
 import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.activity.BaseActivity;
+import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 
 /**
@@ -62,14 +65,44 @@ public class WebActivity extends BaseActivity {
         userid = getIntent().getStringExtra("userid");
         titleStr = getIntent().getStringExtra("title");
 
+
+        //在访问网络前先判断用户是否注销
+        HttpPostUtils httpUtils = new HttpPostUtils();
+        RequestParams params = new RequestParams(SPUtil.getApiAuth(this) + "/load");
+        params.addBodyParameter("source_id", "shuxin_know_type");
+        httpUtils.get(this, params);
+        httpUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("验证登录------------" + strJson);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
         if (!url.contains("?")) {
             url = url + "?";
         }
         if (!TextUtils.isEmpty(userid)) {
             userid.replace(".0", "");
-        }else {
+        } else {
             userid = "";
         }
+
+
         url = url
                 + "&id=" + userid
                 + "&token=" + SPUtil.getToken(this)
