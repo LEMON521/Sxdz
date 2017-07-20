@@ -144,7 +144,7 @@ public class LoginFragment extends BaseFragment {
 //
         //方便开发，讲数据填充到EditorText中
 //        userEdit.setText("jinningning@bjsoft.net.cn");
-//        userEdit.setText("zdlf_zongjingli");
+//        userEdit.setText("zdlf_hbxiaoshougang");
 //        userEdit.setText("shuxd@bjsoft.net.cn");
         //userEdit.setText("pengdeqiang@bjsoft.net.cn");
 //        passEdit.setText("111111");
@@ -186,7 +186,13 @@ public class LoginFragment extends BaseFragment {
                         SPUtil.setUserId(getActivity(), loginedDataBean.userid);
                         SPUtil.setToken(getActivity(), loginedDataBean.token);
                         //SPUtil.setIsMember(getContext(), loginedDataBean.ismember);
+                        //判断avatar的url地址
+//                        if (!loginedDataBean.avatar.startsWith("http://")) {
+//                            loginedDataBean.avatar = SPUtil.getUser_ApiData(mActivity) + "/" + SPUtil.getAvatar(mActivity);
+//                            SPUtil.setAvatar(mActivity, loginedDataBean.avatar);
+//                        } else {
                         SPUtil.setAvatar(getActivity(), loginedDataBean.avatar);
+//                        }
                         SPUtil.setLoginUserName(getActivity(), loginedDataBean.loginname);
                         SPUtil.setUsers_SourceId(getActivity(), loginedDataBean.source_id + "");
 

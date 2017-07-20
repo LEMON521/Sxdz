@@ -34,6 +34,7 @@ import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowGroupBean;
 import cn.net.bjsoft.sxdz.bean.app.function.knowledge.KnowGroupDataItemsBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskDetailDataFilesBean;
 import cn.net.bjsoft.sxdz.bean.app.top.message.task.MessageTaskPushAddBean;
+import cn.net.bjsoft.sxdz.bean.app.user.users_all.UsersSingleBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowLedgeItemBean;
 import cn.net.bjsoft.sxdz.bean.zdlf.knowledge.KnowledgeNewPictureBean;
 import cn.net.bjsoft.sxdz.dialog.SideRightPopupWindow;
@@ -317,6 +318,12 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
         String type = new_type_show.getText().toString().trim();
         String keyowrd = new_keyowrd.getText().toString().trim();
 
+        UsersSingleBean usersSingleBean = UsersInforUtils.getInstance(mActivity).getUserInfo(SPUtil.getUserId(mActivity));
+        String author = "";
+        if (usersSingleBean != null) {//防止没有 user 对象
+            author = usersSingleBean.nickname;
+        }
+
 
         Long subTime = System.currentTimeMillis();
 
@@ -436,7 +443,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
         sb.append("\",");
 
         sb.append("\"author\":\"");
-        sb.append(UsersInforUtils.getInstance(mActivity).getUserInfo(SPUtil.getUserId(mActivity)).nickname);
+        sb.append(author);
         sb.append("\",");
 
         sb.append("\"userid\":\"");

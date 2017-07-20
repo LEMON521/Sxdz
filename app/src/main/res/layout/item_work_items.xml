@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dm020"
-        android:background="@color/white"
+        android:background="@color/background"
         android:orientation="vertical">
 
         <TextView
@@ -24,13 +24,13 @@
             android:layout_marginLeft="@dimen/dm020"
             android:layout_marginRight="@dimen/dm020"
             android:layout_marginTop="@dimen/dm020"
-            android:text="项目相关"
+            android:text=""
             android:textSize="@dimen/dm024" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dm001"
-            android:background="@color/aMap_black"></RelativeLayout>
+            android:background="#AAAAAA"></RelativeLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -47,9 +47,8 @@
                 android:id="@+id/item_work_function_gv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
+                android:background="@color/background"
                 android:columnWidth="@dimen/dm130"
-
                 android:numColumns="auto_fit"
                 android:scrollbars="none"
                 android:stretchMode="columnWidth"

@@ -81,7 +81,7 @@ public class WorkFragment extends BaseFragment {
 
     private PushCountReceiver pushCountReceiver;
 
-    View.OnTouchListener touchListener;
+    private View.OnTouchListener touchListener;
 
     @Override
     public void initData() {
@@ -119,6 +119,14 @@ public class WorkFragment extends BaseFragment {
 
         getData();
         //getDataTest();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //防止重复的条目出现
+//        fomateFunctionList.clear();
+//        getData();
     }
 
     private void getDataTest() {
@@ -204,10 +212,15 @@ public class WorkFragment extends BaseFragment {
         }
         scrollListDaos.clear();
 
-        functionListDaos = workDatas.function_list;
+        if (workDatas.function_list != null) {
+            functionListDaos.addAll(workDatas.function_list);
+        }
+
 
         HashMap<String, ArrayList<WorkBean.FunctionListDao>> map = new HashMap<>();
+        map.clear();
         ArrayList<String> listString = new ArrayList<>();
+        listString.clear();
         for (WorkBean.FunctionListDao dao : functionListDaos) {
             if (!map.containsKey(dao.type)) {
                 ArrayList<WorkBean.FunctionListDao> list = new ArrayList<>();

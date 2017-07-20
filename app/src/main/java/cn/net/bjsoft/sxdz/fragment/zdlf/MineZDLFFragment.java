@@ -134,9 +134,17 @@ public class MineZDLFFragment extends BaseFragment {
 
     private BitmapUtils bitmapUtils;
 
+
+    private String avatarUrl = "";
     @Override
     public void initData() {
         title.setText("我的");
+
+        //判断avatar的url地址
+        if (!avatarUrl.startsWith("http://")) {
+            avatarUrl = SPUtil.getUser_ApiData(mActivity) +"/"+ SPUtil.getAvatar(mActivity);
+            SPUtil.setAvatar(mActivity,avatarUrl);
+        }
 
         if (pikersKey == null) {
             pikersKey = new ArrayList<>();
@@ -376,43 +384,6 @@ public class MineZDLFFragment extends BaseFragment {
         Utility.setListViewHeightBasedOnChildren(function);
     }
 
-//    private void getOrganizationData() {
-//
-//
-//        showProgressDialog();
-//        HttpPostUtils httpPostUtil = new HttpPostUtils();
-//        String url = "";
-//        url = http_shuxinyun_url + userOrganizationBean.url;
-//        LogUtil.e("公司架构userOrganizationBean url----===========" + url);
-//        RequestParams params = new RequestParams(url);
-//        httpPostUtil.get(mActivity, params);
-//
-//        httpPostUtil.OnCallBack(new HttpPostUtils.OnSetData() {
-//            @Override
-//            public void onSuccess(String strJson) {
-//                SPUtil.setUserOrganizationJson(mActivity, strJson);//缓存公司架构信息
-//                //LogUtil.e("我的页面json");
-////                LogUtil.e("公司架构==========="+SPUtil.getUserOrganizationJson(mActivity));
-//            }
-//
-//            @Override
-//            public void onError(Throwable ex, boolean isOnCallback) {
-//                SPUtil.setUserOrganizationJson(mActivity, "");
-//                LogUtil.e("我的页面json-----错误" + ex);
-//            }
-//
-//            @Override
-//            public void onCancelled(Callback.CancelledException cex) {
-//
-//            }
-//
-//            @Override
-//            public void onFinished() {
-//                dismissProgressDialog();
-//            }
-//        });
-//
-//    }
 
 
     /**

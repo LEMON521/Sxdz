@@ -245,7 +245,7 @@ public class NewInitInfoActivity extends BaseActivity {
                 LogUtil.e("我的页面json-----错误" + ex);
                 MyToast.showShort(mActivity, "程序初始化出错,正在重新启动程序");
                 SPUtil.setToken(mActivity, "");
-                Intent intent = new Intent(mActivity, SplashActivity.class);
+                Intent intent = new Intent(mActivity, NewSplashActivity.class);
                 mActivity.startActivity(intent);
                 mActivity.finish();
 

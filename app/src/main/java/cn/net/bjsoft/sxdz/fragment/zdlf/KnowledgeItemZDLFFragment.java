@@ -406,7 +406,7 @@ public class KnowledgeItemZDLFFragment extends BaseFragment {
         }
 
         head_mark.setText(hostBean.labels);
-        RichText.from(MyBase16.decode(hostBean.content.substring(3, hostBean.content.length()))).autoFix(false).into(head_content);
+        RichText.from(MyBase16.decode(hostBean.content.substring(3, hostBean.content.length()))).autoFix(true).into(head_content);
         //head_content.setText(MyBase16.decode(hostBean.content.substring(3,hostBean.content.length())));
 
         //附件
