@@ -195,11 +195,17 @@ public class TopApproveApplyFragment_new extends BaseFragment {
                     if (messageApproveBean.data.items != null) {
                         if (messageApproveBean.data.count.equals("0")) {
                             MyToast.showLong(mActivity, "没有任何消息可查看!");
-                        } else if (!(messageApproveBean.data.items.size() > 0)) {
-                            list.addAll(messageApproveBean.data.items);
-                            get_start = list.size() + "";//设置开始查询
-                            formateDatas();
-                            groupingDatas();
+                        } else if ((messageApproveBean.data.items.size() > 0)) {
+
+                            if (get_start.equals(messageApproveBean.data.count)) {
+                                MyToast.showLong(mActivity, "没有更多的消息可查看!");
+                            } else {
+
+                                list.addAll(messageApproveBean.data.items);
+                                get_start = list.size() + "";//设置开始查询
+                                formateDatas();
+                                groupingDatas();
+                            }
                         } else {
                             MyToast.showLong(mActivity, "没有任何消息可查看!");
                         }

@@ -8,8 +8,8 @@
         <option name="gradleHome" value="$USER_HOME$/.gradle/wrapper/dists/gradle-3.3-all" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="$USER_HOME$/AndroidStudioWorkSpace/Sxdz" />
+            <option value="$USER_HOME$/AndroidStudioWorkSpace/Sxdz/app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -22,6 +22,7 @@ import cn.net.bjsoft.sxdz.R;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
 import cn.net.bjsoft.sxdz.bean.app.ali_push.ALiPushMessageBean;
 import cn.net.bjsoft.sxdz.utils.GsonUtil;
+import cn.net.bjsoft.sxdz.utils.MyBase16;
 import cn.net.bjsoft.sxdz.utils.SPUtil;
 import cn.net.bjsoft.sxdz.utils.function.ALiPushCountUtils;
 
@@ -36,6 +37,12 @@ public class MyMessageReceiver extends MessageReceiver {
     @Override
     public void onNotification(Context context, String title, String summary, Map<String, String> extraMap) {
         // TODO 处理推送通知
+
+        if (summary.startsWith("HEX")) {
+            summary = summary.replace("HEX" , "");
+            summary = MyBase16.decode(summary);
+        }
+
         mContext = context;
         AdvancedCustomPushNotification notification = new AdvancedCustomPushNotification(R.layout.notification_layout, R.id.m_icon, R.id.m_title, R.id.m_text);//创建高级自定义样式通知,设置布局文件以及对应的控件ID
         notification.setServerOptionFirst(false);//设置服务端配置优先

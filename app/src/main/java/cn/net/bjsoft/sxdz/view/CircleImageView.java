@@ -20,7 +20,6 @@ import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import org.xutils.common.util.LogUtil;
 
 import cn.net.bjsoft.sxdz.R;
 
