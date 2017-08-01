@@ -136,14 +136,15 @@ public class MineZDLFFragment extends BaseFragment {
 
 
     private String avatarUrl = "";
+
     @Override
     public void initData() {
         title.setText("我的");
 
         //判断avatar的url地址
         if (!avatarUrl.startsWith("http://")) {
-            avatarUrl = SPUtil.getUser_ApiData(mActivity) +"/"+ SPUtil.getAvatar(mActivity);
-            SPUtil.setAvatar(mActivity,avatarUrl);
+            avatarUrl = SPUtil.getUser_ApiData(mActivity) + "/" + SPUtil.getAvatar(mActivity);
+            SPUtil.setAvatar(mActivity, avatarUrl);
         }
 
         if (pikersKey == null) {
@@ -205,6 +206,7 @@ public class MineZDLFFragment extends BaseFragment {
         bitmapUtils = new BitmapUtils(getActivity(), AddressUtils.img_cache_url);
         bitmapUtils.configDefaultLoadingImage(R.drawable.tab_me_n);
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.tab_me_n);
+        //getMyJson();
 
         setUserData();
         //getUserData();
@@ -377,13 +379,12 @@ public class MineZDLFFragment extends BaseFragment {
         department.setText(userBean.organization.dept_name);
 
         addinsBeen.clear();
-        if (userBean.addins!=null) {//防止数据是null的
+        if (userBean.addins != null) {//防止数据是null的
             addinsBeen.addAll(userBean.addins);
         }
         addinsAdapter.notifyDataSetChanged();
         Utility.setListViewHeightBasedOnChildren(function);
     }
-
 
 
     /**
@@ -946,9 +947,9 @@ public class MineZDLFFragment extends BaseFragment {
             Log.e("tag", "最终选择的图片=" + picPath);
             //MyBitmapUtils.getInstance(getActivity()).display(picture,picPath);
             Bitmap bm = BitmapFactory.decodeFile(picPath);
-                //toRoundCorner(bm, 60);
-                //picture.setImageBitmap(toRoundCorner(bm, 60));
-                //MyBitmapUtils.getInstance(getActivity()).display(picture, picPath);
+            //toRoundCorner(bm, 60);
+            //picture.setImageBitmap(toRoundCorner(bm, 60));
+            //MyBitmapUtils.getInstance(getActivity()).display(picture, picPath);
             upLoadAvatar(picPath);
         } else {
             Toast.makeText(getActivity(), "选择图片文件不正确", Toast.LENGTH_LONG).show();
@@ -994,6 +995,43 @@ public class MineZDLFFragment extends BaseFragment {
             @Override
             public void onFinished() {
 
+            }
+        });
+
+
+    }
+
+
+    /**
+     * 获取用户信息
+     */
+    private void getMyJson() {
+        showProgressDialog();
+        String url = SPUtil.getApiUser(mActivity) + "/" + SPUtil.getUserId(mActivity) + "/my.json";
+        RequestParams params = new RequestParams(url);
+
+
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                SPUtil.setUserJson(mActivity, result);
+                setUserData();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                ex.printStackTrace();
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
             }
         });
 
