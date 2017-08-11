@@ -62,7 +62,7 @@ public class MyApplication extends MultiDexApplication implements Serializable {
 
         //xutils3.0初始化
         x.Ext.init(this);
-        x.Ext.setDebug(true); //输出debug日志，开启会影响性能
+        x.Ext.setDebug(false); //输出debug日志，开启会影响性能
 
         //极光推送初始化
 //        JPushInterface.setDebugMode(true);
