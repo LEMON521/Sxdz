@@ -9,10 +9,10 @@
 
     <RelativeLayout
         android:id="@+id/pop_position"
-        android:visibility="invisible"
-        android:background="#00000000"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dm001"></RelativeLayout>
+        android:layout_height="@dimen/dm001"
+        android:background="#00000000"
+        android:visibility="invisible"></RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -89,12 +89,12 @@
                     android:verticalSpacing="@dimen/dm020"></GridView>
 
                 <ListView
-                    android:divider="#00000000"
                     android:id="@+id/knowledge_new_files"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dm030"
-                    android:layout_marginTop="@dimen/dm030"></ListView>
+                    android:layout_marginTop="@dimen/dm030"
+                    android:divider="#00000000"></ListView>
 
 
             </LinearLayout>
@@ -160,13 +160,13 @@
                         android:textSize="@dimen/dm024" />
 
                     <EditText
-                        android:singleLine="true"
                         android:id="@+id/knowledge_new_keyowrd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dm060"
                         android:background="@null"
                         android:hint="请输入关键词,用逗号隔开"
+                        android:singleLine="true"
                         android:text=""
                         android:textColor="#333333"
                         android:textColorHint="#999999"
@@ -175,6 +175,49 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dm020"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/dm030"
+                android:paddingLeft="@dimen/dm020"
+                android:paddingRight="@dimen/dm020"
+                android:paddingTop="@dimen/dm030">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="接收消息"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/dm024" />
+
+                <RelativeLayout
+                    android:id="@+id/knowledge_new_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/new_task_zdlf_add_to" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dm001"
+                android:background="@color/gray"></RelativeLayout>
+
+            <ListView
+                android:id="@+id/knowledge_new_add_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"></ListView>
 
             <LinearLayout
                 android:layout_width="match_parent"

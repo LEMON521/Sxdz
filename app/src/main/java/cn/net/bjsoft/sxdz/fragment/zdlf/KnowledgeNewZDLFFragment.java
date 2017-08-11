@@ -2,6 +2,7 @@ package cn.net.bjsoft.sxdz.fragment.zdlf;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +28,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import cn.net.bjsoft.sxdz.R;
+import cn.net.bjsoft.sxdz.activity.EmptyActivity;
+import cn.net.bjsoft.sxdz.adapter.message.task.TaskAddAddressListAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeItemHeadFilesListAdapter;
 import cn.net.bjsoft.sxdz.adapter.zdlf.KnowledgeNewPicturesAdapter;
 import cn.net.bjsoft.sxdz.app_utils.HttpPostUtils;
@@ -47,6 +50,7 @@ import cn.net.bjsoft.sxdz.utils.function.PhotoOrVideoUtils;
 import cn.net.bjsoft.sxdz.utils.function.TimeUtils;
 import cn.net.bjsoft.sxdz.utils.function.UsersInforUtils;
 import cn.net.bjsoft.sxdz.utils.function.Utility;
+import cn.net.bjsoft.sxdz.view.tree_task_add_addresslist.bean.TreeTaskAddAddressListBean;
 
 /**
  * Created by Zrzc on 2017/4/12.
@@ -81,6 +85,13 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
     @ViewInject(R.id.knowledge_new_files)
     private ListView new_files;
 
+    @ViewInject(R.id.knowledge_new_add_user)
+    private ListView add_user;
+
+    @ViewInject(R.id.knowledge_new_add)
+    private RelativeLayout new_add;
+
+
     private KnowledgeNewZDLFFragment fragment;
 
     private SideRightPopupWindow rightPopupWindow;
@@ -101,6 +112,10 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
     private final int REQUEST_CODE_FILES = 200;//从相片中获取照片
     private int selectType = -1;
 
+    private static final int ADD_ADDRESS_LIST = 1000;
+    private ArrayList<TreeTaskAddAddressListBean.TreeTaskAddAddressListDao> humenList;
+    private TaskAddAddressListAdapter adapter;
+
 
     private KnowGroupBean knowGroupBean;//知识分类实体
     private ArrayList<KnowGroupDataItemsBean> groupDataList;//分组所在集合
@@ -110,7 +125,8 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
     @Event(value = {R.id.title_back
             , R.id.knowledge_new_type
-            , R.id.knowledge_new_submit})
+            , R.id.knowledge_new_submit
+            , R.id.knowledge_new_add})
     private void onClick(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -124,6 +140,12 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
                 break;
             case R.id.knowledge_new_submit://发表,推送数据到服务器上
                 submitToService();
+                break;
+
+            case R.id.knowledge_new_add:
+                Intent intent = new Intent(mActivity, EmptyActivity.class);
+                intent.putExtra("fragment_name", "TopAddTaskAddressListFragment");
+                startActivityForResult(intent, ADD_ADDRESS_LIST);
                 break;
         }
     }
@@ -185,7 +207,16 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
         new_files.setAdapter(filesAddAdapter);
         //附件相关结束
+        if (humenList == null) {
+            humenList = new ArrayList<>();
+        } else {
+            humenList.clear();
+        }
+        if (adapter == null) {
+            adapter = new TaskAddAddressListAdapter(mActivity, humenList);
+        }
 
+        add_user.setAdapter(adapter);
 
         itemClickListener = new AdapterView.OnItemClickListener() {
             @Override
@@ -307,13 +338,16 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
     }
 
+    private String title_str = "";
+    private String resuld_id = "";
+
     /**
      * 提交数据到服务器
      */
     private void submitToService() {
-        MyToast.showShort(mActivity, "提交到服务器");
+//        MyToast.showShort(mActivity, "提交到服务器");
         //mActivity.finish();
-        String title = new_title.getText().toString().trim();
+        title_str = new_title.getText().toString().trim();
         String discription = new_detail.getText().toString().trim();
         String type = new_type_show.getText().toString().trim();
         String keyowrd = new_keyowrd.getText().toString().trim();
@@ -327,7 +361,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
         Long subTime = System.currentTimeMillis();
 
-        if (TextUtils.isEmpty(title)) {
+        if (TextUtils.isEmpty(title_str)) {
             MyToast.showShort(mActivity, "请输入标题");
             return;
         }
@@ -379,7 +413,21 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
         sb.append("{");
 
         sb.append("\"title\":\"");
-        sb.append(title);
+        sb.append(title_str);
+        sb.append("\",");
+
+        sb.append("\"users_id\":\"");
+        if (humenList.size() > 0) {
+            for (int i = 0; i < humenList.size(); i++) {
+                LogUtil.e("id=======" + humenList.get(i).id);
+                humenList.get(i).id = humenList.get(i).id.replace(".0", "");
+                LogUtil.e("id=======" + humenList.get(i).id);
+                sb.append(humenList.get(i).id);
+                if (i != (humenList.size() - 1)) {
+                    sb.append(",");
+                }
+            }
+        }
         sb.append("\",");
 
         sb.append("\"content\":\"HEX");
@@ -457,7 +505,7 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
         MessageTaskPushAddBean pushData = new MessageTaskPushAddBean();
 
-        pushData.title = title;
+        pushData.title = title_str;
         pushData.description = discription;
         pushData.starttime = TimeUtils.getFormateTime(subTime, "-", ":");
 
@@ -469,22 +517,28 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
             pushData.files.add(filesBean);
         }
-
-
 //        params.addBodyParameter("data", pushData.toString());
-
         httpPostUtils.post(mActivity, params);
         httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
             @Override
             public void onSuccess(String strJson) {
-                LogUtil.e("-----------------任务详情------上传获取消息----------------" + strJson);
+                LogUtil.e("-----------------添加任务详情------上传获取消息----------------" + strJson);
 
                 try {
                     JSONObject jsonObject = new JSONObject(strJson);
                     if (jsonObject.optInt("code") == 0) {
 
                         MyToast.showShort(mActivity, "提交成功!");
-                        mActivity.finish();
+                        JSONObject dataObject = jsonObject.getJSONObject("data");
+                        resuld_id = dataObject.getString("id");
+
+                        if (humenList.size() > 0) {
+                            sendMessage2Users();
+                        } else {
+                            mActivity.finish();
+                        }
+
+
                     } else {
                         MyToast.showLong(mActivity, "提交任务失败,请联系管理员");
                     }
@@ -523,6 +577,103 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
 
     }
 
+    /**
+     * 向添加通知人发送消息
+     */
+    private void sendMessage2Users() {
+        showProgressDialog();
+        HttpPostUtils httpPostUtils = new HttpPostUtils();
+
+        String url = SPUtil.getApiAuth(mActivity) + "/submit";
+        LogUtil.e("url$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + url);
+        RequestParams params = new RequestParams(url);
+        params.addBodyParameter("submit_id", "shuxin_alert");
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+
+        sb.append("\"id\":\"");
+        sb.append("\",");
+
+        sb.append("\"name\":\"");
+        sb.append("有新发表的知识@了你");
+        sb.append("\",");
+
+        sb.append("\"message\":\"");
+        sb.append(UsersInforUtils.getInstance(mActivity).getUserInfo(SPUtil.getUserId(mActivity)).nickname + "发表的知识【" + title_str + "】@了你,请及时回复");
+        sb.append("\",");
+
+        sb.append("\"users_id\":\"");
+        if (humenList.size() > 0) {
+            for (int i = 0; i < humenList.size(); i++) {
+                humenList.get(i).id = humenList.get(i).id.replace(".0", "");
+                sb.append(humenList.get(i).id);
+                if (i != (humenList.size() - 1)) {
+                    sb.append(",");
+                }
+            }
+        }
+        sb.append("\",");
+
+        sb.append("\"type\":\"");
+        sb.append("know");
+        sb.append("\",");
+
+        sb.append("\"progress\":\"");
+        sb.append("0");
+        sb.append("\",");
+
+        sb.append("\"is_readed\":\"");
+        sb.append("0");
+        sb.append("\",");
+
+        sb.append("\"par_id\":\"");
+        sb.append(resuld_id);
+        sb.append("\"");
+
+
+        sb.append("}");
+
+        params.addBodyParameter("data", sb.toString());
+        httpPostUtils.post(mActivity, params);
+        httpPostUtils.OnCallBack(new HttpPostUtils.OnSetData() {
+            @Override
+            public void onSuccess(String strJson) {
+                LogUtil.e("-----------------发送知识消息------上传消息----------------" + strJson);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(strJson);
+                    if (jsonObject.optInt("code") == 0) {
+
+                        MyToast.showShort(mActivity, "已发送消息!");
+                        mActivity.finish();
+                    } else {
+                        MyToast.showLong(mActivity, "提交任务失败,请联系管理员");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                ex.printStackTrace();
+                MyToast.showShort(mActivity, "获取数据失败!!");
+            }
+
+            @Override
+            public void onCancelled(Callback.CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                dismissProgressDialog();
+            }
+        });
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Uri uri = PhotoOrVideoUtils.getFileUri(requestCode, resultCode, data);
@@ -530,6 +681,53 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
             if (selectType != -1) {
                 String path = PhotoOrVideoUtils.getPath(mActivity, uri);
                 upLoadFile(selectType, path);
+            }
+        }
+
+        if (data != null) {
+            if (requestCode == ADD_ADDRESS_LIST) {
+                //获取到选择的联系人
+                Bundle bundle = data.getExtras();
+//                nodeId.addAll(bundle.getStringArrayList("nodeId"));
+//                nodeAvatar.addAll(bundle.getStringArrayList("nodeAvatar"));
+//                nodeName.addAll(bundle.getStringArrayList("nodeName"));
+//                nodeDepartment.addAll(bundle.getStringArrayList("nodeDepartment"));
+
+                String userId = bundle.getString("nodeId");
+                String userAvatar = bundle.getString("nodeAvatar");
+                String userName = bundle.getString("nodeName");
+                String userDepartment = bundle.getString("nodeDepartment");
+
+                //去除重复联系人
+                if (humenList.size() > 0) {
+                    for (int i = 0; i < humenList.size(); i++) {
+                        if (!userId.equals(humenList.get(i).id)) {
+                            if (i == humenList.size() - 1) {//当都比对完的时候,没有重复的,就添加一条新的,
+                                TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
+                                TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
+                                dao.id = userId;
+                                dao.avatar = userAvatar;
+                                dao.name = userName;
+                                dao.department = userDepartment;
+                                humenList.add(dao);//
+                                break;//跳出循环,避免ConcurrentModificationException异常
+                            }
+                        } else {
+                            MyToast.showLong(mActivity, "已添加(" + userName + ")为消息接收人,请重新添加");
+                            break;//跳出循环,防止到最后一个节点重复添加
+                        }
+                    }
+                } else {
+                    TreeTaskAddAddressListBean bean = new TreeTaskAddAddressListBean();
+                    TreeTaskAddAddressListBean.TreeTaskAddAddressListDao dao = bean.new TreeTaskAddAddressListDao();
+                    dao.id = userId;
+                    dao.avatar = userAvatar;
+                    dao.name = userName;
+                    dao.department = userDepartment;
+                    humenList.add(dao);
+                }
+                adapter.notifyDataSetChanged();
+                Utility.setListViewHeightBasedOnChildren(add_user);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
