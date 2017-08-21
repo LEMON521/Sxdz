@@ -193,6 +193,9 @@
             android:name=".activity.home.function.form.FunctionFormActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".test.TestWebViewActivity"/>
+
+
         <service android:name=".service.JPushService"></service>
 
         <!--<activity android:name=".main.ui.login.RegisterActivity"/>-->

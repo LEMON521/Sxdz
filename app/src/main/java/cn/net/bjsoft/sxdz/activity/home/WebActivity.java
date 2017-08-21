@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -120,6 +121,7 @@ public class WebActivity extends BaseActivity {
         web.getSettings().setSupportZoom(true);
         web.getSettings().setUseWideViewPort(true);
         web.getSettings().setJavaScriptEnabled(true);
+        web.addJavascriptInterface(this, "android");
 
         web.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         web.getSettings().setAllowFileAccess(true);
@@ -185,6 +187,15 @@ public class WebActivity extends BaseActivity {
             }
 
         });
+    }
+
+    /**
+     * js调用的返回方法
+     */
+    @JavascriptInterface
+    public void jsBack() {
+//        ToastUtil.show(this,"点击返回");
+        onClick(back);
     }
 
     @Event(value = {R.id.title_back})

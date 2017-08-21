@@ -138,6 +138,8 @@ public class TopApproveApplyFragment_new extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 LogUtil.e("点击---" + formate_list.get(position).wf_name + "::" + position);
                 if (!formate_list.get(position).id.equals("-1")) {
+
+//                    Intent intent = new Intent(mActivity, TestWebViewActivity.class);
                     Intent intent = new Intent(mActivity, WebViewApproveActivity.class);
                     //目前还没有跳转字段
                     intent.putExtra("type", "workflow");
@@ -167,6 +169,7 @@ public class TopApproveApplyFragment_new extends BaseFragment {
 
         get_start = "0";
         list.clear();
+        formate_list.clear();
         datas.clear();
         getData();
     }
@@ -264,6 +267,7 @@ public class TopApproveApplyFragment_new extends BaseFragment {
             formate_list.add(title);
             formate_list.addAll(datas.get(key));
         }
+//        Utility.setListViewHeightBasedOnChildren(root);
         adapter.notifyDataSetChanged();
 
 

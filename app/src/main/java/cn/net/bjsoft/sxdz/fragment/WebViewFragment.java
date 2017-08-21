@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -130,6 +131,7 @@ public class WebViewFragment extends BaseFragment {
         wv_home.getSettings().setSupportZoom(true);
         wv_home.getSettings().setUseWideViewPort(true);
         wv_home.getSettings().setJavaScriptEnabled(true);
+        wv_home.addJavascriptInterface(this,"android");
 
         wv_home.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         wv_home.getSettings().setAllowFileAccess(true);
@@ -162,6 +164,12 @@ public class WebViewFragment extends BaseFragment {
             }
 
         });
+    }
+
+    @JavascriptInterface
+    public void jsBack() {
+//        ToastUtil.show(this,"点击返回");
+        uploadOnClick(back);
     }
 
     @Event(value = {R.id.home_back})

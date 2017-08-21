@@ -76,7 +76,7 @@ public class InitFragmentUtil {
                             fragment = new TopMessageFragment();
                         } else if (mBottonList.get(i).tag.equals("communication")) {//通讯录
                             fragment = new MineAddressListFragment();
-                        }else if (mBottonList.get(i).tag.equals("workflow")) {
+                        } else if (mBottonList.get(i).tag.equals("workflow")) {
                             fragment = new TopApproveFragment();
                         } else if (mBottonList.get(i).tag.equals("signin")) {
                             fragment = new TopSignFragment();
@@ -94,7 +94,7 @@ public class InitFragmentUtil {
                         } else if (mBottonList.get(i).tag.equals("article")) {
                             //fragment = new BottonNewsFragment();//新闻页面
                             fragment = new TopHelpNewFragment();//新闻页面
-                            bundle.putString("type","news");
+                            bundle.putString("type", "news");
                         } else if (mBottonList.get(i).tag.equals("form")) {
                             fragment = new WebViewFragment();
                         } else if (mBottonList.get(i).tag.equals("workflow")) {
@@ -189,7 +189,7 @@ public class InitFragmentUtil {
 //            addFragment2List("help", new TopHelpFragment());//旧的--已弃用
             BaseFragment baseFragment = new TopHelpNewFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("type","help");
+            bundle.putString("type", "help");
             baseFragment.setArguments(bundle);
             addFragment2List("help", baseFragment);
 
@@ -197,14 +197,14 @@ public class InitFragmentUtil {
         if (mToolBarBean.proposal) {//建议
             BaseFragment baseFragment = new TopHelpNewFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("type","proposal");
+            bundle.putString("type", "proposal");
             baseFragment.setArguments(bundle);
             addFragment2List("proposal", baseFragment);
         }
         if (mToolBarBean.bug) {//报错
             BaseFragment baseFragment = new TopHelpNewFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("type","disabuse");
+            bundle.putString("type", "disabuse");
             baseFragment.setArguments(bundle);
             addFragment2List("disabuse", baseFragment);
         }

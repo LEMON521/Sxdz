@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -111,6 +112,7 @@ public class WebViewApproveActivity extends BaseActivity {
         web.getSettings().setSupportZoom(true);
         web.getSettings().setUseWideViewPort(true);
         web.getSettings().setJavaScriptEnabled(true);
+        web.addJavascriptInterface(this,"android");
 
         web.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 //        web.getSettings().setAllowFileAccess(true);
@@ -155,6 +157,16 @@ public class WebViewApproveActivity extends BaseActivity {
             }
 
         });
+    }
+
+
+    //由于安全原因 targetSdkVersion>=17需要加 @JavascriptInterface
+    //JS调用Android JAVA方法名和HTML中的按钮 onclick后的别名后面的名字对应
+
+    @JavascriptInterface
+    public void jsBack() {
+//        ToastUtil.show(this,"点击返回");
+        onClick(back);
     }
 
     @Event(value = {R.id.title_back})

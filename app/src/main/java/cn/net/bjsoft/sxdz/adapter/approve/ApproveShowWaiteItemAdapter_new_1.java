@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.xutils.image.ImageOptions;
@@ -69,7 +70,7 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
             tag.root = (LinearLayout) convertView.findViewById(R.id.approve_apply_head);
             tag.title = (TextView) convertView.findViewById(R.id.approve_apply_title);
 
-            tag.body = (LinearLayout) convertView.findViewById(R.id.approve_apply_body);
+            tag.body = (RelativeLayout) convertView.findViewById(R.id.approve_apply_body);
             tag.type = (ImageView) convertView.findViewById(R.id.approve_show_item_type);
             tag.type_1 = (TextView) convertView.findViewById(R.id.approve_show_item_type_1);
             tag.time = (TextView) convertView.findViewById(R.id.approve_show_item_time);
@@ -96,8 +97,8 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
             holder.type_1.setText(list.get(position).title);
 
             //部门暂时写成人名
-            holder.department.setVisibility(View.GONE);
-            holder.department.setText(UsersInforUtils.getInstance(context).getUserInfo(list.get(position).userid).nickname);
+//            holder.department.setVisibility(View.GONE);
+//            holder.department.setText(UsersInforUtils.getInstance(context).getUserInfo(list.get(position).userid).nickname);
 
             holder.name.setText(UsersInforUtils.getInstance(context).getUserInfo(list.get(position).userid).nickname);
 
@@ -106,7 +107,7 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
 
             holder.type_2.setText(list.get(position).wf_name);
 
-            if (list.get(position).ctime.startsWith("/Date(")){
+            if (list.get(position).ctime.startsWith("/Date(")) {
                 formateDates(list.get(position));
             }
             holder.time.setText(TimeUtils.getTimeDifference(Long.parseLong(list.get(position).ctime)));
@@ -120,7 +121,7 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
         return convertView;
     }
 
-    private void formateDates(MessageApproveDataItemsBean bean){
+    private void formateDates(MessageApproveDataItemsBean bean) {
         String time = bean.ctime;
         time = time.replace("/Date(", "");
         time = time.replace(")/", "");
@@ -128,7 +129,8 @@ public class ApproveShowWaiteItemAdapter_new_1 extends BaseAdapter {
     }
 
     public static class Holder {
-        public LinearLayout root, body;
+        public LinearLayout root/*, body*/;
+        public RelativeLayout body;
         public ImageView type;
         public TextView
                 title //标题
