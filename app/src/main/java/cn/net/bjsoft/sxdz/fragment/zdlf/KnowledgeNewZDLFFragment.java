@@ -429,57 +429,68 @@ public class KnowledgeNewZDLFFragment extends BaseFragment {
             }
         }
         sb.append("\",");
+        if (picList.size() > 0) {
+            for (int i = 0; i < picList.size() - 1; i++) {
+                discription += "<p><img src=\"" + picList.get(i).url + "\" alt=\"" + picList.get(i).pic_name + "\" width=\"100%\"><br></p>\n";
+            }
+        }
+        if (filesAddList.size() > 0) {
+            for (int i = 0; i < filesAddList.size() - 1; i++) {
+                discription += "<p><a style=\"text-decoration:underline;color:blue;\" href=\"" + filesAddList.get(i).file_url + "\" target=\"_blank\" alt=\"" + filesAddList.get(i).file_name + "\"> " + filesAddList.get(i).file_name + " </a>&nbsp; 点击下载<br></p>";
+            }
+        }
+
 
         sb.append("\"content\":\"HEX");
         sb.append(MyBase16.encode(discription));
         sb.append("\",");
 
 
-        sb.append("\"files\":[");
-        if (filesAddList.size() > 0) {
-            for (int i = 0; i < filesAddList.size() - 1; i++) {
-                sb.append("{");
-
-                sb.append("\"url\":\"");
-                sb.append(filesAddList.get(i).file_url);
-                sb.append("\",");
-
-                sb.append("\"name\":\"");
-                sb.append(filesAddList.get(i).file_name);
-                sb.append("\"");
-
-
-                if (i != (filesAddList.size() - 2)) {
-                    sb.append("},");
-                } else {
-                    sb.append("}");
-                }
-            }
-        }
-        sb.append("],");
-
-
-        sb.append("\"images\":[");
-        if (picList.size() > 0) {
-            for (int i = 0; i < picList.size() - 1; i++) {
-                sb.append("{");
-
-                sb.append("\"url\":\"");
-                sb.append(picList.get(i).url);
-                sb.append("\",");
-
-                sb.append("\"name\":\"");
-                sb.append(picList.get(i).pic_name);
-                sb.append("\"");
-
-                if (i != (picList.size() - 2)) {
-                    sb.append("},");
-                } else {
-                    sb.append("}");
-                }
-            }
-        }
-        sb.append("],");
+//        sb.append("\"files\":[");
+//        if (filesAddList.size() > 0) {
+//            for (int i = 0; i < filesAddList.size() - 1; i++) {
+//                sb.append("{");
+//
+//                sb.append("\"url\":\"");
+//                sb.append("filesAddList.get(i).file_url+");
+//                sb.append("\",");
+//
+//                sb.append("\"name\":\"");
+//                sb.append(filesAddList.get(i).file_name);
+//                sb.append("\"");
+//
+//
+//                if (i != (filesAddList.size() - 2)) {
+//                    sb.append("},");
+//                } else {
+//                    sb.append("}");
+//                }
+//            }
+//        }
+//        sb.append("],");
+//
+//
+//        sb.append("\"images\":[");
+//        if (picList.size() > 0) {
+//            for (int i = 0; i < picList.size() - 1; i++) {
+//                sb.append("{");
+//
+//                sb.append("\"url\":\"");
+//                sb.append(picList.get(i).url);
+//                sb.append("\",");
+//
+//                sb.append("\"name\":\"");
+//                sb.append(picList.get(i).pic_name);
+//                sb.append("\"");
+//
+//                if (i != (picList.size() - 2)) {
+//                    sb.append("},");
+//                } else {
+//                    sb.append("}");
+//                }
+//            }
+//        }
+//        sb.append("],");
 
 
         sb.append("\"type\":\"");
